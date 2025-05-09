@@ -5,12 +5,13 @@ import streamlit.components.v1 as components
 import math
 
 st.set_page_config(layout="wide")
-st.title("🧭 PHONG THỦY ĐỊA LÝ – Danh sách công trình")
+st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
 st.markdown("""
 ### 📌 Hướng dẫn
-- Danh sách hơn **4900 công trình tâm linh** từ `lakinhnet.py`.
-- Gõ tên để lọc → Chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
+- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam** .
+- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
+- Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
 """)
 
 # Thư mục chứa HTML
@@ -24,7 +25,7 @@ if search:
     df = df[df["Tên công trình"].str.lower().str.contains(search)]
 
 # Phân trang
-per_page = 30
+per_page = 15
 total_pages = math.ceil(len(df) / per_page)
 page = st.number_input(f"📄 Trang (1–{total_pages}):", min_value=1, max_value=total_pages, value=1, step=1)
 
@@ -54,4 +55,4 @@ if selected_html:
         components.html(html_content, height=800, scrolling=True)
 
 st.markdown("---")
-st.caption("📍 Phát triển từ lakinhnet.py – phụng sự cộng đồng và học thuật.")
+st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
