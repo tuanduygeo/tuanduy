@@ -14,7 +14,7 @@ st.markdown("""
 """)
 
 # Thư mục chứa HTML
-html_dir = "D:/diamach/dulieu"
+html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
 
