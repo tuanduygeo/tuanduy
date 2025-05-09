@@ -25,7 +25,7 @@ if search:
     df = df[df["Tên công trình"].str.lower().str.contains(search)]
 
 # Phân trang
-per_page = 15
+per_page = 10
 total_pages = math.ceil(len(df) / per_page)
 page = st.number_input(f"📄 Trang (1–{total_pages}):", min_value=1, max_value=total_pages, value=1, step=1)
 
