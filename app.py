@@ -5,6 +5,9 @@ import streamlit.components.v1 as components
 import math
 from datetime import date, timedelta, datetime
 import swisseph as swe
+import pytz
+
+
 
 
 st.set_page_config(layout="wide")
@@ -180,16 +183,13 @@ def get_house_for_planet(lon, house_cusps):
             return i + 1
     return None
 
-
-
-
-
-now_local = datetime.now()
+vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+now_local = datetime.now(vn_tz)  # giờ VN thực sự
 now_utc = now_local - timedelta(hours=timezone)
 jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
-st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_utc.strftime('%Y-%m-%d %H:%M:%S')}")
+st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 
 
 houses, _ = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
