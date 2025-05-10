@@ -215,11 +215,19 @@ equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 3
 
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
-st.subheader("🌅 Ascendant (Lagna)")
-st.write(f"`{asc_degree_dms}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
+
 planet_data = []
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
-
+planet_data.append({
+    "Hành tinh": "Ascendant",
+    "Vị trí": asc_degree_dms,
+    "Cung": asc_rashi,
+    "Nakshatra": asc_nak,
+    "Pada": asc_pada,
+    "Nhà": 1,
+    "Dignity": "",
+    "Nghịch hành": ""
+})
 for name, code in planets.items():
     lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
     rashi = get_rashi(lon_deg)
