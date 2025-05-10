@@ -48,38 +48,46 @@ for i, (_, row) in enumerate(df_page.iterrows()):
     with col2:
         if st.button("Xem", key=row['Tên công trình']):
             st.session_state.selected_idx = idx
-if html_files:
-    default_html = html_files[0]  # chọn file đầu tiên mặc định
-    html_path = os.path.join(html_dir, default_html)
-    st.subheader(f"📍 Bản đồ: {default_html}")
-    with open(html_path, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-        components.html(html_content, height=800, scrolling=True)
-else:
-    st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
-# Hiển thị bản đồ
-if st.session_state.selected_idx is not None:
-    selected_html = df.iloc[st.session_state.selected_idx]['Tên công trình']
 
-    # Nút tiến/lùi phía trên bản đồ
-    col1, _, col3 = st.columns([1, 6, 1])
-    with col1:
-        if st.button("⬅️ Lùi"):
-            if st.session_state.selected_idx > 0:
+# Hiển thị bản đồ
+if "selected_idx" not in st.session_state:
+    st.session_state.selected_idx = None
+
+# Nếu có danh sách HTML
+if html_files:
+    df = pd.DataFrame({"Tên công trình": html_files})
+
+    # Nếu chưa chọn gì → hiển thị mặc định bản đồ đầu tiên
+    if st.session_state.selected_idx is None:
+        default_html = html_files[0]
+        html_path = os.path.join(html_dir, default_html)
+        st.subheader(f"📍 Bản đồ mặc định: {default_html}")
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+            components.html(html_content, height=800, scrolling=True)
+
+    # Nếu đã chọn → hiển thị bản đồ có nút tiến lùi
+    else:
+        selected_html = df.iloc[st.session_state.selected_idx]['Tên công trình']
+
+        col1, _, col3 = st.columns([1, 6, 1])
+        with col1:
+            if st.button("⬅️ Lùi") and st.session_state.selected_idx > 0:
                 st.session_state.selected_idx -= 1
                 st.rerun()
-    with col3:
-        if st.button("Tiến ➡️"):
-            if st.session_state.selected_idx < len(df) - 1:
+        with col3:
+            if st.button("Tiến ➡️") and st.session_state.selected_idx < len(df) - 1:
                 st.session_state.selected_idx += 1
                 st.rerun()
-    
-    st.markdown("---")
-    st.subheader(f"🗺️ Bản đồ: {selected_html}")
-    html_path = os.path.join(html_dir, selected_html)
-    with open(html_path, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-        components.html(html_content, height=800, scrolling=True)
+
+        st.markdown("---")
+        st.subheader(f"🗺️ Bản đồ: {selected_html}")
+        html_path = os.path.join(html_dir, selected_html)
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+            components.html(html_content, height=800, scrolling=True)
+else:
+    st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
 # --- SCHUMANN RESONANCE ---
 st.markdown("""
