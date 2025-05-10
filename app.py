@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import streamlit.components.v1 as components
 import math
-
+from datetime import date, timedelta, datetime
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
@@ -85,7 +85,6 @@ st.markdown("""
 ### 📆 Xem lại biểu đồ Schumann Resonance trước đó
 Chọn ngày để xem ảnh lịch sử từ hệ thống Tomsk.
 """)
-from datetime import datetime
 selected_date = st.date_input("Ngày", value=datetime.today() - timedelta(days=1))
 date_str = selected_date.strftime("%Y%m%d")
 image_url = f"https://sosrff.tsu.ru/new/shm{date_str}.gif"
