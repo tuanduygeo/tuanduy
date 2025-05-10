@@ -4,6 +4,9 @@ import pandas as pd
 import streamlit.components.v1 as components
 import math
 from datetime import date, timedelta, datetime
+import datetime
+
+
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
@@ -102,6 +105,187 @@ start_date = (datetime.today() - timedelta(days=30)).strftime('%Y-%m-%d')
 end_date = datetime.today().strftime('%Y-%m-%d')
 iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=30&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+
+
+# ==== Thiết lập ====
+swe.set_ephe_path("")
+swe.set_sid_mode(swe.SIDM_LAHIRI)
+
+# Tọa độ sinh
+latitude = 21.0
+longitude = 105.8
+timezone = 7
+
+rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
+          "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
+
+nakshatras = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+              "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+              "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+              "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"]
+
+planets = {
+    'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
+    'Jupiter': swe.JUPITER, 'Venus': swe.VENUS, 'Saturn': swe.SATURN, 'Rahu': swe.MEAN_NODE
+}
+
+dignities = {
+    "Sun": {"vượng": "Leo", "tướng": "Aries", "tù": "Libra", "tử": "Aquarius"},
+    "Moon": {"vượng": "Cancer", "tướng": "Taurus", "tù": "Scorpio", "tử": "Capricorn"},
+    "Mars": {"vượng": "Aries", "tướng": "Capricorn", "tù": "Cancer", "tử": "Libra"},
+    "Mercury": {"vượng": "Gemini", "tướng": "Virgo", "tù": "Pisces", "tử": "Sagittarius"},
+    "Jupiter": {"vượng": "Sagittarius", "tướng": "Cancer", "tù": "Capricorn", "tử": "Gemini"},
+    "Venus": {"vượng": "Taurus", "tướng": "Pisces", "tù": "Virgo", "tử": "Scorpio"},
+    "Saturn": {"vượng": "Capricorn", "tướng": "Libra", "tù": "Aries", "tử": "Cancer"},
+}
+
+dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
+
+
+# ==== Hàm phụ ====
+def get_rashi(degree):
+    return rashis[int(degree // 30)]
+
+
+def get_nakshatra(degree):
+    return nakshatras[int(degree // (360 / 27))]
+
+
+def get_pada(degree):
+    deg_in_nak = degree % (360 / 27)
+    return int(deg_in_nak // (13.3333 / 4)) + 1
+
+
+def compute_ketu(rahu_deg):
+    return (rahu_deg + 180.0) % 360.0
+
+
+def is_combust(planet_lon, sun_lon):
+    diff = abs(planet_lon - sun_lon)
+    diff = min(diff, 360 - diff)
+    return diff < 6
+
+
+def is_retrograde(code):
+    res, ret = swe.calc_ut(jd, code)
+    return ret < 0
+
+
+def deg_to_dms(degree):
+    d = int(degree)
+    m = int((degree - d) * 60)
+    s = int(((degree - d) * 60 - m) * 60)
+    return f"{d}°{m:02d}'{s:02d}\""
+
+
+def get_house_for_planet(lon, house_cusps):
+    for i in range(12):
+        start = house_cusps[i]
+        end = house_cusps[i + 1]
+        if end < start: end += 360
+        lon_mod = lon if lon >= start else lon + 360
+        if start <= lon_mod < end:
+            return i + 1
+    return None
+
+
+# ==== Main App ====
+st.set_page_config(layout="wide")
+st.title("🔭 Chiêm Tinh Ấn Độ (Vedic Astrology)")
+
+now_local = datetime.now()
+now_utc = now_local - timedelta(hours=timezone)
+jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
+                now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
+
+st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
+st.markdown(f"**📅 Julian Day (UT)**: `{jd:.5f}`")
+
+houses, _ = swe.houses_ex(jd, latitude, longitude, b'W', flag=swe.FLG_SIDEREAL)
+asc = houses[0]
+asc_rashi = get_rashi(asc)
+asc_pada = get_pada(asc)
+asc_nak = get_nakshatra(asc)
+asc_degree_dms = deg_to_dms(asc % 30)
+equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
+
+st.subheader("🌅 Ascendant (Lagna)")
+st.write(f"`{asc_degree_dms}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} (Pada {asc_pada})")
+
+# Hành tinh
+st.subheader("🪐 Vị trí Hành Tinh")
+planet_data = []
+sun_deg = swe.calc(jd, swe.SUN, flag=swe.FLG_SIDEREAL)[0][0]
+
+for name, code in planets.items():
+    lon_deg = swe.calc(jd, code, flag=swe.FLG_SIDEREAL)[0][0]
+    rashi = get_rashi(lon_deg)
+    nak = get_nakshatra(lon_deg)
+    pada = get_pada(lon_deg)
+    sign_deg = deg_to_dms(lon_deg % 30)
+    dignity = dignities.get(name, {}).get("vượng", "")
+    bhava = get_house_for_planet(lon_deg, equal_house_cusps)
+    planet_data.append({
+        "Hành tinh": name,
+        "Vị trí": sign_deg,
+        "Cung": rashi,
+        "Nakshatra": nak,
+        "Pada": pada,
+        "Nhà": bhava,
+        "Dignity": dignity,
+        "Nghịch hành": "R" if is_retrograde(code) else "",
+        "Đốt cháy": "🔥" if name != "Sun" and is_combust(lon_deg, sun_deg) else ""
+    })
+
+ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
+planet_data.append({
+    "Hành tinh": "Ketu",
+    "Vị trí": deg_to_dms(ketu_deg % 30),
+    "Cung": get_rashi(ketu_deg),
+    "Nakshatra": get_nakshatra(ketu_deg),
+    "Pada": get_pada(ketu_deg),
+    "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
+    "Dignity": "",
+    "Nghịch hành": "",
+    "Đốt cháy": ""
+})
+
+df_planets = pd.DataFrame(planet_data)
+st.dataframe(df_planets, use_container_width=True)
+
+# Dasha
+st.subheader("🕰️ Vimshottari Dasha (120 năm)")
+
+moon_long = swe.calc(jd, swe.MOON, flag=swe.FLG_SIDEREAL)[0][0]
+nak_index = int(moon_long // (360 / 27))
+first_dasha = dasha_sequence[nak_index % 9]
+deg_in_nak = moon_long % (360 / 27)
+balance_years = dasha_years[first_dasha] * (13.3333 - deg_in_nak) / 13.3333
+
+start_date = now_local
+rows = []
+total_years = 0
+index = 0
+years_list = [balance_years] + [dasha_years[p] for p in dasha_sequence[1:]]
+ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
+
+while total_years < 120:
+    dasha = ordered_dasha[index % 9]
+    years = years_list[index] if index < len(years_list) else dasha_years[dasha]
+    if total_years + years > 120: years = 120 - total_years
+    end_date = start_date + timedelta(days=years * 365.25)
+    rows.append({
+        "Dasha Lord": dasha,
+        "Years": round(years, 2),
+        "Start": start_date.strftime('%Y-%m-%d'),
+        "End": end_date.strftime('%Y-%m-%d')
+    })
+    start_date = end_date
+    total_years += years
+    index += 1
+
+st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
