@@ -9,11 +9,15 @@ st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
 st.markdown("""
 ### 📌 Hướng dẫn
-- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam** .
+- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
 - Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
 - Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
 - Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
 """)
+
+# Khởi tạo session state
+if "selected_idx" not in st.session_state:
+    st.session_state.selected_idx = None
 
 # Thư mục chứa HTML
 html_dir = "dulieu"
@@ -24,6 +28,7 @@ df = pd.DataFrame({"Tên công trình": html_files})
 search = st.text_input("🔍 Tìm công trình:", "").lower()
 if search:
     df = df[df["Tên công trình"].str.lower().str.contains(search)]
+    st.session_state.selected_idx = None  # reset khi tìm
 
 # Phân trang
 per_page = 10
@@ -34,26 +39,38 @@ start_idx = (page - 1) * per_page
 end_idx = start_idx + per_page
 df_page = df.iloc[start_idx:end_idx]
 
-# Biến lưu tên file được chọn
-selected_html = None
-
 # Hiển thị danh sách từng trang
-for _, row in df_page.iterrows():
+for i, (_, row) in enumerate(df_page.iterrows()):
+    idx = start_idx + i
     col1, col2 = st.columns([5, 1])
     with col1:
         st.markdown(f"🔸 **{row['Tên công trình']}**")
     with col2:
         if st.button("Xem", key=row['Tên công trình']):
-            selected_html = row['Tên công trình']
+            st.session_state.selected_idx = idx
 
-# Hiển thị bản đồ nếu đã chọn
-if selected_html:
-    html_path = os.path.join(html_dir, selected_html)
+# Hiển thị bản đồ
+if st.session_state.selected_idx is not None:
+    selected_html = df.iloc[st.session_state.selected_idx]['Tên công trình']
     st.markdown("---")
     st.subheader(f"🗺️ Bản đồ: {selected_html}")
+    html_path = os.path.join(html_dir, selected_html)
     with open(html_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
         components.html(html_content, height=800, scrolling=True)
+
+    # Nút lùi/tiến
+    col_prev, col_next = st.columns(2)
+    with col_prev:
+        if st.button("⬅️ Lùi"):
+            if st.session_state.selected_idx > 0:
+                st.session_state.selected_idx -= 1
+                st.rerun()
+    with col_next:
+        if st.button("Tiến ➡️"):
+            if st.session_state.selected_idx < len(df) - 1:
+                st.session_state.selected_idx += 1
+                st.rerun()
 
 st.markdown("---")
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
