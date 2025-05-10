@@ -216,7 +216,7 @@ st.write(f"`{asc_degree_dms}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} (Pada 
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
 planet_data = []
-sun_deg = swe.calc(jd, swe.SUN, flag=swe.FLG_SIDEREAL)[0][0]
+sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 
 for name, code in planets.items():
     lon_deg = swe.calc(jd, code, flag=swe.FLG_SIDEREAL)[0][0]
