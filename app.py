@@ -238,7 +238,7 @@ planet_data.append({
     "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
     "Dignity": "",
     "Nghịch hành": "",
-    "Đốt cháy": ""
+    
 })
 
 df_planets = pd.DataFrame(planet_data)
@@ -247,7 +247,7 @@ st.dataframe(df_planets, use_container_width=True)
 # Dasha
 st.subheader("🕰️ Vimshottari Dasha (120 năm)")
 
-moon_long = swe.calc(jd, swe.MOON, flag=swe.FLG_SIDEREAL)[0][0]
+moon_long = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
 nak_index = int(moon_long // (360 / 27))
 first_dasha = dasha_sequence[nak_index % 9]
 deg_in_nak = moon_long % (360 / 27)
