@@ -322,7 +322,8 @@ def draw_north_indian_chart():
     return fig
 
 # Hiển thị biểu đồ
-st.pyplot(draw_north_indian_chart())
+fig = draw_north_indian_chart()
+st.pyplot(fig, use_container_width=False)
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
