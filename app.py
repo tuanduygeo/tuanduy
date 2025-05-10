@@ -160,19 +160,9 @@ def get_pada(degree):
 
 def compute_ketu(rahu_deg):
     return (rahu_deg + 180.0) % 360.0
-
-
-def is_combust(planet_lon, sun_lon):
-    diff = abs(planet_lon - sun_lon)
-    diff = min(diff, 360 - diff)
-    return diff < 6
-
-
 def is_retrograde(code):
     res, ret = swe.calc_ut(jd, code)
     return ret < 0
-
-
 def deg_to_dms(degree):
     d = int(degree)
     m = int((degree - d) * 60)
@@ -235,7 +225,7 @@ for name, code in planets.items():
         "Nhà": bhava,
         "Dignity": dignity,
         "Nghịch hành": "R" if is_retrograde(code) else "",
-        "Đốt cháy": "🔥" if name != "Sun" and is_combust(lon_deg, sun_deg) else ""
+        
     })
 
 ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
