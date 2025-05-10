@@ -86,7 +86,7 @@ st.markdown("""
 ### 2.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
 """)
-st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True=True)
+st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
 # --- ĐỊA TỪ TRẠM PHÚ THỌ (INTERMAGNET) ---
 st.markdown("""
 ### 3.🧲 Dữ liệu địa từ trực tuyến""")
