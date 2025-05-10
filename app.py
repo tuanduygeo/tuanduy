@@ -95,7 +95,7 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 Bạn có thể xem hoặc tải dữ liệu tại:
 iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=30&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=600)
+""")
 
-st.components.v1.iframe("https://imag-data.bgs.ac.uk/GIN_V1/GINForms2", height=600)
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
