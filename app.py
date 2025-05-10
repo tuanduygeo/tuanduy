@@ -296,6 +296,21 @@ while total_years < 120:
     index += 1
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
+
+planet_positions = {
+    1: "Sun",
+    2: "Moon",
+    3: "Mars",
+    4: "Mercury",
+    5: "Jupiter",
+    6: "Venus",
+    7: "Saturn",
+    8: "Rahu",
+    9: "Ketu",
+    10: "Uranus",
+    11: "Neptune",
+    12: "Pluto"
+}
 # Hàm vẽ biểu đồ
 def draw_north_indian_chart():
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -318,11 +333,29 @@ def draw_north_indian_chart():
 
     # Hình thoi trung tâm
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
-
+    # Hiển thị số nhà và tên hành tinh
+    for house, (x, y) in house_coords.items():
+        ax.text(x, y + 5, str(house), ha='center', va='center', fontsize=9, weight='bold')
+        if house in planet_data:
+            ax.text(x, y - 5, planet_data[house], ha='center', va='center', fontsize=7, color='darkblue')
     return fig
-
+# Tọa độ tương đối cho từng nhà (x, y)
+house_coords = {
+    1: (50, 70),
+    2: (30, 85),
+    3: (15, 70),
+    4: (30, 50),
+    5: (15, 30),
+    6: (30, 15),
+    7: (50, 30),
+    8: (70, 15),
+    9: (85, 30),
+    10: (70, 50),
+    11: (85, 70),
+    12: (70, 85),
+}
 # Hiển thị biểu đồ
-fig = draw_north_indian_chart()
+fig = draw_chart(planet_positions)
 st.pyplot(fig, use_container_width=False)
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
