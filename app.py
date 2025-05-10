@@ -9,7 +9,7 @@ import swisseph as swe
 
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
-
+print(swe.get_planet_name(swe.SUN))  # -> 'Sun'
 st.markdown("""
 ### 📌 Hướng dẫn
 - Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
