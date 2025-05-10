@@ -192,7 +192,7 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 
 
-houses,ascmc _ = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
+houses,ascmc = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
 asc = houses[0]
 
 asc_rashi = get_rashi(asc)
