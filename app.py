@@ -90,8 +90,10 @@ st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live
 # --- ĐỊA TỪ TRẠM PHÚ THỌ (INTERMAGNET) ---
 st.markdown("""
 ### 🧲 Dữ liệu địa từ 
+start_date = (datetime.today() - timedelta(days=30)).strftime('%Y-%m-%d')
+end_date = datetime.today().strftime('%Y-%m-%d')
 Bạn có thể xem hoặc tải dữ liệu tại:
-(https://imag-data.bgs.ac.uk/GIN_V1/GINForms2)
+(iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=30&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView")
 """)
 
 st.components.v1.iframe("https://imag-data.bgs.ac.uk/GIN_V1/GINForms2", height=600)
