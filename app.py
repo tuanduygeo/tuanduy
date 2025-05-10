@@ -219,7 +219,7 @@ planet_data = []
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 
 for name, code in planets.items():
-    lon_deg = swe.calc(jd, code, flag=swe.FLG_SIDEREAL)[0][0]
+    lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
     rashi = get_rashi(lon_deg)
     nak = get_nakshatra(lon_deg)
     pada = get_pada(lon_deg)
