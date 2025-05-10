@@ -205,7 +205,7 @@ equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 3
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
 st.subheader("🌅 Ascendant (Lagna)")
-st.write(f"`{asc}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
+st.write(f"`{equal_house_cusps}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
 planet_data = []
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 
