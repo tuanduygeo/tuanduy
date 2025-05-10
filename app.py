@@ -110,7 +110,8 @@ st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 # ==== Thiết lập ====
 swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
-
+import os
+print("✅ File trong ephe:", os.listdir("ephe"))
 # Tọa độ sinh
 latitude = 21.0
 longitude = 105.8
