@@ -201,7 +201,7 @@ asc_degree_dms = deg_to_dms(asc % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
 
 st.subheader("🌅 Ascendant (Lagna)")
-st.write(f"`{asc_degree_dms}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} (Pada {asc_pada})")
+st.write(f"`{asc_degree_dms}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
 
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
