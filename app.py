@@ -108,7 +108,7 @@ st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
 
 # ==== Thiết lập ====
-swe.set_ephe_path("")
+swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
 
 # Tọa độ sinh
