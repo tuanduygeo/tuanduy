@@ -191,9 +191,8 @@ def get_house_for_planet(lon, house_cusps):
     return None
 
 
-# ==== Main App ====
-st.set_page_config(layout="wide")
-st.title("🔭 Chiêm Tinh Ấn Độ (Vedic Astrology)")
+
+
 
 now_local = datetime.now()
 now_utc = now_local - timedelta(hours=timezone)
