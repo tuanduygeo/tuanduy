@@ -6,7 +6,7 @@ import math
 from datetime import date, timedelta, datetime
 import swisseph as swe
 import pytz
-
+import matplotlib.pyplot as plt
 
 
 
@@ -296,7 +296,33 @@ while total_years < 120:
     index += 1
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
+# Hàm vẽ biểu đồ
+def draw_north_indian_chart():
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
 
+    # Khung ngoài
+    ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
+
+    # Các đường chéo
+    ax.plot([0, 100], [0, 100], 'k', linewidth=2)
+    ax.plot([0, 100], [100, 0], 'k', linewidth=2)
+
+    # Đường từ giữa cạnh đến trung tâm
+    ax.plot([0, 50], [50, 100], 'k', linewidth=2)
+    ax.plot([50, 100], [100, 50], 'k', linewidth=2)
+    ax.plot([100, 50], [50, 0], 'k', linewidth=2)
+    ax.plot([50, 0], [0, 50], 'k', linewidth=2)
+
+    # Hình thoi trung tâm
+    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
+
+    return fig
+
+# Hiển thị biểu đồ
+st.pyplot(Biểu đồ chiêm tinh())
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
