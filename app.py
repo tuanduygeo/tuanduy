@@ -48,7 +48,15 @@ for i, (_, row) in enumerate(df_page.iterrows()):
     with col2:
         if st.button("Xem", key=row['Tên công trình']):
             st.session_state.selected_idx = idx
-
+if html_files:
+    default_html = html_files[0]  # chọn file đầu tiên mặc định
+    html_path = os.path.join(html_dir, default_html)
+    st.subheader(f"📍 Bản đồ: {default_html}")
+    with open(html_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+        components.html(html_content, height=800, scrolling=True)
+else:
+    st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 # Hiển thị bản đồ
 if st.session_state.selected_idx is not None:
     selected_html = df.iloc[st.session_state.selected_idx]['Tên công trình']
@@ -72,6 +80,7 @@ if st.session_state.selected_idx is not None:
     with open(html_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
         components.html(html_content, height=800, scrolling=True)
+
 # --- SCHUMANN RESONANCE ---
 st.markdown("""
 ### 🌐 Trực tiếp Schumann Resonance (Biểu đồ cộng hưởng Trái Đất)
