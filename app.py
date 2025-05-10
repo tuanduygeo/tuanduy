@@ -298,7 +298,7 @@ while total_years < 120:
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
 # Hàm vẽ biểu đồ
 def draw_north_indian_chart():
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(3, 3))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
