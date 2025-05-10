@@ -151,7 +151,17 @@ dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 
 def get_rashi(degree):
     return rashis[int(degree // 30)]
 
-
+def get_dignity(planet, rashi):
+    dign = dignities.get(planet, {})
+    if rashi.split()[-1] == dign.get("vượng"):
+        return "vượng"
+    elif rashi.split()[-1] == dign.get("tướng"):
+        return "tướng"
+    elif rashi.split()[-1] == dign.get("tù"):
+        return "tù"
+    elif rashi.split()[-1] == dign.get("tử"):
+        return "tử"
+    return ""
 def get_nakshatra(degree):
     return nakshatras[int(degree // (360 / 27))]
 
@@ -216,7 +226,7 @@ for name, code in planets.items():
     nak = get_nakshatra(lon_deg)
     pada = get_pada(lon_deg)
     sign_deg = deg_to_dms(lon_deg % 30)
-    dignity = dignities.get(name, {}).get("vượng", "")
+    dignity = get_dignity(name, rashi)
     bhava = get_house_for_planet(lon_deg, equal_house_cusps)
     planet_data.append({
         "Hành tinh": name,
