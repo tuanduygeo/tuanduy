@@ -312,7 +312,7 @@ planet_positions = {
     12: "Pluto"
 }
 # Hàm vẽ biểu đồ
-def draw_north_indian_chart():
+def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
