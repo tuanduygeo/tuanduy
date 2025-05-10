@@ -189,8 +189,8 @@ now_utc = now_local - timedelta(hours=timezone)
 jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
-st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-st.markdown(f"**📅 Julian Day (UT)**: `{jd:.5f}`")
+st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_utc.strftime('%Y-%m-%d %H:%M:%S')}")
+
 
 houses, _ = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
 asc = houses[0]
@@ -200,11 +200,12 @@ asc_nak = get_nakshatra(asc)
 asc_degree_dms = deg_to_dms(asc % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
 
-st.subheader("🌅 Ascendant (Lagna)")
-st.write(f"`{asc}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
+
 
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
+st.subheader("🌅 Ascendant (Lagna)")
+st.write(f"`{asc}` → {asc_rashi} | 🌙 Nakshatra: {asc_nak} ")
 planet_data = []
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 
