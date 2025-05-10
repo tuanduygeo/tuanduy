@@ -77,17 +77,7 @@ st.markdown("""
 ### 🌐 Trực tiếp Schumann Resonance (Biểu đồ cộng hưởng Trái Đất)
 Nguồn: [Tomsk, Russia – Space Observing System]
 """)
-
 st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_column_width=True)
 
-# Hiển thị ảnh theo ngày cụ thể (slice lịch sử)
-st.markdown("""
-### 📆 Xem lại biểu đồ Schumann Resonance trước đó
-Chọn ngày để xem ảnh lịch sử từ hệ thống Tomsk.
-""")
-selected_date = st.date_input("Ngày", value=datetime.today() - timedelta(days=1))
-date_str = selected_date.strftime("%Y%m%d")
-image_url = f"https://sosrff.tsu.ru/new/shm{date_str}.gif"
-st.image(image_url, caption=f"Schumann Resonance - {date_str}", use_column_width=True)
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
