@@ -52,25 +52,26 @@ for i, (_, row) in enumerate(df_page.iterrows()):
 # Hiển thị bản đồ
 if st.session_state.selected_idx is not None:
     selected_html = df.iloc[st.session_state.selected_idx]['Tên công trình']
+
+    # Nút tiến/lùi phía trên bản đồ
+    col1, _, col3 = st.columns([1, 6, 1])
+    with col1:
+        if st.button("⬅️ Lùi"):
+            if st.session_state.selected_idx > 0:
+                st.session_state.selected_idx -= 1
+                st.rerun()
+    with col3:
+        if st.button("Tiến ➡️"):
+            if st.session_state.selected_idx < len(df) - 1:
+                st.session_state.selected_idx += 1
+                st.rerun()
+
     st.markdown("---")
     st.subheader(f"🗺️ Bản đồ: {selected_html}")
     html_path = os.path.join(html_dir, selected_html)
     with open(html_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
         components.html(html_content, height=800, scrolling=True)
-
-    # Nút lùi/tiến
-    col_prev, col_next = st.columns(2)
-    with col_prev:
-        if st.button("⬅️ Lùi"):
-            if st.session_state.selected_idx > 0:
-                st.session_state.selected_idx -= 1
-                st.rerun()
-    with col_next:
-        if st.button("Tiến ➡️"):
-            if st.session_state.selected_idx < len(df) - 1:
-                st.session_state.selected_idx += 1
-                st.rerun()
 
 st.markdown("---")
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
