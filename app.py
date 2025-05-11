@@ -284,25 +284,21 @@ planet_data.append({
 })
 
 for name, code in planets.items():
+    # Tính độ của hành tinh ở hiện tại và trước đó
     lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
-    rashi = get_rashi(lon_deg)
-    nak = get_nakshatra(lon_deg)
-    pada = get_pada(lon_deg)
-    sign_deg = deg_to_dms(lon_deg % 30)
-    dignity = get_dignity(name, rashi)
-    bhava = get_house_for_planet(lon_deg, equal_house_cusps)
     
-    # Kiểm tra nghịch hành
-    retrograde_status = "R" if is_retrograde(code, jd) else ""
+    # Kiểm tra nghịch hành với hai ngày
+    retrograde_status = "R" if is_retrograde(code, jd, jd_previous) else ""
 
+    # Thêm thông tin hành tinh vào danh sách planet_data
     planet_data.append({
         "Hành tinh": name,
-        "Vị trí": sign_deg,
-        "Cung": rashi,
-        "Nakshatra": nak,
-        "Pada": pada,
-        "Nhà": bhava,
-        "Tính chất": dignity,
+        "Vị trí": deg_to_dms(lon_deg % 30),
+        "Cung": get_rashi(lon_deg),
+        "Nakshatra": get_nakshatra(lon_deg),
+        "Pada": get_pada(lon_deg),
+        "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
+        "Tính chất": get_dignity(name, get_rashi(lon_deg)),
         "Nghịch hành": retrograde_status,
     })
 # Tìm Rahu trong planet_data
