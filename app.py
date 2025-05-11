@@ -299,7 +299,7 @@ st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
 planet_labels_by_house = {i: "" for i in range(1, 13)}
 
-for pid, name in planet_names.items():
+for pid, name in planet.items():
     lon, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
     house = int(swe.house_pos(lon[0], latitude, longitude, b'W'))
     planet_labels_by_house[house] += name + "\n"
