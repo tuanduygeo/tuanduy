@@ -389,5 +389,5 @@ st.markdown("""
 ### 4.🧲 Dữ liệu địa từ trực tuyến""")
 start_date = (datetime.today() - timedelta(days=15)).strftime('%Y-%m-%d')
 end_date = datetime.today().strftime('%Y-%m-%d')
-iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=30&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
+iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=15&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
