@@ -376,9 +376,17 @@ while total_years < 120:
     start_date = end_date
     total_years += years
 
-# Hiển thị kết quả Vimshottari Dasha
+# Hiển thị kết quả Vimshottari Dasha trên Streamlit
+st.title("🕰️ Vimshottari Mahadasha (120 năm)")
+st.markdown("Dưới đây là bảng Mahadasha theo hệ thống Vimshottari.")
 
-st.dataframe(pd.DataFrame(rows), use_container_width=True)
+# Hiển thị bảng trong Streamlit
+dasha_df = pd.DataFrame(rows)
+st.dataframe(dasha_df)  # Sử dụng st.dataframe để hiển thị bảng trong Streamlit
+
+# Thêm thông tin cho người dùng về quá trình tính toán
+st.markdown(f"**🌙 Mặt Trăng hiện tại đang ở:** {swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]}°")
+st.markdown(f"**🗓️ Thời gian hiện tại (VN):** {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
