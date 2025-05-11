@@ -308,14 +308,14 @@ def draw_chart(planet_data):
     ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
 
     # Các đường chéo
-    ax.plot([0, 100], [0, 100], 'k', linewidth=2)
-    ax.plot([0, 100], [100, 0], 'k', linewidth=2)
+    ax.plot([0, 100], [0, 100], 'k', linewidth=1)
+    ax.plot([0, 100], [100, 0], 'k', linewidth=1)
 
     # Đường từ giữa cạnh đến trung tâm
-    ax.plot([0, 50], [50, 100], 'k', linewidth=2)
-    ax.plot([50, 100], [100, 50], 'k', linewidth=2)
-    ax.plot([100, 50], [50, 0], 'k', linewidth=2)
-    ax.plot([50, 0], [0, 50], 'k', linewidth=2)
+    ax.plot([0, 50], [50, 100], 'k', linewidth=1)
+    ax.plot([50, 100], [100, 50], 'k', linewidth=1)
+    ax.plot([100, 50], [50, 0], 'k', linewidth=1)
+    ax.plot([50, 0], [0, 50], 'k', linewidth=1)
 
     # Hình thoi trung tâm
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
@@ -352,12 +352,12 @@ def draw_chart(planet_data):
                 deg_str = p["Vị trí"].split("°")[0] + "°"
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
-        ax.text(x, y, names, ha='center', va='center', fontsize=4, color='blue')
+        ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
 
     return fig  
 
 # Hiển thị biểu đồ
-st.title("🔮 Biểu đồ Chiêm tinh Bắc Ấn")
+st.title("🔮 Biểu đồ Chiêm tinh")
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
 
