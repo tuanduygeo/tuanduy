@@ -111,37 +111,33 @@ st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 st.markdown("""
 ### 4.Chiêm tinh Ấn Độ""")
 
-# ==== Thiết lập ====
+# ==== Setup ====
 swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
-
-# Cài đặt múi giờ Việt Nam
 vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
 
-# Tạo giao diện kéo thả (slider) cho các thành phần thời gian và tọa độ
-st.title("🧭 Chỉnh Sửa Thời Gian và Tọa Độ")
-vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
-now_local = datetime.now(vn_tz)  # giờ VN thực sự
+# Get current date and time
+now_local = datetime.now()
+timezone = 7  # Timezone offset
 now_utc = now_local - timedelta(hours=timezone)
+
 jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-# Sử dụng cột để chia bố cục và sắp xếp các slider
+
+# Create sliders for user input for time and coordinates
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    # Slider cho Năm, Tháng, Ngày
     year = st.slider("Chọn Năm", min_value=1900, max_value=2100, value=2025, step=1)
     month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=5, step=1)
     day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=11, step=1)
 
 with col2:
-    # Slider cho Giờ, Phút
     hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=13, step=1)
     minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=26, step=1)
 
-# Sử dụng cột để chọn Vĩ độ, Kinh độ và Múi giờ
 col3, col4 = st.columns([1, 1])
 
 with col3:
@@ -151,31 +147,23 @@ with col3:
 with col4:
     timezone = st.slider("Chọn Múi giờ", min_value=-12, max_value=12, value=7, step=1)
 
-# Tạo button để chạy tính toán
+# Button to calculate
 if st.button("Chạy Tính Toán"):
-    # Tạo datetime theo dữ liệu người dùng nhập
     selected_datetime = datetime(year, month, day, hour, minute)
 
-    # Kiểm tra xem datetime đã có múi giờ chưa
     if selected_datetime.tzinfo is None:
-        # Nếu chưa có múi giờ, localize vào múi giờ Việt Nam
         selected_datetime_vn = vn_tz.localize(selected_datetime)
     else:
-        # Nếu đã có múi giờ, chuyển nó sang múi giờ Việt Nam
         selected_datetime_vn = selected_datetime.astimezone(vn_tz)
 
-    # Chuyển đổi thời gian sang UTC
-    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Chuyển sang UTC
-    
-    # Tính Julian Day (JDay)
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
+
     jd = swe.julday(selected_datetime_vn.year, selected_datetime_vn.month, selected_datetime_vn.day,
                     selected_datetime_vn.hour + selected_datetime_vn.minute / 60 + selected_datetime_vn.second / 3600)
-    
-    # Hiển thị kết quả
+
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
-        # Hiển thị thông tin chi tiết (năm, tháng, ngày, giờ, phút)
     st.markdown(f"**Năm**: {selected_datetime.year} **Tháng**: {selected_datetime.month} **Ngày**: {selected_datetime.day}")
-    
+
 
 rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
           "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
