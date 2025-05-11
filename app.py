@@ -263,40 +263,6 @@ planet_data.append({
 
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
-
-# Dasha
-st.subheader("🕰️ Vimshottari Dasha (120 năm)")
-
-moon_long = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
-nak_index = int(moon_long // (360 / 27))
-first_dasha = dasha_sequence[nak_index % 9]
-deg_in_nak = moon_long % (360 / 27)
-balance_years = dasha_years[first_dasha] * (13.3333 - deg_in_nak) / 13.3333
-
-start_date = now_local
-rows = []
-total_years = 0
-index = 0
-years_list = [balance_years] + [dasha_years[p] for p in dasha_sequence[1:]]
-ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
-
-while total_years < 120:
-    dasha = ordered_dasha[index % 9]
-    years = years_list[index] if index < len(years_list) else dasha_years[dasha]
-    if total_years + years > 120: years = 120 - total_years
-    end_date = start_date + timedelta(days=years * 365.25)
-    rows.append({
-        "Dasha Lord": dasha,
-        "Years": round(years, 2),
-        "Start": start_date.strftime('%Y-%m-%d'),
-        "End": end_date.strftime('%Y-%m-%d')
-    })
-    start_date = end_date
-    total_years += years
-    index += 1
-
-st.dataframe(pd.DataFrame(rows), use_container_width=True)
-
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -360,6 +326,40 @@ def draw_chart(planet_data):
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
+# Dasha
+st.subheader("🕰️ Vimshottari Dasha (120 năm)")
+
+moon_long = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
+nak_index = int(moon_long // (360 / 27))
+first_dasha = dasha_sequence[nak_index % 9]
+deg_in_nak = moon_long % (360 / 27)
+balance_years = dasha_years[first_dasha] * (13.3333 - deg_in_nak) / 13.3333
+
+start_date = now_local
+rows = []
+total_years = 0
+index = 0
+years_list = [balance_years] + [dasha_years[p] for p in dasha_sequence[1:]]
+ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
+
+while total_years < 120:
+    dasha = ordered_dasha[index % 9]
+    years = years_list[index] if index < len(years_list) else dasha_years[dasha]
+    if total_years + years > 120: years = 120 - total_years
+    end_date = start_date + timedelta(days=years * 365.25)
+    rows.append({
+        "Dasha Lord": dasha,
+        "Years": round(years, 2),
+        "Start": start_date.strftime('%Y-%m-%d'),
+        "End": end_date.strftime('%Y-%m-%d')
+    })
+    start_date = end_date
+    total_years += years
+    index += 1
+
+st.dataframe(pd.DataFrame(rows), use_container_width=True)
+
+
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
