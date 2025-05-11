@@ -127,11 +127,7 @@ nakshatras = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra
               "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
               "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
               "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"]
-rashi_number = {
-    "Aries": 1, "Taurus": 2, "Gemini": 3, "Cancer": 4,
-    "Leo": 5, "Virgo": 6, "Libra": 7, "Scorpio": 8,
-    "Sagittarius": 9, "Capricorn": 10, "Aquarius": 11, "Pisces": 12
-}
+
 planets = {
     'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
     'Jupiter': swe.JUPITER, 'Venus': swe.VENUS, 'Saturn': swe.SATURN, 'Rahu': swe.MEAN_NODE
@@ -337,48 +333,14 @@ def draw_chart(planet_data):
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
-    for house, (x, y) in house_label_coords.items():
-        # Xác định cung tại nhà đó
-        cusp_long = equal_house_cusps[house - 1]
-        rashi = get_rashi(cusp_long).split()[-1]  # chỉ lấy tên cung
-        number = rashi_number[rashi]
-        ax.text(x, y, str(number), fontsize=6, color='black', weight='bold', ha='center', va='center')
+    
     return fig  
 
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-# Dasha
-st.subheader("🕰️ Vimshottari Dasha (120 năm)")
 
-moon_long = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
-nak_index = int(moon_long // (360 / 27))
-first_dasha = dasha_sequence[nak_index % 9]
-deg_in_nak = moon_long % (360 / 27)
-balance_years = dasha_years[first_dasha] * (13.3333 - deg_in_nak) / 13.3333
-
-start_date = now_local
-rows = []
-total_years = 0
-index = 0
-ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
-years_list = [balance_years] + [dasha_years[d] for d in ordered_dasha[1:]]
-
-while total_years < 120:
-    dasha = ordered_dasha[index % 9]
-    years = years_list[index] if index < len(years_list) else dasha_years[dasha]
-    if total_years + years > 120: years = 120 - total_years
-    end_date = start_date + timedelta(days=years * 365.25)
-    rows.append({
-        "Dasha Lord": dasha,
-        "Years": round(years, 2),
-        "Start": start_date.strftime('%Y-%m-%d'),
-        "End": end_date.strftime('%Y-%m-%d')
-    })
-    start_date = end_date
-    total_years += years
-    index += 1
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
