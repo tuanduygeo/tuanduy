@@ -321,9 +321,9 @@ def draw_chart(planet_data):
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
     # Tọa độ tương đối cho từng nhà (x, y)
     house_coords = {
-        1: (50, 70),
-        2: (25, 85),
-        3: (10, 70),
+        1: (50, 80),
+        2: (25, 95),
+        3: (10, 80),
         4: (25, 45),
         5: (15, 20),
         6: (25, 5),
@@ -331,8 +331,8 @@ def draw_chart(planet_data):
         8: (75, 5),
         9: (85, 20),
         10: (75, 45),
-        11: (90, 70),
-        12: (75, 85),
+        11: (90, 80),
+        12: (75, 95),
     }   
     # Gom nhóm các hành tinh theo nhà
     house_planets = {i: [] for i in range(1, 13)}
@@ -345,7 +345,7 @@ def draw_chart(planet_data):
     # Vẽ tên hành tinh tại vị trí từng nhà
     for house, (x, y) in house_coords.items():
         names = "\n".join(house_planets[house])
-        ax.text(x, y, names, ha='center', va='center', fontsize=8, color='blue')
+        ax.text(x, y, names, ha='center', va='center', fontsize=6, color='blue')
 
     return fig  
 
