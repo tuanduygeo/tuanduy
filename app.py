@@ -255,10 +255,6 @@ asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
 
-
-# Hành tinh
-st.subheader("🪐 Vị trí Hành Tinh")
-
 # Tính toán các hành tinh
 planet_data = []
 
@@ -386,8 +382,6 @@ def draw_chart(planet_data):
     
     return fig  
 
-# Hiển thị biểu đồ
-st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
 
