@@ -131,7 +131,7 @@ with col3:
     longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 
 
-if st.button("Chạy Tính Toán") :
+if st.button("Tính Toán") :
     selected_datetime = datetime(year, month, day, hour, minute)
 
     if selected_datetime.tzinfo is None:
@@ -391,6 +391,3 @@ start_date = (datetime.today() - timedelta(days=30)).strftime('%Y-%m-%d')
 end_date = datetime.today().strftime('%Y-%m-%d')
 https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=30&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView
 st.components.v1.iframe(iframe_url, height=1000,scrolling=True)
-st.title("🧲 Mô hình từ trường IGRF – Tính toán trực tuyến")
-
-st.components.v1.iframe("https://geomag.bgs.ac.uk/data_service/models_compass/igrf_calc.html", height=1000, scrolling=True)
