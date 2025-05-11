@@ -318,7 +318,7 @@ def draw_chart(planet_data):
     ax.plot([50, 0], [0, 50], 'k', linewidth=1)
 
     # Hình thoi trung tâm
-    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
+    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
     # Tọa độ tương đối cho từng nhà (x, y)
     house_coords = {
         1: (50, 80),
