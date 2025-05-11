@@ -297,21 +297,6 @@ while total_years < 120:
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
-planet_labels_by_house = {i: "" for i in range(1, 13)}
-
-for pid, name in planets.items():
-    pos, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
-    lon = pos[0]
-    house = int(swe.house_pos(lon, latitude, longitude, b'W'))
-    planet_labels_by_house[house] += name + "\n"
-
-# Tính Ketu
-rahu_pos, _ = swe.calc_ut(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)
-ketu_lon = (rahu_pos[0] + 180) % 360
-ketu_house = int(swe.house_pos(ketu_lon, latitude, longitude, b'W'))
-planet_labels_by_house[ketu_house] += "Ketu"
-
-
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -335,13 +320,7 @@ def draw_chart(planet_data):
     # Hình thoi trung tâm
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
    
-    # Thêm số nhà và hành tinh
-    for house, (x, y) in house_coords.items():
-        ax.text(x, y + 5, str(house), ha='center', va='center', fontsize=9, weight='bold')
-        if planet_data.get(house):
-            ax.text(x, y - 5, planet_data[house], ha='center', va='center', fontsize=7, color='darkblue')
-
-    return fig
+  
 # Tọa độ tương đối cho từng nhà (x, y)
 house_coords = {
     1: (50, 70),
