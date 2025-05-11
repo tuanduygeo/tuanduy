@@ -120,7 +120,13 @@ vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
 
 # Tạo giao diện kéo thả (slider) cho các thành phần thời gian và tọa độ
 st.title("🧭 Chỉnh Sửa Thời Gian và Tọa Độ")
+vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+now_local = datetime.now(vn_tz)  # giờ VN thực sự
+now_utc = now_local - timedelta(hours=timezone)
+jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
+                now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
+st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 # Sử dụng cột để chia bố cục và sắp xếp các slider
 col1, col2 = st.columns([1, 1])
 
@@ -166,16 +172,10 @@ if st.button("Chạy Tính Toán"):
                     selected_datetime_vn.hour + selected_datetime_vn.minute / 60 + selected_datetime_vn.second / 3600)
     
     # Hiển thị kết quả
-    st.markdown(f"**🕒 Thời gian chỉnh sửa (VN)**: {selected_datetime_vn.strftime('%Y-%m-%d %H:%M:%S')}")
-    st.markdown(f"**Thời gian UTC**: {selected_utc.strftime('%Y-%m-%d %H:%M:%S')}")
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
-    
-    # Hiển thị Julian Day
-    st.markdown(f"**Julian Day (JDay)**: {jd}")
-
-    # Hiển thị thông tin chi tiết (năm, tháng, ngày, giờ, phút)
+        # Hiển thị thông tin chi tiết (năm, tháng, ngày, giờ, phút)
     st.markdown(f"**Năm**: {selected_datetime.year} **Tháng**: {selected_datetime.month} **Ngày**: {selected_datetime.day}")
-    st.markdown(f"**Giờ**: {selected_datetime.hour} **Phút**: {selected_datetime.minute}")
+    
 
 rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
           "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
