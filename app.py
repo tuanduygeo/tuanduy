@@ -139,11 +139,9 @@ with col2:
 
     latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
-# Khi người dùng nhấn Enter, chúng ta sẽ kích hoạt phần tính toán
-run_calculation = st.text_input("Nhấn Enter hoặc nhấn nút để tính toán các hành tinh:", "")
 
-# Kiểm tra nếu người dùng nhấn nút "Chạy Tính Toán" hoặc Enter
-if st.button("Chạy Tính Toán") or run_calculation:
+
+if st.button("Chạy Tính Toán") :
     selected_datetime = datetime(year, month, day, hour, minute)
 
     if selected_datetime.tzinfo is None:
