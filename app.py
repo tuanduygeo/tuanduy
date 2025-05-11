@@ -300,15 +300,18 @@ st.dataframe(pd.DataFrame(rows), use_container_width=True)
 planet_labels_by_house = {i: "" for i in range(1, 13)}
 
 for pid, name in planets.items():
-    lon, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
-    house = int(swe.house_pos(lon[0], latitude, longitude, b'W'))
+   pos, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
+    lon = pos[0]
+    house = int(swe.house_pos(lon, latitude, longitude, b'W'))
     planet_labels_by_house[house] += name + "\n"
 
-# Thêm Ketu (đối diện Rahu)
-rahu_lon, _ = swe.calc_ut(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)
-ketu_lon = (rahu_lon[0] + 180) % 360
+# Tính Ketu
+rahu_pos, _ = swe.calc_ut(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)
+ketu_lon = (rahu_pos[0] + 180) % 360
 ketu_house = int(swe.house_pos(ketu_lon, latitude, longitude, b'W'))
 planet_labels_by_house[ketu_house] += "Ketu"
+
+
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
