@@ -218,13 +218,7 @@ def get_pada(degree):
 
 def compute_ketu(rahu_deg):
     return (rahu_deg + 180.0) % 360.0
-def is_retrograde(code, jd):
-    # Tính toán vị trí hành tinh theo Julian Day
-    res, ret = swe.calc_ut(jd, code)
-    # Nếu tốc độ chuyển động (ret) là âm, hành tinh đang nghịch hành
-    if ret < 0:
-        return True
-    return False
+
 def deg_to_dms(degree):
     d = int(degree)
     m = int((degree - d) * 60)
@@ -241,6 +235,21 @@ def get_house_for_planet(lon, house_cusps):
         if start <= lon_mod < end:
             return i + 1
     return None
+def is_retrograde(code, jd_current, jd_previous):
+    # Tính toán vị trí hành tinh tại thời điểm hiện tại
+    res_current, _ = swe.calc_ut(jd_current, code)
+    lon_deg_current = res_current[0]
+    
+    # Tính toán vị trí hành tinh tại thời điểm trước đó
+    res_previous, _ = swe.calc_ut(jd_previous, code)
+    lon_deg_previous = res_previous[0]
+    
+    # Kiểm tra xem vị trí có thay đổi hướng không
+    # Nếu sự thay đổi giữa hai ngày có dấu hiệu quay ngược, hành tinh đang nghịch hành
+    if lon_deg_current < lon_deg_previous:
+        return True
+    return False
+
 
 
 
@@ -257,7 +266,11 @@ equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 3
 # Hành tinh
 st.subheader("🪐 Vị trí Hành Tinh")
 
+# Tính toán các hành tinh
 planet_data = []
+
+# Tính toán ngày trước đó (1 ngày)
+jd_previous = jd - 1  # Giảm 1 ngày để lấy ngày trước đó
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 planet_data.append({
     "Hành tinh": "Asc",
