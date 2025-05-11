@@ -329,7 +329,7 @@ if rahu_deg is not None:
         "Pada": ketu_pada,
         "Nhà": ketu_bhava,
         "Tính chất": ketu_dignity,
-        "Nghịch hành": "",  # Ketu không có nghịch hành
+        "Nghịch hành": "R",  
     })
 
 
