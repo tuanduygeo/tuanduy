@@ -223,7 +223,11 @@ def get_house_for_planet(lon, house_cusps):
     return None
 
 vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
-now_local = selected_datetime  # giờ VN thực sự
+# Chuyển đổi thời gian sang múi giờ Việt Nam
+selected_datetime_vn = vn_tz.localize(selected_datetime)  # Localize vào múi giờ Việt Nam
+    
+    # Chuyển đổi thời gian UTC
+now_utc = selected_datetime_vn.astimezone(pytz.utc)  # Chuyển sang UTC
 now_utc = now_local - timedelta(hours=timezone)
 jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
