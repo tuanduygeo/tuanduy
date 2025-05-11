@@ -264,32 +264,68 @@ planet_data.append({
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 # Hàm vẽ biểu đồ
-def draw_chart(planet_data):
-    fig, ax = plt.subplots(figsize=(3, 3))
-    ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
-    ax.axis("off")
+navamsa_map = {
+    "Aries": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"],
+    "Taurus": ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo"],
+    "Gemini": ["Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini"],
+    "Cancer": ["Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"],
+    "Leo": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"],
+    "Virgo": ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo"],
+    "Libra": ["Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini"],
+    "Scorpio": ["Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"],
+    "Sagittarius": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"],
+    "Capricorn": ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo"],
+    "Aquarius": ["Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini"],
+    "Pisces": ["Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+}
+d9_data = []
 
-    # Khung ngoài
-    ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
+for planet in planet_data:
+    sign_full = planet["Cung"]
+    if not sign_full:
+        continue
+    sign = sign_full.split()[-1]  # e.g. "Aries"
+    degree = float(planet["Vị trí"].split("°")[0])  # only degrees, ignore minutes/seconds
+    deg_in_sign = degree
+    navamsa_index = int(deg_in_sign // (30 / 9))  # 3.3333 per navamsa
+    d9_sign = navamsa_map[sign][navamsa_index]
+    d9_data.append({
+        "Hành tinh": planet["Hành tinh"],
+        "D1 Cung": sign,
+        "D1 Độ": f"{degree:.0f}°",
+        "D9 Cung": d9_sign,
+        "D9 Navamsa số": navamsa_index + 1
+    })
 
-    # Các đường chéo
-    ax.plot([0, 100], [0, 100], 'k', linewidth=1)
-    ax.plot([0, 100], [100, 0], 'k', linewidth=1)
+df_d9 = pd.DataFrame(d9_data)
+st.subheader("🪐 Bảng D9 (Navamsa Chart)")
+st.dataframe(df_d9, use_container_width=True)
+rashi_order = [
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+]
+rashi_to_house_num = {r: i+1 for i, r in enumerate(rashi_order)}
+def draw_combined_chart(planet_data, d9_data):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))  # 2 biểu đồ cạnh nhau
+    for ax in (ax1, ax2):
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 100)
+        ax.axis("off")
+        # Khung
+        ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
+        ax.plot([0, 100], [0, 100], 'k', linewidth=2)
+        ax.plot([0, 100], [100, 0], 'k', linewidth=2)
+        ax.plot([0, 50], [50, 100], 'k', linewidth=2)
+        ax.plot([50, 100], [100, 50], 'k', linewidth=2)
+        ax.plot([100, 50], [50, 0], 'k', linewidth=2)
+        ax.plot([50, 0], [0, 50], 'k', linewidth=2)
+        ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
 
-    # Đường từ giữa cạnh đến trung tâm
-    ax.plot([0, 50], [50, 100], 'k', linewidth=1)
-    ax.plot([50, 100], [100, 50], 'k', linewidth=1)
-    ax.plot([100, 50], [50, 0], 'k', linewidth=1)
-    ax.plot([50, 0], [0, 50], 'k', linewidth=1)
-
-    # Hình thoi trung tâm
-    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
-    # Tọa độ tương đối cho từng nhà (x, y)
+    # House coords
     house_coords = {
-        1: (50, 80),
-        2: (25, 95),
-        3: (10, 80),
+        1: (50, 70),
+        2: (25, 85),
+        3: (10, 70),
         4: (25, 45),
         5: (15, 20),
         6: (25, 5),
@@ -297,35 +333,42 @@ def draw_chart(planet_data):
         8: (75, 5),
         9: (85, 20),
         10: (75, 45),
-        11: (90, 80),
-        12: (75, 95),
-    }   
-    # Gom nhóm các hành tinh theo nhà
-    house_planets = {i: [] for i in range(1, 13)}
-    for planet in planet_data:
-        house = planet["Nhà"]
-        name = planet["Hành tinh"]
-        if house:
-            house_planets[house].append(name)
+        11: (90, 70),
+        12: (75, 85),
+    }
 
-    # Vẽ tên hành tinh tại vị trí từng nhà
-    for house, (x, y) in house_coords.items():
-        labels = []
-        for p in planet_data:
-            if p["Nhà"] == house:
-                name = p["Hành tinh"]
-                sign = p["Cung"].split()[-1]
-                deg_str = p["Vị trí"].split("°")[0] + "°"
-                labels.append(f"{name} ({sign} {deg_str})")
-        names = "\n".join(labels)
-        ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
+    # D1 chart (Trái)
+    bhava_planets = {i: [] for i in range(1, 13)}
+    for p in planet_data:
+        bh = p["Nhà"]
+        if bh:
+            sign = p["Cung"].split()[-1]
+            deg = p["Vị trí"].split("°")[0]
+            bhava_planets[bh].append(f"{p['Hành tinh']} ({sign} {deg}°)")
+    for h, (x, y) in house_coords.items():
+        ax1.text(x, y, "\n".join(bhava_planets[h]), ha='center', va='center', fontsize=8, color='blue')
+    ax1.set_title("D1 Chart", fontsize=12)
 
-    return fig  
+    # D9 chart (Phải)
+    rashi_order = [
+        "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+        "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+    ]
+    rashi_to_house_num = {r: i+1 for i, r in enumerate(rashi_order)}
+    d9_house_planets = {i: [] for i in range(1, 13)}
+    for p in d9_data:
+        house = rashi_to_house_num[p["D9 Cung"]]
+        d9_house_planets[house].append(f"{p['Hành tinh']} ({p['D9 Cung']})")
+    for h, (x, y) in house_coords.items():
+        ax2.text(x, y, "\n".join(d9_house_planets[h]), ha='center', va='center', fontsize=8, color='darkred')
+    ax2.set_title("D9 (Navamsa) Chart", fontsize=12)
+
+    return fig
 
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
-fig = draw_chart(planet_data)
-st.pyplot(fig, use_container_width=False)
+fig = draw_combined_chart(planet_data, d9_data)
+st.pyplot(fig)
 # Dasha
 st.subheader("🕰️ Vimshottari Dasha (120 năm)")
 
@@ -358,7 +401,6 @@ while total_years < 120:
     index += 1
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
-
 
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
