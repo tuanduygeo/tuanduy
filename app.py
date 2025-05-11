@@ -357,7 +357,7 @@ def draw_chart(planet_data):
     return fig  
 
 # Hiển thị biểu đồ
-st.markdown("<h3 style='text-align: left;'>4. Biểu đồ Chiêm tinh</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
 
