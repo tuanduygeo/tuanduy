@@ -115,10 +115,6 @@ st.markdown("""
 swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
 vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
-
-# Get current date and time
-vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
-
 # Lấy giờ hiện tại ở múi giờ Việt Nam
 now_local = datetime.now(vn_tz)
 
@@ -162,11 +158,11 @@ if st.button("Chạy Tính Toán"):
 
     selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
 
-    jd = swe.julday(selected_datetime_vn.year, selected_datetime_vn.month, selected_datetime_vn.day,
-                    selected_datetime_vn.hour + selected_datetime_vn.minute / 60 + selected_datetime_vn.second / 3600)
+    jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
+                    selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
-    st.markdown(f"**Năm**: {selected_datetime.year} **Tháng**: {selected_datetime.month} **Ngày**: {selected_datetime.day}")
+    st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}")
 
 
 rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
