@@ -340,10 +340,5 @@ def draw_chart(planet_data):
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-
-
-st.dataframe(pd.DataFrame(rows), use_container_width=True)
-
-
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
 
