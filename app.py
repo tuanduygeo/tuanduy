@@ -352,7 +352,7 @@ def draw_chart(planet_data):
                 deg_str = p["Vị trí"].split("°")[0] + "°"
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
-        ax.text(x, y, names, ha='center', va='center', fontsize=3, color='blue')
+        ax.text(x, y, names, ha='center', va='center', fontsize=4, color='blue')
 
     return fig  
 
