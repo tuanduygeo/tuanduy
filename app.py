@@ -304,6 +304,20 @@ def draw_chart(planet_data):
         11: (95, 80),
         12: (75, 95),
     }   
+    house_label_coords = {
+    1: (50, 95),
+    2: (15, 95),
+    3: (5, 70),
+    4: (15, 35),
+    5: (10, 10),
+    6: (20, 0),
+    7: (50, 5),
+    8: (80, 0),
+    9: (90, 10),
+    10: (85, 35),
+    11: (95, 70),
+    12: (85, 95)
+}
     # Gom nhóm các hành tinh theo nhà
     house_planets = {i: [] for i in range(1, 13)}
     for planet in planet_data:
