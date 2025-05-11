@@ -333,7 +333,7 @@ def draw_chart(planet_data):
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
    
     # Thêm số nhà và hành tinh
-     for house, (x, y) in house_coords.items():
+    for house, (x, y) in house_coords.items():
         ax.text(x, y + 5, str(house), ha='center', va='center', fontsize=9, weight='bold')
         if planet_data.get(house):
             ax.text(x, y - 5, planet_data[house], ha='center', va='center', fontsize=7, color='darkblue')
