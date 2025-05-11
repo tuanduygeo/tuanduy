@@ -359,13 +359,19 @@ start_date = now_local
 total_years = 0
 rows = []
 
+# Duy trì tổng thời gian không vượt quá 120 năm
 while total_years < 120:
-    dasha = ordered_dasha[total_years // 120]
-    years = years_list[total_years % len(years_list)]
+    # Lấy tên hành tinh và thời gian Dasha
+    dasha = ordered_dasha[total_years % 9]  # Lặp qua lại 9 hành tinh
+    years = years_list[total_years % len(years_list)]  # Sử dụng năm của hành tinh đó
+    
+    # Điều chỉnh nếu tổng thời gian vượt quá 120 năm
     if total_years + years > 120:
         years = 120 - total_years
 
     end_date = start_date + timedelta(days=years * 365.25)
+    
+    # Thêm dòng vào bảng
     rows.append({
         "Dasha Lord": dasha,
         "Years": round(years, 2),
@@ -373,6 +379,7 @@ while total_years < 120:
         "End Date": end_date.strftime('%Y-%m-%d')
     })
 
+    # Cập nhật thời gian bắt đầu cho Dasha tiếp theo
     start_date = end_date
     total_years += years
 
@@ -384,9 +391,6 @@ st.markdown("Dưới đây là bảng Mahadasha theo hệ thống Vimshottari.")
 dasha_df = pd.DataFrame(rows)
 st.dataframe(dasha_df)  # Sử dụng st.dataframe để hiển thị bảng trong Streamlit
 
-# Thêm thông tin cho người dùng về quá trình tính toán
-st.markdown(f"**🌙 Mặt Trăng hiện tại đang ở:** {swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]}°")
-st.markdown(f"**🗓️ Thời gian hiện tại (VN):** {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
