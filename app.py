@@ -324,11 +324,11 @@ def draw_chart(planet_data):
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     for house, (x, y) in house_label_coords.items():
-    # Xác định cung tại nhà đó
-    cusp_long = equal_house_cusps[house - 1]
-    rashi = get_rashi(cusp_long).split()[-1]  # chỉ lấy tên cung
-    number = rashi_number[rashi]
-    ax.text(x, y, str(number), fontsize=6, color='black', weight='bold', ha='center', va='center')
+        # Xác định cung tại nhà đó
+        cusp_long = equal_house_cusps[house - 1]
+        rashi = get_rashi(cusp_long).split()[-1]  # chỉ lấy tên cung
+        number = rashi_number[rashi]
+        ax.text(x, y, str(number), fontsize=6, color='black', weight='bold', ha='center', va='center')
     return fig  
 
 # Hiển thị biểu đồ
