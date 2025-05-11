@@ -115,39 +115,57 @@ st.markdown("""
 swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
 
-# Tạo giao diện cho các slider để người dùng chọn thời gian và tọa độ
 st.title("🧭 Chỉnh Sửa Thời Gian và Tọa Độ")
 
-# Slider cho Năm, Tháng, Ngày, Giờ, Phút
-year = st.slider("Chọn Năm", min_value=1900, max_value=2100, value=2025)
-month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=5)
-day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=11)
-hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=13)
-minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=26)
+# Sử dụng cột để chia bố cục và sắp xếp các slider
+col1, col2 = st.columns([1, 1])
 
-# Slider cho Vĩ độ và Kinh độ
-latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0)
-longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8)
+with col1:
+    # Slider cho Năm, Tháng, Ngày
+    year = st.slider("Chọn Năm", min_value=1900, max_value=2100, value=2025, step=1)
+    month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=5, step=1)
+    day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=11, step=1)
 
-# Slider cho múi giờ
-timezone = st.slider("Chọn Múi giờ", min_value=-12, max_value=12, value=7)
+with col2:
+    # Slider cho Giờ, Phút
+    hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=13, step=1)
+    minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=26, step=1)
+
+# Sử dụng cột để chọn Vĩ độ, Kinh độ và Múi giờ
+col3, col4 = st.columns([1, 1])
+
+with col3:
+    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
+    longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
+
+with col4:
+    timezone = st.slider("Chọn Múi giờ", min_value=-12, max_value=12, value=7, step=1)
 
 # Tạo button để chạy tính toán
 if st.button("Chạy Tính Toán"):
     # Tạo datetime theo dữ liệu người dùng nhập
     selected_datetime = datetime(year, month, day, hour, minute)
 
-    # Chuyển đổi thời gian UTC
-    selected_utc = selected_datetime - timedelta(hours=timezone)
-    
+    # Đảm bảo selected_datetime là "naive" (không có múi giờ)
+    if selected_datetime.tzinfo is None:
+        selected_datetime_vn = vn_tz.localize(selected_datetime)  # Localize vào múi giờ Việt Nam
+    else:
+        selected_datetime_vn = selected_datetime.astimezone(vn_tz)  # Nếu đã có múi giờ, chuyển đổi
+
+    # Chuyển đổi thời gian sang UTC
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Chuyển sang UTC
+     # Tính Julian Day (JDay)
+    jd = swe.julday(selected_datetime_vn.year, selected_datetime_vn.month, selected_datetime_vn.day,
+                    selected_datetime_vn.hour + selected_datetime_vn.minute / 60 + selected_datetime_vn.second / 3600)
     # Hiển thị kết quả
-    st.markdown(f"**🕒 Thời gian chỉnh sửa**: {selected_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    st.markdown(f"**🕒 Thời gian chỉnh sửa (VN)**: {selected_datetime_vn.strftime('%Y-%m-%d %H:%M:%S')}")
     st.markdown(f"**Thời gian UTC**: {selected_utc.strftime('%Y-%m-%d %H:%M:%S')}")
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
 
     # Hiển thị thông tin chi tiết (năm, tháng, ngày, giờ, phút)
     st.markdown(f"**Năm**: {selected_datetime.year} **Tháng**: {selected_datetime.month} **Ngày**: {selected_datetime.day}")
     st.markdown(f"**Giờ**: {selected_datetime.hour} **Phút**: {selected_datetime.minute}")
+    
 
 rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
           "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
@@ -222,18 +240,7 @@ def get_house_for_planet(lon, house_cusps):
             return i + 1
     return None
 
-vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
-# Chuyển đổi thời gian sang múi giờ Việt Nam
-selected_datetime_vn = vn_tz.localize(selected_datetime)  # Localize vào múi giờ Việt Nam
-    
-    # Chuyển đổi thời gian UTC
-now_local = selected_datetime_vn.astimezone(pytz.utc)  # Chuyển sang UTC
-now_utc = now_local - timedelta(hours=timezone)
-jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
-                now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
-st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-st.markdown(f"Tọa độ:21,105.8")
 
 houses,ascmc = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
 asc = houses[0]
