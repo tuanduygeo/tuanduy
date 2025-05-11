@@ -115,6 +115,10 @@ st.markdown("""
 swe.set_ephe_path("ephe")
 swe.set_sid_mode(swe.SIDM_LAHIRI)
 
+# Cài đặt múi giờ Việt Nam
+vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+
+# Tạo giao diện kéo thả (slider) cho các thành phần thời gian và tọa độ
 st.title("🧭 Chỉnh Sửa Thời Gian và Tọa Độ")
 
 # Sử dụng cột để chia bố cục và sắp xếp các slider
@@ -146,26 +150,32 @@ if st.button("Chạy Tính Toán"):
     # Tạo datetime theo dữ liệu người dùng nhập
     selected_datetime = datetime(year, month, day, hour, minute)
 
-    # Đảm bảo selected_datetime là "naive" (không có múi giờ)
+    # Kiểm tra xem datetime đã có múi giờ chưa
     if selected_datetime.tzinfo is None:
-        selected_datetime_vn = vn_tz.localize(selected_datetime)  # Localize vào múi giờ Việt Nam
+        # Nếu chưa có múi giờ, localize vào múi giờ Việt Nam
+        selected_datetime_vn = vn_tz.localize(selected_datetime)
     else:
-        selected_datetime_vn = selected_datetime.astimezone(vn_tz)  # Nếu đã có múi giờ, chuyển đổi
+        # Nếu đã có múi giờ, chuyển nó sang múi giờ Việt Nam
+        selected_datetime_vn = selected_datetime.astimezone(vn_tz)
 
     # Chuyển đổi thời gian sang UTC
     selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Chuyển sang UTC
-     # Tính Julian Day (JDay)
+    
+    # Tính Julian Day (JDay)
     jd = swe.julday(selected_datetime_vn.year, selected_datetime_vn.month, selected_datetime_vn.day,
                     selected_datetime_vn.hour + selected_datetime_vn.minute / 60 + selected_datetime_vn.second / 3600)
+    
     # Hiển thị kết quả
     st.markdown(f"**🕒 Thời gian chỉnh sửa (VN)**: {selected_datetime_vn.strftime('%Y-%m-%d %H:%M:%S')}")
     st.markdown(f"**Thời gian UTC**: {selected_utc.strftime('%Y-%m-%d %H:%M:%S')}")
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
+    
+    # Hiển thị Julian Day
+    st.markdown(f"**Julian Day (JDay)**: {jd}")
 
     # Hiển thị thông tin chi tiết (năm, tháng, ngày, giờ, phút)
     st.markdown(f"**Năm**: {selected_datetime.year} **Tháng**: {selected_datetime.month} **Ngày**: {selected_datetime.day}")
     st.markdown(f"**Giờ**: {selected_datetime.hour} **Phút**: {selected_datetime.minute}")
-    
 
 rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
           "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
