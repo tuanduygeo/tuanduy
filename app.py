@@ -377,8 +377,8 @@ while total_years < 120:
     total_years += years
 
 # Hiển thị kết quả Vimshottari Dasha
-dasha_df = pd.DataFrame(rows)
-print(dasha_df)
+
+st.dataframe(pd.DataFrame(rows), use_container_width=True)
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
