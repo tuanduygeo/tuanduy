@@ -225,7 +225,7 @@ planet_data.append({
     "Nakshatra": asc_nak,
     "Pada": asc_pada,
     "Nhà": 1,
-    "Dignity": "",
+    "Tính chất": "",
     "Nghịch hành": ""
 })
 for name, code in planets.items():
@@ -243,7 +243,7 @@ for name, code in planets.items():
         "Nakshatra": nak,
         "Pada": pada,
         "Nhà": bhava,
-        "Dignity": dignity,
+        "Tính chất": dignity,
         "Nghịch hành": "R" if is_retrograde(code) else "",
         
     })
@@ -256,7 +256,7 @@ planet_data.append({
     "Nakshatra": get_nakshatra(ketu_deg),
     "Pada": get_pada(ketu_deg),
     "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
-    "Dignity": "",
+    "Tính chất": "",
     "Nghịch hành": "",
     
 })
