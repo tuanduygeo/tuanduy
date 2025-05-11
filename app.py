@@ -297,15 +297,18 @@ while total_years < 120:
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
-planet_positions = {}
+planet_labels_by_house = {i: "" for i in range(1, 13)}
 
-for pid, name in planet.items():
+for pid, name in planet_names.items():
     lon, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
     house = int(swe.house_pos(lon[0], latitude, longitude, b'W'))
-    if house in planet_positions:
-        planet_positions[house] += f", {name}"
-    else:
-        planet_positions[house] = name
+    planet_labels_by_house[house] += name + "\n"
+
+# Thêm Ketu (đối diện Rahu)
+rahu_lon, _ = swe.calc_ut(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)
+ketu_lon = (rahu_lon[0] + 180) % 360
+ketu_house = int(swe.house_pos(ketu_lon, latitude, longitude, b'W'))
+planet_labels_by_house[ketu_house] += "Ketu"
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -330,9 +333,9 @@ def draw_chart(planet_data):
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
    
     # Thêm số nhà và hành tinh
-    for house, (x, y) in house_coords.items():
+     for house, (x, y) in house_coords.items():
         ax.text(x, y + 5, str(house), ha='center', va='center', fontsize=9, weight='bold')
-        if house in planet_data:
+        if planet_data.get(house):
             ax.text(x, y - 5, planet_data[house], ha='center', va='center', fontsize=7, color='darkblue')
 
     return fig
@@ -353,7 +356,7 @@ house_coords = {
 }
 # Hiển thị biểu đồ
 st.title("🔮 Biểu đồ Chiêm tinh Bắc Ấn")
-fig = draw_chart(planet_positions)
+fig = draw_chart(planet_labels_by_house)
 st.pyplot(fig, use_container_width=False)
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
