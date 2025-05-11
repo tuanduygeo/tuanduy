@@ -200,7 +200,7 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-st.markdown(f"**Tọa độ:21,105.8")
+st.markdown(f"Tọa độ:21,105.8")
 
 houses,ascmc = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
 asc = houses[0]
