@@ -335,61 +335,6 @@ def draw_chart(planet_data):
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
     return fig  
-def get_nakshatra_index(moon_longitude):
-    nakshatra_degrees = 360 / 27  # Mỗi Nakshatra có 13.33 độ
-    return int(moon_longitude // nakshatra_degrees)
-
-# Tính độ của Mặt Trăng
-moon_lon = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]  # Độ của Mặt Trăng
-nak_index = get_nakshatra_index(moon_lon)
-
-# Dasha Sequence theo Vimshottari
-dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-dasha_years = {
-    "Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10,
-    "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17
-}
-
-# Sắp xếp lại dasha theo Nakshatra hiện tại
-ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
-years_list = [dasha_years[p] for p in ordered_dasha]
-
-# Tính toán thời gian cho từng Mahadasha
-start_date = now_local
-total_years = 0
-rows = []
-
-# Duy trì tổng thời gian không vượt quá 120 năm
-while total_years < 120:
-    # Lấy tên hành tinh và thời gian Dasha
-    dasha = ordered_dasha[total_years % 9]  # Lặp qua lại 9 hành tinh
-    years = years_list[total_years % len(years_list)]  # Sử dụng năm của hành tinh đó
-    
-    # Điều chỉnh nếu tổng thời gian vượt quá 120 năm
-    if total_years + years > 120:
-        years = 120 - total_years
-
-    end_date = start_date + timedelta(days=years * 365.25)
-    
-    # Thêm dòng vào bảng
-    rows.append({
-        "Dasha Lord": dasha,
-        "Years": round(years, 2),
-        "Start Date": start_date.strftime('%Y-%m-%d'),
-        "End Date": end_date.strftime('%Y-%m-%d')
-    })
-
-    # Cập nhật thời gian bắt đầu cho Dasha tiếp theo
-    start_date = end_date
-    total_years += years
-
-# Hiển thị kết quả Vimshottari Dasha trên Streamlit
-st.title("🕰️ Vimshottari Mahadasha (120 năm)")
-st.markdown("Dưới đây là bảng Mahadasha theo hệ thống Vimshottari.")
-
-# Hiển thị bảng trong Streamlit
-dasha_df = pd.DataFrame(rows)
-st.dataframe(dasha_df)  # Sử dụng st.dataframe để hiển thị bảng trong Streamlit
 
 # Hiển thị biểu đồ
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
