@@ -338,7 +338,7 @@ house_coords = {
 }
 # Hiển thị biểu đồ
 st.title("🔮 Biểu đồ Chiêm tinh Bắc Ấn")
-fig = draw_chart(planet_labels_by_house)
+fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
