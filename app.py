@@ -339,8 +339,8 @@ start_date = now_local
 rows = []
 total_years = 0
 index = 0
-years_list = [balance_years] + [dasha_years[p] for p in dasha_sequence[1:]]
 ordered_dasha = dasha_sequence[nak_index % 9:] + dasha_sequence[:nak_index % 9]
+years_list = [balance_years] + [dasha_years[d] for d in ordered_dasha[1:]]
 
 while total_years < 120:
     dasha = ordered_dasha[index % 9]
