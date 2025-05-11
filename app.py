@@ -319,23 +319,36 @@ def draw_chart(planet_data):
 
     # Hình thoi trung tâm
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
-   
-  
-# Tọa độ tương đối cho từng nhà (x, y)
-house_coords = {
-    1: (50, 70),
-    2: (25, 85),
-    3: (10, 70),
-    4: (25, 45),
-    5: (15, 20),
-    6: (25, 5),
-    7: (50, 20),
-    8: (75, 5),
-    9: (85, 20),
-    10: (75, 45),
-    11: (90, 70),
-    12: (75, 85),
-}
+    # Tọa độ tương đối cho từng nhà (x, y)
+    house_coords = {
+        1: (50, 70),
+        2: (25, 85),
+        3: (10, 70),
+        4: (25, 45),
+        5: (15, 20),
+        6: (25, 5),
+        7: (50, 20),
+        8: (75, 5),
+        9: (85, 20),
+        10: (75, 45),
+        11: (90, 70),
+        12: (75, 85),
+    }   
+    # Gom nhóm các hành tinh theo nhà
+    house_planets = {i: [] for i in range(1, 13)}
+    for planet in planet_data:
+        house = planet["Nhà"]
+        name = planet["Hành tinh"]
+        if house:
+            house_planets[house].append(name)
+
+    # Vẽ tên hành tinh tại vị trí từng nhà
+    for house, (x, y) in house_coords.items():
+        names = "\n".join(house_planets[house])
+        ax.text(x, y, names, ha='center', va='center', fontsize=8, color='blue')
+
+    return fig  
+
 # Hiển thị biểu đồ
 st.title("🔮 Biểu đồ Chiêm tinh Bắc Ấn")
 fig = draw_chart(planet_data)
