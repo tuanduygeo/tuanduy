@@ -218,9 +218,13 @@ def get_pada(degree):
 
 def compute_ketu(rahu_deg):
     return (rahu_deg + 180.0) % 360.0
-def is_retrograde(code):
+def is_retrograde(code, jd):
+    # Tính toán vị trí hành tinh theo Julian Day
     res, ret = swe.calc_ut(jd, code)
-    return ret < 0
+    # Nếu tốc độ chuyển động (ret) là âm, hành tinh đang nghịch hành
+    if ret < 0:
+        return True
+    return False
 def deg_to_dms(degree):
     d = int(degree)
     m = int((degree - d) * 60)
@@ -265,6 +269,7 @@ planet_data.append({
     "Tính chất": "",
     "Nghịch hành": ""
 })
+
 for name, code in planets.items():
     lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
     rashi = get_rashi(lon_deg)
@@ -273,6 +278,10 @@ for name, code in planets.items():
     sign_deg = deg_to_dms(lon_deg % 30)
     dignity = get_dignity(name, rashi)
     bhava = get_house_for_planet(lon_deg, equal_house_cusps)
+    
+    # Kiểm tra nghịch hành
+    retrograde_status = "R" if is_retrograde(code, jd) else ""
+
     planet_data.append({
         "Hành tinh": name,
         "Vị trí": sign_deg,
@@ -281,8 +290,7 @@ for name, code in planets.items():
         "Pada": pada,
         "Nhà": bhava,
         "Tính chất": dignity,
-        "Nghịch hành": "R" if is_retrograde(code) else "",
-        
+        "Nghịch hành": retrograde_status,
     })
 
 ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
