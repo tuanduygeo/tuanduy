@@ -292,19 +292,38 @@ for name, code in planets.items():
         "Tính chất": dignity,
         "Nghịch hành": retrograde_status,
     })
+# Tìm Rahu trong planet_data
+rahu_deg = None
+for planet in planet_data:
+    if planet["Hành tinh"] == "Rahu":
+        rahu_deg = swe.calc(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)[0][0]
+        break
 
-ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
-planet_data.append({
-    "Hành tinh": "Ketu",
-    "Vị trí": deg_to_dms(ketu_deg % 30),
-    "Cung": get_rashi(ketu_deg),
-    "Nakshatra": get_nakshatra(ketu_deg),
-    "Pada": get_pada(ketu_deg),
-    "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
-    "Tính chất": "",
-    "Nghịch hành": "",
-    
-})
+# Nếu Rahu có giá trị, tính toán Ketu
+if rahu_deg is not None:
+    ketu_deg = (rahu_deg + 180) % 360  # Ketu là đối diện của Rahu
+
+    # Tính toán các thông số của Ketu
+    ketu_rashi = get_rashi(ketu_deg)
+    ketu_nak = get_nakshatra(ketu_deg)
+    ketu_pada = get_pada(ketu_deg)
+    ketu_sign_deg = deg_to_dms(ketu_deg % 30)
+    ketu_dignity = ""  # Ketu không có "tính chất" (vượng, tướng, tù, tử)
+    ketu_bhava = get_house_for_planet(ketu_deg, equal_house_cusps)
+
+    # Thêm Ketu vào planet_data
+    planet_data.append({
+        "Hành tinh": "Ketu",
+        "Vị trí": ketu_sign_deg,
+        "Cung": ketu_rashi,
+        "Nakshatra": ketu_nak,
+        "Pada": ketu_pada,
+        "Nhà": ketu_bhava,
+        "Tính chất": ketu_dignity,
+        "Nghịch hành": "",  # Ketu không có nghịch hành
+    })
+
+
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
