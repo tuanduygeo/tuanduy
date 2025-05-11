@@ -297,20 +297,15 @@ while total_years < 120:
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True)
 
-planet_positions = {
-    1: "Sun",
-    2: "Moon",
-    3: "Mars",
-    4: "Mercury",
-    5: "Jupiter",
-    6: "Venus",
-    7: "Saturn",
-    8: "Rahu",
-    9: "Ketu",
-    10: "Uranus",
-    11: "Neptune",
-    12: "Pluto"
-}
+planet_positions = {}
+
+for pid, name in planet.items():
+    lon, _ = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
+    house = int(swe.house_pos(lon[0], latitude, longitude, b'W'))
+    if house in planet_positions:
+        planet_positions[house] += f", {name}"
+    else:
+        planet_positions[house] = name
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -333,11 +328,13 @@ def draw_chart(planet_data):
 
     # Hình thoi trung tâm
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=2)
-    # Hiển thị số nhà và tên hành tinh
+   
+    # Thêm số nhà và hành tinh
     for house, (x, y) in house_coords.items():
         ax.text(x, y + 5, str(house), ha='center', va='center', fontsize=9, weight='bold')
         if house in planet_data:
             ax.text(x, y - 5, planet_data[house], ha='center', va='center', fontsize=7, color='darkblue')
+
     return fig
 # Tọa độ tương đối cho từng nhà (x, y)
 house_coords = {
@@ -355,6 +352,7 @@ house_coords = {
     12: (75, 85),
 }
 # Hiển thị biểu đồ
+st.title("🔮 Biểu đồ Chiêm tinh Bắc Ấn")
 fig = draw_chart(planet_positions)
 st.pyplot(fig, use_container_width=False)
 
