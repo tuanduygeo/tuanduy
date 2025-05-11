@@ -219,7 +219,7 @@ st.subheader("🪐 Vị trí Hành Tinh")
 planet_data = []
 sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
 planet_data.append({
-    "Hành tinh": "Ascendant",
+    "Hành tinh": "Asc",
     "Vị trí": asc_degree_dms,
     "Cung": asc_rashi,
     "Nakshatra": asc_nak,
@@ -344,7 +344,14 @@ def draw_chart(planet_data):
 
     # Vẽ tên hành tinh tại vị trí từng nhà
     for house, (x, y) in house_coords.items():
-        names = "\n".join(house_planets[house])
+        labels = []
+        for p in planet_data:
+            if p["Nhà"] == house:
+                name = p["Hành tinh"]
+                sign = p["Cung"].split()[-1]
+                deg_str = p["Vị trí"].split("°")[0] + "°"
+                labels.append(f"{name} ({sign} {deg_str})")
+        names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=6, color='blue')
 
     return fig  
