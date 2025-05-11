@@ -335,6 +335,10 @@ def draw_chart(planet_data):
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
     return fig  
+def get_nakshatra_index(moon_longitude):
+    nakshatra_degrees = 360 / 27  # Mỗi Nakshatra có 13.33 độ
+    return int(moon_longitude // nakshatra_degrees)
+
 # Tính độ của Mặt Trăng
 moon_lon = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]  # Độ của Mặt Trăng
 nak_index = get_nakshatra_index(moon_lon)
