@@ -117,9 +117,13 @@ swe.set_sid_mode(swe.SIDM_LAHIRI)
 vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
 
 # Get current date and time
-now_local = datetime.now()
-timezone = 7  # Timezone offset
-now_utc = now_local - timedelta(hours=timezone)
+vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+
+# Lấy giờ hiện tại ở múi giờ Việt Nam
+now_local = datetime.now(vn_tz)
+
+# Chuyển đổi giờ hiện tại về UTC
+now_utc = now_local.astimezone(pytz.utc)
 
 jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
