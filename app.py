@@ -249,6 +249,54 @@ asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
 
+
+# Hành tinh
+st.subheader("🪐 Vị trí Hành Tinh")
+
+planet_data = []
+sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
+planet_data.append({
+    "Hành tinh": "Asc",
+    "Vị trí": asc_degree_dms,
+    "Cung": asc_rashi,
+    "Nakshatra": asc_nak,
+    "Pada": asc_pada,
+    "Nhà": 1,
+    "Tính chất": "",
+    "Nghịch hành": ""
+})
+for name, code in planets.items():
+    lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
+    rashi = get_rashi(lon_deg)
+    nak = get_nakshatra(lon_deg)
+    pada = get_pada(lon_deg)
+    sign_deg = deg_to_dms(lon_deg % 30)
+    dignity = get_dignity(name, rashi)
+    bhava = get_house_for_planet(lon_deg, equal_house_cusps)
+    planet_data.append({
+        "Hành tinh": name,
+        "Vị trí": sign_deg,
+        "Cung": rashi,
+        "Nakshatra": nak,
+        "Pada": pada,
+        "Nhà": bhava,
+        "Tính chất": dignity,
+        "Nghịch hành": "R" if is_retrograde(code) else "",
+        
+    })
+
+ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
+planet_data.append({
+    "Hành tinh": "Ketu",
+    "Vị trí": deg_to_dms(ketu_deg % 30),
+    "Cung": get_rashi(ketu_deg),
+    "Nakshatra": get_nakshatra(ketu_deg),
+    "Pada": get_pada(ketu_deg),
+    "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
+    "Tính chất": "",
+    "Nghịch hành": "",
+    
+})
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
     fig, ax = plt.subplots(figsize=(3, 3))
@@ -313,54 +361,6 @@ def draw_chart(planet_data):
 st.markdown("<h3 style='text-align: left;'>BIỂU ĐỒ CHIÊM TINH</h3>", unsafe_allow_html=True)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-
-# Hành tinh
-st.subheader("🪐 Vị trí Hành Tinh")
-
-planet_data = []
-sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
-planet_data.append({
-    "Hành tinh": "Asc",
-    "Vị trí": asc_degree_dms,
-    "Cung": asc_rashi,
-    "Nakshatra": asc_nak,
-    "Pada": asc_pada,
-    "Nhà": 1,
-    "Tính chất": "",
-    "Nghịch hành": ""
-})
-for name, code in planets.items():
-    lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
-    rashi = get_rashi(lon_deg)
-    nak = get_nakshatra(lon_deg)
-    pada = get_pada(lon_deg)
-    sign_deg = deg_to_dms(lon_deg % 30)
-    dignity = get_dignity(name, rashi)
-    bhava = get_house_for_planet(lon_deg, equal_house_cusps)
-    planet_data.append({
-        "Hành tinh": name,
-        "Vị trí": sign_deg,
-        "Cung": rashi,
-        "Nakshatra": nak,
-        "Pada": pada,
-        "Nhà": bhava,
-        "Tính chất": dignity,
-        "Nghịch hành": "R" if is_retrograde(code) else "",
-        
-    })
-
-ketu_deg = compute_ketu(swe.calc(jd, swe.MEAN_NODE)[0][0])
-planet_data.append({
-    "Hành tinh": "Ketu",
-    "Vị trí": deg_to_dms(ketu_deg % 30),
-    "Cung": get_rashi(ketu_deg),
-    "Nakshatra": get_nakshatra(ketu_deg),
-    "Pada": get_pada(ketu_deg),
-    "Nhà": get_house_for_planet(ketu_deg, equal_house_cusps),
-    "Tính chất": "",
-    "Nghịch hành": "",
-    
-})
 
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
