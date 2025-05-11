@@ -127,7 +127,11 @@ nakshatras = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra
               "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
               "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
               "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"]
-
+rashi_number = {
+    "Aries": 1, "Taurus": 2, "Gemini": 3, "Cancer": 4,
+    "Leo": 5, "Virgo": 6, "Libra": 7, "Scorpio": 8,
+    "Sagittarius": 9, "Capricorn": 10, "Aquarius": 11, "Pisces": 12
+}
 planets = {
     'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
     'Jupiter': swe.JUPITER, 'Venus': swe.VENUS, 'Saturn': swe.SATURN, 'Rahu': swe.MEAN_NODE
@@ -319,7 +323,12 @@ def draw_chart(planet_data):
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
-
+    for house, (x, y) in house_label_coords.items():
+    # Xác định cung tại nhà đó
+    cusp_long = equal_house_cusps[house - 1]
+    rashi = get_rashi(cusp_long).split()[-1]  # chỉ lấy tên cung
+    number = rashi_number[rashi]
+    ax.text(x, y, str(number), fontsize=6, color='black', weight='bold', ha='center', va='center')
     return fig  
 
 # Hiển thị biểu đồ
