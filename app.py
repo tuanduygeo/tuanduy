@@ -362,7 +362,7 @@ def draw_chart(planet_data):
         for p in planet_data:
             if p["Nhà"] == house:
                 name = p["Hành tinh"]
-                sign = p["Cung"].split()[1]
+                sign = p["Cung"].split(maxsplit=1)[1]
                 deg_str = p["Vị trí"].split("°")[0] + "°"
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
