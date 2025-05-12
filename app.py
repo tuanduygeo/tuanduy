@@ -409,20 +409,36 @@ n = st.slider("Chọn kích thước ma phương (n lẻ)", min_value=3, max_val
 
 # 🔢 Tạo ma phương kiểu Ấn Độ
 def generate_indian_magic(n):
+    if n % 2 == 0:
+        raise ValueError("Chỉ hỗ trợ số lẻ.")
+
     square = [[0 for _ in range(n)] for _ in range(n)]
-    i = j = n // 2
-    square[i][j] = 1
 
-    for num in range(2, n * n + 1):
-        new_i = (i + 1) % n
-        new_j = (j + 1) % n
+    # 🎯 Bắt đầu tại ô giữa cột, dòng dưới cùng
+    i, j = n - 1, n // 2
 
-        if square[new_i][new_j] == 0:
-            i, j = new_i, new_j
-        else:
-            i = (i - 1 + n) % n
-
+    for num in range(1, n * n + 1):
         square[i][j] = num
+
+        # Ghi nhớ vị trí trước
+        old_i, old_j = i, j
+
+        # Di chuyển chéo lên phải
+        i -= 1
+        j += 1
+
+        # Wrap-around nếu vượt biên
+        if i < 0:
+            i = n - 1
+        if j == n:
+            j = 0
+
+        # Nếu ô đã có số → lùi lại và đi thẳng xuống
+        if square[i][j] != 0:
+            i = old_i + 1
+            j = old_j
+            if i == n:
+                i = 0
 
     return square
 # Sinh ma phương
