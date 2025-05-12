@@ -376,13 +376,8 @@ def draw_chart(planet_data):
                     arrow = " ↓"
                 else:
                     arrow = ""
-                if retrograde_status:
-                    retrograde = f" {retrograde_status}"  # Thêm "R" nếu hành tinh nghịch hành
-                else:
-                    retrograde = ""
-            
-                # Thêm "R" nếu hành tinh nghịch hành
-                labels.append(f"{name} ({sign} {deg_str}){arrow}{retrograde}")
+                
+                labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
