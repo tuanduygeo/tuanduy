@@ -148,8 +148,8 @@ if st.button("Tính Toán"):
 
 
 
-rashis = ["♈ Bạch Dương", "♉ Kim Ngưu", "♊ Song Tử", "♋ Cự Giải", "♌ Sư Tử", "♍ Xử Nữ", "♎ Thiên Bình", "♏ Bọ Cạp",
-          "♐ Nhân Mã", "♑ Ma Kết", "♒ Bảo Bình", "♓ Song Ngư"]
+rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
+          "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
 
 nakshatras = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
               "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
@@ -362,7 +362,7 @@ def draw_chart(planet_data):
         for p in planet_data:
             if p["Nhà"] == house:
                 name = p["Hành tinh"]
-                sign = p["Cung"].split(maxsplit=1)[1]
+                sign = p["Cung"]
                 deg_str = p["Vị trí"].split("°")[0] + "°"
                 labels.append(f"{name} ({sign} {deg_str})")
         names = "\n".join(labels)
