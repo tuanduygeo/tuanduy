@@ -402,6 +402,40 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+st.title("5.🪷 Ma Phương (Odd Order Magic Square)")
 
+# 📌 Chọn n từ 3 đến 27 (lẻ)
+n = st.slider("Chọn kích thước ma phương (n lẻ)", min_value=3, max_value=27, step=2, value=9)
+
+# 🔢 Tạo ma phương kiểu Ấn Độ
+def generate_indian_magic(n):
+    square = [[0 for _ in range(n)] for _ in range(n)]
+    i = j = n // 2
+    square[i][j] = 1
+
+    for num in range(2, n * n + 1):
+        new_i = (i + 1) % n
+        new_j = (j + 1) % n
+
+        if square[new_i][new_j] == 0:
+            i, j = new_i, new_j
+        else:
+            i = (i - 1 + n) % n
+
+        square[i][j] = num
+
+    return square
+
+# 🧮 Tạo ma phương
+magic_square = generate_indian_magic(n)
+df = pd.DataFrame(magic_square)
+
+# 📊 Hiển thị bảng màu
+st.subheader("📋 Ma phương:")
+st.dataframe(df.style.background_gradient(cmap="viridis").format("{:d}"), use_container_width=True)
+
+# ➕ Tổng chuẩn
+magic_constant = n * (n**2 + 1) // 2
+st.success(f"Tổng ma phương (Magic Constant): {magic_constant}")
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
