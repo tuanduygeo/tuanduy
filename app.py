@@ -144,7 +144,7 @@ if st.button("Tính Toán"):
                     selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-    st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}")
+    st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour}")
 
 
 
