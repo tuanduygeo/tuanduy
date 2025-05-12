@@ -402,64 +402,6 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
-st.title("5.🪷 Ma Phương (Odd Order Magic Square)")
 
-# 📌 Chọn n từ 3 đến 27 (lẻ)
-n = st.slider("Chọn kích thước ma phương (n lẻ)", min_value=3, max_value=27, step=2, value=9)
-
-# 🔢 Tạo ma phương kiểu Ấn Độ
-def generate_indian_magic(n):
-    square = [[0 for _ in range(n)] for _ in range(n)]
-    i, j = n - 1, n // 2
-    for num in range(1, n * n + 1):
-        square[i][j] = num
-        old_i, old_j = i, j
-        i -= 1
-        j += 1
-        if i < 0:
-            i = n - 1
-        if j == n:
-            j = 0
-        if square[i][j] != 0:
-            i = old_i + 1
-            j = old_j
-            if i == n:
-                i = 0
-    return np.array(square)
-
-magic = generate_indian_magic(n)
-
-# Vẽ lại hình vuông với highlight trung tâm và số 1
-fig, ax = plt.subplots(figsize=(n / 2.5, n / 2.5))
-ax.set_axis_off()
-table = ax.table(
-    cellText=magic,
-    loc='center',
-    cellLoc='center'
-)
-table.scale(1, 1.5)
-
-# Highlight
-mod_target = (n + 1) // 2
-center_value = magic[n // 2][n // 2]
-
-for (i, j), cell in table.get_celld().items():
-    if i == 0:
-        continue
-    val = magic[i - 1][j]
-    if val == 1:
-        cell.set_facecolor('#ff4d4d')  # đỏ cho số 1
-    elif val % n == mod_target:
-        cell.set_facecolor('#facc15')  # vàng cho số mod = (n+1)//2
-    elif i - 1 == j or i - 1 + j == n - 1:
-        cell.set_facecolor('#fde68a')  # vàng nhạt cho đường chéo
-    cell.set_fontsize(10)
-    cell.set_height(1.0 / n)
-    cell.set_width(1.0 / n)
-
-st.pyplot(fig)
-
-magic_sum = n * (n ** 2 + 1) // 2
-st.success(f"Tổng mỗi hàng/cột/đường chéo = {magic_sum}")
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
