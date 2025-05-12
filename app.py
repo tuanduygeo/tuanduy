@@ -70,7 +70,7 @@ if html_files:
         st.subheader(f"📍 Bản đồ mặc định: {default_html}")
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1000, scrolling=True)
+            components.html(html_content, height=1100, scrolling=True)
 
     # Nếu đã chọn → hiển thị bản đồ có nút tiến lùi
     else:
@@ -91,7 +91,7 @@ if html_files:
         html_path = os.path.join(html_dir, selected_html)
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1000, scrolling=True)
+            components.html(html_content, height=1100, scrolling=True)
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
