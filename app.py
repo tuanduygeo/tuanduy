@@ -316,7 +316,7 @@ if rahu_deg is not None:
 
 # Hàm vẽ biểu đồ
 def draw_chart(planet_data):
-    fig, ax = plt.subplots(figsize=(3, 3))
+    fig, ax = plt.subplots(figsize=(4,4))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
