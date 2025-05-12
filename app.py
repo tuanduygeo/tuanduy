@@ -403,5 +403,37 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
+def generate_magic_square(n):
+    if n % 2 == 0:
+        raise ValueError("Chỉ áp dụng cho ma phương cấp lẻ.")
 
+    square = [[0] * n for _ in range(n)]
+    num = 1
+    row, col = 0, n // 2
+
+    while num <= n * n:
+        square[row][col] = num
+        next_row = (row - 1) % n
+        next_col = (col + 1) % n
+
+        if square[next_row][next_col]:
+            row = (row + 1) % n
+        else:
+            row, col = next_row, next_col
+        num += 1
+
+    return square
+
+# Giao diện Streamlit
+st.set_page_config(page_title="Ma phương kiểu Lạc Thư", layout="wide")
+st.title("🔢 Ma phương kiểu Lạc Thư")
+
+n = st.slider("Chọn cấp của ma phương (số lẻ)", min_value=3, max_value=21, step=2, value=9)
+
+try:
+    square = generate_magic_square(n)
+    df = pd.DataFrame(square)
+    st.dataframe(df.style.highlight_max(axis=0), height=600)
+except ValueError as e:
+    st.error(str(e))
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
