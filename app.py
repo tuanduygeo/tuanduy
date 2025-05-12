@@ -425,17 +425,30 @@ def generate_indian_magic(n):
         square[i][j] = num
 
     return square
-
-# 🧮 Tạo ma phương
+# Sinh ma phương
 magic_square = generate_indian_magic(n)
-df = pd.DataFrame(magic_square)
 
-# 📊 Hiển thị bảng màu
-st.subheader("📋 Ma phương:")
-st.dataframe(df.style.background_gradient(cmap="viridis").format("{:d}"), use_container_width=True)
+# Vẽ hình vuông bằng matplotlib
+fig, ax = plt.subplots(figsize=(n / 2.5, n / 2.5))  # Tỷ lệ giữ vuông
+ax.set_axis_off()
+table = ax.table(
+    cellText=magic_square,
+    loc='center',
+    cellLoc='center'
+)
+table.scale(1, 1.5)
 
-# ➕ Tổng chuẩn
-magic_constant = n * (n**2 + 1) // 2
-st.success(f"Tổng ma phương (Magic Constant): {magic_constant}")
+# Căn giữa văn bản và điều chỉnh font
+for key, cell in table.get_celld().items():
+    cell.set_fontsize(10)
+    cell.set_height(1.0 / n)
+    cell.set_width(1.0 / n)
+
+# Hiển thị
+st.pyplot(fig)
+
+# Tổng chuẩn
+magic_sum = n * (n ** 2 + 1) // 2
+st.info(f"Tổng ma phương (Magic Constant): **{magic_sum}**")
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
