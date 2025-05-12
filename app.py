@@ -403,7 +403,7 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
-st.set_page_config(page_title="🧮 Ma Phương", layout="centered")
+
 
 st.title("5.🧮 Tạo Ma Phương Xoay")
 
