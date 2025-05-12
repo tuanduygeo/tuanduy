@@ -446,7 +446,7 @@ def compute_vimshottari_dasa(chart_date, moon_lon_deg, moon_nakshatra, moon_naks
         dasa_start_date = dasa_end_date
 
     return vimshottari_dasa
-    def compute_new_date(start_date, diff_value, direction="forward"):
+def compute_new_date(start_date, diff_value, direction="forward"):
     
     year, month, day, hour, minute = start_date
     base_date = datetime(year, month, day, hour, minute)
