@@ -377,7 +377,7 @@ def draw_chart(planet_data):
                 else:
                     arrow = ""
                 if retrograde_status:
-                retrograde = f" {retrograde_status}"  # Thêm "R" nếu hành tinh nghịch hành
+                    retrograde = f" {retrograde_status}"  # Thêm "R" nếu hành tinh nghịch hành
                 else:
                     retrograde = ""
             
