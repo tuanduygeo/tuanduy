@@ -368,7 +368,16 @@ def draw_chart(planet_data):
                 name = p["Hành tinh"]
                 sign = p["Cung"]
                 deg_str = p["Vị trí"].split("°")[0] + "°"
-                labels.append(f"{name} ({sign} {deg_str})")
+                # Kiểm tra và gán mũi tên tương ứng
+                dignity = get_dignity(name, sign)
+                if dignity == "vượng" or dignity == "tướng" or dignity == "bạn bè":
+                    arrow = " ↑"
+                elif dignity == "tù" or dignity == "tử" or dignity == "địch thủ":
+                    arrow = " ↓"
+                else:
+                    arrow = ""
+            
+            labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
