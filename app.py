@@ -376,11 +376,11 @@ def draw_chart(planet_data):
                     arrow = " ↓"
                 else:
                     arrow = ""
-                if is_retrograde(p["Hành tinh_code"], jd_current, jd_previous):
-                    retrograde = " R"  # Nếu hành tinh nghịch hành, thêm ký hiệu "R"
+                if retrograde_status:
+                retrograde = f" {retrograde_status}"  # Thêm "R" nếu hành tinh nghịch hành
                 else:
                     retrograde = ""
-                
+            
                 # Thêm "R" nếu hành tinh nghịch hành
                 labels.append(f"{name} ({sign} {deg_str}){arrow}{retrograde}")
         names = "\n".join(labels)
