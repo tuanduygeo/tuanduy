@@ -148,8 +148,8 @@ if st.button("Tính Toán"):
 
 
 
-rashis = ["♈ Aries", "♉ Taurus", "♊ Gemini", "♋ Cancer", "♌ Leo", "♍ Virgo", "♎ Libra", "♏ Scorpio",
-          "♐ Sagittarius", "♑ Capricorn", "♒ Aquarius", "♓ Pisces"]
+rashis = ["♈ Bạch Dương", "♉ Kim Ngưu", "♊ Song Tử", "♋ Cự Giải", "♌ Sư Tử", "♍ Xử Nữ", "♎ Thiên Bình", "♏ Bọ Cạp",
+          "♐ Nhân Mã", "♑ Ma Kết", "♒ Bảo Bình", "♓ Song Ngư"]
 
 nakshatras = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
               "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
@@ -162,13 +162,13 @@ planets = {
 }
 
 dignities = {
-    "Sun": {"vượng": "Leo", "tướng": "Aries", "tù": "Libra", "tử": "Aquarius"},
-    "Moon": {"vượng": "Cancer", "tướng": "Taurus", "tù": "Scorpio", "tử": "Capricorn"},
-    "Mars": {"vượng": "Aries", "tướng": "Capricorn", "tù": "Cancer", "tử": "Libra"},
-    "Mercury": {"vượng": "Gemini", "tướng": "Virgo", "tù": "Pisces", "tử": "Sagittarius"},
-    "Jupiter": {"vượng": "Sagittarius", "tướng": "Cancer", "tù": "Capricorn", "tử": "Gemini"},
-    "Venus": {"vượng": "Taurus", "tướng": "Pisces", "tù": "Virgo", "tử": "Scorpio"},
-    "Saturn": {"vượng": "Capricorn", "tướng": "Libra", "tù": "Aries", "tử": "Cancer"},
+    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình"},
+    "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết"},
+    "Mars": {"vượng": "Bạch Dương", "tướng": "Ma Kết", "tù": "Cự Giải", "tử": "Thiên Bình"},
+    "Mercury": {"vượng": "Song Tử", "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã"},
+    "Jupiter": {"vượng": "Nhân Mã", "tướng": "Cự Giải", "tù": "Ma Kết", "tử": "Song Tử"},
+    "Venus": {"vượng": "Kim Ngưu", "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": "Bọ Cạp"},
+    "Saturn": {"vượng": "Ma Kết", "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": "Cự Giải"},
 }
 
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
