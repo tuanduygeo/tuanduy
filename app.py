@@ -404,45 +404,4 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
 
-
-st.title("5.🧮 Tạo Ma Phương Xoay")
-
-n = st.slider("Chọn kích thước ma phương (n lẻ)", min_value=3, max_value=27, step=2, value=5)
-
-def generate_magic_square(n):
-    if n % 2 == 0:
-        raise ValueError("Chỉ hỗ trợ ma phương lẻ (n là số lẻ).")
-
-    magic_square = [[0] * n for _ in range(n)]
-    i, j = 0, n // 2  # bắt đầu tại dòng đầu, cột giữa
-
-    for num in range(1, n * n + 1):
-        magic_square[i][j] = num
-        old_i, old_j = i, j
-        i -= 1
-        j += 1
-
-        if i < 0:
-            i = n - 1
-        if j == n:
-            j = 0
-        if magic_square[i][j] != 0:
-            i = old_i + 1
-            j = old_j
-            if i == n:
-                i = 0
-
-    # Xoay 90° ngược chiều kim đồng hồ (số 1 xuống giữa dòng dưới)
-    rotated = np.rot90(magic_square, k=1)
-    return rotated
-
-# Tạo và hiển thị bảng
-square = generate_magic_square(n)
-df = pd.DataFrame(square)
-
-st.subheader("📋 Ma phương:")
-st.dataframe(df.style.background_gradient(cmap="YlGnBu").format("{:.0f}"), use_container_width=True)
-
-magic_sum = n * (n**2 + 1) // 2
-st.markdown(f"🔢 **Tổng mỗi hàng/cột/đường chéo:** {magic_sum}")
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
