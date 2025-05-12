@@ -130,7 +130,7 @@ with col3:
     latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
-if st.button("Chạy Tính Toán"):
+if st.button("Tính Toán"):
     selected_datetime = datetime(year, month, day, hour, minute)
 
     if selected_datetime.tzinfo is None:
