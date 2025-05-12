@@ -445,7 +445,7 @@ for key, cell in table.get_celld().items():
     cell.set_width(1.0 / n)
 
 # Hiển thị
-st.pyplot(fig)
+st.pyplot(fig, use_container_width=False)
 
 # Tổng chuẩn
 magic_sum = n * (n ** 2 + 1) // 2
