@@ -447,9 +447,7 @@ def compute_vimshottari_dasa(chart_date, moon_lon_deg, moon_nakshatra, moon_naks
 
     return vimshottari_dasa
     def compute_new_date(start_date, diff_value, direction="forward"):
-    """
-    Tính toán ngày mới dựa vào ngày bắt đầu và số năm
-    """
+    
     year, month, day, hour, minute = start_date
     base_date = datetime(year, month, day, hour, minute)
     delta_days = int(diff_value * 365.25)
