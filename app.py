@@ -377,7 +377,7 @@ def draw_chart(planet_data):
                 else:
                     arrow = ""
             
-        labels.append(f"{name} ({sign} {deg_str}){arrow}")
+                labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
