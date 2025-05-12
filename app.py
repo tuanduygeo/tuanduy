@@ -188,9 +188,10 @@ def get_dignity(planet, rashi):
         return "tù"
     elif rashi == dign.get("tử"):
         return "tử"
-    elif rashi == dign.get("bạn bè"):
+     # Check for "bạn bè" and "địch thủ" (they are sets)
+    elif rashi in dign.get("bạn bè", set()):
         return "bạn bè"
-    elif rashi == dign.get("địch thủ"):
+    elif rashi in dign.get("địch thủ", set()):
         return "địch thủ"
     return ""
 def get_nakshatra(degree):
