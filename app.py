@@ -181,14 +181,18 @@ def get_rashi(degree):
 
 def get_dignity(planet, rashi):
     dign = dignities.get(planet, {})
-    if rashi.split()[-1] == dign.get("vượng"):
+    if rashi == dign.get("vượng"):
         return "vượng"
-    elif rashi.split()[-1] == dign.get("tướng"):
+    elif rashi == dign.get("tướng"):
         return "tướng"
-    elif rashi.split()[-1] == dign.get("tù"):
+    elif rashi == dign.get("tù"):
         return "tù"
-    elif rashi.split()[-1] == dign.get("tử"):
+    elif rashi == dign.get("tử"):
         return "tử"
+    elif rashi == dign.get("bạn bè"):
+        return "bạn bè"
+    elif rashi == dign.get("địch thủ"):
+        return "địch thủ"
     return ""
 def get_nakshatra(degree):
     return nakshatras[int(degree // (360 / 27))]
