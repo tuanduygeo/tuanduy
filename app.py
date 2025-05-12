@@ -387,46 +387,92 @@ st.pyplot(fig, use_container_width=False)
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
-def compute_vimshottari_moon_dasha(jd, moon_longitude):
-    # 1. Danh sách hành tinh đại vận và thời gian của chúng
-    dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-    dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
-                   "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
+def compute_vimshottari_dasa(chart_date, moon_lon_deg, moon_nakshatra, moon_nakshatra_lord):
     
-    # 2. Xác định Nakshatra hiện tại (chia vòng tròn 360 độ thành 27 phần)
-    nakshatra_deg = 13.333333333333334  # 360/27
-    nak_index = int(moon_longitude // nakshatra_deg)
-    nak_fraction = (moon_longitude % nakshatra_deg) / nakshatra_deg
+    # Thứ tự Dasa và thời gian tương ứng
+    dasa_sequence = ['Ketu', 'Venus', 'Sun', 'Moon', 'Mars', 'Rahu', 'Jupiter', 'Saturn', 'Mercury']
+    dasa_lengths = [7, 20, 6, 10, 7, 18, 16, 19, 17]  # đơn vị: năm
+    typical_nakshatra_arc = 800  # minutes
 
-    # 3. Tìm hành tinh chủ đại vận hiện tại
-    current_lord = dasha_sequence[nak_index % 9]
-    current_index = dasha_sequence.index(current_lord)
+    # Tìm vị trí nakshatra và tính phần còn lại
+    nakshatra_start = NAKSHATRAS.index(moon_nakshatra) * typical_nakshatra_arc
+    moon_lon_mins = round(moon_lon_deg * 60, 2)
+    elapsed_moon_mins = moon_lon_mins - nakshatra_start
+    remaining_arc_mins = typical_nakshatra_arc - elapsed_moon_mins
 
-    # 4. Tính phần còn lại của đại vận đầu tiên
-    total_years = dasha_years[current_lord]
-    remaining_years = total_years * (1 - nak_fraction)
+    # Xoay chuỗi dasa bắt đầu từ nakshatra lord
+    start_index = dasa_sequence.index(moon_nakshatra_lord)
+    dasa_sequence = dasa_sequence[start_index:] + dasa_sequence[:start_index]
+    dasa_lengths = dasa_lengths[start_index:] + dasa_lengths[:start_index]
+    dasa_order = dict(zip(dasa_sequence, dasa_lengths))
 
-    # 5. Tính dãy đại vận từ thời điểm hiện tại
-    dasha_list = []
-    current_date = datetime(*swe.revjul(jd)[:3])  # Convert Julian to datetime
+    # Tính thời gian còn lại của Dasa đầu tiên
+    starting_dasa_duration = dasa_order[moon_nakshatra_lord]
+    start_dasa_remaining_duration = (starting_dasa_duration / typical_nakshatra_arc) * remaining_arc_mins
+    start_dasa_elapsed_duration = starting_dasa_duration - start_dasa_remaining_duration
 
-    for i in range(len(dasha_sequence)):
-        lord = dasha_sequence[(current_index + i) % 9]
-        years = dasha_years[lord]
-        if i == 0:
-            years = remaining_years
-        end_date = current_date + timedelta(days=years * 365.25)
-        dasha_list.append({
-            "Hành tinh": lord,
-            "Bắt đầu": current_date.strftime("%Y-%m-%d"),
-            "Kết thúc": end_date.strftime("%Y-%m-%d"),
-            "Số năm": round(years, 2)
-        })
-        current_date = end_date
+    # Lùi lại thời điểm để bắt đầu từ đầu Dasa
+    dasa_start_date = compute_new_date(start_date=chart_date, diff_value=start_dasa_elapsed_duration, direction="backward")
+    dt_tuple_str = lambda dt: dt.strftime("%d-%m-%Y")
 
-    return pd.DataFrame(dasha_list)
-moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
-vimshottari_df = compute_vimshottari_moon_dasha(jd, moon_long)
+    # Dữ liệu dasa
+    vimshottari_dasa = {}
+
+    for i in range(len(dasa_sequence)):
+        dasa = dasa_sequence[i]
+        dasa_length = dasa_lengths[i]
+        dasa_end_date = compute_new_date(start_date=tuple(dasa_start_date.timetuple())[:5], diff_value=dasa_length, direction="forward")
+        vimshottari_dasa[dasa] = {
+            'start': dt_tuple_str(dasa_start_date),
+            'end': dt_tuple_str(dasa_end_date),
+            'bhuktis': {}
+        }
+
+        bhukti_start_date = dasa_start_date
+        start_index = dasa_sequence.index(dasa)
+        bhukti_sequence = dasa_sequence[start_index:] + dasa_sequence[:start_index]
+        bhukti_lengths = dasa_lengths[start_index:] + dasa_lengths[:start_index]
+
+        for j in range(len(bhukti_sequence)):
+            bhukti = bhukti_sequence[j]
+            bhukti_length = dasa_length * bhukti_lengths[j] / 120
+            bhukti_end_date = compute_new_date(start_date=tuple(bhukti_start_date.timetuple())[:5], diff_value=bhukti_length, direction="forward")
+            vimshottari_dasa[dasa]['bhuktis'][bhukti] = {
+                'start': dt_tuple_str(bhukti_start_date),
+                'end': dt_tuple_str(bhukti_end_date)
+            }
+            bhukti_start_date = bhukti_end_date
+
+        dasa_start_date = dasa_end_date
+
+    return vimshottari_dasa
+    def compute_new_date(start_date, diff_value, direction="forward"):
+    """
+    Tính toán ngày mới dựa vào ngày bắt đầu và số năm
+    """
+    year, month, day, hour, minute = start_date
+    base_date = datetime(year, month, day, hour, minute)
+    delta_days = int(diff_value * 365.25)
+
+    if direction == "forward":
+        return base_date + timedelta(days=delta_days)
+    else:
+        return base_date - timedelta(days=delta_days)
+moon = chart.get(const.MOON)
+moon_rl_nl_sl = get_rl_nl_sl_data(deg=moon.lon)
+moon_nakshatra = moon_rl_nl_sl["Nakshatra"]
+moon_nakshatra_lord = moon_rl_nl_sl["NakshatraLord"]
+
+chart_date = (year, month, day, hour, minute)
+vimshottari_result = compute_vimshottari_dasa(
+    chart_date=chart_date,
+    moon_lon_deg=moon.lon,
+    moon_nakshatra=moon_nakshatra,
+    moon_nakshatra_lord=moon_nakshatra_lord
+)
+
+st.json(vimshottari_result)
+
 
 st.markdown("### 🪐 Đại vận Vimshottari chính xác theo vị trí Mặt Trăng")
 st.dataframe(vimshottari_df, use_container_width=True)
