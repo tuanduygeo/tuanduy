@@ -217,93 +217,6 @@ def is_retrograde(code, jd_current, jd_previous):
     if lon_deg_current < lon_deg_previous:
         return True
     return False
-# Cập nhật các thông số Dasha
-vimsottari_year = sidereal_year  # Tùy chỉnh số ngày trong năm theo cách tính Vệ Đà
-
-# Định nghĩa các hành tinh
-adhipati_list = [swe.KETU, swe.SUKRA, swe.SURYA, swe.CHANDRA, swe.KUJA, swe.RAHU, swe.GURU, swe.SANI, swe.BUDHA]
-
-# Dasha cho các hành tinh
-mahadasa = {swe.KETU: 7, swe.SUKRA: 20, swe.SURYA: 6, swe.CHANDRA: 10, swe.KUJA: 7, 
-             swe.RAHU: 18, swe.GURU: 16, swe.SANI: 19, swe.BUDHA: 17}
-
-def adhipati(nak):
-    """Trả về chủ tể của Nakshatra."""
-    return adhipati_list[nak % len(adhipati_list)]
-
-def next_adhipati(lord):
-    """Trả về hành tinh tiếp theo trong danh sách adhipati."""
-    current = adhipati_list.index(lord)
-    next_index = (current + 1) % len(adhipati_list)
-    return adhipati_list[next_index]
-
-def nakshatra_position(jdut1):
-    """Lấy vị trí Nakshatra và số độ đã đi qua tại JD(UT1)."""
-    moon = sidereal_longitude(jdut1, swe.MOON)
-    one_star = (360 / 27.)
-    nak = int(moon / one_star)  # 0..26
-    rem = (moon - nak * one_star)  # độ đã đi qua trong Nakshatra
-    return [nak, rem]
-
-def dasha_start_date(jdut1):
-    """Trả về ngày bắt đầu (UT1) của mahadasha mà xảy ra trước hoặc vào JD(UT1)."""
-    nak, rem = nakshatra_position(jdut1)
-    one_star = (360 / 27.)
-    lord = adhipati(nak)  # hành tinh chủ của Nakshatra hiện tại
-    period = mahadasa[lord]  # số năm của hành tinh chủ
-    period_elapsed = rem / one_star * period  # số năm đã trôi qua
-    period_elapsed *= vimsottari_year  # số ngày
-    start_date = jdut1 - period_elapsed  # số ngày trước ngày hiện tại
-    return [lord, start_date]
-
-def vimsottari_mahadasa(jdut1):
-    """Danh sách các Mahadasha và ngày bắt đầu của chúng."""
-    lord, start_date = dasha_start_date(jdut1)
-    retval = Dict()
-    for i in range(9):
-        retval[lord] = start_date
-        start_date += mahadasa[lord] * vimsottari_year
-        lord = next_adhipati(lord)
-    return retval
-
-def vimsottari_bhukti(maha_lord, start_date):
-    """Tính tất cả Bhukti của Mahadasha."""
-    lord = maha_lord
-    retval = Dict()
-    for i in range(9):
-        retval[lord] = start_date
-        factor = mahadasa[lord] * mahadasa[maha_lord] / 120.
-        start_date += factor * vimsottari_year
-        lord = next_adhipati(lord)
-    return retval
-
-def vimsottari_antara(maha_lord, bhukti_lord, start_date):
-    """Tính tất cả Antardasha từ ngày bắt đầu của Bhukti."""
-    lord = bhukti_lord
-    retval = Dict()
-    for i in range(9):
-        retval[lord] = start_date
-        factor = mahadasa[lord] * (mahadasa[maha_lord] / 120.)
-        factor *= (mahadasa[bhukti_lord] / 120.)
-        start_date += factor * vimsottari_year
-        lord = next_adhipati(lord)
-    return retval
-
-# Tính toán Dasha và Antardasha
-def compute_dasha_and_antara(jd):
-    dashas = vimsottari_mahadasa(jd)
-    results = []
-    for dasha_lord in dashas:
-        dasha_start = dashas[dasha_lord]
-        bhuktis = vimsottari_bhukti(dasha_lord, dasha_start)
-        for bhukti_lord in bhuktis:
-            bhukti_start = bhuktis[bhukti_lord]
-            antardashas = vimsottari_antara(dasha_lord, bhukti_lord, bhukti_start)
-            for antara_lord in antardashas:
-                antara_start = antardashas[antara_lord]
-                results.append((dasha_lord, bhukti_lord, antara_lord, dasha_start, bhukti_start, antara_start))
-    return results
-
 
 
 houses,ascmc = swe.houses_ex(jd, latitude, longitude, b'W', swe.FLG_SIDEREAL)
@@ -441,28 +354,6 @@ def draw_chart(planet_data):
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
     
     return fig  
-if st.button("Tính Toán") :
-    selected_datetime = datetime(year, month, day, hour, minute)
-
-    if selected_datetime.tzinfo is None:
-        selected_datetime_vn = vn_tz.localize(selected_datetime)
-    else:
-        selected_datetime_vn = selected_datetime.astimezone(vn_tz)
-
-    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
-
-    jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
-                    selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
-
-    st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-    st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}")
-     # Tính Dasha và Antardasha
-    dasha_antara_results = compute_dasha_and_antara(jd)
-    
-    # Hiển thị kết quả
-    st.subheader("Bảng Mahadasha, Bhukti và Antardasha")
-    results_df = pd.DataFrame(dasha_antara_results, columns=['Mahadasha Lord', 'Bhukti Lord', 'Antardasha Lord', 'Mahadasha Start', 'Bhukti Start', 'Antardasha Start'])
-    st.dataframe(results_df)
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
 
