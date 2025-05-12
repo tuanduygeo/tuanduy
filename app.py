@@ -7,7 +7,7 @@ from datetime import date, timedelta, datetime
 import swisseph as swe
 import pytz
 import matplotlib.pyplot as plt
-import random
+
 
 
 st.set_page_config(layout="wide")
@@ -65,12 +65,12 @@ if html_files:
 
     # Nếu chưa chọn gì → hiển thị mặc định bản đồ đầu tiên
     if st.session_state.selected_idx is None:
-        default_html = random.choice(html_files)
+        default_html = html_files[0]
         html_path = os.path.join(html_dir, default_html)
         st.subheader(f"📍 Bản đồ mặc định: {default_html}")
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1000, scrolling=True)
+            components.html(html_content, height=800, scrolling=True)
 
     # Nếu đã chọn → hiển thị bản đồ có nút tiến lùi
     else:
@@ -91,7 +91,7 @@ if html_files:
         html_path = os.path.join(html_dir, selected_html)
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1000, scrolling=True)
+            components.html(html_content, height=800, scrolling=True)
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
@@ -143,7 +143,7 @@ if st.button("Tính Toán"):
     jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
                     selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
-    st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}°")
+    st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}")
 
 
@@ -162,7 +162,7 @@ planets = {
 }
 
 dignities = {
-    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình"},
+    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  },},
     "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết"},
     "Mars": {"vượng": "Bạch Dương", "tướng": "Ma Kết", "tù": "Cự Giải", "tử": "Thiên Bình"},
     "Mercury": {"vượng": "Song Tử", "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã"},
@@ -390,4 +390,4 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
-st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. zalo: 0377442597")
+st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
