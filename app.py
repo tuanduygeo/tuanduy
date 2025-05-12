@@ -129,7 +129,22 @@ with col3:
 
     latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
+# Button to calculate
+if st.button("Chạy Tính Toán"):
+    selected_datetime = datetime(year, month, day, hour, minute)
 
+    if selected_datetime.tzinfo is None:
+        selected_datetime_vn = vn_tz.localize(selected_datetime)
+    else:
+        selected_datetime_vn = selected_datetime.astimezone(vn_tz)
+
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
+
+    jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
+                    selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
+
+    st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° **Múi giờ**: GMT{timezone}")
+    st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}")
 
 
 
