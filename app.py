@@ -387,43 +387,48 @@ st.pyplot(fig, use_container_width=False)
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
-def compute_vimshottari_moon_dasha(jd, moon_deg):
+def compute_vimshottari_moon_dasha(jd, moon_longitude):
+    # 1. Danh sách hành tinh đại vận và thời gian của chúng
     dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
     dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                    "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
     
-    total_nakshatra = 27
-    nakshatra_deg = 360 / total_nakshatra
-    nak_index = int(moon_deg // nakshatra_deg)
-    nak_fraction = (moon_deg % nakshatra_deg) / nakshatra_deg
+    # 2. Xác định Nakshatra hiện tại (chia vòng tròn 360 độ thành 27 phần)
+    nakshatra_deg = 13.333333333333334  # 360/27
+    nak_index = int(moon_longitude // nakshatra_deg)
+    nak_fraction = (moon_longitude % nakshatra_deg) / nakshatra_deg
 
-    lord = dasha_sequence[nak_index % 9]
-    total_years = dasha_years[lord]
+    # 3. Tìm hành tinh chủ đại vận hiện tại
+    current_lord = dasha_sequence[nak_index % 9]
+    current_index = dasha_sequence.index(current_lord)
+
+    # 4. Tính phần còn lại của đại vận đầu tiên
+    total_years = dasha_years[current_lord]
     remaining_years = total_years * (1 - nak_fraction)
 
+    # 5. Tính dãy đại vận từ thời điểm hiện tại
     dasha_list = []
-    index = dasha_sequence.index(lord)
-    start_date = swe.revjul(jd)
-    start_date = datetime(start_date[0], start_date[1], start_date[2])
+    current_date = datetime(*swe.revjul(jd)[:3])  # Convert Julian to datetime
 
     for i in range(len(dasha_sequence)):
-        current_lord = dasha_sequence[(index + i) % len(dasha_sequence)]
-        duration = dasha_years[current_lord]
+        lord = dasha_sequence[(current_index + i) % 9]
+        years = dasha_years[lord]
         if i == 0:
-            duration = remaining_years
-        end_date = start_date + timedelta(days=duration * 365.25)
+            years = remaining_years
+        end_date = current_date + timedelta(days=years * 365.25)
         dasha_list.append({
-            "Hành tinh": current_lord,
-            "Bắt đầu": start_date.strftime("%Y-%m-%d"),
+            "Hành tinh": lord,
+            "Bắt đầu": current_date.strftime("%Y-%m-%d"),
             "Kết thúc": end_date.strftime("%Y-%m-%d"),
-            "Số năm": round(duration, 2)
+            "Số năm": round(years, 2)
         })
-        start_date = end_date
-    return pd.DataFrame(dasha_list)
-moon_deg = swe.calc_ut(jd, swe.MOON)[0][0]
-vimshottari_df = compute_vimshottari_moon_dasha(jd, moon_deg)
+        current_date = end_date
 
-st.markdown("### 🧭 Đại vận Vimshottari từ vị trí Mặt Trăng hiện tại")
+    return pd.DataFrame(dasha_list)
+moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
+vimshottari_df = compute_vimshottari_moon_dasha(jd, moon_long)
+
+st.markdown("### 🪐 Đại vận Vimshottari chính xác theo vị trí Mặt Trăng")
 st.dataframe(vimshottari_df, use_container_width=True)
 
 
