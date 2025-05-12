@@ -120,11 +120,11 @@ col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
     year = st.slider("Chọn Năm", min_value=1900, max_value=2100, value=2025, step=1)
-    month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=5, step=1)
-    day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=11, step=1)
+    month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=6, step=1)
+    day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=15, step=1)
 with col2:
-    hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=13, step=1)
-    minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=26, step=1)
+    hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=7, step=1)
+    minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=0, step=1)
 with col3:
 
     latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
@@ -168,7 +168,7 @@ dignities = {
     "Mercury": {"vượng": {"Song Tử","Xử Nữ" }, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
     "Jupiter": {"vượng": {"Nhân Mã","Song Ngư" }, "tướng": "Cự Giải", "tù": "Ma Kết", "tử": {"Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
     "Venus": {"vượng": {"Kim Ngưu","Thiên Bình" }, "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": {"Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
-    "Saturn": {"vượng": {"Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Bảo Bình","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Cự Giải","Song Ngư"}},
+    "Saturn": {"vượng": {"Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Bảo Bình","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Cự Giải",}},
               }
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
