@@ -380,13 +380,54 @@ def draw_chart(planet_data):
                 labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
-    
+  
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
+
+def compute_vimshottari_moon_dasha(jd, moon_deg):
+    dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+    dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
+                   "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
+    
+    total_nakshatra = 27
+    nakshatra_deg = 360 / total_nakshatra
+    nak_index = int(moon_deg // nakshatra_deg)
+    nak_fraction = (moon_deg % nakshatra_deg) / nakshatra_deg
+
+    lord = dasha_sequence[nak_index % 9]
+    total_years = dasha_years[lord]
+    remaining_years = total_years * (1 - nak_fraction)
+
+    dasha_list = []
+    index = dasha_sequence.index(lord)
+    start_date = swe.revjul(jd)
+    start_date = datetime(start_date[0], start_date[1], start_date[2])
+
+    for i in range(len(dasha_sequence)):
+        current_lord = dasha_sequence[(index + i) % len(dasha_sequence)]
+        duration = dasha_years[current_lord]
+        if i == 0:
+            duration = remaining_years
+        end_date = start_date + timedelta(days=duration * 365.25)
+        dasha_list.append({
+            "Hành tinh": current_lord,
+            "Bắt đầu": start_date.strftime("%Y-%m-%d"),
+            "Kết thúc": end_date.strftime("%Y-%m-%d"),
+            "Số năm": round(duration, 2)
+        })
+        start_date = end_date
+    return pd.DataFrame(dasha_list)
+moon_deg = swe.calc_ut(jd, swe.MOON)[0][0]
+vimshottari_df = compute_vimshottari_moon_dasha(jd, moon_deg)
+
+st.markdown("### 🧭 Đại vận Vimshottari từ vị trí Mặt Trăng hiện tại")
+st.dataframe(vimshottari_df, use_container_width=True)
+
+
+
 
 
 st.markdown("""
