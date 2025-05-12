@@ -370,6 +370,8 @@ st.markdown("""
 ### 4.🧲 Dữ liệu địa từ trực tuyến""")
 start_date = (datetime.today() - timedelta(days=15)).strftime('%Y-%m-%d')
 end_date = datetime.today().strftime('%Y-%m-%d')
-iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?observatoryIagaCode=PHU&publicationState=Best+available&dataStartDate={start_date}&dataDuration=15&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"st.components.v1.iframe(iframe_url, height=1000,scrolling=True)
-
+iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
+             f"observatoryIagaCode=PHU&publicationState=Best+available" \
+             f"&dataStartDate={start_date}&dataDuration=30" \
+             f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.")
