@@ -162,14 +162,13 @@ planets = {
 }
 
 dignities = {
-    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  },},
-    "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết"},
-    "Mars": {"vượng": "Bạch Dương", "tướng": "Ma Kết", "tù": "Cự Giải", "tử": "Thiên Bình"},
-    "Mercury": {"vượng": "Song Tử", "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã"},
-    "Jupiter": {"vượng": "Nhân Mã", "tướng": "Cự Giải", "tù": "Ma Kết", "tử": "Song Tử"},
-    "Venus": {"vượng": "Kim Ngưu", "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": "Bọ Cạp"},
-    "Saturn": {"vượng": "Ma Kết", "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": "Cự Giải"},
-}
+    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  }},
+    "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết","bạn bè": {"Bạch Dương","Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Thiên Bình", "Song Tử","Xử Nữ","Bảo Bình"  }},
+    "Mars": { {"vượng": "Bạch Dương","Bọ Cạp" }, "tướng": "Ma Kết", "tù": "Cự Giải", "tử": {"Kim Ngưu","Thiên Bình"},"bạn bè": {"Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": { "Song Tử","Xử Nữ","Bảo Bình"}},
+    "Mercury": {{"vượng": "Song Tử","Xử Nữ" }, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+    "Jupiter": {{"vượng": "Nhân Mã","Song Ngư" }, "tướng": "Cự Giải", "tù": "Ma Kết", {"tử": "Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
+    "Venus": {{"vượng": "Kim Ngưu","Thiên Bình" }, "tướng": "Song Ngư", "tù": "Xử Nữ", {"tử": "Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+    "Saturn": {{"vượng": "Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", {"tử": "Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Bảo Bình","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Cự Giải",}},
 
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
