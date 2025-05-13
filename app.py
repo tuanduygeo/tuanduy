@@ -512,7 +512,9 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
-st.markdown(""""🔴 Chỉ số Kp – Cảnh báo Bão Từ"""")
+st.markdown(""""
+### 🔴 Chỉ số Kp – Cảnh báo Bão Từ
+"""")
 
 # Lấy dữ liệu từ NOAA (Kp mỗi phút)
 url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
