@@ -518,19 +518,7 @@ st.markdown("""
 Nguồn: [Tomsk, Russia – Space Observing System]
 """)
 st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
-# Lấy dữ liệu Kp Index từ NOAA
-url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
-response = requests.get(url)
-data = response.json()
 
-# Chuyển đổi dữ liệu thành DataFrame
-df = pd.DataFrame(data)
-df['time_tag'] = pd.to_datetime(df['time_tag'])
-df.set_index('time_tag', inplace=True)
-
-# Hiển thị biểu đồ Kp Index
-st.title("Biểu đồ Kp Index")
-st.line_chart(df['kp_index'])
 st.markdown("""
 ### 4.🧲 Dữ liệu địa từ trực tuyến""")
 start_date = (datetime.today() - timedelta(days=15)).strftime('%Y-%m-%d')
@@ -540,6 +528,35 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+
+# Lấy dữ liệu Kp Index từ NOAA
+url = "https://services.swpc.noaa.gov/json/planetary_k_index_3hour.json"
+response = requests.get(url)
+data = response.json()
+
+# Đưa vào DataFrame
+df = pd.DataFrame(data)
+df['time_tag'] = pd.to_datetime(df['time_tag'])
+df.set_index('time_tag', inplace=True)
+df['date'] = df.index.date
+
+# Chỉ lấy 3 ngày gần nhất
+latest_dates = sorted(df['date'].unique())[-3:]
+df_recent = df[df['date'].isin(latest_dates)]
+
+# Hiển thị cảnh báo nếu bất kỳ giá trị nào > 6
+if (df_recent['kp_index'] > 6).any():
+    st.error("⚠️ Cảnh báo: Có chỉ số Kp vượt mức 6 (bão từ mạnh)!")
+else:
+    st.success("✅ An toàn: Không có Kp > 6 trong 3 ngày gần nhất.")
+
+# Vẽ biểu đồ
+st.line_chart(df_recent['kp_index'])
+
+# Ghi chú
+st.markdown("### 📅 Ngày đang hiển thị:")
+for d in latest_dates:
+    st.markdown(f"- {d.strftime('%d-%m-%Y')}")
 
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
