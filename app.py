@@ -516,15 +516,8 @@ st.markdown("""
 ###  Chỉ số Kp – Cảnh báo Bão Từ
 """)
 
-# Lấy dữ liệu từ NOAA (Kp mỗi phút)
-url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
-response = requests.get(url)
-data = response.json()
-# Chuyển đổi dữ liệu thành DataFrame
-df = pd.DataFrame(data)
-df['time_tag'] = pd.to_datetime(df['time_tag'])
-df.set_index('time_tag', inplace=True)
-st.line_chart(df['kp_index'])
+kp_url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
+
 def interpret_kp(kp):
     if kp <= 2:
         return "🟢 Rất an toàn"
@@ -542,8 +535,9 @@ def interpret_kp(kp):
         return "🔴 Rất nguy hiểm – G4"
     else:
         return "🚨 Cực kỳ nguy hiểm – G5"
+
 try:
-    kp_data = requests.get(url).json()
+    kp_data = requests.get(kp_url).json()
     df_kp = pd.DataFrame(kp_data)
 
     if 'kp_index' in df_kp.columns and not df_kp.empty:
