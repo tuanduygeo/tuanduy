@@ -128,7 +128,8 @@ if "selected_time" not in st.session_state:
 
 with col1:
     # Giao diện chọn ngày và giờ
-    st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date)
+    st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date,min_value=date(1900, 1, 1),
+        max_value=date(2100, 12, 31))
     st.session_state.selected_time = st.time_input("⏰ Chọn giờ", value=st.session_state.selected_time)
 
     # Gộp lại thành datetime hoàn chỉnh
