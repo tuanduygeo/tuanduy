@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 from geopy.geocoders import Nominatim
+import requests
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
@@ -517,6 +518,19 @@ st.markdown("""
 Nguồn: [Tomsk, Russia – Space Observing System]
 """)
 st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
+# Lấy dữ liệu Kp Index từ NOAA
+url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
+response = requests.get(url)
+data = response.json()
+
+# Chuyển đổi dữ liệu thành DataFrame
+df = pd.DataFrame(data)
+df['time_tag'] = pd.to_datetime(df['time_tag'])
+df.set_index('time_tag', inplace=True)
+
+# Hiển thị biểu đồ Kp Index
+st.title("Biểu đồ Kp Index")
+st.line_chart(df['kp_index'])
 st.markdown("""
 ### 4.🧲 Dữ liệu địa từ trực tuyến""")
 start_date = (datetime.today() - timedelta(days=15)).strftime('%Y-%m-%d')
