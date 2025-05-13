@@ -423,14 +423,10 @@ dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 # Tính phần Mahadasha còn lại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nakshatra_fraction) * full_years
-# ✅ Tính lùi lại toàn bộ dãy Mahadasha từ trước
-idx = dasha_sequence.index(dasha_lord)
-years_before = sum(dasha_years[dasha_sequence[(idx - i) % 9]] for i in range(1, 9))
-start_jd = jd - (years_before + remain_years) * 365.25
-curr_jd = start_jd
-
-# ✅ Tạo bảng Mahadasha
+# Tạo bảng Mahadasha
 dasha_list = []
+idx = dasha_sequence.index(dasha_lord)
+curr_jd = jd
 for i in range(9):
     lord = dasha_sequence[(idx + i) % 9]
     duration = dasha_years[lord]
