@@ -423,6 +423,14 @@ dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 # Tính phần Mahadasha còn lại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nakshatra_fraction) * full_years
+# Mahadasha info
+full_years = dasha_years[dasha_lord]
+elapsed_years = nakshatra_fraction * full_years  # ✅ phần đã trôi qua
+remain_years = full_years - elapsed_years         # chỉ để tham khảo
+
+# ✅ Thời điểm bắt đầu thực sự của Mahadasha hiện tại
+start_jd = jd - elapsed_years * 365.25
+curr_jd = start_jd  # ✅ Bắt đầu tính từ đây mới đúng
 # Tạo bảng Mahadasha
 dasha_list = []
 idx = dasha_sequence.index(dasha_lord)
