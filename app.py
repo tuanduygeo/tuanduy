@@ -147,35 +147,11 @@ if st.button("Tính Toán"):
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
 
 
-moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
+
 rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
           "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
 
-# Danh sách Nakshatra
-nakshatras = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
-    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
-    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
 
-# Ánh xạ Nakshatra → Dasha Lord
-nakshatra_to_dasha_lord = {
-    "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
-    "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
-    "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
-    "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
-    "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
-    "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
-    "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
-    "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
-    "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
-}
-
-# Dasha sequence và số năm tương ứng
-dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
-               "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 
 planets = {
     'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
@@ -413,12 +389,36 @@ st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 
 
 # Tính lại vị trí Mặt Trăng
-
+moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
 nak_index = int(moon_long // (360 / 27))
 nakshatra_index = int(moon_longitude // (360 / 27)) % 27
 nakshatra_name = nakshatras[nakshatra_index]
 dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
+# Danh sách Nakshatra
+nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+]
 
+# Ánh xạ Nakshatra → Dasha Lord
+nakshatra_to_dasha_lord = {
+    "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
+    "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
+    "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
+    "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
+    "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
+    "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
+    "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
+    "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
+    "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
+}
+
+# Dasha sequence và số năm tương ứng
+dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
+               "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 # Tính thời gian còn lại của Mahadasha hiện tại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nak_fraction) * full_years
