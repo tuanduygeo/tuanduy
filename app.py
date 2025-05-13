@@ -473,7 +473,7 @@ def compute_antardasha(mahadasha_lord, start_jd, duration_years):
             "Antardasha": f"{mahadasha_lord}/{sub_lord}",
             "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
             "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
-            "Số tháng": round(sub_duration * 12, 1)
+            "Số năm": round(sub_duration, 2)
         })
         jd_pointer = end_jd
 
