@@ -411,7 +411,7 @@ dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 
 # Tính vị trí mặt trăng
-moon_longitude = swe.calc_ut(jd, swe.MOON)[0][0]
+moon_longitude = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)
 nakshatra_index = get_nakshatra(moon_longitude)
 nakshatra_fraction = (moon_longitude % (360 / 27)) / (360 / 27)
 dasha_lord = nakshatra_to_dasha_lord[nakshatra_index]
