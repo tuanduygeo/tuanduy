@@ -117,20 +117,18 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-# Create sliders for user input for time and coordinates
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns([1, 1])
 
 with col1:
-    year = st.slider("Chọn Năm", min_value=1900, max_value=2100, value=2025, step=1)
-    month = st.slider("Chọn Tháng", min_value=1, max_value=12, value=6, step=1)
-    day = st.slider("Chọn Ngày", min_value=1, max_value=31, value=15, step=1)
-with col2:
-    hour = st.slider("Chọn Giờ", min_value=0, max_value=23, value=7, step=1)
-    minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=0, step=1)
-with col3:
+    # Nhập ngày và giờ
+    selected_date = st.date_input("📅 Chọn ngày", value=datetime.now().date())
+    selected_time = st.time_input("⏰ Chọn giờ", value=datetime.now().time())
+    selected_datetime = datetime.combine(selected_date, selected_time)
 
-    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
-    longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
+with col2:
+    # Nhập vĩ độ và kinh độ
+    latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
+    longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
 if st.button("Tính Toán"):
     selected_datetime = datetime(year, month, day, hour, minute)
