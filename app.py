@@ -9,6 +9,8 @@ import pytz
 import matplotlib.pyplot as plt
 import random
 import numpy as np
+import requests
+
 
 
 st.set_page_config(layout="wide")
@@ -509,4 +511,41 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+
+st.markdown(""""🔴 Chỉ số Kp – Cảnh báo Bão Từ (3 ngày gần nhất)"""")
+
+# Lấy dữ liệu từ NOAA (Kp mỗi phút)
+url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
+response = requests.get(url)
+data = response.json()
+
+# Đưa vào DataFrame
+df = pd.DataFrame(data)
+df['time_tag'] = pd.to_datetime(df['time_tag'])
+df['date'] = df['time_tag'].dt.date
+
+# Chia theo ngày
+grouped = df.groupby('date')
+
+# Lấy 3 ngày gần nhất
+sorted_days = sorted(grouped.groups.keys(), reverse=True)
+valid_days = []
+
+# Kiểm tra xem ngày có dữ liệu đủ không (ví dụ: ít nhất 30 giá trị)
+for day in sorted_days:
+    if len(grouped.get_group(day)) > 30:
+        valid_days.append(day)
+    if len(valid_days) == 3:
+        break
+
+# Gộp dữ liệu từ 3 ngày "đủ đẹp"
+df_filtered = df[df['date'].isin(valid_days)]
+
+# Hiển thị biểu đồ
+st.line_chart(df_filtered.set_index('time_tag')['kp_index'])
+
+# Ghi chú các ngày được giữ
+st.markdown("### 📅 Các ngày được hiển thị:")
+for d in valid_days:
+    st.markdown(f"- {d.strftime('%d-%m-%Y')}")
 st.title("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
