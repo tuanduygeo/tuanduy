@@ -249,7 +249,7 @@ asc_pada = get_pada(ast)
 asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
-
+st.markdown("### Vị trí hành tinh")
 # Tính toán các hành tinh
 planet_data = []
 
@@ -391,7 +391,7 @@ df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
-st.markdown("### 🕉️ Vimshottari Mahadasha")
+st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
 # Bảng ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
@@ -490,7 +490,7 @@ for _, row in df_dasha.iterrows():
 df_all_antar = pd.DataFrame(all_antardasha)
 
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
-    st.markdown("### 📋 Toàn bộ Antardasha")
+    
     st.dataframe(df_all_antar, use_container_width=True)
 
 st.markdown("""
