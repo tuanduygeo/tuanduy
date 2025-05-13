@@ -3,5 +3,4 @@ pandas
 matplotlib
 pyswisseph
 numpy
-geopy
 requests
