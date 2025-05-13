@@ -249,7 +249,7 @@ asc_pada = get_pada(ast)
 asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
-st.markdown("### Vị trí hành tinh")
+
 # Tính toán các hành tinh
 planet_data = []
 
@@ -387,6 +387,7 @@ def draw_chart(planet_data):
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
+st.markdown("### Vị trí hành tinh")
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
