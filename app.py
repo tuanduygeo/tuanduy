@@ -492,12 +492,19 @@ if selected_dasha:
 
         return pd.DataFrame(antardashas)
 
-    # Tính bảng Antardasha
-    df_antar = compute_antardasha(selected_dasha, start_jd, duration_years)
+all_antardasha = []
+for _, row in df_dasha.iterrows():
+    m_lord = row["Dasha"]
+    m_start = datetime.strptime(row["Bắt đầu"], "%d-%m-%Y")
+    m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
+    m_years = row["Số năm"]
+    all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years)
 
-    # Hiển thị bảng
-    st.markdown(f"### 📆 Antardasha của {selected_dasha}")
-    st.dataframe(df_antar, use_container_width=True)
+df_all_antar = pd.DataFrame(all_antardasha)
+
+if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
+    st.markdown("### 📋 Toàn bộ Antardasha")
+    st.dataframe(df_all_antar, use_container_width=True)
 
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
