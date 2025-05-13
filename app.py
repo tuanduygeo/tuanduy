@@ -509,34 +509,66 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
 
-# Lấy dữ liệu Kp Index từ NOAA
-url = "https://services.swpc.noaa.gov/json/planetary_k_index_3hour.json"
-response = requests.get(url)
-data = response.json()
+### 🧲 5. Giám sát Bão Từ Thời Gian Thực
+Dữ liệu từ NOAA SWPC
+""")
 
-# Đưa vào DataFrame
-df = pd.DataFrame(data)
-df['time_tag'] = pd.to_datetime(df['time_tag'])
-df.set_index('time_tag', inplace=True)
-df['date'] = df.index.date
+# URLs dữ liệu
+urls = {
+    "Kp Index": "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json",
+    "Dst Index": "https://services.swpc.noaa.gov/products/noaa-dst-index.json",
+    "Solar Wind (speed, bz)": "https://services.swpc.noaa.gov/products/summary/solar-wind.json"
+}
 
-# Chỉ lấy 3 ngày gần nhất
-latest_dates = sorted(df['date'].unique())[-3:]
-df_recent = df[df['date'].isin(latest_dates)]
+# Kp Index
+try:
+    kp_data = requests.get(urls["Kp Index"]).json()
+    df_kp = pd.DataFrame(kp_data)
+    df_kp['time_tag'] = pd.to_datetime(df_kp['time_tag'])
+    df_kp.set_index('time_tag', inplace=True)
+    latest_kp = df_kp['kp_index'].iloc[-1]
+except:
+    latest_kp = None
+    st.error("Không thể tải dữ liệu Kp Index")
 
-# Hiển thị cảnh báo nếu bất kỳ giá trị nào > 6
-if (df_recent['kp_index'] > 6).any():
-    st.error("⚠️ Cảnh báo: Có chỉ số Kp vượt mức 6 (bão từ mạnh)!")
-else:
-    st.success("✅ An toàn: Không có Kp > 6 trong 3 ngày gần nhất.")
+# Dst Index
+try:
+    dst_data = requests.get(urls["Dst Index"]).json()
+    df_dst = pd.DataFrame(dst_data[1:], columns=dst_data[0])
+    df_dst['time_tag'] = pd.to_datetime(df_dst['time_tag'])
+    df_dst.set_index('time_tag', inplace=True)
+    df_dst['dst'] = pd.to_numeric(df_dst['dst'])
+    latest_dst = df_dst['dst'].iloc[-1]
+except:
+    latest_dst = None
+    st.error("Không thể tải dữ liệu Dst Index")
 
-# Vẽ biểu đồ
-st.line_chart(df_recent['kp_index'])
+# Solar Wind
+try:
+    wind_data = requests.get(urls["Solar Wind (speed, bz)"]).json()
+    wind_latest = wind_data[-1]
+    wind_speed = float(wind_latest[2])
+    bz = float(wind_latest[6])
+except:
+    wind_speed = None
+    bz = None
+    st.error("Không thể tải dữ liệu Gió Mặt Trời")
 
-# Ghi chú
-st.markdown("### 📅 Ngày đang hiển thị:")
-for d in latest_dates:
-    st.markdown(f"- {d.strftime('%d-%m-%Y')}")
+# Hiển thị chỉ số
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    st.metric("🌐 Kp Index", f"{latest_kp}" if latest_kp is not None else "N/A", 
+              delta="⚠️ Cảnh báo" if latest_kp and latest_kp >= 6 else "✅ An toàn")
+with col2:
+    st.metric("📉 Dst Index", f"{latest_dst} nT" if latest_dst is not None else "N/A", 
+              delta="⚠️ Bão từ" if latest_dst and latest_dst <= -50 else "✅ Bình thường")
+with col3:
+    st.metric("💨 Tốc độ gió Mặt Trời", f"{wind_speed} km/s" if wind_speed else "N/A",
+              delta="⚠️ Cao" if wind_speed and wind_speed > 600 else "✅ Bình thường")
+with col4:
+    st.metric("🧲 Bz", f"{bz} nT" if bz else "N/A",
+              delta="⚠️ Âm mạnh" if bz and bz < -5 else "✅ Ổn định")
+
 
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
