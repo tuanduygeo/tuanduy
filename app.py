@@ -147,7 +147,7 @@ if st.button("Tính Toán"):
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
 
 
-
+moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
 rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
           "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
 
@@ -413,7 +413,7 @@ st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 
 
 # Tính lại vị trí Mặt Trăng
-moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
+
 nak_index = int(moon_long // (360 / 27))
 nakshatra_index = int(moon_longitude // (360 / 27)) % 27
 nakshatra_name = nakshatras[nakshatra_index]
