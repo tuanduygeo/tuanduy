@@ -387,6 +387,65 @@ st.pyplot(fig, use_container_width=False)
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
+st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
+
+# Danh sách Nakshatra
+nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+]
+
+# Ánh xạ Nakshatra → Dasha Lord
+nakshatra_to_dasha_lord = [
+    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
+    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
+    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"
+]
+
+# Dasha sequence và số năm tương ứng
+dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
+               "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
+
+# Tính lại vị trí Mặt Trăng
+moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
+nak_index = int(moon_long // (360 / 27))
+nak_fraction = (moon_long % (360 / 27)) / (360 / 27)
+dasha_lord = nakshatra_to_dasha_lord[nak_index]
+
+# Tính thời gian còn lại của Mahadasha hiện tại
+full_years = dasha_years[dasha_lord]
+remain_years = (1 - nak_fraction) * full_years
+
+# Tính và hiển thị bảng Mahadasha
+dasha_list = []
+idx = dasha_sequence.index(dasha_lord)
+curr_jd = jd
+
+for i in range(9):
+    lord = dasha_sequence[(idx + i) % 9]
+    duration = dasha_years[lord]
+    if i == 0:
+        duration = remain_years
+
+    start = swe.revjul(curr_jd)
+    end_jd = curr_jd + duration * 365.25
+    end = swe.revjul(end_jd)
+
+    dasha_list.append({
+        "Dasha": lord,
+        "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
+        "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
+        "Số năm": round(duration, 2)
+    })
+
+    curr_jd = end_jd
+
+df_dasha = pd.DataFrame(dasha_list)
+st.dataframe(df_dasha, use_container_width=True)
+
 
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
