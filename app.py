@@ -527,12 +527,16 @@ for _, m_row in df_dasha.iterrows():
     for _, antar in antars.iterrows():
         a_lord = antar["Antardasha"]
         a_years = antar["Số năm"]
+    
+        # Điểm riêng cho Mahadasha và Antardasha
         a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
         a_score = antardasha_scores.get(a_house, 0)
-
-        total_score = m_score + a_score
+    
+        # ✅ Tính điểm đúng: ảnh hưởng chính là của Antardasha
+        score = a_score  # hoặc: score = a_score + m_score * 0.2 (nếu bạn vẫn muốn có baseline Mahadasha nhẹ)
+    
         life_years.append(current_year)
-        life_scores.append(total_score)
+        life_scores.append(score)
         current_year += a_years
 
 # Vẽ biểu đồ
