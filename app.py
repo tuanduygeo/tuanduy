@@ -450,7 +450,7 @@ for i in range(9):
 st.markdown(f"👑 **Mahadasha Lord:** {dasha_lord}")
 df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
-selected_dasha = st.selectbox("Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
+
 
 selected_dasha = st.selectbox("🔍 Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
 
