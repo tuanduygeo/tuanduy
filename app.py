@@ -390,10 +390,10 @@ st.pyplot(fig, use_container_width=False)
 df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
-st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
+# === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
+st.markdown("### 🕉️ Vimshottari Mahadasha")
 
-
-
+# Bảng ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
     "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
     "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
@@ -406,33 +406,35 @@ nakshatra_to_dasha_lord = {
     "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
 }
 
+# Dasha sequence và số năm
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 
-
-# Tính vị trí mặt trăng
-# Tính vị trí chính xác của Mặt Trăng (sidereal)
+# Tính vị trí Mặt Trăng
 moon_longitude = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
 
-# Tính nakshatra index đúng cách (chia theo 13°20')
+# Xác định nakshatra
 nakshatra_index = int((moon_longitude % 360) / 13.3333333333)
 nakshatra_fraction = ((moon_longitude % 360) % 13.3333333333) / 13.3333333333
 nakshatra_name = nakshatras[nakshatra_index]
 dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 
-# Tính phần Mahadasha còn lại
+# Số năm còn lại trong Mahadasha hiện tại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nakshatra_fraction) * full_years
+
+# ✅ Giữ ngày kết thúc là hiện tại, tính ngược ra ngày bắt đầu
+end_jd = jd + remain_years * 365.25
+start_jd = end_jd - full_years * 365.25
+curr_jd = start_jd
+
 # Tạo bảng Mahadasha
 dasha_list = []
 idx = dasha_sequence.index(dasha_lord)
-curr_jd = jd
 for i in range(9):
     lord = dasha_sequence[(idx + i) % 9]
     duration = dasha_years[lord]
-    if i == 0:
-        duration = remain_years
 
     start = swe.revjul(curr_jd)
     end_jd = curr_jd + duration * 365.25
@@ -447,7 +449,7 @@ for i in range(9):
 
     curr_jd = end_jd
 
-st.markdown(f"👑 **Mahadasha Lord:** {dasha_lord}")
+# Hiển thị bảng Mahadasha
 df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
