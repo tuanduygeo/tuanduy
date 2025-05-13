@@ -411,19 +411,26 @@ dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 def compute_antardasha(mahadasha_lord, start_jd, duration_years):
     antardashas = []
-    for sub_lord in dasha_sequence:
+    start_index = dasha_sequence.index(mahadasha_lord)
+    jd_pointer = start_jd
+
+    for i in range(9):
+        sub_lord = dasha_sequence[(start_index + i) % 9]
         weight = dasha_years[sub_lord] / 120
         sub_duration = duration_years * weight
-        end_jd = start_jd + sub_duration * 365.25
-        start = swe.revjul(start_jd)
+        end_jd = jd_pointer + sub_duration * 365.25
+
+        start = swe.revjul(jd_pointer)
         end = swe.revjul(end_jd)
+
         antardashas.append({
             "Antardasha": f"{mahadasha_lord}/{sub_lord}",
             "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
             "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
             "Số tháng": round(sub_duration * 12, 1)
         })
-        start_jd = end_jd
+        jd_pointer = end_jd
+
     return pd.DataFrame(antardashas)
 
 # Tính vị trí mặt trăng
