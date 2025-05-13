@@ -138,11 +138,19 @@ if st.button("Tính Toán"):
     else:
         selected_datetime_vn = selected_datetime.astimezone(vn_tz)
 
-    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)
 
-    jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
-                    selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
-    st.session_state.jd = jd
+    # ✅ Lưu cả datetime và jd vào session_state
+    st.session_state.selected_datetime = selected_datetime
+    st.session_state.jd = swe.julday(
+        selected_utc.year,
+        selected_utc.month,
+        selected_utc.day,
+        selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600
+    )
+
+    # ✅ Ghi đè vào jd hiện tại (để toàn bộ app dùng cùng 1 jd)
+    jd = st.session_state.jd
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
 
@@ -423,7 +431,7 @@ dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 # Số năm còn lại trong Mahadasha hiện tại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nakshatra_fraction) * full_years
-
+jd = st.session_state.get("jd", jd)
 # ✅ Giữ ngày kết thúc là hiện tại, tính ngược ra ngày bắt đầu
 end_jd = jd + remain_years * 365.25
 start_jd = end_jd - full_years * 365.25
