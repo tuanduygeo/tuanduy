@@ -131,7 +131,7 @@ with col2:
     longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
 if st.button("Tính Toán"):
-    selected_datetime = datetime(year, month, day, hour, minute)
+    selected_datetime = datetime.combine(selected_date, selected_time)
 
     if selected_datetime.tzinfo is None:
         selected_datetime_vn = vn_tz.localize(selected_datetime)
