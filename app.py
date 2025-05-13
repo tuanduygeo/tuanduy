@@ -509,7 +509,11 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+st.markdown("### 5.☀️ Mô hình dự báo gió Mặt Trời WSA–Enlil-NOAA SWPC")
+st.image("https://services.swpc.noaa.gov/images/animations/enlil/loop/enlil-3-day.gif",
+         caption="Dự báo gió Mặt Trời 3 ngày – WSA-Enlil", use_column_width=True)
 
+st.markdown("""""- Mô hình thể hiện sự di chuyển của gió Mặt Trời và các vụ phun trào CME.""""")
 
 
 st.caption("📍 Phát triển từ tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
