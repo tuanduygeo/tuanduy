@@ -4,4 +4,4 @@ matplotlib
 pyswisseph
 numpy
 requests
-json
+
