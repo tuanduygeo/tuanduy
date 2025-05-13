@@ -505,11 +505,7 @@ for _, row in df_dasha.iterrows():
     m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
     m_years = row["Số năm"]
     all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years).to_dict("records")
-for i, row in df_all_antar.iterrows():
-    bold = (i % 9 == 0)  # 0, 9, 18, 27,... nghĩa là mỗi Mahadasha mới
-    text = f"**{row['Antardasha']}** | **{row['Bắt đầu']}** → **{row['Kết thúc']}** ({row['Số năm']} năm)" if bold else \
-           f"{row['Antardasha']} | {row['Bắt đầu']} → {row['Kết thúc']} ({row['Số năm']} năm)"
-    st.markdown(text)
+
 df_all_antar = pd.DataFrame(all_antardasha)
 
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
