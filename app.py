@@ -391,7 +391,7 @@ df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
-st.markdown("### 🕉️ Vimshottari Mahadasha")
+st.markdown("#### 🕉️ Bảng Đại Vận Vimshottari")
 
 # Bảng ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
@@ -454,7 +454,7 @@ df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
 
-selected_dasha = st.selectbox("🔍 Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
+selected_dasha = st.selectbox("🔍 Chọn Đại vận chính để xem Tiểu vận:", df_dasha["Dasha"])
 
 # Khi có chọn, lấy dữ liệu từ bảng Mahadasha
 if selected_dasha:
@@ -486,7 +486,7 @@ if selected_dasha:
                 "Antardasha": f"{mahadasha_lord}/{sub_lord}",
                 "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
                 "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
-                "Số tháng": round(sub_duration * 12, 1)
+                "Số năm": round(sub_duration, 2)
             })
             jd_pointer = end_jd
 
@@ -496,7 +496,7 @@ if selected_dasha:
     df_antar = compute_antardasha(selected_dasha, start_jd, duration_years)
 
     # Hiển thị bảng
-    st.markdown(f"### 📆 Antardasha của {selected_dasha}")
+    st.markdown(f"### 📆 Tiểu vận Antardasha của {selected_dasha}")
     st.dataframe(df_antar, use_container_width=True)
 
 st.markdown("""
