@@ -416,7 +416,7 @@ moon_longitude = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
 
 # Tính nakshatra index đúng cách (chia theo 13°20')
 nakshatra_index = int((moon_longitude % 360) / 13.3333333333)
-
+nakshatra_fraction = ((moon_longitude % 360) % 13.3333333333) / 13.3333333333
 nakshatra_name = nakshatras[nakshatra_index]
 dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 
