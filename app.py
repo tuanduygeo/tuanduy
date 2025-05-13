@@ -543,7 +543,7 @@ def interpret_kp(kp):
     else:
         return "🚨 Cực kỳ nguy hiểm – G5"
 try:
-    kp_data = requests.get(kp_url).json()
+    kp_data = requests.get(url).json()
     df_kp = pd.DataFrame(kp_data)
 
     if 'kp_index' in df_kp.columns and not df_kp.empty:
