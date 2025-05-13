@@ -427,7 +427,8 @@ remain_years = (1 - nakshatra_fraction) * full_years
 # Tạo bảng Mahadasha
 dasha_list = []
 idx = dasha_sequence.index(dasha_lord)
-curr_jd = jd
+start_jd = jd - remain_years * 365.25
+curr_jd = start_jd
 
 for i in range(9):
     lord = dasha_sequence[(idx + i) % 9]
