@@ -532,7 +532,7 @@ def build_life_chart(df_dasha, planet_data):
             a_score = antardasha_scores.get(a_house, 0)
 
             # Điểm cuốc sống dựa trên Antardasha (Mahadasha là nền nhệ)
-            total_score = round(a_score + 0.3 * m_score, 2)
+            total_score = round(0.7*a_score + m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
@@ -546,7 +546,7 @@ chart_df = build_life_chart(df_dasha, planet_data)
 # Vẽ biểu đồ
 fig, ax = plt.subplots(figsize=(12, 4))
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-ax.set_title("Biểu đồ điểm số cuộc đời theo Mahadasha / Antardasha")
+ax.set_title("Biểu đồ điểm số theo Đại vận / tiểu vận")
 ax.set_xlabel("Năm trong đời")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
