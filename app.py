@@ -124,13 +124,24 @@ if "selected_date" not in st.session_state:
 if "selected_time" not in st.session_state:
     st.session_state.selected_time = datetime.now().time()
 
-# Cột giao diện
 col1, col2 = st.columns([1, 1])
 
+# Khởi tạo session_state nếu chưa có
+if "selected_date" not in st.session_state:
+    st.session_state.selected_date = datetime.now().date()
+if "selected_time" not in st.session_state:
+    st.session_state.selected_time = datetime.now().time()
+
 with col1:
+    # Dùng session_state để không bị reset sau mỗi lần rerun
     st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date)
     st.session_state.selected_time = st.time_input("⏰ Chọn giờ", value=st.session_state.selected_time)
-    selected_datetime = datetime.combine(st.session_state.selected_date, st.session_state.selected_time)
+
+    # Kết hợp thành datetime
+    selected_datetime = datetime.combine(
+        st.session_state.selected_date,
+        st.session_state.selected_time
+    )
 
 with col2:
     latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
