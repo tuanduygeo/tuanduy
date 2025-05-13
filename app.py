@@ -126,7 +126,7 @@ with col2:
     minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=0, step=1)
 with col3:
 
-    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21, step=0.1)
+    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
 if st.button("Tính Toán"):
