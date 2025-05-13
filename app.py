@@ -118,15 +118,21 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
 col1, col2 = st.columns([1, 1])
+# Khởi tạo thời gian mặc định 1 lần duy nhất
+if "selected_date" not in st.session_state:
+    st.session_state.selected_date = datetime.now().date()
+if "selected_time" not in st.session_state:
+    st.session_state.selected_time = datetime.now().time()
+
+# Cột giao diện
+col1, col2 = st.columns([1, 1])
 
 with col1:
-    # Nhập ngày và giờ
-    selected_date = st.date_input("📅 Chọn ngày", value=datetime.now().date())
-    selected_time = st.time_input("⏰ Chọn giờ", value=datetime.now().time())
-    selected_datetime = datetime.combine(selected_date, selected_time)
+    st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date)
+    st.session_state.selected_time = st.time_input("⏰ Chọn giờ", value=st.session_state.selected_time)
+    selected_datetime = datetime.combine(st.session_state.selected_date, st.session_state.selected_time)
 
 with col2:
-    # Nhập vĩ độ và kinh độ
     latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
