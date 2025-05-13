@@ -415,7 +415,7 @@ st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 # Tính lại vị trí Mặt Trăng
 moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
 nak_index = int(moon_long // (360 / 27))
-nak_fraction = (moon_long % (360 / 27)) / (360 / 27)
+nakshatra_index = int(moon_longitude // (360 / 27)) % 27
 nakshatra_name = nakshatras[nakshatra_index]
 dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 
