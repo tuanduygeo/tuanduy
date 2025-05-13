@@ -525,4 +525,23 @@ df = pd.DataFrame(data)
 df['time_tag'] = pd.to_datetime(df['time_tag'])
 df.set_index('time_tag', inplace=True)
 st.line_chart(df['kp_index'])
+def interpret_kp(kp):
+    if kp <= 2:
+        return "🟢 Rất an toàn"
+    elif kp == 3:
+        return "🟢 An toàn"
+    elif kp == 4:
+        return "🟡 Trung bình – chú ý nhẹ"
+    elif kp == 5:
+        return "🟠 Cảnh báo nhẹ – Bão từ cấp G1"
+    elif kp == 6:
+        return "🔴 Cảnh báo – Bão từ cấp G2"
+    elif kp == 7:
+        return "🔴 Nguy hiểm – Bão từ cấp G3"
+    elif kp == 8:
+        return "🔴 Rất nguy hiểm – G4"
+    else:
+        return "🚨 Cực kỳ nguy hiểm – G5"
+latest_kp = df_kp['kp_index'].iloc[-1]
+st.metric("Kp Index", f"{latest_kp}", delta=interpret_kp(latest_kp))
 st.title("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
