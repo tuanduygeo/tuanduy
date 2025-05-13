@@ -509,44 +509,47 @@ st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / A
 mahadasha_scores = {6: -10, 8: -10, 12: -10, 4: 5, 7: 5, 10: 5, 3: 0, 1: 10, 5: 10, 9: 10, 11: 10}
 antardasha_scores = {6: -5, 8: -5, 12: -5, 4: 2, 7: 2, 10: 2, 3: 0, 1: 5, 5: 5, 9: 5, 11: 5}
 
-# Vẽ dữ liệu điểm số
-life_years = []
-life_scores = []
-current_year = 0
+# Tính dữ liệu vẽ biểu đồ
+def build_life_chart(df_dasha, planet_data):
+    life_years = []
+    life_scores = []
+    current_year = 0
 
-for _, m_row in df_dasha.iterrows():
-    m_lord = m_row["Dasha"]
-    m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
-    m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
-    m_duration = m_row["Số năm"]
+    for _, m_row in df_dasha.iterrows():
+        m_lord = m_row["Dasha"]
+        m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
+        m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
+        m_duration = m_row["Số năm"]
 
-    m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
-    m_score = mahadasha_scores.get(m_house, 0)
+        m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
+        m_score = mahadasha_scores.get(m_house, 0)
 
-    antars = compute_antardasha(m_lord, m_start_jd, m_duration)
-    for _, antar in antars.iterrows():
-        a_lord = antar["Antardasha"]
-        a_years = antar["Số năm"]
-    
-        # Điểm riêng cho Mahadasha và Antardasha
-        a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-        a_score = antardasha_scores.get(a_house, 0)
-    
-        # ✅ Tính điểm đúng: ảnh hưởng chính là của Antardasha
-        score = a_score  # hoặc: score = a_score + m_score * 0.2 (nếu bạn vẫn muốn có baseline Mahadasha nhẹ)
-    
-        life_years.append(current_year)
-        life_scores.append(score)
-        current_year += a_years
+        antars = compute_antardasha(m_lord, m_start_jd, m_duration)
+        for _, antar in antars.iterrows():
+            a_lord = antar["Antardasha"]
+            a_years = antar["Số năm"]
+            a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
+            a_score = antardasha_scores.get(a_house, 0)
+
+            # Điểm cuốc sống dựa trên Antardasha (Mahadasha là nền nhệ)
+            total_score = round(a_score + 0.3 * m_score, 2)
+
+            life_years.append(current_year)
+            life_scores.append(total_score)
+            current_year += a_years
+
+    return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores})
+
+# Ví dụ sử dữ liệu df_dasha và planet_data đã tính
+chart_df = build_life_chart(df_dasha, planet_data)
 
 # Vẽ biểu đồ
 fig, ax = plt.subplots(figsize=(12, 4))
-ax.plot(life_years, life_scores, marker='o')
-ax.set_title("Biểu đồ điểm số Mahadasha / Antardasha theo 120 năm cuộc đời")
+ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+ax.set_title("Biểu đồ điểm số cuộc đời theo Mahadasha / Antardasha")
 ax.set_xlabel("Năm trong đời")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
-
 st.pyplot(fig)
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
