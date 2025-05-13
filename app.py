@@ -542,6 +542,26 @@ def interpret_kp(kp):
         return "🔴 Rất nguy hiểm – G4"
     else:
         return "🚨 Cực kỳ nguy hiểm – G5"
-latest_kp = df_kp['kp_index'].iloc[-1]
-st.metric("Kp Index", f"{latest_kp}", delta=interpret_kp(latest_kp))
+try:
+    kp_data = requests.get(kp_url).json()
+    df_kp = pd.DataFrame(kp_data)
+
+    if 'kp_index' in df_kp.columns and not df_kp.empty:
+        df_kp['time_tag'] = pd.to_datetime(df_kp['time_tag'])
+        df_kp.set_index('time_tag', inplace=True)
+
+        latest_kp = df_kp['kp_index'].iloc[-1]
+        st.metric("🌐 Kp Index (hiện tại)", f"{latest_kp}", delta=interpret_kp(latest_kp))
+
+        # Hiển thị biểu đồ 3 ngày gần nhất
+        df_kp['date'] = df_kp.index.date
+        last_3_days = sorted(df_kp['date'].unique())[-3:]
+        df_plot = df_kp[df_kp['date'].isin(last_3_days)]
+        st.line_chart(df_plot['kp_index'])
+
+    else:
+        st.warning("⚠️ Không tìm thấy cột 'kp_index' trong dữ liệu.")
+except Exception as e:
+    st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
+    st.text(str(e))
 st.title("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
