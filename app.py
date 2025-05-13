@@ -117,52 +117,44 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-col1, col2 = st.columns([1, 1])
-# Khởi tạo thời gian mặc định 1 lần duy nhất
-if "selected_date" not in st.session_state:
-    st.session_state.selected_date = datetime.now().date()
-if "selected_time" not in st.session_state:
-    st.session_state.selected_time = datetime.now().time()
-
+# --- Chọn thời gian và tọa độ ---
 col1, col2 = st.columns([1, 1])
 
-# Khởi tạo session_state nếu chưa có
+# Khởi tạo session_state nếu chưa có (chạy 1 lần duy nhất)
 if "selected_date" not in st.session_state:
     st.session_state.selected_date = datetime.now().date()
 if "selected_time" not in st.session_state:
     st.session_state.selected_time = datetime.now().time()
 
 with col1:
-    # Dùng session_state để không bị reset sau mỗi lần rerun
+    # Giao diện chọn ngày và giờ
     st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date)
     st.session_state.selected_time = st.time_input("⏰ Chọn giờ", value=st.session_state.selected_time)
 
-    # Kết hợp thành datetime
+    # Gộp lại thành datetime hoàn chỉnh
     selected_datetime = datetime.combine(
         st.session_state.selected_date,
         st.session_state.selected_time
     )
 
 with col2:
+    # Giao diện nhập tọa độ
     latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
     longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
 if st.button("Tính Toán"):
-    selected_datetime = datetime.combine(selected_date, selected_time)
-
     if selected_datetime.tzinfo is None:
         selected_datetime_vn = vn_tz.localize(selected_datetime)
     else:
         selected_datetime_vn = selected_datetime.astimezone(vn_tz)
 
-    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)
 
     jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
                     selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
-
 
 
 rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
