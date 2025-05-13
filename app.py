@@ -434,7 +434,7 @@ curr_jd = start_jd  # ✅ Bắt đầu tính từ đây mới đúng
 # Tạo bảng Mahadasha
 dasha_list = []
 idx = dasha_sequence.index(dasha_lord)
-curr_jd = jd
+
 for i in range(9):
     lord = dasha_sequence[(idx + i) % 9]
     duration = dasha_years[lord]
