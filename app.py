@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import requests
+import json
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
 
