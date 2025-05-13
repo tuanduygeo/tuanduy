@@ -138,19 +138,11 @@ if st.button("Tính Toán"):
     else:
         selected_datetime_vn = selected_datetime.astimezone(vn_tz)
 
-    selected_utc = selected_datetime_vn.astimezone(pytz.utc)
+    selected_utc = selected_datetime_vn.astimezone(pytz.utc)  # Convert to UTC
 
-    # ✅ Lưu cả datetime và jd vào session_state
-    st.session_state.selected_datetime = selected_datetime
-    st.session_state.jd = swe.julday(
-        selected_utc.year,
-        selected_utc.month,
-        selected_utc.day,
-        selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600
-    )
+    jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
+                    selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
-    # ✅ Ghi đè vào jd hiện tại (để toàn bộ app dùng cùng 1 jd)
-    jd = st.session_state.jd
     st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
     st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
 
@@ -399,7 +391,7 @@ df_planets = pd.DataFrame(planet_data)
 st.dataframe(df_planets, use_container_width=True)
 
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
-st.markdown("#### 🕉️ Bảng Đại Vận Vimshottari")
+st.markdown("### 🕉️ Vimshottari Mahadasha")
 
 # Bảng ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
@@ -418,7 +410,7 @@ nakshatra_to_dasha_lord = {
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
-jd = st.session_state.get("jd", jd)
+
 # Tính vị trí Mặt Trăng
 moon_longitude = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
 
@@ -431,7 +423,7 @@ dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 # Số năm còn lại trong Mahadasha hiện tại
 full_years = dasha_years[dasha_lord]
 remain_years = (1 - nakshatra_fraction) * full_years
-jd = st.session_state.get("jd", jd)
+
 # ✅ Giữ ngày kết thúc là hiện tại, tính ngược ra ngày bắt đầu
 end_jd = jd + remain_years * 365.25
 start_jd = end_jd - full_years * 365.25
@@ -462,7 +454,7 @@ df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
 
-selected_dasha = st.selectbox("🔍 Chọn Đại vận chính để xem Tiểu vận:", df_dasha["Dasha"])
+selected_dasha = st.selectbox("🔍 Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
 
 # Khi có chọn, lấy dữ liệu từ bảng Mahadasha
 if selected_dasha:
@@ -494,7 +486,7 @@ if selected_dasha:
                 "Antardasha": f"{mahadasha_lord}/{sub_lord}",
                 "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
                 "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
-                "Số năm": round(sub_duration, 2)
+                "Số tháng": round(sub_duration * 12, 1)
             })
             jd_pointer = end_jd
 
@@ -504,7 +496,7 @@ if selected_dasha:
     df_antar = compute_antardasha(selected_dasha, start_jd, duration_years)
 
     # Hiển thị bảng
-    st.markdown(f"#####  Tiểu vận Antardasha của {selected_dasha}")
+    st.markdown(f"### 📆 Antardasha của {selected_dasha}")
     st.dataframe(df_antar, use_container_width=True)
 
 st.markdown("""
