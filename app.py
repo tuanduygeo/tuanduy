@@ -503,7 +503,47 @@ df_all_antar = pd.DataFrame(all_antardasha)
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     
     st.dataframe(df_all_antar, use_container_width=True)
+st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
 
+# Quy tắc điểm số theo nhà
+mahadasha_scores = {6: -10, 8: -10, 12: -10, 4: 5, 7: 5, 10: 5, 3: 0, 1: 10, 5: 10, 9: 10, 11: 10}
+antardasha_scores = {6: -5, 8: -5, 12: -5, 4: 2, 7: 2, 10: 2, 3: 0, 1: 5, 5: 5, 9: 5, 11: 5}
+
+# Vẽ dữ liệu điểm số
+life_years = []
+life_scores = []
+current_year = 0
+
+for _, m_row in df_dasha.iterrows():
+    m_lord = m_row["Dasha"]
+    m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
+    m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
+    m_duration = m_row["Số năm"]
+
+    m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
+    m_score = mahadasha_scores.get(m_house, 0)
+
+    antars = compute_antardasha(m_lord, m_start_jd, m_duration)
+    for _, antar in antars.iterrows():
+        a_lord = antar["Antardasha"]
+        a_years = antar["Số năm"]
+        a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
+        a_score = antardasha_scores.get(a_house, 0)
+
+        total_score = m_score + a_score
+        life_years.append(current_year)
+        life_scores.append(total_score)
+        current_year += a_years
+
+# Vẽ biểu đồ
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(life_years, life_scores, marker='o')
+ax.set_title("Biểu đồ điểm số Mahadasha / Antardasha theo 120 năm cuộc đời")
+ax.set_xlabel("Năm trong đời")
+ax.set_ylabel("Điểm số")
+ax.grid(True)
+
+st.pyplot(fig)
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
@@ -567,40 +607,4 @@ except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
 st.header("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
- 
-if "votes" not in st.session_state:
-    st.session_state.votes = 0
 
-if "comments" not in st.session_state:
-    st.session_state.comments = []
-
-st.header("📊 Bình chọn và Bình luận")
-
-# Hiển thị số lượng vote hiện tại
-st.metric(label="Số lượt vote", value=st.session_state.votes)
-
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("👍 Vote lên"):
-        st.session_state.votes += 1
-with col2:
-    if st.button("👎 Vote xuống"):
-        st.session_state.votes -= 1
-
-st.divider()
-
-# Gửi bình luận
-st.subheader("💬 Viết bình luận")
-comment = st.text_area("Ý kiến của bạn", placeholder="Nhập bình luận tại đây...")
-if st.button("Gửi bình luận"):
-    if comment.strip():
-        st.session_state.comments.append(comment.strip())
-        st.success("Đã gửi bình luận!")
-    else:
-        st.warning("Bình luận không được để trống!")
-
-# Hiển thị danh sách bình luận
-if st.session_state.comments:
-    st.subheader("🗂 Các bình luận đã gửi")
-    for i, c in enumerate(st.session_state.comments[::-1], 1):
-        st.write(f"**#{i}:** {c}")
