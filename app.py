@@ -9,7 +9,6 @@ import pytz
 import matplotlib.pyplot as plt
 import random
 import numpy as np
-from geopy.geocoders import Nominatim
 import requests
 st.set_page_config(layout="wide")
 st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
@@ -115,25 +114,6 @@ jd = swe.julday(now_utc.year, now_utc.month, now_utc.day,
                 now_utc.hour + now_utc.minute / 60 + now_utc.second / 3600)
 
 st.markdown(f"**🕒 Giờ hiện tại (VN)**: {now_local.strftime('%Y-%m-%d %H:%M:%S')}")
-geolocator = Nominatim(user_agent="astro_app")
-
-# Nhập địa điểm
-location_name = st.text_input("📍 Nhập địa điểm (ví dụ: Huế, Đà Nẵng, Sài Gòn):", value="Hà Nội")
-
-# Mặc định nếu không tìm thấy
-latitude_default = 21.0
-longitude_default = 105.8
-
-# Tìm lat/lon từ địa điểm nhập
-if location_name:
-    location = geolocator.geocode(location_name)
-    if location:
-        latitude_default = location.latitude
-        longitude_default = location.longitude
-        st.success(f"Tìm được: {location.address}")
-    else:
-        st.warning("❗Không tìm thấy địa điểm, dùng mặc định Hà Nội.")
-
 # Create sliders for user input for time and coordinates
 col1, col2, col3 = st.columns([1, 1, 1])
 
@@ -146,8 +126,8 @@ with col2:
     minute = st.slider("Chọn Phút", min_value=0, max_value=59, value=0, step=1)
 with col3:
 
-    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=latitude_default, step=0.1)
-    longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=longitude_default, step=0.1)
+    latitude = st.slider("Chọn Vĩ độ", min_value=-90.0, max_value=90.0, value=21, step=0.1)
+    longitude = st.slider("Chọn Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
 # Button to calculate
 if st.button("Tính Toán"):
     selected_datetime = datetime(year, month, day, hour, minute)
