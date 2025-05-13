@@ -496,7 +496,7 @@ if selected_dasha:
     df_antar = compute_antardasha(selected_dasha, start_jd, duration_years)
 
     # Hiển thị bảng
-    st.markdown(f"### 📆 Tiểu vận Antardasha của {selected_dasha}")
+    st.markdown(f"#####  Tiểu vận Antardasha của {selected_dasha}")
     st.dataframe(df_antar, use_container_width=True)
 
 st.markdown("""
