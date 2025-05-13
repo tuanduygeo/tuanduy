@@ -559,3 +559,40 @@ except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
 st.title("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
+ 
+if "votes" not in st.session_state:
+    st.session_state.votes = 0
+
+if "comments" not in st.session_state:
+    st.session_state.comments = []
+
+st.header("📊 Bình chọn và Bình luận")
+
+# Hiển thị số lượng vote hiện tại
+st.metric(label="Số lượt vote", value=st.session_state.votes)
+
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("👍 Vote lên"):
+        st.session_state.votes += 1
+with col2:
+    if st.button("👎 Vote xuống"):
+        st.session_state.votes -= 1
+
+st.divider()
+
+# Gửi bình luận
+st.subheader("💬 Viết bình luận")
+comment = st.text_area("Ý kiến của bạn", placeholder="Nhập bình luận tại đây...")
+if st.button("Gửi bình luận"):
+    if comment.strip():
+        st.session_state.comments.append(comment.strip())
+        st.success("Đã gửi bình luận!")
+    else:
+        st.warning("Bình luận không được để trống!")
+
+# Hiển thị danh sách bình luận
+if st.session_state.comments:
+    st.subheader("🗂 Các bình luận đã gửi")
+    for i, c in enumerate(st.session_state.comments[::-1], 1):
+        st.write(f"**#{i}:** {c}")
