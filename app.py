@@ -409,29 +409,7 @@ nakshatra_to_dasha_lord = {
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
-def compute_antardasha(mahadasha_lord, start_jd, duration_years):
-    antardashas = []
-    start_index = dasha_sequence.index(mahadasha_lord)
-    jd_pointer = start_jd
 
-    for i in range(9):
-        sub_lord = dasha_sequence[(start_index + i) % 9]
-        weight = dasha_years[sub_lord] / 120
-        sub_duration = duration_years * weight
-        end_jd = jd_pointer + sub_duration * 365.25
-
-        start = swe.revjul(jd_pointer)
-        end = swe.revjul(end_jd)
-
-        antardashas.append({
-            "Antardasha": f"{mahadasha_lord}/{sub_lord}",
-            "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
-            "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
-            "Số tháng": round(sub_duration * 12, 1)
-        })
-        jd_pointer = end_jd
-
-    return pd.DataFrame(antardashas)
 
 # Tính vị trí mặt trăng
 # Tính vị trí chính xác của Mặt Trăng (sidereal)
@@ -474,13 +452,49 @@ df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 selected_dasha = st.selectbox("Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
 
+selected_dasha = st.selectbox("🔍 Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
+
+# Khi có chọn, lấy dữ liệu từ bảng Mahadasha
 if selected_dasha:
-    row = df_dasha[df_dasha["Dasha"] == selected_dasha].iloc[0]
-    start_date = datetime.strptime(row["Bắt đầu"], "%d-%m-%Y")
+    selected_row = df_dasha[df_dasha["Dasha"] == selected_dasha].iloc[0]
+
+    # Chuyển ngày bắt đầu sang Julian Day
+    start_date = datetime.strptime(selected_row["Bắt đầu"], "%d-%m-%Y")
     start_jd = swe.julday(start_date.year, start_date.month, start_date.day)
-    duration_years = row["Số năm"]
+
+    # Lấy độ dài Mahadasha
+    duration_years = selected_row["Số năm"]
+
+    # Hàm tính Antardasha chuẩn
+    def compute_antardasha(mahadasha_lord, start_jd, duration_years):
+        antardashas = []
+        start_index = dasha_sequence.index(mahadasha_lord)
+        jd_pointer = start_jd
+
+        for i in range(9):
+            sub_lord = dasha_sequence[(start_index + i) % 9]
+            weight = dasha_years[sub_lord] / 120
+            sub_duration = duration_years * weight
+            end_jd = jd_pointer + sub_duration * 365.25
+
+            start = swe.revjul(jd_pointer)
+            end = swe.revjul(end_jd)
+
+            antardashas.append({
+                "Antardasha": f"{mahadasha_lord}/{sub_lord}",
+                "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
+                "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
+                "Số tháng": round(sub_duration * 12, 1)
+            })
+            jd_pointer = end_jd
+
+        return pd.DataFrame(antardashas)
+
+    # Tính bảng Antardasha
     df_antar = compute_antardasha(selected_dasha, start_jd, duration_years)
-    st.markdown(f"### Antardasha của {selected_dasha}")
+
+    # Hiển thị bảng
+    st.markdown(f"### 📆 Antardasha của {selected_dasha}")
     st.dataframe(df_antar, use_container_width=True)
 
 st.markdown("""
