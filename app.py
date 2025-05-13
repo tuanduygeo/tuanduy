@@ -386,14 +386,6 @@ st.dataframe(df_planets, use_container_width=True)
 
 st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 
-
-
-# Tính lại vị trí Mặt Trăng
-moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
-nak_index = int(moon_long // (360 / 27))
-nakshatra_index = int(moon_longitude // (360 / 27)) % 27
-nakshatra_name = nakshatras[nakshatra_index]
-dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 # Danh sách Nakshatra
 nakshatras = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
@@ -402,7 +394,6 @@ nakshatras = [
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
 
-# Ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
     "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
     "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
@@ -415,15 +406,22 @@ nakshatra_to_dasha_lord = {
     "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
 }
 
-# Dasha sequence và số năm tương ứng
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
                "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
-# Tính thời gian còn lại của Mahadasha hiện tại
-full_years = dasha_years[dasha_lord]
-remain_years = (1 - nak_fraction) * full_years
 
-# Tính và hiển thị bảng Mahadasha
+# Tính vị trí mặt trăng
+moon_longitude = swe.calc_ut(jd, swe.MOON)[0][0]
+nakshatra_index = int(moon_longitude // (360 / 27)) % 27
+nakshatra_fraction = (moon_longitude % (360 / 27)) / (360 / 27)
+nakshatra_name = nakshatras[nakshatra_index]
+dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
+
+# Tính phần Mahadasha còn lại
+full_years = dasha_years[dasha_lord]
+remain_years = (1 - nakshatra_fraction) * full_years
+
+# Tạo bảng Mahadasha
 dasha_list = []
 idx = dasha_sequence.index(dasha_lord)
 curr_jd = jd
