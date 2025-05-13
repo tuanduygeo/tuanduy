@@ -444,7 +444,10 @@ for i in range(9):
     })
 
     curr_jd = end_jd
-
+st.markdown(f"🌙 **Moon Degree:** {moon_longitude:.2f}°")
+st.markdown(f"🔢 **Nakshatra index:** {nakshatra_index}")
+st.markdown(f"📛 **Nakshatra name:** {nakshatra_name}")
+st.markdown(f"👑 **Mahadasha Lord:** {dasha_lord}")
 df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
