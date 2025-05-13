@@ -453,9 +453,6 @@ for i in range(9):
 df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
-
-selected_dasha = st.selectbox("🔍 Chọn Mahadasha để xem Antardasha:", df_dasha["Dasha"])
-
 # Khi có chọn, lấy dữ liệu từ bảng Mahadasha
 if selected_dasha:
     selected_row = df_dasha[df_dasha["Dasha"] == selected_dasha].iloc[0]
