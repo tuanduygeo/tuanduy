@@ -453,41 +453,31 @@ for i in range(9):
 df_dasha = pd.DataFrame(dasha_list)
 st.dataframe(df_dasha, use_container_width=True)
 
-# Khi có chọn, lấy dữ liệu từ bảng Mahadasha
-if selected_dasha:
-    selected_row = df_dasha[df_dasha["Dasha"] == selected_dasha].iloc[0]
 
-    # Chuyển ngày bắt đầu sang Julian Day
-    start_date = datetime.strptime(selected_row["Bắt đầu"], "%d-%m-%Y")
-    start_jd = swe.julday(start_date.year, start_date.month, start_date.day)
+# Hàm tính Antardasha chuẩn
+def compute_antardasha(mahadasha_lord, start_jd, duration_years):
+    antardashas = []
+    start_index = dasha_sequence.index(mahadasha_lord)
+    jd_pointer = start_jd
 
-    # Lấy độ dài Mahadasha
-    duration_years = selected_row["Số năm"]
+    for i in range(9):
+        sub_lord = dasha_sequence[(start_index + i) % 9]
+        weight = dasha_years[sub_lord] / 120
+        sub_duration = duration_years * weight
+        end_jd = jd_pointer + sub_duration * 365.25
 
-    # Hàm tính Antardasha chuẩn
-    def compute_antardasha(mahadasha_lord, start_jd, duration_years):
-        antardashas = []
-        start_index = dasha_sequence.index(mahadasha_lord)
-        jd_pointer = start_jd
+        start = swe.revjul(jd_pointer)
+        end = swe.revjul(end_jd)
 
-        for i in range(9):
-            sub_lord = dasha_sequence[(start_index + i) % 9]
-            weight = dasha_years[sub_lord] / 120
-            sub_duration = duration_years * weight
-            end_jd = jd_pointer + sub_duration * 365.25
+        antardashas.append({
+            "Antardasha": f"{mahadasha_lord}/{sub_lord}",
+            "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
+            "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
+            "Số tháng": round(sub_duration * 12, 1)
+        })
+        jd_pointer = end_jd
 
-            start = swe.revjul(jd_pointer)
-            end = swe.revjul(end_jd)
-
-            antardashas.append({
-                "Antardasha": f"{mahadasha_lord}/{sub_lord}",
-                "Bắt đầu": f"{int(start[2]):02d}-{int(start[1]):02d}-{int(start[0])}",
-                "Kết thúc": f"{int(end[2]):02d}-{int(end[1]):02d}-{int(end[0])}",
-                "Số tháng": round(sub_duration * 12, 1)
-            })
-            jd_pointer = end_jd
-
-        return pd.DataFrame(antardashas)
+    return pd.DataFrame(antardashas)
 
 all_antardasha = []
 for _, row in df_dasha.iterrows():
