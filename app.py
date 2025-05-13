@@ -150,7 +150,13 @@ if st.button("Tính Toán"):
 
 rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
           "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
-
+# Danh sách Nakshatra
+nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+]
 
 
 planets = {
@@ -386,13 +392,7 @@ st.dataframe(df_planets, use_container_width=True)
 
 st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 
-# Danh sách Nakshatra
-nakshatras = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
-    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
-    "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
+
 
 nakshatra_to_dasha_lord = {
     "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
