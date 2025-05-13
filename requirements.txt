@@ -4,3 +4,4 @@ matplotlib
 pyswisseph
 numpy
 geopy
+requests
