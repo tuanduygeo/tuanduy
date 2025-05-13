@@ -160,11 +160,17 @@ nakshatras = [
 ]
 
 # Ánh xạ Nakshatra → Dasha Lord
-nakshatra_to_dasha_lord = [
-    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
-    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
-    "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"
-]
+nakshatra_to_dasha_lord = {
+    "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
+    "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
+    "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
+    "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
+    "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
+    "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
+    "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
+    "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
+    "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
+}
 
 # Dasha sequence và số năm tương ứng
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
@@ -410,7 +416,8 @@ st.markdown("### 🕉️ Vimshottari Dasha (Mahadasha)")
 moon_long = swe.calc_ut(jd, swe.MOON)[0][0]
 nak_index = int(moon_long // (360 / 27))
 nak_fraction = (moon_long % (360 / 27)) / (360 / 27)
-dasha_lord = nakshatra_to_dasha_lord[nak_index]
+nakshatra_name = nakshatras[nakshatra_index]
+dasha_lord = nakshatra_to_dasha_lord[nakshatra_name]
 
 # Tính thời gian còn lại của Mahadasha hiện tại
 full_years = dasha_years[dasha_lord]
