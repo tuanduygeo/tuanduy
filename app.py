@@ -506,7 +506,7 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
 st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {6: -10, 8: -10, 12: -10, 4: 5, 7: 5, 10: 5, 3: 0, 1: 10, 5: 10, 9: 10, 11: 10}
+mahadasha_scores = {6: -18, 8: -12, 12: -10, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11}
 antardasha_scores = {6: -5, 8: -5, 12: -5, 4: 2, 7: 2, 10: 2, 3: 0, 1: 5, 5: 5, 9: 5, 11: 5}
 
 # Tính dữ liệu vẽ biểu đồ
