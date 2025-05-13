@@ -498,7 +498,7 @@ for _, row in df_dasha.iterrows():
     m_start = datetime.strptime(row["Bắt đầu"], "%d-%m-%Y")
     m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
     m_years = row["Số năm"]
-    all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years)
+    all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years).to_dict("records")
 
 df_all_antar = pd.DataFrame(all_antardasha)
 
