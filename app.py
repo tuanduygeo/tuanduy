@@ -509,7 +509,7 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
-
+st.markdown("""
 ### 🧲 5. Giám sát Bão Từ Thời Gian Thực
 Dữ liệu từ NOAA SWPC
 """)
