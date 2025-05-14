@@ -506,8 +506,8 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
 st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {1:6  ,2:0  ,3:-1  ,4:1  ,5:1  ,6:-2  ,7:2  ,8:-4  ,9:5  ,10:3  ,11:4  ,12:-3  }
-antardasha_scores = {1:6  ,2:0  ,3:-1  ,4:1  ,5:1  ,6:-2  ,7:2  ,8:-4  ,9:5  ,10:3  ,11:4  ,12:-3 }
+mahadasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5  }
+antardasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5 }
 
 # Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
@@ -556,7 +556,7 @@ ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-
+ax.set_ylim(-8, 8)
 ax.set_title("Biểu đồ điểm số đại vận")
 ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
