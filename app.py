@@ -273,7 +273,7 @@ planet_data = []
 
 # Tính toán ngày trước đó (1 ngày)
 jd_previous = jd - 1  # Giảm 1 ngày để lấy ngày trước đó
-sun_deg = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)
+
 planet_data.append({
     "Hành tinh": "Asc",
     "Vị trí": asc_degree_dms,
@@ -291,7 +291,7 @@ for name, code in planets.items():
     
     # Kiểm tra nghịch hành với hai ngày
     retrograde_status = "R" if is_retrograde(code, jd, jd_previous) else ""
-    is_c = is_combust(name, lon_deg, sun_deg[0], retrograde=(retrograde_status == "R"))
+    is_c = is_combust(name, lon_deg, sun_lon, retrograde=(retrograde_status == "R"))
     status = retrograde_status
     if is_c:
         status += " C"
