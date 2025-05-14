@@ -543,7 +543,63 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
 # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
 chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
-plot(fig)
+if st.checkbox("👁️ Hiện 4 đường mục tiêu (sự nghiệp, hôn nhân, tài chính, sức khỏe)"):
+    # Ánh xạ trọng số theo từng mục tiêu
+    purpose_weights = {
+        "sự nghiệp": {1: 5, 10: 5, 11: 4, 9: 3, 6: -3, 8: -5, 12: -3},
+        "hôn nhân": {7: 6, 4: 3, 2: 2, 5: 2, 11: 2, 12: -3, 6: -4, 8: -5},
+        "tài chính": {2: 5, 11: 4, 10: 3, 6: -2, 12: -4, 8: -5},
+        "sức khỏe": {1: 5, 6: -5, 8: -4, 12: -4, 5: 2, 9: 2, 10: 1}
+    }
+
+    # Tính điểm từng mục tiêu
+    for purpose, weights in purpose_weights.items():
+        chart_df[purpose] = chart_df["Nhà"].apply(lambda x: weights.get(x, 0))
+
+    # Chọn hiển thị mục tiêu nào
+    st.markdown("### 🔧 Chọn mục tiêu để hiển thị:")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        show_su_nghiep = st.checkbox("Sự nghiệp", value=True, key="su_nghiep")
+    with col2:
+        show_hon_nhan = st.checkbox("Hôn nhân", value=True, key="hon_nhan")
+    with col3:
+        show_tai_chinh = st.checkbox("Tài chính", value=True, key="tai_chinh")
+    with col4:
+        show_suc_khoe = st.checkbox("Sức khỏe", value=True, key="suc_khoe")
+
+    # Vẽ biểu đồ
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.plot(chart_df["Năm"], chart_df["Điểm số"], label="Điểm Mahadasha", color='black', marker='o')
+
+    colors = {
+        "sự nghiệp": "gold",
+        "hôn nhân": "red",
+        "tài chính": "green",
+        "sức khỏe": "purple"
+    }
+
+    if show_su_nghiep:
+        ax.plot(chart_df["Năm"], chart_df["sự nghiệp"], label="Sự nghiệp", linestyle='--', color=colors["sự nghiệp"])
+    if show_hon_nhan:
+        ax.plot(chart_df["Năm"], chart_df["hôn nhân"], label="Hôn nhân", linestyle='--', color=colors["hôn_nhan"])
+    if show_tai_chinh:
+        ax.plot(chart_df["Năm"], chart_df["tài chính"], label="Tài chính", linestyle='--', color=colors["tài chính"])
+    if show_suc_khoe:
+        ax.plot(chart_df["Năm"], chart_df["sức khỏe"], label="Sức khỏe", linestyle='--', color=colors["sức khỏe"])
+
+    ax.axvline(x=birth_x, color='blue', linestyle=':', linewidth=2)
+    ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='blue', ha='center', va='bottom')
+
+    ax.set_ylim(-10, 10)
+    ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))
+    ax.tick_params(axis='x', rotation=45)
+    ax.set_title("Biểu đồ đại vận theo từng mục tiêu")
+    ax.set_xlabel("Năm")
+    ax.set_ylabel("Điểm số")
+    ax.grid(True)
+    ax.legend()
+    st.pyplot(fig)
 
 
 st.markdown("""
