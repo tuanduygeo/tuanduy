@@ -517,7 +517,16 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
         m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
         m_score = mahadasha_scores.get(m_house, 0)
-
+        # Gán nhãn mục tiêu dựa theo nhà
+        purpose = ""
+        if m_house in [2, 11]:
+            purpose = " (tài)"
+        elif m_house in [1, 5, 9]:
+            purpose = " (sức khỏe)"
+        elif m_house == 10:
+            purpose = " (sự nghiệp)"
+        elif m_house == 7:
+            purpose = " (hôn nhân)"
         antars = compute_antardasha(m_lord, m_start_jd, m_duration)
         for _, antar in antars.iterrows():
             a_lord = antar["Antardasha"].split("/")[-1]
@@ -529,7 +538,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
             life_years.append(current_year)
             life_scores.append(total_score)
-            year_labels.append(m_lord)
+              year_labels.append(m_lord + purpose)
             current_year += a_years
 
     birth_x = round(birth_offset, 2) if birth_offset else 0
