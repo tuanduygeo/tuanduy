@@ -495,8 +495,8 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     st.dataframe(df_all_antar, use_container_width=True)
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5  }
-antardasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5 }
+mahadasha_scores = {1:5  ,2:3  ,3:-3  ,4:3  ,5:3  ,6:-4  ,7:3  ,8:-6  ,9:4  ,10:4  ,11:4  ,12:-5  }
+antardasha_scores = {1:5  ,2:3  ,3:-3  ,4:3  ,5:3  ,6:-4  ,7:3  ,8:-6  ,9:4  ,10:4  ,11:4  ,12:-5  }
 
 # Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
@@ -537,6 +537,26 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
 # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
 chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
+# Trọng số theo từng mục tiêu
+purpose_weights = {
+    "sự nghiệp": {1: 5, 10: 5, 11: 4, 9: 3, 6: -3, 8: -5, 12: -3},
+    "hôn nhân": {7: 6, 4: 3, 2: 2, 5: 2, 11: 2, 12: -3, 6: -4, 8: -5},
+    "tài chính": {2: 5, 11: 4, 10: 3, 6: -2, 12: -4, 8: -5},
+    "sức khỏe": {1: 5, 6: -5, 8: -4, 12: -4, 5: 2, 9: 2, 10: 1}
+}
+
+# Tính điểm số theo từng mục tiêu
+for purpose, weights in purpose_weights.items():
+    chart_df[purpose] = chart_df["Nhà"].apply(lambda x: weights.get(x, 0))
+colors = {
+    "sự nghiệp": "yellow",
+    "hôn nhân": "red",
+    "tài chính": "green",
+    "sức khỏe": "purple"
+}
+
+for purpose, color in colors.items():
+    ax.plot(chart_df["Năm"], chart_df[purpose], label=purpose.capitalize(), color=color, marker='o')
 
 # Vẽ biểu đồ zigzag và đường cong mượt
 fig, ax = plt.subplots(figsize=(12, 4))
