@@ -391,7 +391,7 @@ def draw_chart(planet_data):
         cusp_degree = equal_house_cusps[i - 1]
         rashi_name = get_rashi(cusp_degree)
         rashi_number = rashi_to_number[rashi_name]
-        ax.text(x - 8, y + 3, str(rashi_number), fontsize=4, color='red')
+        ax.text(x - 8, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
