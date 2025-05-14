@@ -204,7 +204,21 @@ def get_dignity(planet, rashi):
 def get_nakshatra(degree):
     return nakshatras[int(degree // (360 / 27))]
 
-
+def is_combust(planet_name, planet_lon, sun_lon, retrograde=False):
+    if planet_name in ["Sun", "Rahu", "Ketu"]:
+        return False
+    diff = abs((planet_lon - sun_lon + 180) % 360 - 180)
+    
+    combust_limits = {
+        "Moon": 8,
+        "Mercury": 4 ,
+        "Venus": 6,
+        "Mars": 8,
+        "Jupiter": 8,
+        "Saturn": 8
+    }
+    limit = combust_limits.get(planet_name, 0)
+    return diff < limit
 def get_pada(degree):
     deg_in_nak = degree % (360 / 27)
     return int(deg_in_nak // (13.3333 / 4)) + 1
@@ -277,7 +291,10 @@ for name, code in planets.items():
     
     # Kiểm tra nghịch hành với hai ngày
     retrograde_status = "R" if is_retrograde(code, jd, jd_previous) else ""
-
+    is_c = is_combust(name, lon_deg, sun_deg[0], retrograde=(retrograde_status == "R"))
+    status = retrograde_status
+    if is_c:
+        status += " C"
     # Thêm thông tin hành tinh vào danh sách planet_data
     planet_data.append({
         "Hành tinh": name,
@@ -287,7 +304,7 @@ for name, code in planets.items():
         "Pada": get_pada(lon_deg),
         "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
         "Tính chất": get_dignity(name, get_rashi(lon_deg)),
-        "Nghịch hành": retrograde_status,
+        "Nghịch hành": status,
     })
 # Tìm Rahu trong planet_data
 rahu_deg = None
