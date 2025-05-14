@@ -509,16 +509,22 @@ st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / A
 mahadasha_scores = {6: -5, 8: -10, 12: -9, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11,2:8}
 antardasha_scores = {6: -5, 8: -10, 12: -9, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11,2:8}
 
-def build_life_chart(df_dasha, planet_data):
+# Tính dữ liệu vẽ biểu đồ
+def build_life_chart(df_dasha, planet_data, birth_jd):
     life_years = []
     life_scores = []
+    year_labels = []
     current_year = 0
+    birth_offset = None
 
     for _, m_row in df_dasha.iterrows():
         m_lord = m_row["Dasha"]
         m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
         m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
         m_duration = m_row["Số năm"]
+
+        if birth_offset is None and birth_jd >= m_start_jd:
+            birth_offset = (birth_jd - m_start_jd) / 365.25
 
         m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
         m_score = mahadasha_scores.get(m_house, 0)
@@ -530,26 +536,34 @@ def build_life_chart(df_dasha, planet_data):
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
             a_score = antardasha_scores.get(a_house, 0)
 
-            # Điểm cuộc sống dựa trên Antardasha (Mahadasha là nền nhẹ)
-            total_score = round(0.3 *a_score +  m_score, 2)
+            total_score = round(a_score + 0.3 * m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
+            year_labels.append(m_lord)
             current_year += a_years
 
-    return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores})
+    birth_x = round(birth_offset, 2) if birth_offset else 0
+    return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
 
-# Ví dụ sử dụng dữ liệu df_dasha và planet_data đã tính
-chart_df = build_life_chart(df_dasha, planet_data)
+# Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
+chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 
-# Vẽ biểu đồ
+# Vẽ biểu đồ zigzag và đường cong mượt
 fig, ax = plt.subplots(figsize=(12, 4))
-ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-ax.set_title("Biểu đồ điểm số theo đại vận")
-ax.set_xlabel("Năm ")
+
+ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o', label="Zigzag")
+# Đánh dấu thời điểm sinh
+ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
+ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
+
+ax.set_title("Biểu đồ điểm số đại vận")
+ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
+ax.legend()
 st.pyplot(fig)
+
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
