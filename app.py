@@ -509,7 +509,6 @@ st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / A
 mahadasha_scores = {6: -18, 8: -12, 12: -10, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11}
 antardasha_scores = {6: -5, 8: -5, 12: -5, 4: 2, 7: 2, 10: 2, 3: 0, 1: 5, 5: 5, 9: 5, 11: 5}
 
-# Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data):
     life_years = []
     life_scores = []
@@ -526,13 +525,13 @@ def build_life_chart(df_dasha, planet_data):
 
         antars = compute_antardasha(m_lord, m_start_jd, m_duration)
         for _, antar in antars.iterrows():
-            a_lord = antar["Antardasha"]
+            a_lord = antar["Antardasha"].split("/")[-1]
             a_years = antar["Số năm"]
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
             a_score = antardasha_scores.get(a_house, 0)
 
-            # Điểm cuốc sống dựa trên Antardasha (Mahadasha là nền nhệ)
-            total_score = round(0.7*a_score + m_score, 2)
+            # Điểm cuộc sống dựa trên Antardasha (Mahadasha là nền nhẹ)
+            total_score = round(a_score + 0.3 * m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
@@ -540,13 +539,13 @@ def build_life_chart(df_dasha, planet_data):
 
     return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores})
 
-# Ví dụ sử dữ liệu df_dasha và planet_data đã tính
+# Ví dụ sử dụng dữ liệu df_dasha và planet_data đã tính
 chart_df = build_life_chart(df_dasha, planet_data)
 
 # Vẽ biểu đồ
 fig, ax = plt.subplots(figsize=(12, 4))
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-ax.set_title("Biểu đồ điểm số theo Đại vận / tiểu vận")
+ax.set_title("Biểu đồ điểm số cuộc đời theo Mahadasha / Antardasha")
 ax.set_xlabel("Năm trong đời")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
