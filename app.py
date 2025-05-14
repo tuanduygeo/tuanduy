@@ -556,7 +556,7 @@ ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-ax.set_ylim(-8, 8)
+ax.set_ylim(-10, 10)
 ax.set_title("Biểu đồ điểm số đại vận")
 ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
