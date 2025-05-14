@@ -547,7 +547,15 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         # Điểm từ vị trí hiện tại của hành tinh
         m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
         m_score = mahadasha_scores.get(m_house, 0)
-        
+        m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
+        if m_dignity in ["vượng", "tướng"]:
+            m_score += 1
+        elif m_dignity == "bạn bè":
+            m_score += 0.5
+        elif m_dignity == "địch thủ":
+            m_score -= 0.5
+        elif m_dignity in ["tù", "tử"]:
+            m_score -= 1
         # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
         ruled_houses = planet_to_ruled_houses.get(m_lord, [])
         rule_bonus = 0
@@ -591,6 +599,16 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
                     rule_bonus_a += 0.25
             
             a_score += rule_bonus_a
+            # ✅ Thêm điểm theo dignity (tính chất) của Antardasha lord
+            a_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == a_lord), "")
+            if a_dignity in ["vượng", "tướng"]:
+                a_score += 0.5
+            elif a_dignity == "bạn bè":
+                a_score += 0.2
+            elif a_dignity == "địch thủ":
+                a_score -= 0.2
+            elif a_dignity in ["tù", "tử"]:
+                a_score -= 0.5
             total_score = round(0.33 *a_score +  m_score, 2)
 
             life_years.append(current_year)
