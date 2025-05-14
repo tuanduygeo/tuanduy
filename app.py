@@ -544,8 +544,22 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         if birth_offset is None and birth_jd >= m_start_jd:
             birth_offset = (birth_jd - m_start_jd) / 365.25
 
+        # Điểm từ vị trí hiện tại của hành tinh
         m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
         m_score = mahadasha_scores.get(m_house, 0)
+        
+        # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
+        ruled_houses = planet_to_ruled_houses.get(m_lord, [])
+        rule_bonus = 0
+        for rh in ruled_houses:
+            if rh in [6, 8, 12]:
+                rule_bonus -= 3
+            elif rh in [1, 5, 9]:
+                rule_bonus += 3
+            elif rh in [2, 4, 7, 10, 11]:
+                rule_bonus += 2
+        
+        m_score += rule_bonus
         # Gán nhãn mục tiêu dựa theo nhà
         purpose = ""
         if m_house in [2, 11]:
