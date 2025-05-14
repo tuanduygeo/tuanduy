@@ -524,8 +524,8 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     st.dataframe(df_all_antar, use_container_width=True)
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {1:5  ,2:3  ,3:-2  ,4:2  ,5:3  ,6:-3  ,7:2  ,8:-5  ,9:4  ,10:3  ,11:4  ,12:-4  }
-antardasha_scores = {1:5  ,2:3  ,3:-2  ,4:2  ,5:3  ,6:-3  ,7:2  ,8:-5  ,9:4  ,10:3  ,11:4  ,12:-4 }
+mahadasha_scores = {1:4  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-3  ,7:2  ,8:-4  ,9:4  ,10:3  ,11:3  ,12:-4  }
+antardasha_scores = {1:4  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-3  ,7:2  ,8:-4  ,9:4  ,10:3  ,11:3  ,12:-4 }
 
 # Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
@@ -591,7 +591,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
                     rule_bonus_a += 0.25
             
             a_score += rule_bonus_a
-            total_score = round(0.5 *a_score +  m_score, 2)
+            total_score = round(0.33 *a_score +  m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
