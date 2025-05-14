@@ -394,7 +394,7 @@ def draw_chart(planet_data):
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-st.markdown("### Vị trí hành tinh")
+
 df_planets = pd.DataFrame(planet_data)
 rashi_rulers = {
     "Bạch Dương": "Mars", "Kim Ngưu": "Venus", "Song Tử": "Mercury", "Cự Giải": "Moon",
@@ -402,15 +402,20 @@ rashi_rulers = {
     "Nhân Mã": "Jupiter", "Ma Kết": "Saturn", "Bảo Bình": "Saturn", "Song Ngư": "Jupiter"
 }
 
-house_rulers = {i + 1: rashi_rulers[get_rashi(cusp)] for i, cusp in enumerate(equal_house_cusps[:12])}
+house_rulers = {
+    i + 1: rashi_rulers[get_rashi(cusp)]
+    for i, cusp in enumerate(equal_house_cusps[:12])
+}
 
 planet_to_ruled_houses = {}
 for house, ruler in house_rulers.items():
     planet_to_ruled_houses.setdefault(ruler, []).append(house)
 
-df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(lambda p: planet_to_ruled_houses.get(p, []))
+df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
+    lambda p: planet_to_ruled_houses.get(p, [])
+)
 
-
+st.markdown("### Vị trí hành tinh")
 st.dataframe(df_planets, use_container_width=True)
 
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
