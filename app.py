@@ -175,7 +175,11 @@ dignities = {
               }
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
-
+rashi_to_number = {
+    "Bạch Dương": 1, "Kim Ngưu": 2, "Song Tử": 3, "Cự Giải": 4,
+    "Sư Tử": 5, "Xử Nữ": 6, "Thiên Bình": 7, "Bọ Cạp": 8,
+    "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
+}
 
 # ==== Hàm phụ ====
 def get_rashi(degree):
@@ -383,7 +387,9 @@ def draw_chart(planet_data):
                 labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
-  
+    # Hiển thị số thứ tự nhà
+    for house, (x, y) in house_coords.items():
+        ax.text(x, y + 6, str(house), ha='center', va='center', fontsize=8, color='black', weight='bold')
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
