@@ -506,8 +506,8 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
 st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {6: -5, 8: -10, 12: -9, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11,2:8}
-antardasha_scores = {6: -5, 8: -10, 12: -9, 4: 6, 7: 5, 10: 7, 3: 0, 1: 12, 5: 7, 9: 10, 11: 11,2:8}
+mahadasha_scores = {1:6  ,2:0  ,3:-1  ,4:1  ,5:1  ,6:-2  ,7:2  ,8:-4  ,9:5  ,10:3  ,11:4  ,12:-3  }
+antardasha_scores = {1:6  ,2:0  ,3:-1  ,4:1  ,5:1  ,6:-2  ,7:2  ,8:-4  ,9:5  ,10:3  ,11:4  ,12:-3 }
 
 # Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
