@@ -391,8 +391,7 @@ st.pyplot(fig, use_container_width=False)
 df_planets = pd.DataFrame(planet_data)
 
 
-st.markdown("### Vị trí hành tinh")
-st.dataframe(df_planets, use_container_width=True)
+
 rashi_rulers = {
     "Bạch Dương": "Mars", "Kim Ngưu": "Venus", "Song Tử": "Mercury", "Cự Giải": "Moon",
     "Sư Tử": "Sun", "Xử Nữ": "Mercury", "Thiên Bình": "Venus", "Bọ Cạp": "Mars",
@@ -411,6 +410,8 @@ for house, ruler in house_rulers.items():
 df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
     lambda p: planet_to_ruled_houses.get(p, [])
 )
+st.markdown("### Vị trí hành tinh")
+st.dataframe(df_planets, use_container_width=True)
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
 st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
