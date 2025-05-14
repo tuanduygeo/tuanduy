@@ -545,9 +545,6 @@ chart_df = build_life_chart(df_dasha, planet_data)
 # Vẽ biểu đồ
 fig, ax = plt.subplots(figsize=(12, 4))
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-# Hiển thị tên Mahadasha phía dưới trục thời gian
-for x, label in zip(chart_df["Năm"], chart_df["Mahadasha"]):
-    ax.text(x, -12, label, rotation=90, fontsize=8, ha='center', va='top', color='gray')
 ax.set_title("Biểu đồ điểm số theo đại vận")
 ax.set_xlabel("Năm ")
 ax.set_ylabel("Điểm số")
