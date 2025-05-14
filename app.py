@@ -552,7 +552,7 @@ chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 # Vẽ biểu đồ zigzag và đường cong mượt
 fig, ax = plt.subplots(figsize=(12, 4))
 
-ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o'")
+ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
