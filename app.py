@@ -545,15 +545,9 @@ chart_df = build_life_chart(df_dasha, planet_data)
 # Vẽ biểu đồ
 fig, ax = plt.subplots(figsize=(12, 4))
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-ax.set_title("Biểu đồ điểm số cuộc đời theo Mahadasha / Antardasha")
-ax.set_xlabel("Năm trong đời")
+ax.set_title("Biểu đồ điểm số theo đại vận")
+ax.set_xlabel("Năm ")
 ax.set_ylabel("Điểm số")
-# Đường cong mượt bằng spline
-if len(chart_df) >= 4:
-    xnew = np.linspace(min(chart_df["Năm"]), max(chart_df["Năm"]), 300)
-    spl = make_interp_spline(chart_df["Năm"], chart_df["Điểm số"], k=3)
-    y_smooth = spl(xnew)
-    ax.plot(xnew, y_smooth, color='red', linewidth=2, linestyle='-')
 ax.grid(True)
 st.pyplot(fig)
 st.markdown("""
