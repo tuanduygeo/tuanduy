@@ -559,6 +559,7 @@ ax.set_ylim(-10, 10)
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
 ax.tick_params(axis='x', rotation=45)  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
 ax.set_title("Biểu đồ điểm số đại vận")
+ax.legend()
 ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
