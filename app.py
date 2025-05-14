@@ -552,12 +552,12 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         ruled_houses = planet_to_ruled_houses.get(m_lord, [])
         rule_bonus = 0
         for rh in ruled_houses:
-            if rh in [3,6, 8, 12]:
-                rule_bonus -= 3
-            elif rh in [1, 5, 9]:
-                rule_bonus += 3
-            elif rh in [2, 4, 7, 10, 11]:
+            if rh in [6, 8, 12]:
+                rule_bonus -= 2
+            elif rh in [1, 5, 9,11]:
                 rule_bonus += 2
+            elif rh in [2, 4, 7, 10]:
+                rule_bonus += 1
         
         m_score += rule_bonus
         # Gán nhãn mục tiêu dựa theo nhà
@@ -583,12 +583,12 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
             rule_bonus_a = 0
             for rh in ruled_houses_a:
-                if rh in [3,6, 8, 12]:
-                    rule_bonus_a -= 0.8
-                elif rh in [1, 5, 9]:
-                    rule_bonus_a += 0.8
-                elif rh in [2, 4, 7, 10, 11]:
-                    rule_bonus_a += 0.4
+                if rh in [6, 8, 12]:
+                    rule_bonus_a -= 0.5
+                elif rh in [1, 5, 9,11]:
+                    rule_bonus_a += 0.5
+                elif rh in [2, 4, 7, 10]:
+                    rule_bonus_a += 0.25
             
             a_score += rule_bonus_a
             total_score = round(0.5 *a_score +  m_score, 2)
