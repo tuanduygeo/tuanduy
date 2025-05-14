@@ -557,9 +557,12 @@ ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='
 ax.set_ylim(-10, 10)
 # Cài đặt chi tiết cho trục hoành
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
+shown_mahadashas = set()
+
 for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mahadasha"]):
-    if abs(y) > 4:
-        ax.text(x, y + 0.5, label, fontsize=6, rotation=45, ha='left', va='bottom')
+    if label not in shown_mahadashas:
+        ax.text(x, y + 0.5, label, fontsize=8, rotation=45, ha='left', va='bottom')
+        shown_mahadashas.add(label)
 ax.tick_params(axis='x', rotation=45)  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
 ax.set_title("Biểu đồ điểm số đại vận")
 
