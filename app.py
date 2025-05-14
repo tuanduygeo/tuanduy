@@ -578,6 +578,9 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             m_score += 1
         elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
             m_score -= 1
+        m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
+        if "R" in m_status and "C" in m_status:
+            m_score -= 0.5
         # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
         ruled_houses = planet_to_ruled_houses.get(m_lord, [])
         rule_bonus = 0
@@ -619,8 +622,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
                     rule_bonus_a += 0.5
                 elif rh in [2, 4, 7, 10]:
                     rule_bonus_a += 0.25
-            
             a_score += rule_bonus_a
+            
+            a_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == a_lord), "")
+            if "R" in a_status and "C" in a_status:
+                a_score -= 0.2
             # ✅ Thêm điểm theo dignity (tính chất) của Antardasha lord
             a_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == a_lord), "")
             if a_dignity in ["vượng", "tướng"]:
