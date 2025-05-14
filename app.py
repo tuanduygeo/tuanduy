@@ -554,6 +554,8 @@ chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 fig, ax = plt.subplots(figsize=(12, 4))
 
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+# Phủ vùng từ năm 80 đến 120 bằng lớp mờ
+ax.axvspan(80, 120, color='gray', alpha=0.15)
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
