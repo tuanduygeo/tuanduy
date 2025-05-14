@@ -538,7 +538,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
             life_years.append(current_year)
             life_scores.append(total_score)
-              year_labels.append(m_lord + purpose)
+            year_labels.append(m_lord + purpose)
             current_year += a_years
 
     birth_x = round(birth_offset, 2) if birth_offset else 0
