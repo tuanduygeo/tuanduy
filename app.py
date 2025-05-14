@@ -249,13 +249,6 @@ asc_pada = get_pada(ast)
 asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
-# Tính ruler của từng nhà
-house_rulers = {i+1: rashi_rulers[get_rashi(cusp)] for i, cusp in enumerate(equal_house_cusps[:12])}
-planet_to_ruled_houses = {}
-for house, ruler in house_rulers.items():
-    planet_to_ruled_houses.setdefault(ruler, []).append(house)
-df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(lambda p: planet_to_ruled_houses.get(p, []))
-
 # Tính toán các hành tinh
 planet_data = []
 
