@@ -391,7 +391,7 @@ def draw_chart(planet_data):
         cusp_degree = equal_house_cusps[i - 1]
         rashi_name = get_rashi(cusp_degree)
         rashi_number = rashi_to_number[rashi_name]
-        ax.text(x, y + 2.5, str(rashi_number), fontsize=5, color='red',weight='bold')
+        ax.text(x-2, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
@@ -613,7 +613,7 @@ ax.axvspan(0, 70, color='grey', alpha=0.2)
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-ax.set_ylim(-12, 12)
+ax.set_ylim(-14, 14)
 # Cài đặt chi tiết cho trục hoành
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
 shown_mahadashas = set()
