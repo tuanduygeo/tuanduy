@@ -387,9 +387,11 @@ def draw_chart(planet_data):
                 labels.append(f"{name} ({sign} {deg_str}){arrow}")
         names = "\n".join(labels)
         ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
-    # Hiển thị số thứ tự nhà
-    for house, (x, y) in house_coords.items():
-        ax.text(x, y + 6, str(house), ha='center', va='center', fontsize=8, color='black', weight='bold')
+    for i, (x, y) in house_coords.items():
+        cusp_degree = equal_house_cusps[i - 1]
+        rashi_name = get_rashi(cusp_degree)
+        rashi_number = rashi_to_number[rashi_name]
+        ax.text(x - 8, y + 10, str(rashi_number), fontsize=7, color='red', weight='bold')
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
