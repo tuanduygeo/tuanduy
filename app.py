@@ -536,7 +536,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
             a_score = antardasha_scores.get(a_house, 0)
 
-            total_score = round(a_score + 0.3 * m_score, 2)
+            total_score = round(0.3 *a_score +  m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
