@@ -495,13 +495,13 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     st.dataframe(df_all_antar, use_container_width=True)
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {1:5  ,2:3  ,3:-3  ,4:3  ,5:3  ,6:-4  ,7:3  ,8:-6  ,9:4  ,10:4  ,11:4  ,12:-5  }
-antardasha_scores = {1:5  ,2:3  ,3:-3  ,4:3  ,5:3  ,6:-4  ,7:3  ,8:-6  ,9:4  ,10:4  ,11:4  ,12:-5  }
+mahadasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5  }
+antardasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5 }
 
+# Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
     life_years = []
     life_scores = []
-    life_houses = []
     year_labels = []
     current_year = 0
     birth_offset = None
@@ -525,82 +525,36 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
             a_score = antardasha_scores.get(a_house, 0)
 
-            total_score = round(0.5 * a_score + m_score, 2)
+            total_score = round(0.5 *a_score +  m_score, 2)
 
             life_years.append(current_year)
             life_scores.append(total_score)
-            life_houses.append(m_house)
             year_labels.append(m_lord)
             current_year += a_years
 
     birth_x = round(birth_offset, 2) if birth_offset else 0
-    return pd.DataFrame({
-        "Năm": life_years,
-        "Điểm số": life_scores,
-        "Mahadasha": year_labels,
-        "Nhà": life_houses
-    }), birth_x
+    return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
 
 # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
 chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
-if st.checkbox("👁️ Hiện 4 đường mục tiêu (sự nghiệp, hôn nhân, tài chính, sức khỏe)"):
-    # Ánh xạ trọng số theo từng mục tiêu
-    purpose_weights = {
-        "sự nghiệp": {1: 5, 10: 5, 11: 4, 9: 3, 6: -3, 8: -5, 12: -3},
-        "hôn nhân": {7: 6, 4: 3, 2: 2, 5: 2, 11: 2, 12: -3, 6: -4, 8: -5},
-        "tài chính": {2: 5, 11: 4, 10: 3, 6: -2, 12: -4, 8: -5},
-        "sức khỏe": {1: 5, 6: -5, 8: -4, 12: -4, 5: 2, 9: 2, 10: 1}
-    }
 
-    # Tính điểm từng mục tiêu
-    for purpose, weights in purpose_weights.items():
-        chart_df[purpose] = chart_df["Nhà"].apply(lambda x: weights.get(x, 0))
+# Vẽ biểu đồ zigzag và đường cong mượt
+fig, ax = plt.subplots(figsize=(12, 4))
 
-    # Chọn hiển thị mục tiêu nào
-    st.markdown("### 🔧 Chọn mục tiêu để hiển thị:")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        show_su_nghiep = st.checkbox("Sự nghiệp", value=True, key="su_nghiep")
-    with col2:
-        show_hon_nhan = st.checkbox("Hôn nhân", value=True, key="hon_nhan")
-    with col3:
-        show_tai_chinh = st.checkbox("Tài chính", value=True, key="tai_chinh")
-    with col4:
-        show_suc_khoe = st.checkbox("Sức khỏe", value=True, key="suc_khoe")
-
-    # Vẽ biểu đồ
-    fig, ax = plt.subplots(figsize=(12, 5))
-    ax.plot(chart_df["Năm"], chart_df["Điểm số"], label="Điểm Mahadasha", color='black', marker='o')
-
-    colors = {
-        "sự nghiệp": "gold",
-        "hôn nhân": "red",
-        "tài chính": "green",
-        "sức khỏe": "purple"
-    }
-
-    if show_su_nghiep:
-        ax.plot(chart_df["Năm"], chart_df["sự nghiệp"], label="Sự nghiệp", linestyle='--', color=colors["sự nghiệp"])
-    if show_hon_nhan:
-        ax.plot(chart_df["Năm"], chart_df["hôn nhân"], label="Hôn nhân", linestyle='--', color=colors["hôn_nhan"])
-    if show_tai_chinh:
-        ax.plot(chart_df["Năm"], chart_df["tài chính"], label="Tài chính", linestyle='--', color=colors["tài chính"])
-    if show_suc_khoe:
-        ax.plot(chart_df["Năm"], chart_df["sức khỏe"], label="Sức khỏe", linestyle='--', color=colors["sức khỏe"])
-
-    ax.axvline(x=birth_x, color='blue', linestyle=':', linewidth=2)
-    ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='blue', ha='center', va='bottom')
-
-    ax.set_ylim(-10, 10)
-    ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))
-    ax.tick_params(axis='x', rotation=45)
-    ax.set_title("Biểu đồ đại vận theo từng mục tiêu")
-    ax.set_xlabel("Năm")
-    ax.set_ylabel("Điểm số")
-    ax.grid(True)
-    ax.legend()
-    st.pyplot(fig)
-
+ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+# Đánh dấu thời điểm sinh
+ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
+ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
+ax.set_ylim(-10, 10)
+# Cài đặt chi tiết cho trục hoành
+ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
+ax.tick_params(axis='x', rotation=45)  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
+ax.set_title("Biểu đồ điểm số đại vận")
+ax.set_xlabel("Năm")
+ax.set_ylabel("Điểm số")
+ax.grid(True)
+ax.legend()
+st.pyplot(fig)
 
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
