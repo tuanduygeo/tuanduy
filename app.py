@@ -553,16 +553,6 @@ chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 fig, ax = plt.subplots(figsize=(12, 4))
 
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o', label="Zigzag")
-
-if len(chart_df) >= 4:
-    xnew = np.linspace(min(chart_df["Năm"]), max(chart_df["Năm"]), 300)
-    spl = make_interp_spline(chart_df["Năm"], chart_df["Điểm số"], k=3)
-    y_smooth = spl(xnew)
-    ax.plot(xnew, y_smooth, color='red', linewidth=2, linestyle='--', label="Đường cong mượt")
-
-for x, label in zip(chart_df["Năm"], chart_df["Mahadasha"]):
-    ax.text(x, -12, label, rotation=90, fontsize=8, ha='center', va='top', color='gray')
-
 # Đánh dấu thời điểm sinh (x = 0)
 ax.axvline(x=0, color='purple', linestyle=':', linewidth=2)
 ax.text(0, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
