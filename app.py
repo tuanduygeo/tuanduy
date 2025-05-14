@@ -503,7 +503,7 @@ df_all_antar = pd.DataFrame(all_antardasha)
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     
     st.dataframe(df_all_antar, use_container_width=True)
-st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
+
 
 # Quy tắc điểm số theo nhà
 mahadasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5  }
