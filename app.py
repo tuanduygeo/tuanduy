@@ -520,13 +520,16 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         # Gán nhãn mục tiêu dựa theo nhà
         purpose = ""
         if m_house in [2, 11]:
-            purpose = " (tài)"
-        elif m_house in [1, 5, 9]:
-            purpose = " (sức khỏe)"
+            purpose = " (tài ↑)"
+        elif m_house in [1, 9]:
+            purpose = " (sức khỏe ↑)"
         elif m_house == 10:
-            purpose = " (sự nghiệp)"
+            purpose = " (sự nghiệp ↑)"
         elif m_house == 7:
-            purpose = " (hôn nhân)"
+            purpose = " (Quan hệ ↑)"
+        elif m_house in [6,8,12]:
+            purpose = " (tài,sức khỏe↓)"
+            
         antars = compute_antardasha(m_lord, m_start_jd, m_duration)
         for _, antar in antars.iterrows():
             a_lord = antar["Antardasha"].split("/")[-1]
