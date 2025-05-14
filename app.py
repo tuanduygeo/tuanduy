@@ -567,7 +567,7 @@ for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mah
         ax.text(x, y + 0.5, label, fontsize=8,  ha='left', va='bottom')
         shown_mahadashas.add(label)
 ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
-ax.set_title("Biểu đồ điểm số đại vận")
+ax.set_title("Biểu đồ đại vận (tham khảo)")
 
 ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
