@@ -556,6 +556,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             m_score -= 0.5
         elif m_dignity in ["tù", "tử"]:
             m_score -= 1
+        # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
+        if m_lord in ["Jupiter", "Venus", "Moon"]:
+            m_score += 1
+        elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
+            m_score -= 1
         # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
         ruled_houses = planet_to_ruled_houses.get(m_lord, [])
         rule_bonus = 0
@@ -608,6 +613,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             elif a_dignity == "địch thủ":
                 a_score -= 0.2
             elif a_dignity in ["tù", "tử"]:
+                a_score -= 0.5
+                # 4️⃣ Điểm từ phân loại Cát/Hung tinh
+            if a_lord in ["Jupiter", "Venus", "Moon"]:
+                a_score += 0.5
+            elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                 a_score -= 0.5
             total_score = round(0.33 *a_score +  m_score, 2)
 
