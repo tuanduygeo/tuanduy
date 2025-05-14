@@ -249,9 +249,19 @@ asc_pada = get_pada(ast)
 asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
+# Tính ruler của từng nhà
+house_rulers = {i+1: rashi_rulers[get_rashi(cusp)] for i, cusp in enumerate(equal_house_cusps[:12])}
+# Xây bảng chủ tinh -> các nhà
+planet_to_ruled_houses = {}
+for house, ruler in house_rulers.items():
+    planet_to_ruled_houses.setdefault(ruler, []).append(house)
+for p in planet_data:
+    name = p["Hành tinh"]
+    p["Là chủ tinh của nhà"] = planet_to_ruled_houses.get(name, [])
 
 # Tính toán các hành tinh
 planet_data = []
+# Bổ sung vào planet_data
 
 # Tính toán ngày trước đó (1 ngày)
 jd_previous = jd - 1  # Giảm 1 ngày để lấy ngày trước đó
@@ -406,7 +416,20 @@ nakshatra_to_dasha_lord = {
     "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
     "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
 }
-
+rashi_rulers = {
+    "Bạch Dương": "Mars",
+    "Kim Ngưu": "Venus",
+    "Song Tử": "Mercury",
+    "Cự Giải": "Moon",
+    "Sư Tử": "Sun",
+    "Xử Nữ": "Mercury",
+    "Thiên Bình": "Venus",
+    "Bọ Cạp": "Mars",
+    "Nhân Mã": "Jupiter",
+    "Ma Kết": "Saturn",
+    "Bảo Bình": "Saturn",
+    "Song Ngư": "Jupiter"
+}
 # Dasha sequence và số năm
 dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
