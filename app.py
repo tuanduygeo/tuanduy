@@ -503,7 +503,7 @@ df_all_antar = pd.DataFrame(all_antardasha)
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     
     st.dataframe(df_all_antar, use_container_width=True)
-
+st.markdown("### 📈 Biểu đồ cuộc đời theo điểm số Mahadasha / Antardasha")
 
 # Quy tắc điểm số theo nhà
 mahadasha_scores = {1:6  ,2:1  ,3:-3  ,4:2  ,5:1  ,6:-4  ,7:2  ,8:-6  ,9:5  ,10:3  ,11:4  ,12:-5  }
@@ -552,16 +552,13 @@ chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 # Vẽ biểu đồ zigzag và đường cong mượt
 fig, ax = plt.subplots(figsize=(12, 4))
 
-ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o', label="Zigzag")
-# Đánh dấu thời điểm sinh (x = 0)
-ax.axvline(x=0, color='purple', linestyle=':', linewidth=2)
-ax.text(0, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-
-# Cố định trục tung từ -10 đến 10
+ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+# Đánh dấu thời điểm sinh
+ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
+ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
 ax.set_ylim(-10, 10)
-
 ax.set_title("Biểu đồ điểm số đại vận")
-ax.set_xlabel("Năm ")
+ax.set_xlabel("Năm")
 ax.set_ylabel("Điểm số")
 ax.grid(True)
 ax.legend()
@@ -630,4 +627,3 @@ except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
 st.header("📍 Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597")
-
