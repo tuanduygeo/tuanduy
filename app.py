@@ -584,11 +584,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             rule_bonus_a = 0
             for rh in ruled_houses_a:
                 if rh in [3,6, 8, 12]:
-                    rule_bonus_a -= 1.5
+                    rule_bonus_a -= 0.8
                 elif rh in [1, 5, 9]:
-                    rule_bonus_a += 1.5
+                    rule_bonus_a += 0.8
                 elif rh in [2, 4, 7, 10, 11]:
-                    rule_bonus_a += 1
+                    rule_bonus_a += 0.4
             
             a_score += rule_bonus_a
             total_score = round(0.5 *a_score +  m_score, 2)
