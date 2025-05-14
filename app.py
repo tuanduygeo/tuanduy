@@ -288,7 +288,7 @@ planet_data.append({
 for name, code in planets.items():
     # Tính độ của hành tinh ở hiện tại và trước đó
     lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
-    
+    sun_lon = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)[0][0]
     # Kiểm tra nghịch hành với hai ngày
     retrograde_status = "R" if is_retrograde(code, jd, jd_previous) else ""
     is_c = is_combust(name, lon_deg, sun_lon, retrograde=(retrograde_status == "R"))
