@@ -656,7 +656,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             a_lord = antar["Antardasha"].split("/")[-1]
             a_years = antar["Số năm"]
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-            a_score = get_house_score(a_house, a_lord))
+            a_score = get_house_score(a_house, a_lord) 
             # ✅ Thêm điểm từ nhà mà antardasha làm chủ
             ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
             rule_bonus_a = 0
