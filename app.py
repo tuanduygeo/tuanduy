@@ -289,7 +289,7 @@ planet_data.append({
     "Cung": asc_rashi,
     "Tú": asc_nak,
     "Pada": asc_pada,
-    "Thần": get_gana(get_nakshatra(lon_deg))
+    "gana": get_gana(get_nakshatra(lon_deg))
     "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
     "Tính chất": "",
     "Nghịch hành": ""
@@ -312,7 +312,7 @@ for name, code in planets.items():
         "Cung": get_rashi(lon_deg),
         "Tú": get_nakshatra(lon_deg),
         "pada": get_pada(lon_deg),
-        "Thần": get_gana(get_nakshatra(lon_deg))
+        "gana": get_gana(get_nakshatra(lon_deg))
         "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
         "Tính chất": get_dignity(name, get_rashi(lon_deg)),
         "Nghịch hành": status,
