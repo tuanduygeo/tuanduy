@@ -575,9 +575,9 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             m_score -= 1
         # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
         if m_lord in ["Jupiter", "Venus", "Moon"]:
-            m_score += 1
+            m_score += 0.7
         elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
-            m_score -= 1
+            m_score -= 0.7
         m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
         if "R" in m_status and "C" in m_status:
             m_score -= 0.5
@@ -586,11 +586,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         rule_bonus = 0
         for rh in ruled_houses:
             if rh in [6, 8, 12]:
-                rule_bonus -= 2
+                rule_bonus -= 3
             elif rh in [1, 5, 9,11]:
-                rule_bonus += 2
+                rule_bonus += 3
             elif rh in [2, 4, 7, 10]:
-                rule_bonus += 1
+                rule_bonus += 2
         
         m_score += rule_bonus
         # Gán nhãn mục tiêu dựa theo nhà
@@ -617,11 +617,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             rule_bonus_a = 0
             for rh in ruled_houses_a:
                 if rh in [6, 8, 12]:
-                    rule_bonus_a -= 0.5
+                    rule_bonus_a -= 1
                 elif rh in [1, 5, 9,11]:
-                    rule_bonus_a += 0.5
+                    rule_bonus_a += 1
                 elif rh in [2, 4, 7, 10]:
-                    rule_bonus_a += 0.25
+                    rule_bonus_a += 0.5
             a_score += rule_bonus_a
             
             a_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == a_lord), "")
@@ -639,9 +639,9 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
                 a_score -= 0.5
                 # 4️⃣ Điểm từ phân loại Cát/Hung tinh
             if a_lord in ["Jupiter", "Venus", "Moon"]:
-                a_score += 0.5
+                a_score += 0.2
             elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
-                a_score -= 0.5
+                a_score -= 0.2
             total_score = round(0.33 *a_score +  m_score, 2)
 
             life_years.append(current_year)
