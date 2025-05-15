@@ -289,6 +289,7 @@ planet_data.append({
     "Cung": asc_rashi,
     "Tú": asc_nak,
     "Pada": asc_pada,
+    "Gana": ,
     "Nhà": 1,
     "Tính chất": "",
     "Nghịch hành": ""
