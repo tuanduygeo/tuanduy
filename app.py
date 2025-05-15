@@ -717,7 +717,7 @@ ax.grid(True)
 ax.legend()
 st.pyplot(fig)
 filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
-median_score = filtered_df["Điểm số"].median(2)
+median_score = filtered_df["Điểm số"].median(), 2)
 st.subheader(f"**Điểm(Thang từ -10 đến 10):** `{median_score}`")
 
 st.markdown("""
