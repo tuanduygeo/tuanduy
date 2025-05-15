@@ -12,7 +12,9 @@ import numpy as np
 import requests
 
 st.set_page_config(layout="wide")
-st.title("🧭 PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH")
+st.markdown("""
+### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
+""")
 st.markdown("""
 ### 📌 Hướng dẫn
 - Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
