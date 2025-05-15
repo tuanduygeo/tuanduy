@@ -659,12 +659,15 @@ chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 fig, ax = plt.subplots(figsize=(12, 4))
 
 ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+# Đường kẻ ngang tại 0 (trục điểm)
+ax.axhline(y=0, color='black', linestyle='-', linewidth=2)
 # Phủ vùng từ năm 80 đến 120 bằng lớp mờ
 ax.axvspan(0, 70, color='grey', alpha=0.2)
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
 ax.set_ylim(-9, 9)
+average_score = round(chart_df["Điểm số"].mean(), 2)
 # Cài đặt chi tiết cho trục hoành
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
 shown_mahadashas = set()
@@ -681,7 +684,7 @@ ax.set_ylabel("Điểm số")
 ax.grid(True)
 ax.legend()
 st.pyplot(fig)
-
+st.subheader(f"**Điểm số trung bình:** `{average_score}`")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
