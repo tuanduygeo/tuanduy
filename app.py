@@ -573,9 +573,18 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     st.dataframe(df_all_antar, use_container_width=True)
 
 # Quy tắc điểm số theo nhà
-mahadasha_scores = {1:3  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2  ,12:-3  }
-antardasha_scores = {1:3  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2  ,12:-3  }
 
+benefic_house_scores = {1:3  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2  ,12:-3 }
+malefic_house_scores = {1:2  ,2:2  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
+benefics = {"Jupiter", "Venus", "Moon","Mercury"}
+malefics = {"Mars", "Saturn", "Rahu", "Ketu","Sun"}
+def get_house_score(house, planet):
+    if planet in benefics:
+        return benefic_house_scores.get(house, 0)
+    elif planet in malefics:
+        return malefic_house_scores.get(house, 0)
+    else:
+        return 0  # Trung lập hoặc không rõ
 # Tính dữ liệu vẽ biểu đồ
 def build_life_chart(df_dasha, planet_data, birth_jd):
     life_years = []
@@ -595,7 +604,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
 
         # Điểm từ vị trí hiện tại của hành tinh
         m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
-        m_score = mahadasha_scores.get(m_house, 0)
+        m_score = get_house_score(m_house, m_lord)
         m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
         if m_dignity in ["vượng", "tướng"]:
             m_score += 1
@@ -647,7 +656,7 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             a_lord = antar["Antardasha"].split("/")[-1]
             a_years = antar["Số năm"]
             a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-            a_score = antardasha_scores.get(a_house, 0)
+            a_score = get_house_score(a_house, a_lord))
             # ✅ Thêm điểm từ nhà mà antardasha làm chủ
             ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
             rule_bonus_a = 0
