@@ -627,11 +627,11 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         rule_bonus = 0
         for rh in ruled_houses:
             if rh in [6, 8, 12]:
-                rule_bonus -= 4
+                rule_bonus -= 3.5
             elif rh in [1, 5, 9]:
-                rule_bonus += 4
+                rule_bonus += 3.5
             elif rh in [2, 4, 7, 10,11]:
-                rule_bonus += 2
+                rule_bonus += 1.5
         
         m_score += rule_bonus
         # Gán nhãn mục tiêu dựa theo nhà
