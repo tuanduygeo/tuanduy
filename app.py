@@ -461,7 +461,7 @@ def get_aspected_planets(planet_name, current_house):
     result = []
     for other_planet, house in planet_house_map.items():
         if other_planet != planet_name and house in aspected_houses:
-            result.append(f"{other_planet} (Nhà {house})")
+            result.append(f"{other_planet} ( {house})")
     return ", ".join(result)
 
 # Thêm cột vào bảng
