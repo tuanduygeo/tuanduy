@@ -275,6 +275,7 @@ asc_rashi = get_rashi(ast)
 asc_pada = get_pada(ast)
 asc_nak = get_nakshatra(ast)
 asc_degree_dms = deg_to_dms(ast % 30)
+asc_gana = get_gana(asc_nak)
 equal_house_cusps = [(asc + i * 30) % 360 for i in range(12)] + [(asc + 360) % 360]
 # Tính toán các hành tinh
 planet_data = []
@@ -289,7 +290,7 @@ planet_data.append({
     "Cung": asc_rashi,
     "Tú": asc_nak,
     "Pada": asc_pada,
-    "Gana": ,
+    "Gana": asc_gana,
     "Nhà": 1,
     "Tính chất": "",
     "Nghịch hành": ""
