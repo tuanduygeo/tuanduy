@@ -684,7 +684,8 @@ ax.set_ylabel("Điểm số")
 ax.grid(True)
 ax.legend()
 st.pyplot(fig)
-median_score = chart_df["Điểm số"].median()
+filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
+median_score = filtered_df["Điểm số"].median()
 st.subheader(f"**Điểm(Thang từ -10 đến 10):** `{median_score}`")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
