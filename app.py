@@ -715,12 +715,10 @@ def analyze_house(house_number: int, planet_data: list, house_rulers: dict) -> s
         desc += "- Không tìm thấy chủ tinh.\n"
 
     return desc
-st.markdown("### 📖 Phân tích 12 nhà chiêm tinh")
-
 if st.checkbox("👁️ Hiện bảng phân tích 12 nhà"):
     for i in range(1, 13):
-        with st.expander(f"Nhà {i}"):
-            st.markdown(analyze_house(i, planet_data, house_rulers))
+        st.markdown(analyze_house(i, planet_data, house_rulers))
+        st.markdown("---")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
