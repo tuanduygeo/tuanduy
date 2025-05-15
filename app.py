@@ -748,7 +748,7 @@ iframe_html = f"""
 </div>
 """
 # Hiển thị trong Streamlit
-st.components.v1.html(iframe_html, height=int(1200 * zoom) + 50, scrolling=True)
+st.components.v1.html(iframe_html, height=1000, scrolling=True)
 
 st.markdown("""
 ###  Chỉ số Kp – Cảnh báo Bão Từ
