@@ -740,7 +740,15 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"observatoryIagaCode=PHU&publicationState=Best+available" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
-st.components.v1.iframe(iframe_url, height=1200,scrolling=True)
+# Tạo HTML iframe với CSS zoom
+zoom = 0.75  # nhỏ hơn 1 là thu nhỏ
+iframe_html = f"""
+<div style="transform: scale({zoom}); transform-origin: top left; width: {100/zoom}%; height: {1200/zoom}px; overflow: hidden;">
+    <iframe src="{iframe_url}" width="100%" height="1200" style="border:none;"></iframe>
+</div>
+"""
+# Hiển thị trong Streamlit
+st.components.v1.html(iframe_html, height=int(1200 * zoom) + 50, scrolling=True)
 
 st.markdown("""
 ###  Chỉ số Kp – Cảnh báo Bão Từ
