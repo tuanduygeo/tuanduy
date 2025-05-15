@@ -642,8 +642,10 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             purpose = " (mệnh ↑)"
         elif m_house in [ 9]:
             purpose = " (đạo ↑)"
-        elif m_house in [5, 10]:
-            purpose = " (học,sự nghiệp ↑)"
+        elif m_house in [5]:
+            purpose = " (học ↑)"
+        elif m_house in [10]:
+            purpose = " (danh ↑)"
         elif m_house == 7:
             purpose = " (Quan hệ ↑)"
         elif m_house == 3:
