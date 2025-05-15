@@ -844,7 +844,7 @@ def generate_magic_square_southeast(n):
 
     return square
 
-# Tạo ma phương và hiển thị
+# --- MAIN ---
 try:
     square = generate_magic_square_southeast(n)
     df = pd.DataFrame(square)
@@ -861,10 +861,10 @@ try:
     magic_const = n * (n ** 2 + 1) // 2
 
     st.markdown(f"- ✅ Tổng chuẩn (magic constant): **{magic_const}**")
-    st.markdown(f"- 📏 Tổng theo từng hàng: `{list(row_sums.values)}`")
-    st.markdown(f"- 📐 Tổng theo từng cột: `{list(col_sums.values)}`")
-    st.markdown(f"- 🔺 Tổng đường chéo chính: `{diag1}`")
-    st.markdown(f"- 🔻 Tổng đường chéo phụ: `{diag2}`")
+    st.markdown(f"- 📏 Tổng theo từng hàng: {', '.join(str(x) for x in row_sums)}")
+st.markdown(f"- 📐 Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
+st.markdown(f"- 🔺 Tổng đường chéo chính: {diag1}")
+st.markdown(f"- 🔻 Tổng đường chéo phụ: {diag2}")
 
     if (
         all(row_sums == magic_const)
@@ -876,11 +876,11 @@ try:
     else:
         st.warning("⚠️ Ma phương này KHÔNG hợp lệ.")
 
-    # --- VẼ HEATMAP ---
-    st.subheader("📊 Biểu đồ Heatmap:")
-    fig, ax = plt.subplots()
-    sns.heatmap(df, annot=True, fmt="d", cmap="YlGnBu", cbar=True, linewidths=0.5, ax=ax)
-    st.pyplot(fig)
+    
+    # --- BẢNG MODULO 9 ---
+    st.subheader("🧮 Bảng ma phương theo giá trị từng ô % 9:")
+    df_mod9 = df % 9
+    st.dataframe(df_mod9.style.format("{:d}").highlight_max(axis=None, color='orange'))
 
 except Exception as e:
     st.error(f"Lỗi: {e}")
