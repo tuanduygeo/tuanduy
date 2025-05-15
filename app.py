@@ -455,7 +455,7 @@ def get_aspected_planets(planet_name, current_house):
     aspect_offsets = vedic_aspects.get(planet_name, vedic_aspects["Default"])
     
     # Tính các nhà bị chiếu
-    aspected_houses = [((current_house + offset - 1) % 12) + 1 for offset in aspect_offsets]
+    aspected_houses = [((current_house + offset - 2) % 12) + 1 for offset in aspect_offsets]
     
     # Tìm hành tinh nằm trong các nhà bị chiếu
     result = []
