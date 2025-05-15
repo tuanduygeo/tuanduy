@@ -862,9 +862,9 @@ try:
 
     st.markdown(f"- ✅ Tổng chuẩn (magic constant): **{magic_const}**")
     st.markdown(f"- 📏 Tổng theo từng hàng: {', '.join(str(x) for x in row_sums)}")
-st.markdown(f"- 📐 Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
-st.markdown(f"- 🔺 Tổng đường chéo chính: {diag1}")
-st.markdown(f"- 🔻 Tổng đường chéo phụ: {diag2}")
+    st.markdown(f"- 📐 Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
+    st.markdown(f"- 🔺 Tổng đường chéo chính: {diag1}")
+    st.markdown(f"- 🔻 Tổng đường chéo phụ: {diag2}")
 
     if (
         all(row_sums == magic_const)
