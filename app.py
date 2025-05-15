@@ -667,7 +667,7 @@ ax.axvspan(0, 70, color='grey', alpha=0.2)
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
 ax.set_ylim(-10, 10)
-average_score = round(chart_df["Điểm số"].mean(), 2)
+
 # Cài đặt chi tiết cho trục hoành
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
 shown_mahadashas = set()
@@ -684,7 +684,8 @@ ax.set_ylabel("Điểm số")
 ax.grid(True)
 ax.legend()
 st.pyplot(fig)
-st.subheader(f"**Điểm số trung bình:** `{average_score}`")
+median_score = chart_df["Điểm số"].median()
+st.subheader(f"**Điểm:** `{median_score}`")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
