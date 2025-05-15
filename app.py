@@ -813,7 +813,10 @@ try:
 except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
-st.title("🎲 Ma phương bậc lẻ theo hướng Đông Nam (↘)")
+
+st.markdown("""
+###5.🎲 Mô hình lạc thư 3x3 và cao hơn
+""")
 
 # Nhập bậc của ma phương
 n = st.number_input("Nhập bậc lẻ n (>=3):", min_value=3, step=2, value=7)
