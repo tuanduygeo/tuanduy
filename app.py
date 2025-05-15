@@ -29,11 +29,7 @@ if "selected_idx" not in st.session_state:
 html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
-# Tìm kiếm
-search = st.text_input("🔍 Tìm công trình:", "").lower()
-if search:
-    df = df[df["Tên công trình"].str.lower().str.contains(search)]
-    st.session_state.selected_idx = None  # reset khi tìm
+
 # Phân trang
 per_page = 10
 total_pages = math.ceil(len(df) / per_page)
