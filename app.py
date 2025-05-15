@@ -435,32 +435,38 @@ for house, ruler in house_rulers.items():
 df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
     lambda p: planet_to_ruled_houses.get(p, [])
 )
-# ==== Góc chiếu Vedic ====
-
+# === Định nghĩa quy tắc chiếu Vedic ===
 vedic_aspects = {
     "Saturn": [3, 7, 10],
     "Mars": [4, 7, 8],
     "Jupiter": [5, 7, 9],
-    "Other": [7]
+    "Default": [7]
 }
 
-# Tạo từ điển: Hành tinh → Nhà
+# Bản đồ hành tinh -> nhà
 planet_house_map = {p["Hành tinh"]: p["Nhà"] for p in planet_data}
 
-# Tính góc chiếu cho từng hành tinh
+# Hàm tính hành tinh nào bị chiếu
 def get_aspected_planets(planet_name, current_house):
-    aspect_range = vedic_aspects.get(planet_name, vedic_aspects["Other"])
-    aspected_houses = [((current_house + h - 1) % 12) + 1 for h in aspect_range]
-
+    if current_house is None:
+        return ""
+    
+    # Lấy danh sách khoảng cách các nhà bị chiếu
+    aspect_offsets = vedic_aspects.get(planet_name, vedic_aspects["Default"])
+    
+    # Tính các nhà bị chiếu
+    aspected_houses = [((current_house + offset - 1) % 12) + 1 for offset in aspect_offsets]
+    
+    # Tìm hành tinh nằm trong các nhà bị chiếu
     result = []
     for other_planet, house in planet_house_map.items():
         if other_planet != planet_name and house in aspected_houses:
             result.append(f"{other_planet} (Nhà {house})")
     return ", ".join(result)
 
-# Thêm cột "Chiếu hành tinh"
+# Thêm cột vào bảng
 df_planets["Chiếu hành tinh"] = df_planets.apply(
-    lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]) if row["Nhà"] else "", axis=1
+    lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
 )
 
 st.markdown("### Vị trí hành tinh")
