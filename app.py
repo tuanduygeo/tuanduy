@@ -813,6 +813,42 @@ try:
 except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
+st.title("🎲 Ma phương bậc lẻ theo hướng Đông Nam (↘)")
+
+# Nhập bậc của ma phương
+n = st.number_input("Nhập bậc lẻ n (>=3):", min_value=3, step=2, value=7)
+
+def generate_magic_square_southeast(n):
+    if n % 2 == 0:
+        raise ValueError("Chỉ hỗ trợ ma phương bậc lẻ.")
+
+    square = np.zeros((n, n), dtype=int)
+    
+    # Bắt đầu từ vị trí gần tâm: (tâm hàng + 1, tâm cột)
+    i, j = n // 2 + 1, n // 2
+
+    for num in range(1, n * n + 1):
+        square[i % n, j % n] = num
+        
+        # Vị trí kế tiếp theo hướng Đông Nam
+        new_i, new_j = (i + 1) % n, (j + 1) % n
+
+        if square[new_i, new_j] != 0:
+            # Nếu bị trùng, thì nhảy xuống thêm 1 hàng
+            i = (i + 2) % n
+        else:
+            i, j = new_i, new_j
+
+    return square
+
+# Tạo ma phương và hiển thị
+try:
+    square = generate_magic_square_southeast(n)
+    df1 = pd.DataFrame(square)
+    st.subheader(f"✨ Ma phương {n}x{n}:")
+    st.dataframe(df1.style.format("{:d}").highlight_max(axis=None, color='lightgreen'))
+except Exception as e:
+    st.error(str(e))
 st.markdown("""
 ### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597.DONATE: nguyenduytuan techcombank 19033167089018
 """)
