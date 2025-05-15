@@ -289,7 +289,7 @@ planet_data.append({
     "Cung": asc_rashi,
     "Tú": asc_nak,
     "Pada": asc_pada,
-    "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
+    "Nhà": 1,
     "Tính chất": "",
     "Nghịch hành": ""
 })
