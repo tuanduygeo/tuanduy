@@ -163,16 +163,16 @@ planets = {
     'Jupiter': swe.JUPITER, 'Venus': swe.VENUS, 'Saturn': swe.SATURN, 'Rahu': swe.MEAN_NODE
 }
 dignities = {
-    "Nhật": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  }},
-    "Nguyệt": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết","bạn bè": {"Bạch Dương","Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Thiên Bình", "Song Tử","Xử Nữ","Bảo Bình"  }},
-    "Hỏa": { "vượng": {"Bạch Dương","Bọ Cạp"}, "tướng": "Ma Kết", "tù": "Cự Giải", "tử": {"Kim Ngưu","Thiên Bình"},"bạn bè": {"Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Song Tử","Xử Nữ","Bảo Bình"}},
-    "Thủy": {"vượng": {"Song Tử","Xử Nữ" }, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
-    "Mộc": {"vượng": {"Nhân Mã","Song Ngư" }, "tướng": "Cự Giải", "tù": "Ma Kết", "tử": {"Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
-    "Kim": {"vượng": {"Kim Ngưu","Thiên Bình" }, "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": {"Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
-    "Thổ": {"vượng": {"Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Song Ngư"}},
+    "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  }},
+    "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết","bạn bè": {"Bạch Dương","Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Thiên Bình", "Song Tử","Xử Nữ","Bảo Bình"  }},
+    "Mars": { "vượng": {"Bạch Dương","Bọ Cạp"}, "tướng": "Ma Kết", "tù": "Cự Giải", "tử": {"Kim Ngưu","Thiên Bình"},"bạn bè": {"Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Song Tử","Xử Nữ","Bảo Bình"}},
+    "Mercury": {"vượng": {"Song Tử","Xử Nữ" }, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+    "Jupiter": {"vượng": {"Nhân Mã","Song Ngư" }, "tướng": "Cự Giải", "tù": "Ma Kết", "tử": {"Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
+    "Venus": {"vượng": {"Kim Ngưu","Thiên Bình" }, "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": {"Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+    "Saturn": {"vượng": {"Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Song Ngư"}},
               }
-dasha_sequence = ["Kế Đô", "Kim", "Nhật", "Nguyệt", "Hỏa", "La Hầu", "Mộc", "Thổ", "Thủy"]
-dasha_years = {"Kế Đô": 7, "Kim": 20, "Nhật": 6, "Nguyệt": 10, "Hỏa": 7, "La Hầu": 18, "Mộc": 16, "Thổ": 19, "Thủy": 17}
+dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 rashi_to_number = {
     "Bạch Dương": 1, "Kim Ngưu": 2, "Song Tử": 3, "Cự Giải": 4,
     "Sư Tử": 5, "Xử Nữ": 6, "Thiên Bình": 7, "Bọ Cạp": 8,
@@ -203,17 +203,17 @@ def get_nakshatra(degree):
     return nakshatras[int(degree // (360 / 27))]
 
 def is_combust(planet_name, planet_lon, sun_lon, retrograde=False):
-    if planet_name in ["Nhật", "La Hầu", "Kế Đô"]:
+    if planet_name in ["Sun", "Rahu", "Ketu"]:
         return False
     diff = abs((planet_lon - sun_lon + 180) % 360 - 180)
     
     combust_limits = {
-        "Nguyệt": 8,
-        "Thủy": 4 ,
-        "Kim": 6,
-        "Hỏa": 8,
-        "Mộc": 8,
-        "Thổ": 8
+        "Moon": 8,
+        "Mercury": 4 ,
+        "Venus": 6,
+        "Mars": 8,
+        "Jupiter": 8,
+        "Saturn": 8
     }
     limit = combust_limits.get(planet_name, 0)
     return diff < limit
@@ -307,7 +307,7 @@ for name, code in planets.items():
 # Tìm Rahu trong planet_data
 rahu_deg = None
 for planet in planet_data:
-    if planet["Hành tinh"] == "La Hầu":
+    if planet["Hành tinh"] == "Rahu":
         rahu_deg = swe.calc(jd, swe.MEAN_NODE, swe.FLG_SIDEREAL)[0][0]
         break
 
@@ -325,7 +325,7 @@ if rahu_deg is not None:
 
     # Thêm Ketu vào planet_data
     planet_data.append({
-        "Hành tinh": "Kế Đô",
+        "Hành tinh": "Ketu",
         "Vị trí": ketu_sign_deg,
         "Cung": ketu_rashi,
         "Nakshatra": ketu_nak,
@@ -416,9 +416,9 @@ df_planets = pd.DataFrame(planet_data)
 
 
 rashi_rulers = {
-    "Bạch Dương": "Hỏa", "Kim Ngưu": "Kim", "Song Tử": "Thủy", "Cự Giải": "Nguyệt",
-    "Sư Tử": "Nhật", "Xử Nữ": "Thủy", "Thiên Bình": "Kim", "Bọ Cạp": "Hỏa",
-    "Nhân Mã": "Mộc", "Ma Kết": "Thổ", "Bảo Bình": "Thổ", "Song Ngư": "Mộc"
+    "Bạch Dương": "Mars", "Kim Ngưu": "Venus", "Song Tử": "Mercury", "Cự Giải": "Moon",
+    "Sư Tử": "Sun", "Xử Nữ": "Mercury", "Thiên Bình": "Venus", "Bọ Cạp": "Mars",
+    "Nhân Mã": "Jupiter", "Ma Kết": "Saturn", "Bảo Bình": "Saturn", "Song Ngư": "Jupiter"
 }
 
 house_rulers = {
@@ -435,9 +435,9 @@ df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
 )
 # === Định nghĩa quy tắc chiếu Vedic ===
 vedic_aspects = {
-    "Thổ": [3, 7, 10],
-    "Hỏa": [4, 7, 8],
-    "Mộc": [5, 7, 9],
+    "Saturn": [3, 7, 10],
+    "Mars": [4, 7, 8],
+    "Jupiter": [5, 7, 9],
     "Default": [7]
 }
 
@@ -474,21 +474,21 @@ st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
 # Bảng ánh xạ Nakshatra → Dasha Lord
 nakshatra_to_dasha_lord = {
-    "Ashwini": "Kế Đô", "Bharani": "Kim", "Krittika": "Nhật",
-    "Rohini": "Nguyệt", "Mrigashirsha": "Hỏa", "Ardra": "La Hầu",
-    "Punarvasu": "Mộc", "Pushya": "Thổ", "Ashlesha": "Thủy",
-    "Magha": "Kế Đô", "Purva Phalguni": "Kim", "Uttara Phalguni": "Nhật",
-    "Hasta": "Nguyệt", "Chitra": "Hỏa", "Swati": "La Hầu",
-    "Vishakha": "Mộc", "Anuradha": "Thổ", "Jyeshtha": "Thủy",
-    "Mula": "Kế Đô", "Purva Ashadha": "Kim", "Uttara Ashadha": "Nhật",
-    "Shravana": "Nguyệt", "Dhanishta": "Hỏa", "Shatabhisha": "La Hầu",
-    "Purva Bhadrapada": "Mộc", "Uttara Bhadrapada": "Thổ", "Revati": "Thủy"
+    "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
+    "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
+    "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
+    "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
+    "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
+    "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
+    "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
+    "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
+    "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
 }
 
 # Dasha sequence và số năm
-dasha_sequence = ["Kế Đô", "Kim", "Nhật", "Nguyệt", "Hỏa", "La Hầu", "Mộc", "Thổ", "Thủy"]
-dasha_years = {"Kế Đô": 7, "Kim": 20, "Nhật": 6, "Nguyệt": 10, "Hỏa": 7,
-               "La Hầu": 18, "Mộc": 16, "Thổ": 19, "Thủy": 17}
+dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7,
+               "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
 
 # Tính vị trí Mặt Trăng
 moon_longitude = swe.calc(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
@@ -576,8 +576,8 @@ if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
 
 benefic_house_scores = {1:3  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2  ,12:-3 }
 malefic_house_scores = {1:2  ,2:2  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
-benefics = {"Mộc", "Kim", "Nguyệt","Thủy"}
-malefics = {"Hỏa", "Thổ", "La Hầu", "Kế Đô","Nhật"}
+benefics = {"Jupiter", "Venus", "Moon","Mercury"}
+malefics = {"Mars", "Saturn", "Rahu", "Ketu","Sun"}
 def get_house_score(house, planet):
     if planet in benefics:
         return benefic_house_scores.get(house, 0)
@@ -615,9 +615,9 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
         elif m_dignity in ["tù", "tử"]:
             m_score -= 1
         # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
-        if m_lord in ["Mộc", "Kim", "Nguyệt"]:
+        if m_lord in ["Jupiter", "Venus", "Moon"]:
             m_score += 0.7
-        elif m_lord in ["Hỏa", "Thổ", "La Hầu", "Kế Đô"]:
+        elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
             m_score -= 0.7
         m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
         if "R" in m_status and "C" in m_status:
@@ -683,9 +683,9 @@ def build_life_chart(df_dasha, planet_data, birth_jd):
             elif a_dignity in ["tù", "tử"]:
                 a_score -= 0.5
                 # 4️⃣ Điểm từ phân loại Cát/Hung tinh
-            if a_lord in ["Mộc", "Kim", "Nguyệt"]:
+            if a_lord in ["Jupiter", "Venus", "Moon"]:
                 a_score += 0.2
-            elif a_lord in ["Hỏa", "Thổ", "La Hầu", "Kế Đô"]:
+            elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                 a_score -= 0.2
             total_score = round(0.33 *a_score +  m_score, 2)
 
