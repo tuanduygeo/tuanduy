@@ -847,11 +847,43 @@ def generate_magic_square_southeast(n):
 # Tạo ma phương và hiển thị
 try:
     square = generate_magic_square_southeast(n)
-    df1 = pd.DataFrame(square)
+    df = pd.DataFrame(square)
+
     st.subheader(f"✨ Ma phương {n}x{n}:")
-    st.dataframe(df1.style.format("{:d}").highlight_max(axis=None, color='lightgreen'))
+    st.dataframe(df.style.format("{:d}"))
+
+    # --- Kiểm tra tổng ---
+    st.subheader("🧮 Kiểm tra tổng từng hàng, cột, và chéo:")
+    row_sums = df.sum(axis=1)
+    col_sums = df.sum(axis=0)
+    diag1 = np.trace(square)
+    diag2 = np.trace(np.fliplr(square))
+    magic_const = n * (n ** 2 + 1) // 2
+
+    st.markdown(f"- ✅ Tổng chuẩn (magic constant): **{magic_const}**")
+    st.markdown(f"- 📏 Tổng theo từng hàng: `{list(row_sums.values)}`")
+    st.markdown(f"- 📐 Tổng theo từng cột: `{list(col_sums.values)}`")
+    st.markdown(f"- 🔺 Tổng đường chéo chính: `{diag1}`")
+    st.markdown(f"- 🔻 Tổng đường chéo phụ: `{diag2}`")
+
+    if (
+        all(row_sums == magic_const)
+        and all(col_sums == magic_const)
+        and diag1 == magic_const
+        and diag2 == magic_const
+    ):
+        st.success("🎉 Đây là ma phương chuẩn hợp lệ!")
+    else:
+        st.warning("⚠️ Ma phương này KHÔNG hợp lệ.")
+
+    # --- VẼ HEATMAP ---
+    st.subheader("📊 Biểu đồ Heatmap:")
+    fig, ax = plt.subplots()
+    sns.heatmap(df, annot=True, fmt="d", cmap="YlGnBu", cbar=True, linewidths=0.5, ax=ax)
+    st.pyplot(fig)
+
 except Exception as e:
-    st.error(str(e))
+    st.error(f"Lỗi: {e}")
 st.markdown("""
 ### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597.DONATE: nguyenduytuan techcombank 19033167089018
 """)
