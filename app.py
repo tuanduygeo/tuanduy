@@ -178,11 +178,22 @@ rashi_to_number = {
     "Sư Tử": 5, "Xử Nữ": 6, "Thiên Bình": 7, "Bọ Cạp": 8,
     "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
 }
-
+nakshatra_to_gana = {
+    "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
+    "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Quỷ thần",
+    "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
+    "Magha": "Quỷ thần", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
+    "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
+    "Anuradha": "Thiên thần", "Jyeshtha": "Quỷ thần", "Mula": "Quỷ thần",
+    "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thiên thần",
+    "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "Purva Bhadrapada": "Nhân",
+    "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
+}
 # ==== Hàm phụ ====
 def get_rashi(degree):
     return rashis[int(degree // 30)]
-
+def get_gana(nakshatra):
+    return nakshatra_to_gana.get(nakshatra, "")
 def get_dignity(planet, rashi):
     dign = dignities.get(planet, {})
     if rashi == dign.get("vượng"):
@@ -276,9 +287,10 @@ planet_data.append({
     "Hành tinh": "Asc",
     "Vị trí": asc_degree_dms,
     "Cung": asc_rashi,
-    "Nakshatra": asc_nak,
+    "Tú": asc_nak,
     "Pada": asc_pada,
-    "Nhà": 1,
+    "Thần": get_gana(get_nakshatra(lon_deg))
+    "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
     "Tính chất": "",
     "Nghịch hành": ""
 })
@@ -298,8 +310,9 @@ for name, code in planets.items():
         "Hành tinh": name,
         "Vị trí": deg_to_dms(lon_deg % 30),
         "Cung": get_rashi(lon_deg),
-        "Nakshatra": get_nakshatra(lon_deg),
-        "Pada": get_pada(lon_deg),
+        "Tú": get_nakshatra(lon_deg),
+        "pada": get_pada(lon_deg),
+        "Thần": get_gana(get_nakshatra(lon_deg))
         "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
         "Tính chất": get_dignity(name, get_rashi(lon_deg)),
         "Nghịch hành": status,
