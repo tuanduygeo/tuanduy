@@ -743,7 +743,7 @@ iframe_url = f"https://imag-data.bgs.ac.uk/GIN_V1/GINForms2?" \
              f"&dataStartDate={start_date}&dataDuration=30" \
              f"&samplesPerDay=minute&submitValue=View+%2F+Download&request=DataView"
 # Hiển thị trong Streamlit
-st.components.v1(iframe_url, height=1000)
+st.components.v1.iframe(iframe_url, height=1000)
 
 st.markdown("""
 ###  Chỉ số Kp – Cảnh báo Bão Từ
