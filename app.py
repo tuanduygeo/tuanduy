@@ -704,7 +704,7 @@ ax.axvspan(0, 70, color='grey', alpha=0.2)
 # Đánh dấu thời điểm sinh
 ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
 ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-ax.set_ylim(-10, 10)
+ax.set_ylim(-11, 11)
 
 # Cài đặt chi tiết cho trục hoành
 ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
