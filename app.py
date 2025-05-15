@@ -691,34 +691,7 @@ st.pyplot(fig)
 filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
 median_score = filtered_df["Điểm số"].median()
 st.subheader(f"**Điểm(Thang từ -10 đến 10):** `{median_score}`")
-def analyze_house(house_number: int, planet_data: list, house_rulers: dict) -> str:
-    planets_in_house = [p for p in planet_data if p["Nhà"] == house_number]
-    ruler_name = house_rulers.get(house_number)
-    ruler_info = next((p for p in planet_data if p["Hành tinh"] == ruler_name), None)
 
-    desc = f"**Nhà {house_number}**\n"
-    if planets_in_house:
-        desc += "- Cư ngụ: " + ", ".join(
-            f"{p['Hành tinh']} ({p['Cung']}, {p['Tính chất']}, {p['Nghịch hành']})"
-            for p in planets_in_house
-        ) + "\n"
-    else:
-        desc += "- Không có hành tinh cư trú.\n"
-
-    if ruler_info:
-        desc += f"- Chủ tinh: {ruler_name} tại nhà {ruler_info['Nhà']} ({ruler_info['Cung']}, {ruler_info['Tính chất']}, {ruler_info['Nghịch hành']})\n"
-        if ruler_info["Nhà"] in [1, 4,7,11,2, 5, 9, 10]:
-            desc += "✅ Chủ tinh ở nhà tốt. Thuận lợi\n"
-        elif ruler_info["Nhà"] in [3,6, 8, 12]:
-            desc += "⚠️ Chủ tinh ở nhà xấu. Cần cẩn trọng\n"
-    else:
-        desc += "- Không tìm thấy chủ tinh.\n"
-
-    return desc
-if st.checkbox("👁️ Hiện bảng phân tích 12 nhà"):
-    for i in range(1, 13):
-        st.markdown(analyze_house(i, planet_data, house_rulers))
-        st.markdown("---")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
