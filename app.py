@@ -685,7 +685,7 @@ ax.grid(True)
 ax.legend()
 st.pyplot(fig)
 median_score = chart_df["Điểm số"].median()
-st.subheader(f"**Điểm:** `{median_score}`")
+st.subheader(f"**Điểm(Thang từ -10 đến 10):** `{median_score}`")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
