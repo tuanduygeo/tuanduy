@@ -289,7 +289,6 @@ planet_data.append({
     "Cung": asc_rashi,
     "Tú": asc_nak,
     "Pada": asc_pada,
-    "gana": get_gana(get_nakshatra(lon_deg)),
     "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
     "Tính chất": "",
     "Nghịch hành": ""
@@ -343,6 +342,7 @@ if rahu_deg is not None:
         "Cung": ketu_rashi,
         "Nakshatra": ketu_nak,
         "Pada": ketu_pada,
+        "Gana": get_gana(ketu_nak),
         "Nhà": ketu_bhava,
         "Tính chất": ketu_dignity,
         "Nghịch hành": "R",  
