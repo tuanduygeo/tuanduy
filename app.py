@@ -882,7 +882,7 @@ try:
     
     # --- BẢNG MODULO 9 ---
     st.markdown("#### Bảng ma phương chia hết cho 9:")  
-    df_mod9 = df % 9
+    df_mod9 = (df % 9).replace(0, 9)
     st.dataframe(df_mod9, use_container_width=False)
    
     tong_cot_dau = df_mod9.iloc[:, 0].sum()
