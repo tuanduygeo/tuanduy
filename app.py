@@ -750,8 +750,8 @@ ax.legend()
 st.pyplot(fig)
 filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
 median_score = round(filtered_df["Điểm số"].median(), 2)
-st.markdown(f"### **Điểm(Thang từ -10 đến 10):** `{median_score}`")
-st.markdown("""### 📌 Hướng dẫn
+st.markdown(f"#### **Điểm(Thang từ -10 đến 10):** `{median_score}`")
+st.markdown("""#### 📌 Hướng dẫn
 - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
 - Trong biểu đồ này, các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
 - Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình và thường diễn biến đời người cũng hay lên xuống tại điểm này.
