@@ -916,7 +916,7 @@ r_outer = 1.0
 r_inner = 0.7
 
 # Vẽ
-fig, ax = plt.subplots(figsize=(6, 6), subplot_kw={'projection': 'polar'})
+fig, ax = plt.subplots(figsize=(4, 4), subplot_kw={'projection': 'polar'})
 ax.set_theta_direction(-1)
 ax.set_theta_offset(np.pi / 2)
 ax.set_yticklabels([])
@@ -925,12 +925,12 @@ ax.grid(False)
 
 # Vòng ngoài
 for theta, label in zip(theta_outer, labels_outer):
-    ax.plot([theta, theta], [0, r_outer], color='gray', linewidth=0.5)
+    ax.plot([theta, theta], [0.8, r_outer], color='gray', linewidth=0.5)
     ax.text(theta, r_outer, label, ha='center', va='center', fontsize=8, color='blue')
 
 # Vòng trong
 for theta, label in zip(theta_inner, labels_inner):
-    ax.plot([theta, theta], [0, r_inner], color='gray', linewidth=0.5)
+    ax.plot([theta, theta], [0.8, r_inner], color='gray', linewidth=0.5)
     ax.text(theta, r_inner, label, ha='center', va='center', fontsize=8, color='darkred')
 
 
