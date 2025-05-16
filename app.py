@@ -23,32 +23,26 @@ if "selected_idx" not in st.session_state:
 html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
-# Bắt đầu vùng scroll
-st.markdown(
-    """
-    <div style='height: 300px; overflow-y: auto; padding-right: 10px;'>
-    """,
-    unsafe_allow_html=True
-)
+# Phân trang
+per_page = 10
+total_pages = math.ceil(len(df) / per_page)
+page = st.number_input(f"📄 Trang (1–{total_pages}):", min_value=1, max_value=total_pages, value=1, step=1)
 
-# Hiển thị từng công trình với padding dòng lớn hơn
-for idx, (_, row) in enumerate(df.iterrows()):
-    st.markdown(
-        f"""
-        <div style='padding: 12px 0; border-bottom: 1px solid #ddd;'>
-            <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <span>🔸 <strong>{row['Tên công trình']}</strong></span>
-                <form action="" method="post">
-                    <button type="submit" name="button_{idx}" style="background-color:#4CAF50;color:white;padding:6px 12px;border:none;border-radius:4px;">Xem</button>
-                </form>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+start_idx = (page - 1) * per_page
+end_idx = start_idx + per_page
+df_page = df.iloc[start_idx:end_idx]
+# Hiển thị danh sách từng trang
+for i, (_, row) in enumerate(df_page.iterrows()):
+    idx = start_idx + i
+    col1, col2 = st.columns([5, 1])
+    with col1:
+        st.markdown(f"🔸 **{row['Tên công trình']}**")
+    with col2:
+        if st.button("Xem", key=row['Tên công trình']):
+            st.session_state.selected_idx = idx
 
-# Kết thúc vùng scroll
-st.markdown("</div>", unsafe_allow_html=True)
+
+
 
 # Hiển thị bản đồ
 if "selected_idx" not in st.session_state:
