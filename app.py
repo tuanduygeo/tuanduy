@@ -949,7 +949,7 @@ def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
     ax.set_yticklabels([])
     ax.set_xticklabels([])
     ax.grid(False)
-    plt.title("Fibonacci mod 9 & mod 10 + 24 phân cung (Tý, Nhâm,...)", va='bottom')
+   
 
     # ✅ Hiển thị trong Streamlit
     st.pyplot(fig)
