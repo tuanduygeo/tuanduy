@@ -815,7 +815,7 @@ except Exception as e:
     st.text(str(e))
 
 st.markdown("""
-###5.🎲 Mô hình lạc thư 3x3 và cao hơn
+### 5.MÔ HÌNH LẠC THƯ 3X3 VÀ BẬC CAO VÔ TẬN
 """)
 
 # Nhập bậc của ma phương
