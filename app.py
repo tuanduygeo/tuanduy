@@ -929,7 +929,7 @@ def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
     shift = np.deg2rad(7.5)
     for i, t in enumerate(theta_lines):
         linewidth = 2 if i in bold_indices else 1
-        ax.plot([t + shift, t + shift], [0.75, 1.03], color='black', linewidth=linewidth)
+        ax.plot([t + shift, t + shift], [0.75, 1.04], color='black', linewidth=linewidth)
 
     # Vẽ các vòng tròn
     for r in [1.05, 0.95, 0.85, 0.75]:
