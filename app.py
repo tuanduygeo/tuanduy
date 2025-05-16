@@ -888,15 +888,17 @@ try:
 
     
     # --- BẢNG MODULO 9 ---
-    st.subheader("🧮 Bảng ma phương theo giá trị từng ô % 9:")
+    st.subheader("🧮 Bảng ma phương chia hết cho 9:")
     df_mod9 = df % 9
+    
     # Áp dụng highlight cho cả hàng và cột trung tâm
     styled_mod9 = df_mod9.style.format("{:d}") \
         .apply(highlight_center, axis=1) \
         .apply(highlight_center, axis=0)
     
     st.dataframe(styled_mod9)
-    
+    tong_cot_dau = df_mod9.iloc[:, 0].sum()
+    st.markdown(f"🧾 Tổng của cột): **{tong_cot_dau}**")
 
 except Exception as e:
     st.error(f"Lỗi: {e}")
