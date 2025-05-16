@@ -919,7 +919,7 @@ def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
     theta_inner = -np.linspace(0, 2*np.pi, n_inner, endpoint=False)
     theta_lines = -np.linspace(0, 2*np.pi, 24, endpoint=False)
 
-    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw={'projection': 'polar'})
     ax.spines['polar'].set_visible(False)
     ax.set_theta_direction(-1)
     ax.set_theta_offset(np.pi / 2)
@@ -929,7 +929,7 @@ def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
     shift = np.deg2rad(7.5)
     for i, t in enumerate(theta_lines):
         linewidth = 2 if i in bold_indices else 1
-        ax.plot([t + shift, t + shift], [0.75, 1.05], color='black', linewidth=linewidth)
+        ax.plot([t + shift, t + shift], [0.75, 1.03], color='black', linewidth=linewidth)
 
     # Vẽ các vòng tròn
     for r in [1.05, 0.95, 0.85, 0.75]:
