@@ -23,26 +23,32 @@ if "selected_idx" not in st.session_state:
 html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
-# Container có scroll, chỉ hiển thị khoảng 5 công trình
+# Bắt đầu vùng scroll
 st.markdown(
     """
-    <div style='height: 250px; overflow-y: auto; padding-right: 10px;'>
+    <div style='height: 300px; overflow-y: auto; padding-right: 10px;'>
     """,
     unsafe_allow_html=True
 )
 
-# Hiển thị từng công trình với nút "Xem"
+# Hiển thị từng công trình với padding dòng lớn hơn
 for idx, (_, row) in enumerate(df.iterrows()):
-    col1, col2 = st.columns([5, 1])
-    with col1:
-        st.markdown(f"🔸 **{row['Tên công trình']}**")
-    with col2:
-        if st.button("Xem", key=f"xem_{idx}"):
-            st.session_state.selected_idx = idx
+    st.markdown(
+        f"""
+        <div style='padding: 12px 0; border-bottom: 1px solid #ddd;'>
+            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                <span>🔸 <strong>{row['Tên công trình']}</strong></span>
+                <form action="" method="post">
+                    <button type="submit" name="button_{idx}" style="background-color:#4CAF50;color:white;padding:6px 12px;border:none;border-radius:4px;">Xem</button>
+                </form>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
+# Kết thúc vùng scroll
 st.markdown("</div>", unsafe_allow_html=True)
-
-
 
 # Hiển thị bản đồ
 if "selected_idx" not in st.session_state:
