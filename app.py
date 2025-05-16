@@ -871,8 +871,8 @@ try:
     magic_const = n * (n ** 2 + 1) // 2
 
     st.markdown(f"- Tổng chuẩn (magic constant): **{magic_const}**")
-    st.markdown(f"- Tổng theo từng hàng: {', '.join(str(x) for x in row_sums)}")
-    st.markdown(f"- Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
+    st.markdown(f"- Tổng hàng: **{row_sums.iloc[0]}**")
+    st.markdown(f"- Tổng cột: **{col_sums.iloc[0]}**")
     st.markdown(f"- Tổng đường chéo chính: {diag1}")
     st.markdown(f"- Tổng đường chéo phụ: {diag2}")
 
