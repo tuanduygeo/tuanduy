@@ -15,13 +15,7 @@ st.set_page_config(layout="wide")
 st.markdown("""
 ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
 """)
-st.markdown("""
-### 📌 Hướng dẫn
-- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
-- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
-- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
-- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
-""")
+
 # Khởi tạo session state
 if "selected_idx" not in st.session_state:
     st.session_state.selected_idx = None
@@ -39,15 +33,7 @@ start_idx = (page - 1) * per_page
 end_idx = start_idx + per_page
 df_page = df.iloc[start_idx:end_idx]
 
-# Hiển thị danh sách từng trang
-for i, (_, row) in enumerate(df_page.iterrows()):
-    idx = start_idx + i
-    col1, col2 = st.columns([5, 1])
-    with col1:
-        st.markdown(f"🔸 **{row['Tên công trình']}**")
-    with col2:
-        if st.button("Xem", key=row['Tên công trình']):
-            st.session_state.selected_idx = idx
+
 
 # Hiển thị bản đồ
 if "selected_idx" not in st.session_state:
@@ -88,7 +74,22 @@ if html_files:
             components.html(html_content, height=1100, scrolling=True)
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
-
+# Hiển thị danh sách từng trang
+for i, (_, row) in enumerate(df_page.iterrows()):
+    idx = start_idx + i
+    col1, col2 = st.columns([5, 1])
+    with col1:
+        st.markdown(f"🔸 **{row['Tên công trình']}**")
+    with col2:
+        if st.button("Xem", key=row['Tên công trình']):
+            st.session_state.selected_idx = idx
+st.markdown("""
+### 📌 Hướng dẫn
+- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
+- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
+- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
+- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
+""")
 # --- SCHUMANN RESONANCE ---
 
 st.markdown("""
