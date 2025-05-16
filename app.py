@@ -964,8 +964,7 @@ labels_24 = [
 ]
 
 # Streamlit layout
-st.set_page_config(layout="wide")
-st.title("🔄 Biểu đồ vòng tròn Fibonacci mod 9 + mod 10")
+
 plot_fibonacci_triple_circle(fib_mod9, fib_mod10, labels_24)
 
 
