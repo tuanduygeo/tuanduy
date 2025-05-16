@@ -853,7 +853,7 @@ def highlight_center(row_or_col, axis='row'):
 try:
     square = generate_magic_square_southeast(n)
     df = pd.DataFrame(square)
-    st.dataframe(df, use_container_width=Fall)
+    st.dataframe(df, use_container_width=False)
    
 
     # --- Kiểm tra tổng ---
@@ -884,7 +884,7 @@ try:
     # --- BẢNG MODULO 9 ---
     st.markdown("#### Bảng ma phương chia hết cho 9:")  
     df_mod9 = df % 9
-    st.dataframe(df_mod9, use_container_width=Fall)
+    st.dataframe(df_mod9, use_container_width=False)
    
     tong_cot_dau = df_mod9.iloc[:, 0].sum()
     st.markdown(f"🧾 Tổng mỗi cột: **{tong_cot_dau}**")
