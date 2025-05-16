@@ -848,7 +848,10 @@ center_index = n // 2
 
 # Hàm tô màu các ô thuộc hàng/cột trung tâm
 def highlight_center(row_or_col, axis='row'):
-    return ['background-color: orange' if (i == center_index if axis == 'row' else row_or_col.name == center_index) else '' for i in range(len(row_or_col))]
+    if axis == 'row':
+        return ['background-color: orange' if i == center_index else '' for i in range(len(row_or_col))]
+    else:  # axis == 'column'
+        return ['background-color: orange' if row_or_col.name == center_index else ''] * len(row_or_col)
 
 # --- MAIN ---
 try:
