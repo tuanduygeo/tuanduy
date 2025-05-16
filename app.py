@@ -898,47 +898,6 @@ except Exception as e:
 
 
 
-st.markdown("### 🔵 Vòng tròn đồng tâm có thể xoay")
-# Tham số điều chỉnh góc
-angle_outer = st.slider("🌀 Góc xoay vòng ngoài (độ)", 0, 360, 0, step=5)
-angle_inner = st.slider("🌀 Góc xoay vòng trong (độ)", 0, 360, 0, step=5)
-
-# Dữ liệu nhãn
-n_outer = 27
-n_inner = 17
-labels_outer = [f"O{i+1}" for i in range(n_outer)]
-labels_inner = [f"I{i+1}" for i in range(n_inner)]
-
-# Tính góc
-theta_outer = np.linspace(0, 2*np.pi, n_outer, endpoint=False) + np.deg2rad(angle_outer)
-theta_inner = np.linspace(0, 2*np.pi, n_inner, endpoint=False) + np.deg2rad(angle_inner)
-r_outer = 1.0
-r_inner = 0.7
-
-# Vẽ
-fig, ax = plt.subplots(figsize=(4, 4), subplot_kw={'projection': 'polar'})
-ax.set_theta_direction(-1)
-ax.set_theta_offset(np.pi / 2)
-ax.set_yticklabels([])
-ax.set_xticklabels([])
-ax.grid(False)
-
-# Vòng ngoài
-for theta, label in zip(theta_outer, labels_outer):
-    ax.plot([theta, theta], [0.8, r_outer], color='gray', linewidth=0.5)
-    ax.text(theta, r_outer, label, ha='center', va='center', fontsize=8, color='blue')
-
-# Vòng trong
-for theta, label in zip(theta_inner, labels_inner):
-    ax.plot([theta, theta], [0.8, r_inner], color='gray', linewidth=0.5)
-    ax.text(theta, r_inner, label, ha='center', va='center', fontsize=8, color='darkred')
-
-
-
-st.pyplot(fig)
-
-
-
 st.markdown("""
 ### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597.DONATE: nguyenduytuan techcombank 19033167089018
 """)
