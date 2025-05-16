@@ -750,8 +750,14 @@ ax.legend()
 st.pyplot(fig)
 filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
 median_score = round(filtered_df["Điểm số"].median(), 2)
-st.subheader(f"**Điểm(Thang từ -10 đến 10):** `{median_score}`")
-
+st.markdown("""###f"**Điểm(Thang từ -10 đến 10):** `{median_score}`""")
+st.markdown("""
+### 📌 Hướng dẫn
+Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
+Trong biểu đồ này, các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
+Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình và thường diễn biến đời người cũng hay lên xuống tại điểm này.
+Biểu đồ được tính cẩn thận từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay nghịch hành, cát tinh hay sát tinh v.v.
+""")
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
 Nguồn: [Tomsk, Russia – Space Observing System]
