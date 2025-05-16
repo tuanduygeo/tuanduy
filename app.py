@@ -893,7 +893,7 @@ try:
     # Áp dụng highlight cho cả hàng và cột trung tâm
     styled_mod9 = df_mod9.style.format("{:d}") \
         .apply(highlight_center, axis=1) \
-        .apply(highlight_center, axis=0, axis_name='col')
+        .apply(highlight_center, axis=0)
     
     st.dataframe(styled_mod9)
     
