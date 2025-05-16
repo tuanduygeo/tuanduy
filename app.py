@@ -15,13 +15,7 @@ st.set_page_config(layout="wide")
 st.markdown("""
 ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
 """)
-st.markdown("""
-### 📌 Hướng dẫn
-- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
-- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
-- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
-- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
-""")
+
 # Khởi tạo session state
 if "selected_idx" not in st.session_state:
     st.session_state.selected_idx = None
@@ -89,7 +83,13 @@ if html_files:
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
-# --- SCHUMANN RESONANCE ---
+st.markdown("""
+### 📌 Hướng dẫn
+- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
+- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
+- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
+- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
+""")-
 
 st.markdown("""
 ### 2.Chiêm tinh Ấn Độ""")
