@@ -10,11 +10,10 @@ import math
 import pytz
 import requests
 import streamlit.components.v1 as components
-from 1_map_viewer import run as run_map
-from 2_indian_astrology import run as run_astro
-from 3_schumann import run as run_schumann
-from 4_geomagnetic_data import run as run_geomag
-from 5_magic_square import run as run_magic
+from map_viewer import run as run_map
+from indian_astrology import run as run_astro
+from schumann import run as run_schumann
+from magic_square import run as run_magic
 
 st.set_page_config(layout="wide")
 
