@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
 import streamlit as st
 import streamlit as st
 import pandas as pd
@@ -14,9 +17,7 @@ from map_viewer import run as run_map
 from indian_astrology import run as run_astro
 from schumann import run as run_schumann
 from magic_square import run as run_magic
-import sys
-import os
-sys.path.append(os.path.dirname(__file__))
+
 st.set_page_config(layout="wide")
 
 # Sidebar menu
