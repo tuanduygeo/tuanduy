@@ -483,7 +483,7 @@ df_planets["Chiếu hành tinh"] = df_planets.apply(
 )
 
 st.markdown("### Vị trí hành tinh")
-st.dataframe(df_planets, use_container_width=True)
+st.dataframe(df_planets, use_container_width=False)
 # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
 st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
