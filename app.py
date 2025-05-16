@@ -24,14 +24,7 @@ html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
 
-# Phân trang
-per_page = 10
-total_pages = math.ceil(len(df) / per_page)
-page = st.number_input(f"📄 Trang (1–{total_pages}):", min_value=1, max_value=total_pages, value=1, step=1)
 
-start_idx = (page - 1) * per_page
-end_idx = start_idx + per_page
-df_page = df.iloc[start_idx:end_idx]
 
 
 
@@ -74,6 +67,14 @@ if html_files:
             components.html(html_content, height=1100, scrolling=True)
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
+# Phân trang
+per_page = 10
+total_pages = math.ceil(len(df) / per_page)
+page = st.number_input(f"📄 Trang (1–{total_pages}):", min_value=1, max_value=total_pages, value=1, step=1)
+
+start_idx = (page - 1) * per_page
+end_idx = start_idx + per_page
+df_page = df.iloc[start_idx:end_idx]
 # Hiển thị danh sách từng trang
 for i, (_, row) in enumerate(df_page.iterrows()):
     idx = start_idx + i
