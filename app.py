@@ -759,7 +759,7 @@ st.markdown("""### 📌 Hướng dẫn
 """)
 st.markdown("""
 ### 3.🌐Biểu đồ cộng hưởng Schumann Trái Đất trực tuyến
-Nguồn: [Tomsk, Russia – Space Observing System]
+Nguồn: [Tomsk, Russia Space Observing System]
 """)
 st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
 
