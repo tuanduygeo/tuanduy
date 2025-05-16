@@ -882,7 +882,7 @@ try:
         and diag1 == magic_const
         and diag2 == magic_const
     ):
-        st.success("🎉 Đây là ma phương chuẩn hợp lệ!")
+        st.success("Ma phương hợp lệ!")
     else:
         st.warning("⚠️ Ma phương này KHÔNG hợp lệ.")
 
