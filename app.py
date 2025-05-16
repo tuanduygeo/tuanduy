@@ -843,14 +843,24 @@ def generate_magic_square_southeast(n):
             i, j = new_i, new_j
 
     return square
+# Xác định hàng và cột trung tâm
+center_index = n // 2
+
+# Hàm tô màu các ô thuộc hàng/cột trung tâm
+def highlight_center(row_or_col, axis='row'):
+    return ['background-color: orange' if (i == center_index if axis == 'row' else row_or_col.name == center_index) else '' for i in range(len(row_or_col))]
 
 # --- MAIN ---
 try:
     square = generate_magic_square_southeast(n)
     df = pd.DataFrame(square)
 
+   # 👉 Hiển thị bảng ma phương với tô màu trung tâm
     st.subheader(f"✨ Ma phương {n}x{n}:")
-    st.dataframe(df.style.format("{:d}"))
+    styled_df = df.style.format("{:d}") \
+        .apply(highlight_center, axis=1) \
+        .apply(highlight_center, axis=0)
+    st.dataframe(styled_df)
 
     # --- Kiểm tra tổng ---
     st.subheader("🧮 Kiểm tra tổng từng hàng, cột, và chéo:")
@@ -880,7 +890,13 @@ try:
     # --- BẢNG MODULO 9 ---
     st.subheader("🧮 Bảng ma phương theo giá trị từng ô % 9:")
     df_mod9 = df % 9
-    st.dataframe(df_mod9.style.format("{:d}").highlight_max(axis=None, color='orange'))
+    # Áp dụng highlight cho cả hàng và cột trung tâm
+    styled_mod9 = df_mod9.style.format("{:d}") \
+        .apply(highlight_center, axis=1) \
+        .apply(highlight_center, axis=0, axis_name='col')
+    
+    st.dataframe(styled_mod9)
+    
 
 except Exception as e:
     st.error(f"Lỗi: {e}")
