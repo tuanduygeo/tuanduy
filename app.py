@@ -819,7 +819,7 @@ st.markdown("""
 """)
 
 # Nhập bậc của ma phương
-n = st.number_input("Nhập bậc lẻ n (>=3):", min_value=3, step=2, value=7)
+n = st.number_input("Nhập bậc lẻ n (>=3):", min_value=3, step=2, value=3)
 
 def generate_magic_square_southeast(n):
     if n % 2 == 0:
