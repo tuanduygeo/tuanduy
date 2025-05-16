@@ -10,12 +10,18 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import requests
-from st_aggrid import AgGrid, GridOptionsBuilder
+
 st.set_page_config(layout="wide")
 st.markdown("""
 ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
 """)
-
+st.markdown("""
+### 📌 Hướng dẫn
+- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
+- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
+- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
+- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
+""")
 # Khởi tạo session state
 if "selected_idx" not in st.session_state:
     st.session_state.selected_idx = None
@@ -83,13 +89,7 @@ if html_files:
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
-st.markdown("""
-### 📌 Hướng dẫn
-- Danh sách 200 công trình được thường xuyên thay đổi/ 4900 công trình tâm linh được tác giả thu thập tại Việt Nam.
-- Công nghệ: Ứng dụng công nghệ tự động hóa địa không gian để xác định vector các hướng địa mạch tự động tại các công trình.
-- Phiên bản: V1.0 phiên bản web ưu tiên số liệu nhẹ, vector hướng mạch mang tính tham khảo- không chính xác tuyệt đối.
-- Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
-""")
+# --- SCHUMANN RESONANCE ---
 
 st.markdown("""
 ### 2.Chiêm tinh Ấn Độ""")
@@ -813,120 +813,6 @@ try:
 except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
-
-st.markdown("""
-### 5.MÔ HÌNH LẠC THƯ 3X3 VÀ BẬC CAO VÔ TẬN
-""")
-
-# Nhập bậc của ma phương
-n = st.number_input("Nhập bậc lẻ n (>=3):", min_value=3, step=2, value=3)
-
-def generate_magic_square_southeast(n):
-    if n % 2 == 0:
-        raise ValueError("Chỉ hỗ trợ ma phương bậc lẻ.")
-
-    square = np.zeros((n, n), dtype=int)
-    
-    # Bắt đầu từ vị trí gần tâm: (tâm hàng + 1, tâm cột)
-    i, j = n // 2 + 1, n // 2
-
-    for num in range(1, n * n + 1):
-        square[i % n, j % n] = num
-        
-        # Vị trí kế tiếp theo hướng Đông Nam
-        new_i, new_j = (i + 1) % n, (j + 1) % n
-
-        if square[new_i, new_j] != 0:
-            # Nếu bị trùng, thì nhảy xuống thêm 1 hàng
-            i = (i + 2) % n
-        else:
-            i, j = new_i, new_j
-
-    return square
-# Xác định hàng và cột trung tâm
-center_index = n // 2
-
-# Hàm tô màu các ô thuộc hàng/cột trung tâm
-def highlight_center(row_or_col, axis='row'):
-    if axis == 'row':
-        return ['background-color: orange' if i == center_index else '' for i in range(len(row_or_col))]
-    else:  # axis == 'column'
-        return ['background-color: orange' if row_or_col.name == center_index else ''] * len(row_or_col)
-
-# --- MAIN ---
-try:
-    square = generate_magic_square_southeast(n)
-    df = pd.DataFrame(square)
-
-   # Cấu hình hiển thị
-    gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_default_column(resizable=True, wrapText=True, autoHeight=True)
-    gb.configure_grid_options(domLayout='autoHeight')
-    
-    gridOptions = gb.build()
-    
-    # Hiển thị bảng có tự động co cột
-    AgGrid(
-        df,
-        gridOptions=gridOptions,
-        fit_columns_on_grid_load=True,
-        height=300
-    )
-
-    # --- Kiểm tra tổng ---
-    
-    row_sums = df.sum(axis=1)
-    col_sums = df.sum(axis=0)
-    diag1 = np.trace(square)
-    diag2 = np.trace(np.fliplr(square))
-    magic_const = n * (n ** 2 + 1) // 2
-
-    st.markdown(f"- Tổng chuẩn (magic constant): **{magic_const}**")
-    st.markdown(f"- Tổng hàng: **{row_sums.iloc[0]}**")
-    st.markdown(f"- Tổng cột: **{col_sums.iloc[0]}**")
-    st.markdown(f"- Tổng đường chéo chính: {diag1}")
-    st.markdown(f"- Tổng đường chéo phụ: {diag2}")
-
-    if (
-        all(row_sums == magic_const)
-        and all(col_sums == magic_const)
-        and diag1 == magic_const
-        and diag2 == magic_const
-    ):
-        st.success("Ma phương hợp lệ!")
-    else:
-        st.warning("⚠️ Ma phương này KHÔNG hợp lệ.")
-
-    
-    # --- BẢNG MODULO 9 ---
-    st.markdown("#### Bảng ma phương chia hết cho 9:")  
-    df_mod9 = df % 9
-    # Tạo grid option với màu cho cột trung tâm
-    gb2 = GridOptionsBuilder.from_dataframe(df_mod9)
-    for i, col in enumerate(df_mod9.columns):
-        if i == center_index:
-            gb2.configure_column(col, cellStyle={'backgroundColor': '#FFA07A'})  # màu cam nhạt
-        else:
-            gb2.configure_column(col)
-    
-    gridOptions2 = gb2.build()
-    
-    st.markdown("#### Bảng MOD 9 có highlight cột giữa")
-    AgGrid(
-        df_mod9,
-        gridOptions=gridOptions2,
-        fit_columns_on_grid_load=True,
-        height=300
-    )
-    tong_cot_dau = df_mod9.iloc[:, 0].sum()
-    st.markdown(f"🧾 Tổng mỗi cột: **{tong_cot_dau}**")
-
-except Exception as e:
-    st.error(f"Lỗi: {e}")
-
-
-
-
 st.markdown("""
 ### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng.SĐT&ZALO: 0377442597.DONATE: nguyenduytuan techcombank 19033167089018
 """)
