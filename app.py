@@ -950,9 +950,8 @@ def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
     ax.set_xticklabels([])
     ax.grid(False)
    
-
     # ✅ Hiển thị trong Streamlit
-    st.pyplot(fig)
+    st.pyplot(fig, use_container_width=False)
 
 # Dữ liệu
 fib_mod9 = fibonacci_mod(9, 24)
