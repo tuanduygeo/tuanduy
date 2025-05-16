@@ -856,7 +856,7 @@ try:
     df = pd.DataFrame(square)
 
    # 👉 Hiển thị bảng ma phương với tô màu trung tâm
-    st.markdown("#### Ma phương {n}x{n}:")  
+    st.markdown(f"#### Ma phương {n}x{n}:") 
     styled_df = df.style.format("{:d}") \
         .apply(highlight_center, axis=1) \
         .apply(highlight_center, axis=0)
