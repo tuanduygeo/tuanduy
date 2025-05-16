@@ -23,7 +23,16 @@ if "selected_idx" not in st.session_state:
 html_dir = "dulieu"
 html_files = sorted([f for f in os.listdir(html_dir) if f.endswith(".html")])
 df = pd.DataFrame({"Tên công trình": html_files})
-st.dataframe(df, height=180)
+# Hiển thị toàn bộ danh sách theo dạng cuộn, giữ nút "Xem"
+with st.container():
+    for idx, (_, row) in enumerate(df.iterrows()):
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            st.markdown(f"🔸 **{row['Tên công trình']}**")
+        with col2:
+            if st.button("Xem", key=f"xem_{idx}"):
+                st.session_state.selected_idx = idx
+
 
 
 # Hiển thị bản đồ
