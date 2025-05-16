@@ -903,68 +903,7 @@ try:
 except Exception as e:
     st.error(f"Lỗi: {e}")
 
-def fibonacci_mod(mod, length):
-    seq = [0, 1]
-    for _ in range(length - 2):
-        seq.append((seq[-1] + seq[-2]) % mod)
-    return seq
 
-def plot_fibonacci_triple_circle(values_outer, values_middle, labels_inner):
-    n_outer = len(values_outer)
-    n_middle = len(values_middle)
-    n_inner = len(labels_inner)
-
-    theta_outer = -np.linspace(0, 2*np.pi, n_outer, endpoint=False)
-    theta_middle = -np.linspace(0, 2*np.pi, n_middle, endpoint=False)
-    theta_inner = -np.linspace(0, 2*np.pi, n_inner, endpoint=False)
-    theta_lines = -np.linspace(0, 2*np.pi, 24, endpoint=False)
-
-    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw={'projection': 'polar'})
-    ax.spines['polar'].set_visible(False)
-    ax.set_theta_direction(-1)
-    ax.set_theta_offset(np.pi / 2)
-    
-    # Vẽ các đường chia
-    bold_indices = {2, 5, 8, 11, 14, 17, 20, 23}
-    shift = np.deg2rad(7.5)
-    for i, t in enumerate(theta_lines):
-        linewidth = 2 if i in bold_indices else 1
-        ax.plot([t + shift, t + shift], [0.75, 1.04], color='black', linewidth=linewidth)
-
-    # Vẽ các vòng tròn
-    for r in [1.05, 0.95, 0.85, 0.75]:
-        circle_theta = np.linspace(0, 2 * np.pi, 1000)
-        ax.plot(-circle_theta, [r] * len(circle_theta), color='black', linewidth=1)
-
-    # Các lớp dữ liệu
-    for t, num in zip(theta_outer, values_outer):
-        ax.text(t, 0.9, str(num), ha='center', va='center', fontsize=8)
-    for t, num in zip(theta_middle, values_middle):
-        ax.text(t, 1.0, str(num), ha='center', va='center', fontsize=8, color='darkblue')
-    for t, label in zip(theta_inner, labels_inner):
-        ax.text(t, 0.8, label, ha='center', va='center', fontsize=8, color='darkred')
-
-    ax.text(0, 0, '+', ha='center', va='center', fontsize=12, fontweight='bold')
-
-    ax.set_yticklabels([])
-    ax.set_xticklabels([])
-    ax.grid(False)
-   
-    # ✅ Hiển thị trong Streamlit
-    st.pyplot(fig, use_container_width=False)
-
-# Dữ liệu
-fib_mod9 = fibonacci_mod(9, 24)
-fib_mod10 = fibonacci_mod(10, 60)
-labels_24 = [
-    'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
-    'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
-    'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
-]
-
-# Streamlit layout
-
-plot_fibonacci_triple_circle(fib_mod9, fib_mod10, labels_24)
 
 
 st.markdown("""
