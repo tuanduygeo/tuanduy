@@ -853,8 +853,26 @@ def highlight_center(row_or_col, axis='row'):
 try:
     square = generate_magic_square_southeast(n)
     df = pd.DataFrame(square)
-    st.dataframe(df, use_container_width=False)
-   
+    
+       # Xác định chỉ số trung tâm
+    center_index = n // 2
+    
+    # Hàm highlight dòng trung tâm
+    def highlight_center_row(row):
+        return ['background-color: orange' if row.name == center_index else '' for _ in row]
+    
+    # Hàm highlight cột trung tâm
+    def highlight_center_col(col):
+        return ['background-color: orange' if col.name == center_index else '' for _ in col]
+    
+    # Áp dụng định dạng
+    styled_df = df.style \
+        .apply(highlight_center_row, axis=1) \
+        .apply(highlight_center_col, axis=0)
+    
+    # Hiển thị
+    st.write("### Bảng có highlight hàng và cột trung tâm")
+    st.write(styled_df,use_container_width=False)
 
     # --- Kiểm tra tổng ---
     
