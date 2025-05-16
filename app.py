@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import requests
-
+from st_aggrid import AgGrid, GridOptionsBuilder
 st.set_page_config(layout="wide")
 st.markdown("""
 ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
@@ -855,12 +855,20 @@ try:
     square = generate_magic_square_southeast(n)
     df = pd.DataFrame(square)
 
-   # 👉 Hiển thị bảng ma phương với tô màu trung tâm
-    st.markdown(f"#### Ma phương {n}x{n}:") 
-    styled_df = df.style.format("{:d}") \
-        .apply(highlight_center, axis=1) \
-        .apply(highlight_center, axis=0)
-    st.dataframe(styled_df)
+   # Cấu hình hiển thị
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_default_column(resizable=True, wrapText=True, autoHeight=True)
+    gb.configure_grid_options(domLayout='autoHeight')
+    
+    gridOptions = gb.build()
+    
+    # Hiển thị bảng có tự động co cột
+    AgGrid(
+        df,
+        gridOptions=gridOptions,
+        fit_columns_on_grid_load=True,
+        height=300
+    )
 
     # --- Kiểm tra tổng ---
     
