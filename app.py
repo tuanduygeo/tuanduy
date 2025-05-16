@@ -38,7 +38,6 @@ elif section.startswith("2"):
     run_astro()
 elif section.startswith("3"):
     run_schumann()
-elif section.startswith("4"):
-    run_geomag()
+
 elif section.startswith("5"):
     run_magic()
