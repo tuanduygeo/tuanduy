@@ -898,7 +898,7 @@ try:
     
     st.dataframe(styled_mod9)
     tong_cot_dau = df_mod9.iloc[:, 0].sum()
-    st.markdown(f"🧾 Tổng của cột): **{tong_cot_dau}**")
+    st.markdown(f"🧾 Tổng mỗi cột: **{tong_cot_dau}**")
 
 except Exception as e:
     st.error(f"Lỗi: {e}")
