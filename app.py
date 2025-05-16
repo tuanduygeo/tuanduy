@@ -545,7 +545,7 @@ for i in range(9):
 
 # Hiển thị bảng Mahadasha
 df_dasha = pd.DataFrame(dasha_list)
-st.dataframe(df_dasha, use_container_width=True)
+st.dataframe(df_dasha, use_container_width=False)
 
 
 # Hàm tính Antardasha chuẩn
@@ -585,7 +585,7 @@ df_all_antar = pd.DataFrame(all_antardasha)
 
 if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
     
-    st.dataframe(df_all_antar, use_container_width=True)
+    st.dataframe(df_all_antar, use_container_width=False)
 
 # Quy tắc điểm số theo nhà
 
