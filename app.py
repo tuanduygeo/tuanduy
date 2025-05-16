@@ -856,25 +856,25 @@ try:
     df = pd.DataFrame(square)
 
    # 👉 Hiển thị bảng ma phương với tô màu trung tâm
-    st.subheader(f"✨ Ma phương {n}x{n}:")
+    st.markdown("#### Ma phương {n}x{n}:")  
     styled_df = df.style.format("{:d}") \
         .apply(highlight_center, axis=1) \
         .apply(highlight_center, axis=0)
     st.dataframe(styled_df)
 
     # --- Kiểm tra tổng ---
-    st.subheader("🧮 Kiểm tra tổng từng hàng, cột, và chéo:")
+    
     row_sums = df.sum(axis=1)
     col_sums = df.sum(axis=0)
     diag1 = np.trace(square)
     diag2 = np.trace(np.fliplr(square))
     magic_const = n * (n ** 2 + 1) // 2
 
-    st.markdown(f"- ✅ Tổng chuẩn (magic constant): **{magic_const}**")
-    st.markdown(f"- 📏 Tổng theo từng hàng: {', '.join(str(x) for x in row_sums)}")
-    st.markdown(f"- 📐 Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
-    st.markdown(f"- 🔺 Tổng đường chéo chính: {diag1}")
-    st.markdown(f"- 🔻 Tổng đường chéo phụ: {diag2}")
+    st.markdown(f"- Tổng chuẩn (magic constant): **{magic_const}**")
+    st.markdown(f"- Tổng theo từng hàng: {', '.join(str(x) for x in row_sums)}")
+    st.markdown(f"- Tổng theo từng cột: {', '.join(str(x) for x in col_sums)}")
+    st.markdown(f"- Tổng đường chéo chính: {diag1}")
+    st.markdown(f"- Tổng đường chéo phụ: {diag2}")
 
     if (
         all(row_sums == magic_const)
@@ -888,7 +888,7 @@ try:
 
     
     # --- BẢNG MODULO 9 ---
-    st.subheader("🧮 Bảng ma phương chia hết cho 9:")
+    st.markdown("#### Bảng ma phương chia hết cho 9:")  
     df_mod9 = df % 9
     
     # Áp dụng highlight cho cả hàng và cột trung tâm
