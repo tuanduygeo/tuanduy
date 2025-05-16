@@ -898,13 +898,23 @@ try:
     # --- BẢNG MODULO 9 ---
     st.markdown("#### Bảng ma phương chia hết cho 9:")  
     df_mod9 = df % 9
+    # Tạo grid option với màu cho cột trung tâm
+    gb2 = GridOptionsBuilder.from_dataframe(df_mod9)
+    for i, col in enumerate(df_mod9.columns):
+        if i == center_index:
+            gb2.configure_column(col, cellStyle={'backgroundColor': '#FFA07A'})  # màu cam nhạt
+        else:
+            gb2.configure_column(col)
     
-    # Áp dụng highlight cho cả hàng và cột trung tâm
-    styled_mod9 = df_mod9.style.format("{:d}") \
-        .apply(highlight_center, axis=1) \
-        .apply(highlight_center, axis=0)
+    gridOptions2 = gb2.build()
     
-    st.dataframe(styled_mod9)
+    st.markdown("#### Bảng MOD 9 có highlight cột giữa")
+    AgGrid(
+        df_mod9,
+        gridOptions=gridOptions2,
+        fit_columns_on_grid_load=True,
+        height=300
+    )
     tong_cot_dau = df_mod9.iloc[:, 0].sum()
     st.markdown(f"🧾 Tổng mỗi cột: **{tong_cot_dau}**")
 
