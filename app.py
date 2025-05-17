@@ -904,18 +904,8 @@ except Exception as e:
     st.error(f"Lỗi: {e}")
 
 
-# streamlit_app.py
-
-
-
-
-
-# 1. GIAO DIỆN NHẬP TỌA ĐỘ
-# ========================
-st.markdown("### 🗺️ Nhập tọa độ bạn muốn kiểm tra")
-
-x = st.number_input("📍 Nhập kinh độ (longitude)", value=None, format="%.6f")
-y = st.number_input("📍 Nhập vĩ độ (latitude)", value=None, format="%.6f")
+x = st.number_input("📍 Nhập vĩ độ", value=None, format="%.6f")
+y = st.number_input("📍 Nhập kinh độ ", value=None, format="%.6f")
 
 # ========================
 # 2. XỬ LÝ KHI BẤM "TÍNH"
