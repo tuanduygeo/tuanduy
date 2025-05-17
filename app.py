@@ -829,31 +829,18 @@ except Exception as e:
 # 1. tính ========================
 x = st.number_input("v", value=None, format="%.6f")
 y = st.number_input("k", value=None, format="%.6f")
-dt= st.number_input("t", value=None, format="%.6f")
-# Tâm vòng tròn
-x_center, y_center = x, y
 
-# Chuyển tâm sang hệ toạ độ 3857 để tính toán kích thước chuẩn (tính theo mét)
-transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-x_m, y_m = transformer.transform(y_center, x_center)  # lon, lat → x, y (meters)
-
-# Tính bounding box quanh tâm theo mét
-buffer_m = 500  # bán kính 500m để lấy ảnh nền
-x0 = x_m - buffer_m
-y0 = y_m - buffer_m
-x1 = x_m + buffer_m
-y1 = y_m + buffer_m
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
 if st.button("run"):
-    if x is None or y is None or dt is None :
-        st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ và dt.")
+    if x is None or y is None:
+        st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
     else:
         try:
-            dx = dy = dt
-            west, east = y - dt, y + dt
-            south, north = x - dt, x + dt
+            dx = dy = 0.005
+            west, east = y - dx, y + dx
+            south, north = x - dy, x + dy
 
             lat_tile = int(north)
             lon_tile = int(east)
@@ -953,11 +940,11 @@ if st.button("run"):
     # 4. VẼ TOÀN BỘ
     # ========================
     fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
+    
     # Tâm ảnh và góc zoom
     x_center, y_center = transformer.transform(y, x)
     x0, y0 = transformer.transform(west, south)
     x1, y1 = transformer.transform(east, north)
-    
     
     
     
@@ -975,7 +962,7 @@ if st.button("run"):
     mask = data_array >= threshold
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=2)
     # Vẽ vòng Fibonacci
-    plot_fibonacci_labels_only(ax, x, y, labels_24, radius=500)
+    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
     # Slider góc
     #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
     
