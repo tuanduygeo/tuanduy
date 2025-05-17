@@ -927,8 +927,8 @@ if st.button("run"):
         for t, label in zip(theta, labels_inner):
             x = x_center + np.cos(t) * radius * 0.9
             y = y_center + np.sin(t) * radius * 0.9
-            ax.text(x, y, label, ha='center', va='center', fontsize=18, color='white',fontweight='bold')
-        ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=28,color='white', fontweight='bold')
+            ax.text(x, y, label, ha='center', va='center', fontsize=13, color='white',fontweight='bold')
+        ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22,color='white', fontweight='bold')
     labels_24 = [
         'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
         'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
