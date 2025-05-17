@@ -831,6 +831,7 @@ x = st.number_input("v", value=None, format="%.6f")
 y = st.number_input("k", value=None, format="%.6f")
 dt = st.number_input("t", min_value=0.001, max_value=0.5, value=0.005, step=0.001, format="%.3f")
 dx=dy=dt
+radius=dt*111320
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
@@ -899,7 +900,7 @@ if st.button("run"):
             st.error(f"Đã xảy ra lỗi: {e}")
     # 3. HÀM VẼ VÒNG FIBONACCI
     # ========================
-radius=dt*111320
+
     def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
         n = len(labels_inner)
         theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
