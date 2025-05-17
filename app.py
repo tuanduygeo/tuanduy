@@ -825,7 +825,6 @@ try:
 except Exception as e:
     st.error("❌ Lỗi khi tải dữ liệu Kp Index.")
     st.text(str(e))
-st.markdown("""
 
 # 1. tính ========================
 x = st.number_input("x", value=None, format="%.6f")
@@ -987,8 +986,7 @@ if st.button("run"):
     st.pyplot(fig)
 
 
-
-
+st.markdown("""
 ### 5.MÔ HÌNH LẠC THƯ 3X3 VÀ BẬC CAO VÔ TẬN
 """)
 
