@@ -970,14 +970,14 @@ def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500)
     bold_indices = {2, 5, 8, 11, 14, 17, 20, 23}
     for i, t in enumerate(theta):
         lw = 2 if i in bold_indices else 1
-        x0 = x_center + np.cos(t + shift) * radius * 0.75
-        y0 = y_center + np.sin(t + shift) * radius * 0.75
-        x1 = x_center + np.cos(t + shift) * radius * 1.05
-        y1 = y_center + np.sin(t + shift) * radius * 1.05
+        x0 = x_center + np.cos(t + shift) * radius * 0.85
+        y0 = y_center + np.sin(t + shift) * radius * 0.85
+        x1 = x_center + np.cos(t + shift) * radius * 0.95
+        y1 = y_center + np.sin(t + shift) * radius * 0.95
         ax.plot([x0, x1], [y0, y1], color='black', linewidth=lw)
 
     # Vòng tròn
-    for r in [1.05, 0.95, 0.85]:
+    for r in [ 0.95, 0.85]:
         circle_theta = np.linspace(0, 2*np.pi, 1000)
         x = x_center + np.cos(-circle_theta) * r * radius
         y = y_center + np.sin(-circle_theta) * r * radius
