@@ -910,10 +910,10 @@ except Exception as e:
 
 
 
-# ================
+# ========================
 # 1. THÔNG TIN CƠ BẢN
-# ================
-x, y = 21.123, 105.08
+# ========================
+x, y = 21.123, 105.8
 dx = dy = 0.005
 west, east = y - dx, y + dx
 south, north = x - dy, x + dy
@@ -922,26 +922,45 @@ lat_tile = int(north)
 lon_tile = int(east)
 tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
 
-srtm_dir = "dulieu"
+srtm_dir = r"D:/diamach/srtm"
 hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
+out_path = r"D:/diamach/vietnamcrop.tif"
+output_img = r"D:/diamach/final_plot.png"
 
-# ================
-# 2. ĐỌC VÀ CẮT DEM
-# ================
+# ========================
+# 2. XỬ LÝ DEM
+# ========================
 with rasterio.open(hgt_path) as src:
     window = from_bounds(west, south, east, north, src.transform)
     dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
     transform = src.window_transform(window)
     profile = src.profile
 
-# Chuyển sang EPSG:3857
-transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-left, bottom = transformer.transform(west, south)
-right, top = transformer.transform(east, north)
+profile.update({
+    "driver": "GTiff",
+    "height": dem_crop.shape[0],
+    "width": dem_crop.shape[1],
+    "transform": transform,
+    "nodata": -9999
+})
+with rasterio.open(out_path, "w", **profile) as dst:
+    dst.write(dem_crop, 1)
 
-# ================
-# 3. VẼ HÌNH + ẢNH NỀN
-# ================
+with rasterio.open(out_path) as data:
+    data_array = data.read(1).astype(np.float64)
+    transform = data.transform
+
+nrows, ncols = data_array.shape
+xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
+yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
+Xx, Yx = np.meshgrid(xt, yt)
+
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+Xx3857, Yx3857 = transformer.transform(Xx, Yx)
+
+# ========================
+# 3. HÀM VẼ VÒNG FIBONACCI
+# ========================
 def fibonacci_mod(mod, length):
     seq = [0, 1]
     for _ in range(length - 2):
@@ -959,18 +978,21 @@ def draw_fibonacci_circle(ax, center_x, center_y, radius=1000):
     theta = -np.linspace(0, 2*np.pi, 24, endpoint=False)
     shift = np.deg2rad(7.5)
 
+    # Đường chia
     for i, t in enumerate(theta):
         lw = 2 if i % 3 == 2 else 1
         x0, y0 = center_x + np.cos(t + shift) * radius * 0.75, center_y + np.sin(t + shift) * radius * 0.75
         x1, y1 = center_x + np.cos(t + shift) * radius * 1.05, center_y + np.sin(t + shift) * radius * 1.05
         ax.plot([x0, x1], [y0, y1], color='black', linewidth=lw)
 
+    # Vòng tròn
     for r in [1.05, 0.95, 0.85, 0.75]:
         theta_full = np.linspace(0, 2 * np.pi, 1000)
         x = center_x + np.cos(-theta_full) * radius * r
         y = center_y + np.sin(-theta_full) * radius * r
         ax.plot(x, y, color='black', linewidth=1)
 
+    # Các con số
     for i, t in enumerate(theta):
         x = center_x + np.cos(t) * radius * 0.9
         y = center_y + np.sin(t) * radius * 0.9
@@ -986,30 +1008,37 @@ def draw_fibonacci_circle(ax, center_x, center_y, radius=1000):
 
     ax.text(center_x, center_y, '+', ha='center', va='center', fontsize=12, fontweight='bold')
 
+# ========================
+# 4. VẼ TOÀN BỘ
+# ========================
+fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
 
-# Vẽ
-fig, ax = plt.subplots(figsize=(8, 8), dpi=100)
+# Tâm ảnh và góc zoom
+x_center, y_center = transformer.transform(y, x)
+x0, y0 = transformer.transform(west, south)
+x1, y1 = transformer.transform(east, north)
 
-# Vẽ DEM contour
-rows, cols = dem_crop.shape
-xt = np.linspace(left, right, cols)
-yt = np.linspace(bottom, top, rows)
-Xx, Yx = np.meshgrid(xt, yt)
-levels = np.linspace(np.nanmin(dem_crop), np.nanmax(dem_crop), 21)
-cf = ax.contourf(Xx, Yx, dem_crop, cmap="rainbow", levels=levels, alpha=0.6)
 
-# Tải ảnh nền theo đúng extent
-img, ext = ctx.bounds2img(left, bottom, right, top, ll=True, source=ctx.providers.Esri.WorldImagery, zoom=15)
-ax.imshow(img, extent=ext, origin='upper')
+
+# Sau đó thêm ảnh nền
+# Tải ảnh vệ tinh đúng vùng bounding box DEM
+img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
+
+# Hiển thị nền ảnh vệ tinh
+ax.imshow(img, extent=ext, origin="upper")
+
+# Vẽ contour
+levels = np.linspace(data_array.min(), data_array.max(), 21)
+cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alpha=0.5)
 
 # Vẽ vòng Fibonacci
-x_center, y_center = transformer.transform(y, x)
 draw_fibonacci_circle(ax, x_center, y_center, radius=500)
 
-ax.set_xlim(left - 1500, right + 1500)
-ax.set_ylim(bottom - 1500, top + 1500)
+# Tắt trục và lưu ảnh
 ax.set_axis_off()
 plt.tight_layout()
+
+plt.show()
 st.pyplot(fig)
 
 
