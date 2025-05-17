@@ -834,13 +834,13 @@ dt= st.number_input("t", value=None, format="%.6f")
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
 if st.button("run"):
-    if x is None or y is None:
-        st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
+    if x is None or y is None or dt is None :
+        st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ và dt.")
     else:
         try:
             dt= dx = dy 
-            west, east = y - dx, y + dx
-            south, north = x - dy, x + dy
+            west, east = y - dt, y + dt
+            south, north = x - dt, x + dt
 
             lat_tile = int(north)
             lon_tile = int(east)
