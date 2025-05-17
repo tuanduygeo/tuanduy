@@ -1027,7 +1027,7 @@ plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
 # ====== SLIDER GÓC ======
 # Slider góc
 angle_deg = st.slider("🎯 Góc mũi tên (0° = Bắc, thuận chiều kim đồng hồ)", 0, 359, 0)
-angle_rad = np.deg2rad(angle_deg - 90)
+angle_rad = np.deg2rad(angle_deg + 90)
 
 # ====== VẼ MŨI TÊN ======
 arrow_length = 500  # 👈 bằng với bán kính vòng
