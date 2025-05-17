@@ -961,35 +961,29 @@ Xx3857, Yx3857 = transformer.transform(Xx, Yx)
 # ========================
 # 3. HÀM VẼ VÒNG FIBONACCI
 # ========================
-def plot_fibonacci_labels_only(labels_inner):
+def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500):
     n = len(labels_inner)
     theta = -np.linspace(0, 2*np.pi, n, endpoint=False)
     shift = np.deg2rad(7.5)
 
-    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw={'projection': 'polar'})
-    ax.spines['polar'].set_visible(False)
-    ax.set_theta_direction(-1)
-    ax.set_theta_offset(np.pi / 2)
-
-    # Vẽ đường chia chính
+    # Vẽ chia
     bold_indices = {2, 5, 8, 11, 14, 17, 20, 23}
     for i, t in enumerate(theta):
         lw = 2 if i in bold_indices else 1
-        ax.plot([t + shift, t + shift], [0.75, 1.05], color='black', linewidth=lw)
+        ax.plot([t + shift, t + shift], [0.75 * radius, 1.05 * radius], color='black', linewidth=lw)
 
     # Vẽ vòng tròn
     for r in [1.05, 0.95, 0.85]:
         circle_theta = np.linspace(0, 2*np.pi, 1000)
-        ax.plot(-circle_theta, [r] * len(circle_theta), color='black', linewidth=1)
+        ax.plot(x_center + np.cos(-circle_theta) * r * radius,
+                y_center + np.sin(-circle_theta) * r * radius,
+                color='black', linewidth=1)
 
-    # Vẽ nhãn vòng trong
+    # Vẽ nhãn
     for t, label in zip(theta, labels_inner):
-        ax.text(t, 0.9, label, ha='center', va='center', fontsize=9, color='darkred')
-
-    ax.text(0, 0, '+', ha='center', va='center', fontsize=12, fontweight='bold')
-    ax.set_yticklabels([])
-    ax.set_xticklabels([])
-    ax.grid(False)
+        x = x_center + np.cos(t) * 0.9 * radius
+        y = y_center + np.sin(t) * 0.9 * radius
+        ax.text(x, y, label, ha='center', va='center', fontsize=9, color='darkred')
 labels_24 = [
     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
     'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
