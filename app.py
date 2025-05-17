@@ -827,8 +827,8 @@ except Exception as e:
     st.text(str(e))
 
 # 1. tính ========================
-x = st.number_input("x", value=None, format="%.6f")
-y = st.number_input("y", value=None, format="%.6f")
+x = st.number_input("v", value=None, format="%.6f")
+y = st.number_input("k", value=None, format="%.6f")
 
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
