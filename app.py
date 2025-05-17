@@ -904,15 +904,14 @@ except Exception as e:
     st.error(f"Lỗi: {e}")
 
 
-st.title("📍 Cắt DEM theo vị trí nhập")
 
-x = st.number_input("📍 Nhập vĩ độ (latitude)", value=None, format="%.6f")
-y = st.number_input("📍 Nhập kinh độ (longitude)", value=None, format="%.6f")
+x = st.number_input("x", value=None, format="%.6f")
+y = st.number_input("y", value=None, format="%.6f")
 
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
-if st.button("📎 Tính toán DEM"):
+if st.button("run"):
     if x is None or y is None:
         st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
     else:
