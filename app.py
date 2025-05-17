@@ -922,10 +922,10 @@ lat_tile = int(north)
 lon_tile = int(east)
 tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
 
-srtm_dir = r"D:/diamach/srtm"
+srtm_dir = r"dulieu"
 hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
-out_path = r"D:/diamach/vietnamcrop.tif"
-output_img = r"D:/diamach/final_plot.png"
+out_path = r"dulieu/vietnamcrop.tif"
+output_img = r"dulieu/final_plot.png"
 
 # ========================
 # 2. XỬ LÝ DEM
