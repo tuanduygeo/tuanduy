@@ -914,21 +914,21 @@ if st.button("run"):
             y0 = y_center + np.sin(t + shift) * radius * 0.85
             x1 = x_center + np.cos(t + shift) * radius * 0.95
             y1 = y_center + np.sin(t + shift) * radius * 0.95
-            ax.plot([x0, x1], [y0, y1], color='black', linewidth=lw)
+            ax.plot([x0, x1], [y0, y1], color='white', linewidth=lw)
     
         # Vòng tròn
         for r in [ 0.95, 0.85]:
             circle_theta = np.linspace(0, 2*np.pi, 1000)
             x = x_center + np.cos(-circle_theta) * r * radius
             y = y_center + np.sin(-circle_theta) * r * radius
-            ax.plot(x, y, color='black', linewidth=1)
+            ax.plot(x, y, color='white', linewidth=1)
     
         # Nhãn chữ
         for t, label in zip(theta, labels_inner):
             x = x_center + np.cos(t) * radius * 0.9
             y = y_center + np.sin(t) * radius * 0.9
-            ax.text(x, y, label, ha='center', va='center', fontsize=9, color='white')
-        ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, fontweight='bold')
+            ax.text(x, y, label, ha='center', va='center', fontsize=12, color='white')
+        ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22,color='white', fontweight='bold')
     labels_24 = [
         'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
         'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
