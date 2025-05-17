@@ -988,6 +988,7 @@ def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500)
         x = x_center + np.cos(t) * radius * 0.9
         y = y_center + np.sin(t) * radius * 0.9
         ax.text(x, y, label, ha='center', va='center', fontsize=9, color='darkred')
+    ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, fontweight='bold')
 labels_24 = [
     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
     'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
