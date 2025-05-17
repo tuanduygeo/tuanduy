@@ -838,7 +838,7 @@ if st.button("run"):
         st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ và dt.")
     else:
         try:
-            dt= dx = dy 
+            dx = dy = dt
             west, east = y - dt, y + dt
             south, north = x - dt, x + dt
 
@@ -940,7 +940,10 @@ if st.button("run"):
     # 4. VẼ TOÀN BỘ
     # ========================
     fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
-    
+    # Tâm ảnh và góc zoom
+    x_center, y_center = transformer.transform(y, x)
+    x0, y0 = transformer.transform(west, south)
+    x1, y1 = transformer.transform(east, north)
     
     
     
