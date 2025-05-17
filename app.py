@@ -59,12 +59,12 @@ if html_files:
 
     # Nếu chưa chọn gì → hiển thị mặc định bản đồ đầu tiên
     if st.session_state.selected_idx is None:
-        default_html = random.choice(html_files)
+        default_html = html_files[0]
         html_path = os.path.join(html_dir, default_html)
         st.subheader(f"📍 Bản đồ mặc định: {default_html}")
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1100, scrolling=True)
+            components.html(html_content, height=900, scrolling=True)
 
     # Nếu đã chọn → hiển thị bản đồ có nút tiến lùi
     else:
@@ -85,7 +85,7 @@ if html_files:
         html_path = os.path.join(html_dir, selected_html)
         with open(html_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-            components.html(html_content, height=1100, scrolling=True)
+            components.html(html_content, height=900, scrolling=True)
 else:
     st.warning("Không tìm thấy file HTML nào trong thư mục 'dulieu/'")
 
