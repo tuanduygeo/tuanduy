@@ -1025,8 +1025,9 @@ cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alph
 # Vẽ vòng Fibonacci
 plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
 # ====== SLIDER GÓC ======
-angle_deg = st.slider("🎯 Góc mũi tên (độ, 0° là hướng lên trên)", min_value=0, max_value=359, value=0)
-angle_rad = np.deg2rad(angle_deg - 90)  # vì 0 độ là hướng lên
+# Slider góc
+angle_deg = st.slider("🎯 Góc mũi tên (0° = Bắc, thuận chiều kim đồng hồ)", 0, 359, 0)
+angle_rad = np.deg2rad(angle_deg - 90)
 
 # ====== VẼ MŨI TÊN ======
 arrow_length = 500  # 👈 bằng với bán kính vòng
