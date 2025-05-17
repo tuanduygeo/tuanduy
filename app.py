@@ -922,7 +922,7 @@ lat_tile = int(north)
 lon_tile = int(east)
 tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
 
-srtm_dir = "D:/diamach/srtm"
+srtm_dir = "dulieu"
 hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
 
 # ================
