@@ -941,10 +941,7 @@ if st.button("run"):
     # ========================
     fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
     
-    # Tâm ảnh và góc zoom
-    x_center, y_center = transformer.transform(y, x)
-    x0, y0 = transformer.transform(west, south)
-    x1, y1 = transformer.transform(east, north)
+    
     
     
     
@@ -962,7 +959,7 @@ if st.button("run"):
     mask = data_array >= threshold
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=2)
     # Vẽ vòng Fibonacci
-    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
+    plot_fibonacci_labels_only(ax, x, y, labels_24, radius=500)
     # Slider góc
     #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
     
