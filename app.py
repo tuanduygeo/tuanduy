@@ -1024,20 +1024,19 @@ cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alph
 
 # Vẽ vòng Fibonacci
 plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
-# ====== SLIDER GÓC ======
 # Slider góc
 angle_deg = st.slider("🎯 Góc mũi tên (0° = Bắc, thuận chiều kim đồng hồ)", 0, 359, 0)
-angle_rad = np.deg2rad(angle_deg + 90)
+
+# Chuyển sang radian: 0° ở Bắc, tăng thuận chiều kim đồng hồ
+angle_rad = np.deg2rad(-angle_deg + 90)
 
 # ====== VẼ MŨI TÊN ======
 arrow_length = 500  # 👈 bằng với bán kính vòng
 x_end = x_center + arrow_length * np.cos(angle_rad)
 y_end = y_center + arrow_length * np.sin(angle_rad)
 
-ax.annotate(
-    "", xy=(x_end, y_end), xytext=(x_center, y_center),
-    arrowprops=dict(arrowstyle="->", color="black", linewidth=2)
-)
+# Vẽ trên matplotlib hoặc streamlit.pyplot
+ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=50, head_length=70, fc='red', ec='red')
 
 # Tắt trục và lưu ảnh
 ax.set_axis_off()
