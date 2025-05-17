@@ -913,7 +913,18 @@ except Exception as e:
 # ========================
 # 1. THÔNG TIN CƠ BẢN
 # ========================
-x, y = 21.123, 105.8
+# --- Giao diện nút bấm ---
+if "show_input" not in st.session_state:
+    st.session_state.show_input = False
+
+if st.button("📍 Nhập tọa độ mới"):
+    st.session_state.show_input = True
+
+# --- Khi người dùng bấm nút, hiển thị ô nhập ---
+if st.session_state.show_input:
+    x = st.number_input("Nhập kinh độ ", value=105.81)
+    y = st.number_input("Nhập vĩ độ ", value=21.12)
+
 dx = dy = 0.005
 west, east = y - dx, y + dx
 south, north = x - dy, x + dy
