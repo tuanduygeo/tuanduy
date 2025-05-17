@@ -900,7 +900,7 @@ if st.button("run"):
     # 3. HÀM VẼ VÒNG FIBONACCI
     # ========================
     radius=dt*111320
-    def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius):
+    def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
         n = len(labels_inner)
         theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
         shift = np.deg2rad(7.5)
