@@ -904,15 +904,17 @@ except Exception as e:
     st.error(f"Lỗi: {e}")
 
 
-x = st.number_input("📍 Nhập vĩ độ", value=None, format="%.6f")
-y = st.number_input("📍 Nhập kinh độ ", value=None, format="%.6f")
+st.title("📍 Cắt DEM theo vị trí nhập")
+
+x = st.number_input("📍 Nhập vĩ độ (latitude)", value=None, format="%.6f")
+y = st.number_input("📍 Nhập kinh độ (longitude)", value=None, format="%.6f")
 
 # ========================
-# 2. XỬ LÝ KHI BẤM "TÍNH"
+# 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
-if st.button("📍 Tính"):
+if st.button("📎 Tính toán DEM"):
     if x is None or y is None:
-        st.warning("⚠️ Vui lòng nhập đầy đủ kinh độ và vĩ độ.")
+        st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
     else:
         try:
             dx = dy = 0.005
@@ -926,56 +928,53 @@ if st.button("📍 Tính"):
             srtm_dir = "dulieu"
             hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
             out_path = os.path.join(srtm_dir, "vietnamcrop.tif")
-            
 
-            # Kiểm tra file tồn tại
             if not os.path.exists(hgt_path):
-                st.error(f"❌ Không tìm thấy file `{hgt_path}`.")
+                st.error(f"❌ Không tìm thấy file: `{hgt_path}`.")
             else:
+                # ========================
+                # 3. XỬ LÝ DEM & GHI FILE MỚI
+                # ========================
                 with rasterio.open(hgt_path) as src:
                     window = from_bounds(west, south, east, north, src.transform)
                     dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
                     transform = src.window_transform(window)
                     profile = src.profile
 
-                st.success("✅ Đã cắt dữ liệu DEM thành công.")
-                st.write(f"🗂️ File dùng: `{tile}.hgt`")
-                st.write(f"🌐 Vùng cắt: {west:.6f}, {south:.6f}, {east:.6f}, {north:.6f}")
+                profile.update({
+                    "driver": "GTiff",
+                    "height": dem_crop.shape[0],
+                    "width": dem_crop.shape[1],
+                    "transform": transform,
+                    "nodata": -9999
+                })
+
+                with rasterio.open(out_path, "w", **profile) as dst:
+                    dst.write(dem_crop, 1)
+
+                st.success("✅ Đã cắt và lưu DEM thành công.")
+                st.write(f"🗂️ File đầu ra: `{out_path}`")
+
+                # ========================
+                # 4. CHUYỂN HỆ TỌA ĐỘ EPSG:3857
+                # ========================
+                with rasterio.open(out_path) as data:
+                    data_array = data.read(1).astype(np.float64)
+                    transform = data.transform
+
+                nrows, ncols = data_array.shape
+                xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
+                yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
+                Xx, Yx = np.meshgrid(xt, yt)
+
+                transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+                Xx3857, Yx3857 = transformer.transform(Xx, Yx)
+
+                st.success("📐 Chuyển đổi tọa độ sang EPSG:3857 thành công.")
+                st.write(f"🔹 Kích thước raster: {nrows} hàng x {ncols} cột")
 
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
-    # ========================
-    # 2. XỬ LÝ DEM
-    # ========================
-    with rasterio.open(hgt_path) as src:
-        window = from_bounds(west, south, east, north, src.transform)
-        dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
-        transform = src.window_transform(window)
-        profile = src.profile
-    
-    profile.update({
-        "driver": "GTiff",
-        "height": dem_crop.shape[0],
-        "width": dem_crop.shape[1],
-        "transform": transform,
-        "nodata": -9999
-    })
-    with rasterio.open(out_path, "w", **profile) as dst:
-        dst.write(dem_crop, 1)
-    
-    with rasterio.open(out_path) as data:
-        data_array = data.read(1).astype(np.float64)
-        transform = data.transform
-    
-    nrows, ncols = data_array.shape
-    xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
-    yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
-    Xx, Yx = np.meshgrid(xt, yt)
-    
-    transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-    Xx3857, Yx3857 = transformer.transform(Xx, Yx)
-    
-    # ========================
     # 3. HÀM VẼ VÒNG FIBONACCI
     # ========================
     def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500):
