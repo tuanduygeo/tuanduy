@@ -10,7 +10,12 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import requests
-
+import os
+import rasterio
+from rasterio.windows import from_bounds
+from rasterio.enums import Resampling
+from pyproj import Transformer
+import contextily as ctx
 st.set_page_config(layout="wide")
 st.markdown("""
 ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
@@ -899,6 +904,113 @@ except Exception as e:
     st.error(f"Lỗi: {e}")
 
 
+# streamlit_app.py
+
+
+
+
+
+# ================
+# 1. THÔNG TIN CƠ BẢN
+# ================
+x, y = 21.123, 105.8
+dx = dy = 0.005
+west, east = y - dx, y + dx
+south, north = x - dy, x + dy
+
+lat_tile = int(north)
+lon_tile = int(east)
+tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
+
+srtm_dir = "D:/diamach/srtm"
+hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
+
+# ================
+# 2. ĐỌC VÀ CẮT DEM
+# ================
+with rasterio.open(hgt_path) as src:
+    window = from_bounds(west, south, east, north, src.transform)
+    dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
+    transform = src.window_transform(window)
+    profile = src.profile
+
+# Chuyển sang EPSG:3857
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+left, bottom = transformer.transform(west, south)
+right, top = transformer.transform(east, north)
+
+# ================
+# 3. VẼ HÌNH + ẢNH NỀN
+# ================
+def fibonacci_mod(mod, length):
+    seq = [0, 1]
+    for _ in range(length - 2):
+        seq.append((seq[-1] + seq[-2]) % mod)
+    return seq
+
+def draw_fibonacci_circle(ax, center_x, center_y, radius=1000):
+    fib9 = fibonacci_mod(9, 24)
+    fib10 = fibonacci_mod(10, 60)
+    labels = [
+        'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
+        'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
+        'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
+    ]
+    theta = -np.linspace(0, 2*np.pi, 24, endpoint=False)
+    shift = np.deg2rad(7.5)
+
+    for i, t in enumerate(theta):
+        lw = 2 if i % 3 == 2 else 1
+        x0, y0 = center_x + np.cos(t + shift) * radius * 0.75, center_y + np.sin(t + shift) * radius * 0.75
+        x1, y1 = center_x + np.cos(t + shift) * radius * 1.05, center_y + np.sin(t + shift) * radius * 1.05
+        ax.plot([x0, x1], [y0, y1], color='black', linewidth=lw)
+
+    for r in [1.05, 0.95, 0.85, 0.75]:
+        theta_full = np.linspace(0, 2 * np.pi, 1000)
+        x = center_x + np.cos(-theta_full) * radius * r
+        y = center_y + np.sin(-theta_full) * radius * r
+        ax.plot(x, y, color='black', linewidth=1)
+
+    for i, t in enumerate(theta):
+        x = center_x + np.cos(t) * radius * 0.9
+        y = center_y + np.sin(t) * radius * 0.9
+        ax.text(x, y, str(fib9[i]), ha='center', va='center', fontsize=6)
+
+        x2 = center_x + np.cos(t) * radius * 1.0
+        y2 = center_y + np.sin(t) * radius * 1.0
+        ax.text(x2, y2, str(fib10[i]), ha='center', va='center', fontsize=6, color='darkblue')
+
+        x3 = center_x + np.cos(t) * radius * 0.8
+        y3 = center_y + np.sin(t) * radius * 0.8
+        ax.text(x3, y3, labels[i], ha='center', va='center', fontsize=6, color='darkred')
+
+    ax.text(center_x, center_y, '+', ha='center', va='center', fontsize=12, fontweight='bold')
+
+
+# Vẽ
+fig, ax = plt.subplots(figsize=(8, 8), dpi=100)
+
+# Vẽ DEM contour
+rows, cols = dem_crop.shape
+xt = np.linspace(left, right, cols)
+yt = np.linspace(bottom, top, rows)
+Xx, Yx = np.meshgrid(xt, yt)
+levels = np.linspace(np.nanmin(dem_crop), np.nanmax(dem_crop), 21)
+cf = ax.contourf(Xx, Yx, dem_crop, cmap="rainbow", levels=levels, alpha=0.6)
+
+# Tải ảnh nền theo đúng extent
+img, ext = ctx.bounds2img(left, bottom, right, top, ll=True, source=ctx.providers.Esri.WorldImagery, zoom=15)
+ax.imshow(img, extent=ext, origin='upper')
+
+# Vẽ vòng Fibonacci
+x_center, y_center = transformer.transform(y, x)
+draw_fibonacci_circle(ax, x_center, y_center, radius=500)
+
+ax.set_xlim(left - 1500, right + 1500)
+ax.set_ylim(bottom - 1500, top + 1500)
+ax.set_axis_off()
+plt.tight_layout()
+st.pyplot(fig)
 
 
 
