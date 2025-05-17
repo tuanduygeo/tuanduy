@@ -946,17 +946,15 @@ if st.button("run"):
     
     # Tâm ảnh và góc zoom
     x_center, y_center = transformer.transform(y, x)
-    x0, y0 = transformer.transform(west, south)
-    x1, y1 = transformer.transform(east, north)
+    x0, x1 = Xx3857.min(), Xx3857.max()
+    y0, y1 = Yx3857.min(), Yx3857.max()
     
-    
-    
-    # Sau đó thêm ảnh nền
-    # Tải ảnh vệ tinh đúng vùng bounding box DEM
     img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
-    
-    # Hiển thị nền ảnh vệ tinh
     ax.imshow(img, extent=ext, origin="upper")
+    
+    # Khớp lại giới hạn hiển thị
+    ax.set_xlim(x0, x1)
+    ax.set_ylim(y0, y1)
     
     # Vẽ contour
     levels = np.linspace(data_array.min(), data_array.max(), 21)
