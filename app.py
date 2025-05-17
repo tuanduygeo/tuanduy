@@ -1055,7 +1055,7 @@ if st.button("run"):
     y_end = y_center + arrow_length * np.sin(angle_rad)
     
     # Vẽ trên matplotlib hoặc streamlit.pyplot
-    ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=10, head_length=15, fc='black', ec='black')
+    # ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=10, head_length=15, fc='black', ec='black')
     
     # Tắt trục và lưu ảnh
     ax.set_axis_off()
