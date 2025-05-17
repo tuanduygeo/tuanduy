@@ -910,34 +910,50 @@ except Exception as e:
 
 
 
+# 1. GIAO DIỆN NHẬP TỌA ĐỘ
 # ========================
-# 1. THÔNG TIN CƠ BẢN
+st.markdown("### 🗺️ Nhập tọa độ bạn muốn kiểm tra")
+
+x = st.number_input("📍 Nhập kinh độ (longitude)", value=None, format="%.6f")
+y = st.number_input("📍 Nhập vĩ độ (latitude)", value=None, format="%.6f")
+
 # ========================
-# --- Giao diện nút bấm ---
-if "show_input" not in st.session_state:
-    st.session_state.show_input = False
+# 2. XỬ LÝ KHI BẤM "TÍNH"
+# ========================
+if st.button("📍 Tính"):
+    if x is None or y is None:
+        st.warning("⚠️ Vui lòng nhập đầy đủ kinh độ và vĩ độ.")
+    else:
+        try:
+            dx = dy = 0.005
+            west, east = y - dx, y + dx
+            south, north = x - dy, x + dy
 
-if st.button("📍 Nhập tọa độ mới"):
-    st.session_state.show_input = True
+            lat_tile = int(north)
+            lon_tile = int(east)
+            tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
 
-# --- Khi người dùng bấm nút, hiển thị ô nhập ---
-if st.session_state.show_input:
-    x = st.number_input("Nhập kinh độ ", value=105.81)
-    y = st.number_input("Nhập vĩ độ ", value=21.12)
+            srtm_dir = "dulieu"
+            hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
+            out_path = os.path.join(srtm_dir, "vietnamcrop.tif")
+            
 
-    dx = dy = 0.005
-    west, east = y - dx, y + dx
-    south, north = x - dy, x + dy
-    
-    lat_tile = int(north)
-    lon_tile = int(east)
-    tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
-    
-    srtm_dir = r"dulieu"
-    hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
-    out_path = r"dulieu/vietnamcrop.tif"
-    output_img = r"dulieu/final_plot.png"
-    
+            # Kiểm tra file tồn tại
+            if not os.path.exists(hgt_path):
+                st.error(f"❌ Không tìm thấy file `{hgt_path}`.")
+            else:
+                with rasterio.open(hgt_path) as src:
+                    window = from_bounds(west, south, east, north, src.transform)
+                    dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
+                    transform = src.window_transform(window)
+                    profile = src.profile
+
+                st.success("✅ Đã cắt dữ liệu DEM thành công.")
+                st.write(f"🗂️ File dùng: `{tile}.hgt`")
+                st.write(f"🌐 Vùng cắt: {west:.6f}, {south:.6f}, {east:.6f}, {north:.6f}")
+
+        except Exception as e:
+            st.error(f"Đã xảy ra lỗi: {e}")
     # ========================
     # 2. XỬ LÝ DEM
     # ========================
