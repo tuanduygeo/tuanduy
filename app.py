@@ -963,7 +963,7 @@ Xx3857, Yx3857 = transformer.transform(Xx, Yx)
 # ========================
 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500):
     n = len(labels_inner)
-    theta = np.linspace(0, 2*np.pi, n, endpoint=False) - np.pi/2
+    theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
     shift = np.deg2rad(7.5)
 
     # Đường chia
