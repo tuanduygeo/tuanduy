@@ -913,7 +913,7 @@ except Exception as e:
 # ================
 # 1. THÔNG TIN CƠ BẢN
 # ================
-x, y = 20.123, 107.01
+x, y = 21.123, 105.08
 dx = dy = 0.005
 west, east = y - dx, y + dx
 south, north = x - dy, x + dy
