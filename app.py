@@ -967,7 +967,7 @@ def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=500)
     shift = np.deg2rad(7.5)
 
     # Đường chia
-    bold_indices = {3, 6, 9, 12, 15, 18, 22, 24}
+    bold_indices = {1, 4, 7, 10, 13, 16, 19, 22}
     for i, t in enumerate(theta):
         lw = 2 if i in bold_indices else 1
         x0 = x_center + np.cos(t + shift) * radius * 0.85
