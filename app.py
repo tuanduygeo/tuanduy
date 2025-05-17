@@ -960,8 +960,8 @@ if st.button("run"):
     
     # Vẽ contour
     levels = np.linspace(data_array.min(), data_array.max(), 21)
-    cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alpha=0.1)
-    contour_lines = ax.contour(Xx3857, Yx3857, data_array, levels=levels, cmap='rainbow', linewidths=1.5)
+    cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alpha=0)
+    contour_lines = ax.contour(Xx3857, Yx3857, data_array, levels=levels, cmap='rainbow', linewidths=1)
     threshold = np.percentile(data_array, 90)
     mask = data_array >= threshold
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=2)
