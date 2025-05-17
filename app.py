@@ -899,7 +899,7 @@ if st.button("run"):
             st.error(f"Đã xảy ra lỗi: {e}")
     # 3. HÀM VẼ VÒNG FIBONACCI
     # ========================
-    radius=dt*111320
+radius=dt*111320
     def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
         n = len(labels_inner)
         theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
