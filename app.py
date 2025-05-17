@@ -1040,19 +1040,19 @@ if st.button("run"):
     # Vẽ vòng Fibonacci
     plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
     # Slider góc
-    col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
+    #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
     
-    with col1:
-        angle_deg = st.slider("🎯 Góc", 0, 359, 0)
+   # with col1:
+   #     angle_deg = st.slider("🎯 Góc", 0, 359, 0)
     
     
     # Chuyển sang radian: 0° ở Bắc, tăng thuận chiều kim đồng hồ
-    angle_rad = np.deg2rad(-angle_deg + 90)
+   # angle_rad = np.deg2rad(-angle_deg + 90)
     
     # ====== VẼ MŨI TÊN ======
-    arrow_length = 500  # 👈 bằng với bán kính vòng
-    x_end = x_center + arrow_length * np.cos(angle_rad)
-    y_end = y_center + arrow_length * np.sin(angle_rad)
+   # arrow_length = 500  # 👈 bằng với bán kính vòng
+   # x_end = x_center + arrow_length * np.cos(angle_rad)
+   # y_end = y_center + arrow_length * np.sin(angle_rad)
     
     # Vẽ trên matplotlib hoặc streamlit.pyplot
     # ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=10, head_length=15, fc='black', ec='black')
