@@ -830,6 +830,19 @@ except Exception as e:
 x = st.number_input("v", value=None, format="%.6f")
 y = st.number_input("k", value=None, format="%.6f")
 dt= st.number_input("t", value=None, format="%.6f")
+# Tâm vòng tròn
+x_center, y_center = x, y
+
+# Chuyển tâm sang hệ toạ độ 3857 để tính toán kích thước chuẩn (tính theo mét)
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+x_m, y_m = transformer.transform(y_center, x_center)  # lon, lat → x, y (meters)
+
+# Tính bounding box quanh tâm theo mét
+buffer_m = 500  # bán kính 500m để lấy ảnh nền
+x0 = x_m - buffer_m
+y0 = y_m - buffer_m
+x1 = x_m + buffer_m
+y1 = y_m + buffer_m
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
