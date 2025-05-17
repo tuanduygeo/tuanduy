@@ -1030,7 +1030,19 @@ ax.set_axis_off()
 plt.tight_layout()
 
 st.pyplot(fig)
+# ====== SLIDER GÓC ======
+angle_deg = st.slider("🎯 Góc mũi tên (độ, 0° là hướng lên trên)", min_value=0, max_value=359, value=0)
+angle_rad = np.deg2rad(angle_deg - 90)  # vì 0 độ là hướng lên
 
+# ====== VẼ MŨI TÊN ======
+arrow_length = 500  # 👈 bằng với bán kính vòng
+x_end = x_center + arrow_length * np.cos(angle_rad)
+y_end = y_center + arrow_length * np.sin(angle_rad)
+
+ax.annotate(
+    "", xy=(x_end, y_end), xytext=(x_center, y_center),
+    arrowprops=dict(arrowstyle="->", color="black", linewidth=2)
+)
 
 
 
