@@ -965,7 +965,7 @@ if st.button("run"):
     mask = data_array >= threshold
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=2)
     # Vẽ vòng Fibonacci
-    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=500)
+    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
     # Slider góc
     #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
     
