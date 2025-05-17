@@ -965,7 +965,7 @@ if st.button("run"):
     mask = data_array >= threshold
     mask1= data_array <= threshold1
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=3)
-    ax.contour(Xx3857, Yx3857, mask1, levels=[0.5], colors='blue', linewidths=4)
+    ax.contour(Xx3857, Yx3857, mask1, levels=[0.5], colors='blue', linewidths=3)
     # Vẽ vòng Fibonacci
     plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
     plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
