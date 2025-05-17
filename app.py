@@ -927,7 +927,7 @@ if st.button("run"):
         for t, label in zip(theta, labels_inner):
             x = x_center + np.cos(t) * radius * 0.9
             y = y_center + np.sin(t) * radius * 0.9
-            ax.text(x, y, label, ha='center', va='center', fontsize=9, color='darkred')
+            ax.text(x, y, label, ha='center', va='center', fontsize=9, color='white')
         ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, fontweight='bold')
     labels_24 = [
         'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
@@ -965,6 +965,7 @@ if st.button("run"):
     mask = data_array >= threshold
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=2)
     # Vẽ vòng Fibonacci
+    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
     plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
     # Slider góc
     #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
