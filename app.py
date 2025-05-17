@@ -961,7 +961,7 @@ if st.button("run"):
     cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alpha=0)
     contour_lines = ax.contour(Xx3857, Yx3857, data_array, levels=levels, cmap='rainbow', linewidths=1)
     threshold = np.percentile(data_array, 90)
-    threshold1 = np.percentile(data_array, 5)
+    threshold1 = np.percentile(data_array, 2)
     mask = data_array >= threshold
     mask1= data_array <= threshold1
     ax.contour(Xx3857, Yx3857, mask, levels=[0.5], colors='red', linewidths=3)
