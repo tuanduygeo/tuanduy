@@ -829,7 +829,7 @@ except Exception as e:
 # 1. tính ========================
 x = st.number_input("v", value=None, format="%.6f")
 y = st.number_input("k", value=None, format="%.6f")
-
+dt= st.number_input("t", value=None, format="%.6f")
 # ========================
 # 2. NÚT TÍNH & KIỂM TRA FILE
 # ========================
@@ -838,7 +838,7 @@ if st.button("run"):
         st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
     else:
         try:
-            dx = dy = 0.005
+            dt= dx = dy 
             west, east = y - dx, y + dx
             south, north = x - dy, x + dy
 
