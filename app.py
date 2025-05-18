@@ -186,10 +186,20 @@ def main():
                 x_max, y_max = transformer.transform(lon_max, lat_max)
                 
                 # Vẽ arrow từ max về center
+                arrow_scale = 2  # gấp đôi độ dài gốc, tuỳ bạn
+
+                dx = x_center_map - x_max
+                dy = y_center_map - y_max
+                
                 ax.arrow(
                     x_max, y_max,
-                    x_center_map - x_max, y_center_map - y_max,
-                    head_width=10, head_length=15, fc='black', ec='black'
+                    arrow_scale * dx, arrow_scale * dy,
+                    head_width=60,         # đầu mũi tên to hơn
+                    head_length=100,       # dài đầu mũi tên hơn
+                    linewidth=10,          # thân mũi tên dày hơn
+                    length_includes_head=True,  # chiều dài bao gồm cả đầu mũi tên
+                    color='white',         # màu trắng nổi bật
+                    zorder=10              # vẽ nổi trên các lớp khác
                 )
                 
                 ax.set_axis_off()
