@@ -68,7 +68,7 @@ def main():
             st.warning("⚠️ Vui lòng nhập đúng định dạng tọa độ.")
         else:
             try:
-                
+                dx = dy = dt
                 west, east = y - dx, y + dx
                 south, north = x - dy, x + dy
     
