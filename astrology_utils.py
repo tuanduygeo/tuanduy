@@ -5,8 +5,7 @@ import numpy as np
 import pytz
 from datetime import datetime, date
 import matplotlib.pyplot as plt
-from fpdf import FPDF
-import tempfile
+
 def astrology_block():
     
 
@@ -16,11 +15,7 @@ def astrology_block():
     vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
     # Lấy giờ hiện tại ở múi giờ Việt Nam
     now_local = datetime.now(vn_tz)
-    def save_fig_to_temp(fig):
-        tmpfile = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-        fig.savefig(tmpfile.name, bbox_inches='tight', dpi=200)
-        plt.close(fig)
-        return tmpfile.name
+
     # Chuyển đổi giờ hiện tại về UTC
     now_utc = now_local.astimezone(pytz.utc)
 
@@ -345,7 +340,6 @@ def astrology_block():
         return fig  
     fig = draw_chart(planet_data)
     st.pyplot(fig, use_container_width=False)
-    img_chart_path = save_fig_to_temp(fig)
     plt.close(fig)
     df_planets = pd.DataFrame(planet_data)
 
@@ -667,70 +661,16 @@ def astrology_block():
     ax.grid(True)
     ax.legend()
     st.pyplot(fig)
-    img_life_path = save_fig_to_temp(fig) 
     plt.close(fig)
     filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
     st.markdown(f"#### **Điểm(Thang từ -10 đến 10):** `{median_score}`")
     st.markdown("""#### 📌 Hướng dẫn
-    - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
-      được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
-    - Các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
+    - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
+    - Trong biểu đồ này, các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
     - Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình và thường diễn biến đời người cũng hay lên xuống tại điểm này.
-    - Biểu đồ được tính từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay nghịch hànhv.v.
+    - Biểu đồ được tính cẩn thận từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay nghịch hành, cát tinh hay sát tinh v.v.
     """)
-    
-    
-    def df_to_text(df):
-        # Đổi DataFrame thành text table (giản đơn)
-        return df.to_string(index=False)
-    
-    def export_astrology_pdf_fpdf2(img_chart_path, df_planets, df_dasha, img_life_path):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Helvetica", size=14)
-        pdf.cell(0, 10, "BÁO CÁO CHIÊM TINH ẤN ĐỘ", ln=True, align='C')
-    
-        # 1. Biểu đồ lá số
-        pdf.set_font("Helvetica", size=12)
-        pdf.cell(0, 10, "1. Biểu đồ lá số:", ln=True)
-        pdf.image(img_chart_path, w=150)
-        pdf.ln(5)
-    
-        # 2. Bảng vị trí hành tinh
-        pdf.cell(0, 10, "2. Bảng vị trí hành tinh:", ln=True)
-        pdf.set_font("Courier", size=8)
-        planet_table_text = df_to_text(df_planets)
-        for line in planet_table_text.split('\n'):
-            pdf.cell(0, 5, line, ln=True)
-        pdf.ln(5)
-    
-        # 3. Bảng Mahadasha
-        pdf.set_font("Helvetica", size=12)
-        pdf.cell(0, 10, "3. Bảng Mahadasha:", ln=True)
-        pdf.set_font("Courier", size=8)
-        dasha_table_text = df_to_text(df_dasha)
-        for line in dasha_table_text.split('\n'):
-            pdf.cell(0, 5, line, ln=True)
-        pdf.ln(5)
-    
-        # 4. Biểu đồ đại vận (Line Chart)
-        pdf.set_font("Helvetica", size=12)
-        pdf.cell(0, 10, "4. Biểu đồ đại vận:", ln=True)
-        pdf.image(img_life_path, w=180)
-        pdf.ln(5)
-    
-        # Xuất ra bytes
-        return pdf.output(dest="S").encode("latin1")
-   
-    st.download_button(
-    label="📄 Tải báo cáo PDF Chiêm tinh",
-    data=export_astrology_pdf_fpdf2(img_chart_path, df_planets, df_dasha, img_life_path),
-    file_name="chiem_tinh_india_report.pdf",
-    mime="application/pdf"
-)
-    pdf.add_font("DejaVu", "", "DejaVuSans.ttf", uni=True)
-    pdf.set_font("DejaVu", size=12)
     pass
 
 # Thêm các hàm phụ trợ cho Chiêm tinh ở dưới (nếu cần)
