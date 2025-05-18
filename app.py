@@ -193,10 +193,10 @@ def main():
                 
                 ax.arrow(
                     x_max, y_max,
-                    arrow_scale * dx, arrow_scale * dy,
+                    dx, dy,
                     head_width=15,         # đầu mũi tên to hơn
-                    head_length=60,       # dài đầu mũi tên hơn
-                    linewidth=20,          # thân mũi tên dày hơn
+                    head_length=20,       # dài đầu mũi tên hơn
+                    linewidth=5,          # thân mũi tên dày hơn
                     length_includes_head=True,  # chiều dài bao gồm cả đầu mũi tên
                     color='white',         # màu trắng nổi bật
                     zorder=10              # vẽ nổi trên các lớp khác
