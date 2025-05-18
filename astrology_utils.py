@@ -341,6 +341,7 @@ def astrology_block():
         return fig  
     fig = draw_chart(planet_data)
     st.pyplot(fig, use_container_width=False)
+    img_chart_path = save_fig_to_temp(fig)
     plt.close(fig)
     df_planets = pd.DataFrame(planet_data)
 
@@ -662,6 +663,7 @@ def astrology_block():
     ax.grid(True)
     ax.legend()
     st.pyplot(fig)
+    img_life_path = save_fig_to_temp(fig) 
     plt.close(fig)
     filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
@@ -716,19 +718,19 @@ def astrology_block():
     
         # Xuất ra bytes
         return pdf.output(dest="S").encode("latin1")
-        def save_fig_to_temp(fig):
-            tmpfile = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-            fig.savefig(tmpfile.name, bbox_inches='tight', dpi=200)
-            plt.close(fig)
-            return tmpfile.name
-        st.download_button(
-        label="📄 Tải báo cáo PDF Chiêm tinh",
-        data=export_astrology_pdf_fpdf2(img_chart_path, df_planets, df_dasha, img_life_path),
-        file_name="chiem_tinh_india_report.pdf",
-        mime="application/pdf"
-    )
-        pdf.add_font("DejaVu", "", "DejaVuSans.ttf", uni=True)
-        pdf.set_font("DejaVu", size=12)
+    def save_fig_to_temp(fig):
+        tmpfile = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+        fig.savefig(tmpfile.name, bbox_inches='tight', dpi=200)
+        plt.close(fig)
+        return tmpfile.name
+    st.download_button(
+    label="📄 Tải báo cáo PDF Chiêm tinh",
+    data=export_astrology_pdf_fpdf2(img_chart_path, df_planets, df_dasha, img_life_path),
+    file_name="chiem_tinh_india_report.pdf",
+    mime="application/pdf"
+)
+    pdf.add_font("DejaVu", "", "DejaVuSans.ttf", uni=True)
+    pdf.set_font("DejaVu", size=12)
     pass
 
 # Thêm các hàm phụ trợ cho Chiêm tinh ở dưới (nếu cần)
