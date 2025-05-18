@@ -311,8 +311,11 @@ def main():
         contour_lines = ax.contour(Xx3857, Yx3857, data_array, levels=levels, cmap='rainbow', linewidths=1)
         threshold = np.percentile(data_array, 90)
         threshold1 = np.percentile(data_array, 2)
-        ax.contour(Xx3857, Yx3857, data_array, levels=[threshold], colors='red', linewidths=2)
-        ax.contour(Xx3857, Yx3857, data_array, levels=[threshold1], colors='blue', linewidths=2)
+        for level in levels:
+        if level >= threshold:
+            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors='red', linewidths=2.5)
+        if level <= threshold1:
+            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors='blue', linewidths=2.5)
         # Vẽ vòng Fibonacci
         plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
       
