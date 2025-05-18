@@ -35,7 +35,7 @@ def main():
        # --- Giao diện nhập ---
     col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
     with col1:
-        input_str = st.text_input("Tọa độ (vĩ độ, kinh độ)", value="", placeholder="10.123, 106.456")
+        input_str = st.text_input("x", value="")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
     with col4:
