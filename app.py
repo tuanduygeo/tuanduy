@@ -33,7 +33,7 @@ def main():
     astrology_block()
      # 1. tính ========================
     @st.cache_data
-    def generate_base_plot(x, y, dt, ...):  # ... là các tham số khác nếu cần
+    def generate_base_plot(x, y, dt):  # ... là các tham số khác nếu cần
         # --- Tạo data, chuyển đổi, vẽ contour, fibonacci ---
         # Xử lý nhập liệu
         x, y = None, None
