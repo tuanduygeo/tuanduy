@@ -177,9 +177,21 @@ def main():
         st.text(str(e))
     
     # 1. tính ========================
-    input_str = st.text_input("x:", value="")
-
-    # Xử lý tách chuỗi thành 2 số thực
+    # Tạo 3 cột ngang nhau cho input và nút
+    col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
+    
+    with col1:
+        input_str = st.text_input("Vĩ độ, Kinh độ", value="", placeholder="10.123, 106.456")
+    with col2:
+        dt = st.number_input("dt", min_value=0.001, max_value=0.5, value=0.005, step=0.001, format="%.3f")
+    with col3:
+        # Giữ chỗ trống, hoặc bạn có thể thêm thông tin hướng dẫn
+        st.markdown("<br>", unsafe_allow_html=True)  # Đẩy nút xuống đều hàng
+    
+    with col4:
+        run = st.button("Run", use_container_width=True)
+    
+    # Xử lý nhập liệu
     x, y = None, None
     if input_str:
         try:
@@ -188,19 +200,17 @@ def main():
                 x = float(parts[0])
                 y = float(parts[1])
         except Exception:
-            st.warning("⚠️ Cần nhhập định dạng chuẩn")
+            st.warning("⚠️ Cần nhập định dạng chuẩn (ví dụ: 10.123, 106.456)")
     
     if x is not None and y is not None:
-        st.success(f"Bạn đã nhập: vĩ độ={x}, kinh độ={y}")
-    dt = st.number_input("t", min_value=0.001, max_value=0.5, value=0.005, step=0.001, format="%.3f")
-    dx=dy=dt
-    radius=dt*111320
-    # ========================
-    # 2. NÚT TÍNH & KIỂM TRA FILE
-    # ========================
-    if st.button("run"):
+        st.success(f"Bạn đã nhập: vĩ độ={x}, kinh độ={y} | dt={dt}")
+    
+    radius = dt * 111320
+    
+    # Chỉ chạy khi bấm nút Run
+    if run:
         if x is None or y is None:
-            st.warning("⚠️ Vui lòng nhập đúng định dạng.")
+            st.warning("⚠️ Vui lòng nhập đúng định dạng tọa độ.")
         else:
             try:
                 
