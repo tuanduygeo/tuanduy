@@ -16,7 +16,7 @@ def main():
     st.markdown("### 2. Chiêm tinh Ấn Độ")
     astrology_block()
 
-    st.markdown("### 3. DEM, địa hình & Vòng Fibonacci")
+    
     dem_block()
 
     st.markdown("### 4. Ma phương, Schumann, Kp Index")
