@@ -134,6 +134,18 @@ def main():
                 ]
                 
                 fig, ax = plt.subplots(figsize=(12, 12))
+                # VẼ THƯỚC ĐO MÉT (SCALE BAR)
+                x_min, x_max = ax.get_xlim()
+                y_min, y_max = ax.get_ylim()
+                x0 = x_min + 0.05 * (x_max - x_min)
+                y0 = y_min + 0.07 * (y_max - y_min)
+                lengths = [50,100,150,200,250,300,350,400,450,500]
+                for i, l in enumerate(lengths):
+                    x_start = x0
+                    x_end = x0 + l
+                    ax.plot([x_start, x_end], [y0, y0], color='yellow', linewidth=5)
+                    ax.text(x_end, y0 + 20, f"{l}m", color='yellow', fontsize=14, va='bottom', ha='center', fontweight='bold')
+                    x0 = x_end
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
                 img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
@@ -183,7 +195,7 @@ def main():
                 x_max, y_max = transformer.transform(lon_max, lat_max)
                 
                 # Vẽ arrow từ max về center
-                arrow_scale = 2  # gấp đôi độ dài gốc, tuỳ bạn
+                arrow_scale = 2.3  # gấp đôi độ dài gốc, tuỳ bạn
 
                 dx = x_max - x_center_map
                 dy = y_max - y_center_map
