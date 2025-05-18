@@ -312,7 +312,7 @@ def main():
         levels = np.linspace(data_array.min(), data_array.max(), 21)
         cmap = cm.get_cmap('rainbow')
         norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
-        data_smooth = gaussian_filter(data_array, sigma=1.5)
+        data_smooth = gaussian_filter(data_array, sigma=1.2)
         cf = ax.contourf(Xx3857, Yx3857, data_smooth, cmap="rainbow", levels=levels, alpha=0)
         contour_lines = ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='rainbow', linewidths=1)
         threshold = np.percentile(data_array, 95)
