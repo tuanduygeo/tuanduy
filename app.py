@@ -20,7 +20,14 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
-
+hide_github_icon = """
+    <style>
+    a[href*="github.com"] {
+        display: none !important;
+    }
+    </style>
+"""
+st.markdown(hide_github_icon, unsafe_allow_html=True)
 def main():
     
     st.set_page_config(layout="wide")
