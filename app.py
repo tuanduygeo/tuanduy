@@ -200,12 +200,12 @@ def main():
         # Slider góc
         col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
         
-       with col1:
-           angle_deg = st.number_input("Góc", min_value=0, max_value=359, value=0, step=1)
-        
+        with col1:
+            angle_deg = st.number_input("Góc", min_value=0, max_value=359, value=0, step=1)
         
         # Chuyển sang radian: 0° ở Bắc, tăng thuận chiều kim đồng hồ
         angle_rad = np.deg2rad(-angle_deg + 90)
+
         
         # ====== VẼ MŨI TÊN ======
         arrow_length = radius  # 👈 bằng với bán kính vòng
