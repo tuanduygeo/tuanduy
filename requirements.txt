@@ -9,3 +9,4 @@ rasterio
 pyproj
 contextily
 Pillow
+scipy
