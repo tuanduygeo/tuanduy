@@ -170,7 +170,7 @@ def main():
                 
                 lat0 = x
                 lon0 = y
-                mask = ((ys - lat0) ** 2 + (xs - lon0) ** 2) <= (0.002 ** 2)
+                mask = ((ys - lat0) ** 2 + (xs - lon0) ** 2) <= ((dt/2) ** 2)
                 z_flat = z.ravel()
                 mask_flat = mask.ravel()
                 
@@ -188,8 +188,8 @@ def main():
                 # Vẽ arrow từ max về center
                 ax.arrow(
                     x_max, y_max,
-                    dt, dt,
-                    head_width=15, head_length=20, fc='black', ec='black'
+                    x_center_map - x_max, y_center_map - y_max,
+                    head_width=10, head_length=15, fc='black', ec='black'
                 )
                 
                 ax.set_axis_off()
