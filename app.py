@@ -170,8 +170,21 @@ def main():
         st.text(str(e))
     
     # 1. tính ========================
-    x = st.number_input("v", value=None, format="%.6f")
-    y = st.number_input("k", value=None, format="%.6f")
+    input_str = st.text_input("Nhập vĩ độ, kinh độ (cách nhau bằng dấu phẩy):", value="")
+
+    # Xử lý tách chuỗi thành 2 số thực
+    x, y = None, None
+    if input_str:
+        try:
+            parts = [s.strip() for s in input_str.split(",")]
+            if len(parts) == 2:
+                x = float(parts[0])
+                y = float(parts[1])
+        except Exception:
+            st.warning("⚠️ Cần nhhập định dạng chuẩn")
+    
+    if x is not None and y is not None:
+        st.success(f"Bạn đã nhập: vĩ độ={x}, kinh độ={y}")
     dt = st.number_input("t", min_value=0.001, max_value=0.5, value=0.005, step=0.001, format="%.3f")
     dx=dy=dt
     radius=dt*111320
@@ -277,12 +290,6 @@ def main():
             'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
             'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
         ]
-        
-        
-            
-        
-        
-        # ========================
         # 4. VẼ TOÀN BỘ
         # ========================
         fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
@@ -347,9 +354,7 @@ def main():
     def generate_magic_square_southeast(n):
         if n % 2 == 0:
             raise ValueError("Chỉ hỗ trợ ma phương bậc lẻ.")
-    
         square = np.zeros((n, n), dtype=int)
-        
         # Bắt đầu từ vị trí gần tâm: (tâm hàng + 1, tâm cột)
         i, j = n // 2 + 1, n // 2
     
@@ -415,18 +420,6 @@ def main():
     except Exception as e:
         st.error(f"Lỗi: {e}")
     
-    
-    
-    
-
-    
-    dem_block()
-
-    st.markdown("### 4. Ma phương, Schumann, Kp Index")
-    magic_square_block()
-    schumann_block()
-    kp_index_block()
-
     st.markdown("---\n### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. SĐT&ZALO: 0377442597. DONATE: nguyenduytuan techcombank 19033167089018")
 
 if __name__ == "__main__":
