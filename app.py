@@ -968,7 +968,7 @@ if st.button("run"):
     ax.contour(Xx3857, Yx3857, mask1, levels=[0.5], colors='blue', linewidths=3)
     # Vẽ vòng Fibonacci
     plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
-    plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
+  
     # Slider góc
     #col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
     
