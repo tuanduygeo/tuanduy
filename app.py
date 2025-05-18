@@ -1,9 +1,3 @@
-hide_github_icon = """
-    <style>
-    a[href*="github.com"], .stActionButton__icon, .st-emotion-cache-1v0mbdj.e115fcil1 {display: none !important;}
-    [data-testid="stToolbar"] a[href*="github.com"] {display: none !important;}
-    </style>
-"""
 import streamlit as st
 import os
 import pandas as pd
@@ -27,9 +21,7 @@ import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 st.set_page_config(layout="wide")
-st.markdown(hide_github_icon, unsafe_allow_html=True)
 def main():
-    
     
     st.markdown("""
     <div style="background:linear-gradient(90deg,#f9d423,#ff4e50);padding:24px 8px 20px 8px;border-radius:16px;margin-bottom:24px;">
