@@ -188,18 +188,22 @@ def main():
                 # Vẽ arrow từ max về center
                 arrow_scale = 2  # gấp đôi độ dài gốc, tuỳ bạn
 
-                dx = x_center_map - x_max
-                dy = y_center_map - y_max
+                dx = x_max - x_center_map
+                dy = y_max - y_center_map
+                # Điểm cuối ngược hướng max (so với center)
+                arrow_dx = -arrow_scale * dx
+                arrow_dy = -arrow_scale * dy
                 
+                # Vẽ arrow từ center ra đối diện với max
                 ax.arrow(
-                    x_max, y_max,
-                    dx, dy,
-                    head_width=15,         # đầu mũi tên to hơn
-                    head_length=20,       # dài đầu mũi tên hơn
-                    linewidth=5,          # thân mũi tên dày hơn
-                    length_includes_head=True,  # chiều dài bao gồm cả đầu mũi tên
-                    color='white',         # màu trắng nổi bật
-                    zorder=10              # vẽ nổi trên các lớp khác
+                    x_center_map, y_center_map,   # Gốc là center
+                    arrow_dx, arrow_dy,           # Vector ngược hướng max
+                    head_width=10,
+                    head_length=5,
+                    linewidth=2,
+                    fc='white', ec='black',       # Mũi tên trắng, viền đen nổi bật
+                    length_includes_head=True,
+                    zorder=10
                 )
                 
                 ax.set_axis_off()
