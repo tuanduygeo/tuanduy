@@ -318,10 +318,10 @@ def main():
         for level in levels:
             if level >= threshold:
                 color = cmap(norm(level))
-                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
+                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=3)
             if level <= threshold1:
                 color = cmap(norm(level))
-                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
+                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2)
         # Vẽ vòng Fibonacci
         plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
       
