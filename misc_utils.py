@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
 def geo_html_block():
-   st.markdown("""
+    st.markdown("""
     ### 1.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
     """)
 
@@ -85,7 +85,7 @@ def geo_html_block():
     - Cách dùng: Các bạn chọn trang → Bấm `Xem` → Bản đồ sẽ hiển thị bên dưới.
     """)
 
-    pass
+    pass   
 
 def magic_square_block():
     st.markdown("""
