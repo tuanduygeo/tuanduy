@@ -169,7 +169,7 @@ def main():
         st.text(str(e))
     
     # 1. tính ========================
-    input_str = st.text_input("Nhập vĩ độ, kinh độ (cách nhau bằng dấu phẩy):", value="")
+    input_str = st.text_input("x:", value="")
 
     # Xử lý tách chuỗi thành 2 số thực
     x, y = None, None
