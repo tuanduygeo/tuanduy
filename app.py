@@ -134,18 +134,6 @@ def main():
                 ]
                 
                 fig, ax = plt.subplots(figsize=(12, 12))
-                # VẼ THƯỚC ĐO MÉT (SCALE BAR)
-                x_min, x_max = ax.get_xlim()
-                y_min, y_max = ax.get_ylim()
-                x0 = x_min + 0.05 * (x_max - x_min)
-                y0 = y_min + 0.07 * (y_max - y_min)
-                lengths = [50,100,150,200,250,300,350,400,450,500]
-                for i, l in enumerate(lengths):
-                    x_start = x0
-                    x_end = x0 + l
-                    ax.plot([x_start, x_end], [y0, y0], color='yellow', linewidth=5)
-                    ax.text(x_end, y0 + 20, f"{l}m", color='yellow', fontsize=14, va='bottom', ha='center', fontweight='bold')
-                    x0 = x_end
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
                 img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
@@ -272,7 +260,7 @@ def main():
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn: Vì toạ hướng là 27 nên cần thu sơn 27.<br> Trong đó sơn nhâm hợi(tôn), cấn(tử), ất mão(tử) sinh xuất, khắc xuất là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> - Với sơn mùi khôn, tân dậu, bính tý, sửu sinh khắc nhập nên là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ: là các sơn có số 16. Các sơn canh thân(tử), tuất(tử), quý tý(tôn) sinh khắc xuất là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn sinh khắc nhập là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 
                 
-                ax.set_axis_off()
+                
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
