@@ -260,7 +260,7 @@ def main():
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn: Vì toạ hướng là 27 nên cần thu sơn 27.<br> Trong đó sơn nhâm hợi(tôn), cấn(tử), ất mão(tử) sinh xuất, khắc xuất là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> - Với sơn mùi khôn, tân dậu, bính tý, sửu sinh khắc nhập nên là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ: là các sơn có số 16. Các sơn canh thân(tử), tuất(tử), quý tý(tôn) sinh khắc xuất là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn sinh khắc nhập là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 
                 
-                
+                ax.set_axis_off()
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
