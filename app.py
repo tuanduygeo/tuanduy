@@ -65,7 +65,7 @@ def main():
     # Chỉ chạy khi bấm nút Run
     if run:
         if x is None or y is None:
-            st.warning("⚠️ Vui lòng nhập đúng định dạng tọa độ.")
+            st.warning("⚠️ Vui lòng nhập đúng định dạng.")
         else:
             try:
                 dx = dy = dt
