@@ -90,18 +90,19 @@ def main():
                 with rasterio.open(out_path) as data:
                     data_array = data.read(1).astype(np.float64)
                     transform = data.transform
-    
+                
                 nrows, ncols = data_array.shape
                 xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
                 yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
                 Xx, Yx = np.meshgrid(xt, yt)
-    
+                
                 transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
                 Xx3857, Yx3857 = transformer.transform(Xx, Yx)
-    
-                x_center, y_center = transformer.transform(y, x)
+                
+                x_center, y_center = transformer.transform(y, x)  # x=lat, y=lon
+                
                 radius = dt * 111320
-    
+                
                 # --- Hàm vẽ vòng Fibonacci ---
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
@@ -125,13 +126,13 @@ def main():
                         y = y_center + np.sin(t) * radius * 0.9
                         ax.text(x, y, label, ha='center', va='center', fontsize=13, color='white', fontweight='bold')
                     ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22, color='white', fontweight='bold')
-    
+                
                 labels_24 = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
                     'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
                     'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
                 ]
-    
+                
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
@@ -139,7 +140,7 @@ def main():
                 ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
-    
+                
                 # Vẽ contour DEM
                 levels = np.linspace(data_array.min(), data_array.max(), 21)
                 cmap = cm.get_cmap('rainbow')
@@ -158,7 +159,9 @@ def main():
                         ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=2)
                 # Vẽ vòng Fibonacci
                 plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
-    
+                
+                # --- Tìm điểm cao nhất trong mask ---
+                z = data_array  # <-- Đồng nhất biến!
                 rows, cols = z.shape
                 i_idx, j_idx = np.indices((rows, cols))
                 xs, ys = rasterio.transform.xy(transform, i_idx, j_idx, offset='center')
@@ -178,28 +181,17 @@ def main():
                 lat_max = ys.ravel()[idx_global]
                 lon_max = xs.ravel()[idx_global]
                 
-                # Tính bearing
-                dlon = lon0 - lon_max
-                dlat = lat0 - lat_max
-                bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
-                bearing = bearing1
-                
                 # Chuyển sang EPSG:3857 để vẽ trên ảnh
-                transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-                x_center, y_center = transformer.transform(lon0, lat0)
+                x_center_map, y_center_map = transformer.transform(lon0, lat0)
                 x_max, y_max = transformer.transform(lon_max, lat_max)
-                
-                fig, ax = plt.subplots(figsize=(12, 12))
-                # ... hiển thị nền, contour, các lớp khác nếu cần ...
                 
                 # Vẽ arrow từ max về center
                 ax.arrow(
                     x_max, y_max,
-                    x_center - x_max, y_center - y_max,
+                    x_center_map - x_max, y_center_map - y_max,
                     head_width=10, head_length=15, fc='black', ec='black'
                 )
-
-    
+                
                 ax.set_axis_off()
                 plt.tight_layout()
                 st.pyplot(fig)
