@@ -188,8 +188,8 @@ def main():
                 # Vẽ arrow từ max về center
                 ax.arrow(
                     x_max, y_max,
-                    x_center_map - x_max, y_center_map - y_max,
-                    head_width=10, head_length=15, fc='black', ec='black'
+                    dt, dt,
+                    head_width=15, head_length=20, fc='black', ec='black'
                 )
                 
                 ax.set_axis_off()
