@@ -159,14 +159,46 @@ def main():
                 # Vẽ vòng Fibonacci
                 plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
     
-                # Vẽ mũi tên mặc định góc 0 độ (hướng Bắc)
-                angle_deg = 0
-                angle_rad = np.deg2rad(-angle_deg + 90)
-                arrow_length = radius
-                x_end = x_center + arrow_length * np.cos(angle_rad)
-                y_end = y_center + arrow_length * np.sin(angle_rad)
-                ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center,
-                         head_width=10, head_length=15, fc='black', ec='black')
+                rows, cols = z.shape
+                i_idx, j_idx = np.indices((rows, cols))
+                xs, ys = rasterio.transform.xy(transform, i_idx, j_idx, offset='center')
+                xs = np.array(xs)
+                ys = np.array(ys)
+                
+                lat0 = x
+                lon0 = y
+                mask = ((ys - lat0) ** 2 + (xs - lon0) ** 2) <= (0.002 ** 2)
+                z_flat = z.ravel()
+                mask_flat = mask.ravel()
+                
+                idx_max = np.argmax(z_flat[mask_flat])
+                masked_indices = np.nonzero(mask_flat)[0]
+                idx_global = masked_indices[idx_max]
+                
+                lat_max = ys.ravel()[idx_global]
+                lon_max = xs.ravel()[idx_global]
+                
+                # Tính bearing
+                dlon = lon0 - lon_max
+                dlat = lat0 - lat_max
+                bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
+                bearing = bearing1
+                
+                # Chuyển sang EPSG:3857 để vẽ trên ảnh
+                transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+                x_center, y_center = transformer.transform(lon0, lat0)
+                x_max, y_max = transformer.transform(lon_max, lat_max)
+                
+                fig, ax = plt.subplots(figsize=(12, 12))
+                # ... hiển thị nền, contour, các lớp khác nếu cần ...
+                
+                # Vẽ arrow từ max về center
+                ax.arrow(
+                    x_max, y_max,
+                    x_center - x_max, y_center - y_max,
+                    head_width=10, head_length=15, fc='black', ec='black'
+                )
+
     
                 ax.set_axis_off()
                 plt.tight_layout()
