@@ -32,6 +32,162 @@ def main():
     st.markdown("### 1. Chiêm tinh Ấn Độ")
     astrology_block()
      # 1. tính ========================
+    @st.cache_data
+    def generate_base_plot(x, y, dt, ...):  # ... là các tham số khác nếu cần
+        # --- Tạo data, chuyển đổi, vẽ contour, fibonacci ---
+        # Xử lý nhập liệu
+        x, y = None, None
+        if input_str:
+            try:
+                parts = [s.strip() for s in input_str.split(",")]
+                if len(parts) == 2:
+                    x = float(parts[0])
+                    y = float(parts[1])
+            except Exception:
+                st.warning("⚠️ Cần nhập định dạng chuẩn (ví dụ: 10.123, 106.456)")
+        
+        if x is not None and y is not None:
+            st.success(f"Bạn đã nhập: vĩ độ={x}, kinh độ={y} | dt={dt}")
+        
+        radius = dt * 111320
+        
+        # Chỉ chạy khi bấm nút Run
+        if run:
+            if x is None or y is None:
+                st.warning("⚠️ Vui lòng nhập đúng định dạng.")
+            else:
+                try:
+                    dx = dy = dt
+                    west, east = y - dx, y + dx
+                    south, north = x - dy, x + dy
+        
+                    lat_tile = int(north)
+                    lon_tile = int(east)
+                    tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
+        
+                    srtm_dir = "dulieu"
+                    hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
+                    out_path = os.path.join(srtm_dir, "vietnamcrop.tif")
+        
+                    if not os.path.exists(hgt_path):
+                        st.error(f"❌ Không tìm thấy file: `{hgt_path}`.")
+                    else:
+                        # ========================
+                        # 3. XỬ LÝ DEM & GHI FILE MỚI
+                        # ========================
+                        with rasterio.open(hgt_path) as src:
+                            window = from_bounds(west, south, east, north, src.transform)
+                            dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
+                            transform = src.window_transform(window)
+                            profile = src.profile
+        
+                        profile.update({
+                            "driver": "GTiff",
+                            "height": dem_crop.shape[0],
+                            "width": dem_crop.shape[1],
+                            "transform": transform,
+                            "nodata": -9999
+                        })
+        
+                        with rasterio.open(out_path, "w", **profile) as dst:
+                            dst.write(dem_crop, 1)
+        
+                        st.success("✅ Đã cắt file thành công.")
+                        
+        
+                        # ========================
+                        # 4. CHUYỂN HỆ TỌA ĐỘ EPSG:3857
+                        # ========================
+                        with rasterio.open(out_path) as data:
+                            data_array = data.read(1).astype(np.float64)
+                            transform = data.transform
+        
+                        nrows, ncols = data_array.shape
+                        xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
+                        yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
+                        Xx, Yx = np.meshgrid(xt, yt)
+        
+                        transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+                        Xx3857, Yx3857 = transformer.transform(Xx, Yx)
+        
+                        st.success("📐 Chuyển đổi số liệu thành công.")
+                        
+        
+                except Exception as e:
+                    st.error(f"Đã xảy ra lỗi: {e}")
+            # 3. HÀM VẼ VÒNG FIBONACCI
+            # ========================
+        
+            def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
+                n = len(labels_inner)
+                theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
+                shift = np.deg2rad(7.5)
+            
+                # Đường chia
+                bold_indices = {1, 4, 7, 10, 13, 16, 19, 22}
+                for i, t in enumerate(theta):
+                    lw = 2 if i in bold_indices else 1
+                    x0 = x_center + np.cos(t + shift) * radius * 0.85
+                    y0 = y_center + np.sin(t + shift) * radius * 0.85
+                    x1 = x_center + np.cos(t + shift) * radius * 0.95
+                    y1 = y_center + np.sin(t + shift) * radius * 0.95
+                    ax.plot([x0, x1], [y0, y1], color='white', linewidth=lw)
+            
+                # Vòng tròn
+                for r in [ 0.95, 0.85]:
+                    circle_theta = np.linspace(0, 2*np.pi, 1000)
+                    x = x_center + np.cos(-circle_theta) * r * radius
+                    y = y_center + np.sin(-circle_theta) * r * radius
+                    ax.plot(x, y, color='white', linewidth=1)
+            
+                # Nhãn chữ
+                for t, label in zip(theta, labels_inner):
+                    x = x_center + np.cos(t) * radius * 0.9
+                    y = y_center + np.sin(t) * radius * 0.9
+                    ax.text(x, y, label, ha='center', va='center', fontsize=13, color='white',fontweight='bold')
+                ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22,color='white', fontweight='bold')
+            labels_24 = [
+                'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
+                'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
+                'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
+            ]
+            # 4. VẼ TOÀN BỘ
+            # ========================
+            fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
+            
+            # Tâm ảnh và góc zoom
+            x_center, y_center = transformer.transform(y, x)
+            x0, x1 = Xx3857.min(), Xx3857.max()
+            y0, y1 = Yx3857.min(), Yx3857.max()
+            
+            img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
+            ax.imshow(img, extent=ext, origin="upper")
+            
+            # Khớp lại giới hạn hiển thị
+            ax.set_xlim(x0, x1)
+            ax.set_ylim(y0, y1)
+            
+            # Vẽ contour
+            levels = np.linspace(data_array.min(), data_array.max(), 21)
+            cmap = cm.get_cmap('rainbow')
+            norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
+            data_smooth = gaussian_filter(data_array, sigma=1.2)
+            cf = ax.contourf(Xx3857, Yx3857, data_smooth, cmap="rainbow", levels=levels, alpha=0)
+            contour_lines = ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='rainbow', linewidths=1)
+            threshold = np.percentile(data_array, 95)
+            threshold1 = np.percentile(data_array, 2)
+            for level in levels:
+                if level >= threshold:
+                    color = cmap(norm(level))
+                    ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=3)
+                if level <= threshold1:
+                    color = cmap(norm(level))
+                    ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=2)
+            # Vẽ vòng Fibonacci
+            plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
+        
+        # Return các thông số tâm x_center, y_center, radius,... để dùng cho vẽ mũi tên
+        return fig, ax, x_center, y_center, radius
     # Tạo 3 cột ngang nhau cho input và nút
     col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
     
@@ -46,181 +202,46 @@ def main():
     with col4:
         run = st.button("Run", use_container_width=True)
     
-    # Xử lý nhập liệu
-    x, y = None, None
-    if input_str:
-        try:
-            parts = [s.strip() for s in input_str.split(",")]
-            if len(parts) == 2:
-                x = float(parts[0])
-                y = float(parts[1])
-        except Exception:
-            st.warning("⚠️ Cần nhập định dạng chuẩn (ví dụ: 10.123, 106.456)")
     
-    if x is not None and y is not None:
-        st.success(f"Bạn đã nhập: vĩ độ={x}, kinh độ={y} | dt={dt}")
-    
-    radius = dt * 111320
-    
-    # Chỉ chạy khi bấm nút Run
-    if run:
-        if x is None or y is None:
-            st.warning("⚠️ Vui lòng nhập đúng định dạng.")
-        else:
-            try:
-                dx = dy = dt
-                west, east = y - dx, y + dx
-                south, north = x - dy, x + dy
-    
-                lat_tile = int(north)
-                lon_tile = int(east)
-                tile = f"{'N' if lat_tile >= 0 else 'S'}{abs(lat_tile):02d}{'E' if lon_tile >= 0 else 'W'}{abs(lon_tile):03d}"
-    
-                srtm_dir = "dulieu"
-                hgt_path = os.path.join(srtm_dir, f"{tile}.hgt")
-                out_path = os.path.join(srtm_dir, "vietnamcrop.tif")
-    
-                if not os.path.exists(hgt_path):
-                    st.error(f"❌ Không tìm thấy file: `{hgt_path}`.")
-                else:
-                    # ========================
-                    # 3. XỬ LÝ DEM & GHI FILE MỚI
-                    # ========================
-                    with rasterio.open(hgt_path) as src:
-                        window = from_bounds(west, south, east, north, src.transform)
-                        dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
-                        transform = src.window_transform(window)
-                        profile = src.profile
-    
-                    profile.update({
-                        "driver": "GTiff",
-                        "height": dem_crop.shape[0],
-                        "width": dem_crop.shape[1],
-                        "transform": transform,
-                        "nodata": -9999
-                    })
-    
-                    with rasterio.open(out_path, "w", **profile) as dst:
-                        dst.write(dem_crop, 1)
-    
-                    st.success("✅ Đã cắt file thành công.")
-                    
-    
-                    # ========================
-                    # 4. CHUYỂN HỆ TỌA ĐỘ EPSG:3857
-                    # ========================
-                    with rasterio.open(out_path) as data:
-                        data_array = data.read(1).astype(np.float64)
-                        transform = data.transform
-    
-                    nrows, ncols = data_array.shape
-                    xt = np.arange(ncols) * transform.a + transform.c + transform.a / 2
-                    yt = np.arange(nrows) * transform.e + transform.f + transform.e / 2
-                    Xx, Yx = np.meshgrid(xt, yt)
-    
-                    transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-                    Xx3857, Yx3857 = transformer.transform(Xx, Yx)
-    
-                    st.success("📐 Chuyển đổi số liệu thành công.")
-                    
-    
-            except Exception as e:
-                st.error(f"Đã xảy ra lỗi: {e}")
-        # 3. HÀM VẼ VÒNG FIBONACCI
-        # ========================
-    
-        def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
-            n = len(labels_inner)
-            theta = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
-            shift = np.deg2rad(7.5)
-        
-            # Đường chia
-            bold_indices = {1, 4, 7, 10, 13, 16, 19, 22}
-            for i, t in enumerate(theta):
-                lw = 2 if i in bold_indices else 1
-                x0 = x_center + np.cos(t + shift) * radius * 0.85
-                y0 = y_center + np.sin(t + shift) * radius * 0.85
-                x1 = x_center + np.cos(t + shift) * radius * 0.95
-                y1 = y_center + np.sin(t + shift) * radius * 0.95
-                ax.plot([x0, x1], [y0, y1], color='white', linewidth=lw)
-        
-            # Vòng tròn
-            for r in [ 0.95, 0.85]:
-                circle_theta = np.linspace(0, 2*np.pi, 1000)
-                x = x_center + np.cos(-circle_theta) * r * radius
-                y = y_center + np.sin(-circle_theta) * r * radius
-                ax.plot(x, y, color='white', linewidth=1)
-        
-            # Nhãn chữ
-            for t, label in zip(theta, labels_inner):
-                x = x_center + np.cos(t) * radius * 0.9
-                y = y_center + np.sin(t) * radius * 0.9
-                ax.text(x, y, label, ha='center', va='center', fontsize=13, color='white',fontweight='bold')
-            ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22,color='white', fontweight='bold')
-        labels_24 = [
-            'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
-            'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
-            'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
-        ]
-        # 4. VẼ TOÀN BỘ
-        # ========================
-        fig, ax = plt.subplots(figsize=(12, 12))  # 👉 Tăng kích thước hình vẽ
-        
-        # Tâm ảnh và góc zoom
-        x_center, y_center = transformer.transform(y, x)
-        x0, x1 = Xx3857.min(), Xx3857.max()
-        y0, y1 = Yx3857.min(), Yx3857.max()
-        
-        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
-        ax.imshow(img, extent=ext, origin="upper")
-        
-        # Khớp lại giới hạn hiển thị
-        ax.set_xlim(x0, x1)
-        ax.set_ylim(y0, y1)
-        
-        # Vẽ contour
-        levels = np.linspace(data_array.min(), data_array.max(), 21)
-        cmap = cm.get_cmap('rainbow')
-        norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
-        data_smooth = gaussian_filter(data_array, sigma=1.2)
-        cf = ax.contourf(Xx3857, Yx3857, data_smooth, cmap="rainbow", levels=levels, alpha=0)
-        contour_lines = ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='rainbow', linewidths=1)
-        threshold = np.percentile(data_array, 95)
-        threshold1 = np.percentile(data_array, 2)
-        for level in levels:
-            if level >= threshold:
-                color = cmap(norm(level))
-                ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=3)
-            if level <= threshold1:
-                color = cmap(norm(level))
-                ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=2)
-        # Vẽ vòng Fibonacci
-        plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
       
-        # Slider góc
-        col1, col2 = st.columns([1, 3])  # col1 hẹp hơn
-        
-        with col1:
-            angle_deg = st.number_input("Góc", min_value=0, max_value=359, value=0, step=1)
-        
-        # Chuyển sang radian: 0° ở Bắc, tăng thuận chiều kim đồng hồ
-        angle_rad = np.deg2rad(-angle_deg + 90)
+        if run and x is not None and y is not None:
+            fig, ax, x_center, y_center, radius = generate_base_plot(x, y, dt, ...)
+            st.session_state['fig_base'] = fig
+            st.session_state['ax_base'] = ax
+            st.session_state['x_center'] = x_center
+            st.session_state['y_center'] = y_center
+            st.session_state['radius'] = radius
 
+        # --- 3. CHỈNH GÓC và VẼ MŨI TÊN LÊN HÌNH NỀN ---
+        if 'fig_base' in st.session_state:
+            fig = st.session_state['fig_base']
+            ax = st.session_state['ax_base']
+            x_center = st.session_state['x_center']
+            y_center = st.session_state['y_center']
+            radius = st.session_state['radius']
         
-        # ====== VẼ MŨI TÊN ======
-        arrow_length = radius  # 👈 bằng với bán kính vòng
-        x_end = x_center + arrow_length * np.cos(angle_rad)
-        y_end = y_center + arrow_length * np.sin(angle_rad)
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                angle_deg = st.number_input("Góc", min_value=0, max_value=359, value=0, step=1)
+            angle_rad = np.deg2rad(-angle_deg + 90)
         
-        # Vẽ trên matplotlib hoặc streamlit.pyplot
-        ax.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=10, head_length=15, fc='black', ec='black')
+            arrow_length = radius
+            x_end = x_center + arrow_length * np.cos(angle_rad)
+            y_end = y_center + arrow_length * np.sin(angle_rad)
         
-        # Tắt trục và lưu ảnh
-        ax.set_axis_off()
-        plt.tight_layout()
+            # Quan trọng: Tạo bản sao (copy) để không vẽ chồng nhiều mũi tên khi đổi góc!
+            fig2, ax2 = plt.subplots(figsize=(12, 12))
+            fig2.subplots_adjust(0, 0, 1, 1)  # Sửa nếu cần để khớp
+            # Chèn lại ảnh nền
+            for artist in fig.axes[0].get_children():
+                ax2.add_artist(artist)
+            # Vẽ lại mũi tên mới
+            ax2.arrow(x_center, y_center, x_end - x_center, y_end - y_center, head_width=10, head_length=15, fc='black', ec='black')
+            ax2.set_axis_off()
+            plt.tight_layout()
         
-        st.pyplot(fig)
-        plt.close(fig)
+            st.pyplot(fig2)
+            plt.close(fig2)
     st.markdown("""
     ### 2.PHONG THỦY ĐỊA LÝ – BẢN ĐỒ ĐỊA MẠCH
     """)
