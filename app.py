@@ -201,7 +201,7 @@ def main():
                     head_width=10,
                     head_length=5,
                     linewidth=2,
-                    fc='white', ec='black',       # Mũi tên trắng, viền đen nổi bật
+                    fc='white',      # Mũi tên trắng, viền đen nổi bật
                     length_includes_head=True,
                     zorder=10
                 )
