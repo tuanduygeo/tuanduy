@@ -299,7 +299,7 @@ def main():
         x0, x1 = Xx3857.min(), Xx3857.max()
         y0, y1 = Yx3857.min(), Yx3857.max()
         
-        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
+        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
         ax.imshow(img, extent=ext, origin="upper")
         
         # Khớp lại giới hạn hiển thị
