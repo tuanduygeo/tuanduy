@@ -16,7 +16,11 @@ def astrology_block():
     vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
     # Lấy giờ hiện tại ở múi giờ Việt Nam
     now_local = datetime.now(vn_tz)
-
+    def save_fig_to_temp(fig):
+        tmpfile = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+        fig.savefig(tmpfile.name, bbox_inches='tight', dpi=200)
+        plt.close(fig)
+        return tmpfile.name
     # Chuyển đổi giờ hiện tại về UTC
     now_utc = now_local.astimezone(pytz.utc)
 
@@ -718,11 +722,7 @@ def astrology_block():
     
         # Xuất ra bytes
         return pdf.output(dest="S").encode("latin1")
-    def save_fig_to_temp(fig):
-        tmpfile = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-        fig.savefig(tmpfile.name, bbox_inches='tight', dpi=200)
-        plt.close(fig)
-        return tmpfile.name
+   
     st.download_button(
     label="📄 Tải báo cáo PDF Chiêm tinh",
     data=export_astrology_pdf_fpdf2(img_chart_path, df_planets, df_dasha, img_life_path),
