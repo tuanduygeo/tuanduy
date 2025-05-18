@@ -432,7 +432,7 @@ def draw_chart(planet_data):
     return fig  
 fig = draw_chart(planet_data)
 st.pyplot(fig, use_container_width=False)
-
+plt.close(fig)
 df_planets = pd.DataFrame(planet_data)
 
 
@@ -753,6 +753,7 @@ ax.set_ylabel("Điểm số")
 ax.grid(True)
 ax.legend()
 st.pyplot(fig)
+plt.close(fig)
 filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
 median_score = round(filtered_df["Điểm số"].median(), 2)
 st.markdown(f"#### **Điểm(Thang từ -10 đến 10):** `{median_score}`")
@@ -992,7 +993,7 @@ if st.button("run"):
     plt.tight_layout()
     
     st.pyplot(fig)
-
+    plt.close(fig)
 
 st.markdown("""
 ### 5.MÔ HÌNH LẠC THƯ 3X3 VÀ BẬC CAO VÔ TẬN
