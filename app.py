@@ -7,6 +7,8 @@ from datetime import date, timedelta, datetime
 import swisseph as swe
 import pytz
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
 import random
 import numpy as np
 import requests
@@ -307,15 +309,19 @@ def main():
         
         # Vẽ contour
         levels = np.linspace(data_array.min(), data_array.max(), 21)
+        cmap = cm.get_cmap('rainbow')
+        norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
         cf = ax.contourf(Xx3857, Yx3857, data_array, cmap="rainbow", levels=levels, alpha=0)
         contour_lines = ax.contour(Xx3857, Yx3857, data_array, levels=levels, cmap='rainbow', linewidths=1)
-        threshold = np.percentile(data_array, 90)
+        threshold = np.percentile(data_array, 95)
         threshold1 = np.percentile(data_array, 2)
         for level in levels:
         if level >= threshold:
-            ax.contour(Xx3857, Yx3857, data_array, levels=[level], cmap='rainbow', linewidths=2.5)
+            color = cmap(norm(level))
+            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
         if level <= threshold1:
-            ax.contour(Xx3857, Yx3857, data_array, levels=[level], cmap='rainbow', linewidths=2.5)
+            color = cmap(norm(level))
+            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
         # Vẽ vòng Fibonacci
         plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
       
