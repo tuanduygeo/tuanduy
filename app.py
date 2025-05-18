@@ -188,6 +188,9 @@ def main():
         
         # Return các thông số tâm x_center, y_center, radius,... để dùng cho vẽ mũi tên
         return fig, ax, x_center, y_center, radius
+    run = False
+    x = None
+    y = None
     # Tạo 3 cột ngang nhau cho input và nút
     col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
     
