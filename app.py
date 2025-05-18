@@ -316,12 +316,12 @@ def main():
         threshold = np.percentile(data_array, 95)
         threshold1 = np.percentile(data_array, 2)
         for level in levels:
-        if level >= threshold:
-            color = cmap(norm(level))
-            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
-        if level <= threshold1:
-            color = cmap(norm(level))
-            ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
+            if level >= threshold:
+                color = cmap(norm(level))
+                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
+            if level <= threshold1:
+                color = cmap(norm(level))
+                ax.contour(Xx3857, Yx3857, data_array, levels=[level], colors=[color], linewidths=2.5)
         # Vẽ vòng Fibonacci
         plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
       
