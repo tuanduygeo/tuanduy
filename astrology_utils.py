@@ -7,8 +7,7 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 
 def astrology_block():
-    st.markdown("""
-    ### 2.Chiêm tinh Ấn Độ""")
+    
 
     # ==== Setup ====
     swe.set_ephe_path("ephe")
