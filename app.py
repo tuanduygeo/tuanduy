@@ -192,7 +192,7 @@ def main():
     # ========================
     if st.button("run"):
         if x is None or y is None:
-            st.warning("⚠️ Vui lòng nhập đầy đủ vĩ độ và kinh độ.")
+            st.warning("⚠️ Vui lòng nhập đúng định dạng.")
         else:
             try:
                 
