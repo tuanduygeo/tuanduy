@@ -41,7 +41,7 @@ def astrology_block():
             st.session_state.decimal_hour = 12.0
     
         decimal_hour = st.number_input(
-            "⏰ Nhập giờ dưới dạng thập phân (ví dụ: 14.5 = 14h30)",
+            "⏰ Nhập giờ (ví dụ: 14.5 = 14h30)",
             min_value=0.0, max_value=23.99, value=st.session_state.decimal_hour, 
             step=0.01, format="%.2f", key="decimal_hour"
         )
