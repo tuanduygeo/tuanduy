@@ -22,8 +22,7 @@ from scipy.ndimage import gaussian_filter
 import re
 import geomag
 import io
-import gzip
-import shutil
+
 
 st.set_page_config(layout="wide")
 def get_magnetic_declination(lat, lon):
@@ -81,33 +80,7 @@ def extract_phongthuy_data(n_text):
     all_son = son_thoai + son_tan + thuy_thoai + thuy_tan
     df_son = pd.DataFrame(all_son) if all_son else pd.DataFrame()
     return doors, df_son
-def srtm_filename(lat, lon):
-    NS = 'N' if lat >= 0 else 'S'
-    EW = 'E' if lon >= 0 else 'W'
-    return f"{NS}{abs(int(lat)):02d}{EW}{abs(int(lon)):03d}.hgt"
 
-def download_srtm1(lat, lon, save_folder="dulieu"):
-    fname = srtm_filename(lat, lon)
-    url = f"https://s3.amazonaws.com/elevation-tiles-prod/skadi/{fname[0:3]}/{fname}.gz"
-    os.makedirs(save_folder, exist_ok=True)
-    dest_path = os.path.join(save_folder, fname + ".gz")
-    out_path = os.path.join(save_folder, fname)
-    if os.path.exists(out_path):
-        return out_path
-    # Tải về
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        with open(dest_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
-        # Giải nén
-        with gzip.open(dest_path, 'rb') as f_in:
-            with open(out_path, 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.remove(dest_path)
-        return out_path
-    else:
-        return None
 
 def main():
     
@@ -156,14 +129,8 @@ def main():
             out_path = os.path.join(srtm_dir, "vietnamcrop.tif")
     
             if not os.path.exists(hgt_path):
-                st.warning(f"Không tìm thấy file {hgt_path}, đang tự động tải SRTM DEM...")
-                hgt_downloaded = download_srtm1(lat_tile, lon_tile, save_folder=srtm_dir)
-                if not hgt_downloaded or not os.path.exists(hgt_downloaded):
-                    st.error(f"❌ Không thể tải file DEM cho khu vực này ({lat_tile}, {lon_tile}). Kiểm tra lại tọa độ hoặc mạng!")
-                else:
-                    hgt_path = hgt_downloaded
-            
-            if os.path.exists(hgt_path):
+                st.error(f"❌ Không tìm thấy file: `{hgt_path}`.")
+            else:
                 with rasterio.open(hgt_path) as src:
                     window = from_bounds(west, south, east, north, src.transform)
                     dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
