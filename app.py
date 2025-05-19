@@ -100,6 +100,8 @@ def main():
         input_str = st.text_input("Nhập x,y", value="")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
+    with col3:
+        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
     with col4:
         run = st.button("Run", use_container_width=True)
    
@@ -275,30 +277,33 @@ def main():
                     dir_x = dx / length
                     dir_y = dy / length
                 
-                # Đặt độ dài arrow mong muốn = radius
-                arrow_length = radius*0.75   # hoặc radius*1.2 nếu muốn dài hơn một chút
-                arrow_dx = -dir_x * arrow_length   # hoặc dir_x nếu muốn cùng chiều
-                arrow_dy = -dir_y * arrow_length
-                
-                # Vẽ arrow từ center ra ngoài (ngược hướng max)
-                ax.arrow(
-                    x_center_map, y_center_map,   # Gốc là center
-                    arrow_dx, arrow_dy,           # Vector chuẩn hóa, độ dài cố định
-                    head_width=4,
-                    head_length=4,
-                    linewidth=2,
-                    color='white',
-                    length_includes_head=True,
-                    zorder=10
-                )
+                if manual_bearing is not None:
+                    # 0 độ hướng lên trên, tăng theo chiều kim đồng hồ
+                    angle_rad = np.deg2rad(manual_bearing) - np.pi / 2
+                    arrow_length = radius * 0.75
+                    arrow_dx = np.cos(angle_rad) * arrow_length
+                    arrow_dy = np.sin(angle_rad) * arrow_length
+                    # Vẽ mũi tên từ center theo góc nhập vào
+                    ax.arrow(
+                        x_center_map, y_center_map,
+                        arrow_dx, arrow_dy,
+                        head_width=4,
+                        head_length=4,
+                        linewidth=2,
+                        color='red',
+                        length_includes_head=True,
+                        zorder=15
+                    )
                 dlon = lon_max - lon0
                 dlat = lat_max - lat0
-                bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
-                
-                declination = get_magnetic_declination(x, y)
-                huong = "E" if declination >= 0 else "W"
-                declination_str = f"{abs(declination):.1f}°{huong}"
-                bearing= (bearing1 +180- declination) % 360
+                if manual_bearing is not None:
+                    bearing = manual_bearing
+                else:
+                    bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
+                    declination = get_magnetic_declination(x, y)
+                    huong = "E" if declination >= 0 else "W"
+                    declination_str = f"{abs(declination):.1f}°{huong}"
+                    bearing = (bearing1 + 180 - declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
                     n=(" 1.Toạ Bính(-2) Tấn 6 kim khắc xuất hướng Nhâm -1 thuỷ nên là cục toạ Tấn nghi Thoái. Hùng dự Hùng<br>     2. Cửa chính,phụ: Mở ở hướng bính,tỵ, Tân, Dậu, mùi, khôn, Sửu <br>      3.Cung vị sơn:            sơn nhâm, hợi(tôn), Cấn(tử), ất,mão(tử)     là thoái thần <br>  Cần cao, xa> 100m không đáp ứng ảnh hưởng đinh   <br>   -   sơn mùi, khôn, tân, dậu, sửu, bính,tỵ    là tấn thần.<br>Cần cao , xa <100m.<br>    4. Các cung vị thuỷ:    tý quý(tôn), thân canh(tử), tuất(tử)   là thoái thần. <br>    Cần thấp , xa >100m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài.<br>     - Các sơn giáp, dần, tốn,thìn, ngọ,đinh, càn   là tấn thần. Cần có thủy trong 100m." )
