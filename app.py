@@ -335,7 +335,7 @@ def main():
                     return None
                 
                 radius_icon = radius*0.97
-                theta = np.linspace(0, 2*np.pi, len(label_pos), endpoint=False) + np.pi/2
+                theta = np.linspace(0, 2*np.pi, len(label_24), endpoint=False) + np.pi/2
                 
                 for door in doors:
                     idx = get_label_index(door)
