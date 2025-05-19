@@ -445,7 +445,7 @@ def main():
                             else:
                                 diem = -1
                         elif row['zone'] == "cung vị thủy":
-                            if value >= median_z:
+                            if value > median_z:
                                 diem = -1
                             else:
                                 diem = 1
