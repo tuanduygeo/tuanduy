@@ -299,7 +299,7 @@ def main():
                 
                 declination = get_magnetic_declination(x, y)
                 huong = "E" if declination >= 0 else "W"
-                declination_str = f"{abs(declination):.1f}°{huong}"
+                declination_str = f"{abs(declination):.1f}°{huong}
                 bearing= (bearing1 +180+ declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
