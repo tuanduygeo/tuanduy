@@ -300,7 +300,8 @@ def main():
     st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
     st.markdown("""### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. 
     Dữ liệu code nguồn không sao chép dưới mọi hình thức. 
-    SĐT&ZALO: 0377442597. DONATE: nguyenduytuan techcombank 19033167089018
+    SĐT&ZALO: 0377442597. 
+    DONATE: nguyenduytuan techcombank 19033167089018
     """)
 
 if __name__ == "__main__":
