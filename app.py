@@ -22,7 +22,7 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-
+import io
 
 
 st.set_page_config(layout="wide")
@@ -499,6 +499,16 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 plt.tight_layout()
                 st.pyplot(fig)
+                
+                buf_img = io.BytesIO()
+                fig.savefig(buf_img, format="png", bbox_inches='tight', dpi=200)
+                buf_img.seek(0)
+                st.download_button(
+                    label="⬇️ Download ảnh bản đồ DEM",
+                    data=buf_img,
+                    file_name="dem_map.png",
+                    mime="image/png"
+                )
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
                 df_diem = pd.DataFrame(diem_chi_tiet)
