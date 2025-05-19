@@ -322,11 +322,7 @@ def main():
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi, khôn, tân, dậu, bính,tỵ, sửu <br> 3.Cung vị sơn:      sơn nhâm, hợi(tôn), cấn(tử), ất,mão(tử)    là thoái thần <br> Cần cao, xa> 100m không đáp ứng ảnh hưởng đinh <br> -   sơn mùi, khôn, tân, dậu, bính tý, sửu    là tấn thần. <br> Cần cao , xa <100m.  <br>4. Các cung vị thuỷ:    canh,thân(tử), tuất(tử), quý, tý(tôn)   là thoái thần. <br> Cần thấp , xa >100m. không đáp ứng ảnh hưởng tài<br> - Các sơn đinh,ngọ, càn, giáp, dần, tốn,thìn   là tấn thần.<br> Cần thấp, xa< 100m ")
 
                 doors, df_son = extract_phongthuy_data(n)
-                st.write("🚪 Cửa:", doors)
-                if not df_son.empty:
-                    st.dataframe(df_son)
                 
-    
                 def get_label_index(name, labels_24):
                     for i, n in enumerate(labels_24):
                         # Nếu tên cửa nằm trong nhãn (vd: "Bính" trùng "Bính", hoặc "Bính Ngọ" cũng match "Bính")
@@ -343,7 +339,6 @@ def main():
                 doors = [chuan_hoa_ten(d) for d in doors]
                 for door in doors:
                     idx = get_label_index(door, labels_24)
-                    st.write(f"Đang thử gắn icon cho cửa: {door} (idx={idx})")
                     if idx is not None:
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
@@ -381,7 +376,7 @@ def main():
 
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
-                y_start = y0 + 10   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
+                y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
                 
                 # Vẽ thanh thước
