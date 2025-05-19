@@ -338,7 +338,7 @@ def main():
                 theta = np.linspace(0, 2*np.pi, len(labels_24), endpoint=False) + np.pi/2
                 
                 for door in doors:
-                    idx = get_label_index(door)
+                    idx = get_label_index(door, labels_24)
                     if idx is not None:
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
