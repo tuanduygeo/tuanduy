@@ -327,16 +327,11 @@ def main():
                     st.dataframe(df_son)
                 
     
-                label_pos = [
-                    'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
-                    'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
-                    'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
-                ]
-                label_to_idx = {name: i for i, name in enumerate(label_pos)}
-                def get_label_index(name):
-                    for n in label_pos:
-                        if n in name:
-                            return label_to_idx[n]
+                def get_label_index(name, labels_24):
+                    for i, n in enumerate(labels_24):
+                        # Nếu tên cửa nằm trong nhãn (vd: "Bính" trùng "Bính", hoặc "Bính Ngọ" cũng match "Bính")
+                        if name.strip() in n:
+                            return i
                     return None
                 
                 radius_icon = radius*0.97
@@ -348,7 +343,7 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "cửa", ha='center', va='center', fontsize=20, zorder=50)
+                        ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
                 
 
                 ax.set_axis_off()
