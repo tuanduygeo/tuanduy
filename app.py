@@ -288,8 +288,8 @@ def main():
                 ax.arrow(
                     x_center_map, y_center_map,   # Gốc là center
                     arrow_dx, arrow_dy,           # Vector chuẩn hóa, độ dài cố định
-                    head_width=10,
-                    head_length=5,
+                    head_width=4,
+                    head_length=4,
                     linewidth=2,
                     color='white',
                     length_includes_head=True,
