@@ -334,7 +334,7 @@ def main():
                             return i
                     return None
                 
-                radius_icon = radius*0.97
+                radius_icon = radius*0.77
                 theta = np.linspace(0, 2*np.pi, len(labels_24), endpoint=False) + np.pi/2
                 def chuan_hoa_ten(ten):
                     # Chỉ in hoa ký tự đầu, còn lại thường (tốt nhất cho trường hợp tiếng Việt không dấu)
@@ -348,7 +348,7 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, color='red', zorder=99)
+                        ax.text(x_icon, y_icon, "Cửa chính", ha='center', va='center', fontsize=20, color='red', zorder=99)
                 
 
                 ax.set_axis_off()
