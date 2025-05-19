@@ -322,7 +322,9 @@ def main():
         all_son = son_thoai + son_tan + thuy_thoai + thuy_tan
         df_son = pd.DataFrame(all_son) if all_son else pd.DataFrame()
         return doors, df_son
-                
+                st.write("🚪 Cửa:", doors)
+                if not df_son.empty:
+                    st.dataframe(df_son)
                 doors, df_son = extract_phongthuy_data(n)
     
                 label_pos = [
