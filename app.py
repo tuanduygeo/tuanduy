@@ -352,7 +352,7 @@ def main():
                             angle = theta[idx]
                             # --- Xác định bán kính vẽ icon ---
                             if (row['group'] == "tấn"):
-                                r_icon = 100      # 100m tính từ tâm (theo hệ metric của map EPSG:3857)
+                                r_icon = radius*0.2     # 100m tính từ tâm (theo hệ metric của map EPSG:3857)
                             else:
                                 r_icon = radius_icon*1.2  # Mặc định
                     
