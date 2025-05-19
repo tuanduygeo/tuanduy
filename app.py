@@ -511,7 +511,7 @@ def main():
                 st.download_button(
                     label="📥 Tải ảnh bản đồ chất lượng cao",
                     data=buf,
-                    file_name="ban_do_phong_thuy.png",
+                    file_name=f"ban_do_{x:.6f}_{y:.6f}.png"
                     mime="image/png"
                 )
         except Exception as e:
