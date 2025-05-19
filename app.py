@@ -102,41 +102,42 @@ def main():
 
     # Lấy GPS trình duyệt
     with col5:
-        gps_data = st_javascript(
-            """
-            () => new Promise((resolve, reject) => {
-                if ('geolocation' in navigator) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            resolve({
-                                latitude: position.coords.latitude,
-                                longitude: position.coords.longitude
-                            });
-                        },
-                        (error) => {
-                            resolve({
-                                error: error.message,
-                                code: error.code
-                            });
-                        }
-                    );
-                } else {
-                    resolve({error: "Geolocation not supported"});
-                }
-            })
-            """
-        )
-        if st.button("Lấy GPS trình duyệt", key="btn_get_gps"):
-            if gps_data and "latitude" in gps_data and "longitude" in gps_data:
-                lat, lon = gps_data['latitude'], gps_data['longitude']
-                input_str = f"{lat:.6f}, {lon:.6f}"
-                st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
-                # Cập nhật lại vào ô nhập (giúp đồng bộ UI)
-                st.experimental_rerun()
-            elif gps_data and "error" in gps_data:
-                st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
-            else:
-                st.error("Không lấy được GPS từ trình duyệt.")
+        with col5:
+            gps_data = st_javascript(
+                """
+                () => new Promise((resolve, reject) => {
+                    if ('geolocation' in navigator) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                resolve({
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude
+                                });
+                            },
+                            (error) => {
+                                resolve({
+                                    error: error.message,
+                                    code: error.code
+                                });
+                            }
+                        );
+                    } else {
+                        resolve({error: "Geolocation not supported"});
+                    }
+                })
+                """
+            )
+            if st.button("Lấy GPS trình duyệt", key="btn_get_gps"):
+                st.write("Dữ liệu GPS trả về:", gps_data)
+                if gps_data and "latitude" in gps_data and "longitude" in gps_data:
+                    lat, lon = gps_data['latitude'], gps_data['longitude']
+                    st.session_state["input_xy"] = f"{lat:.6f}, {lon:.6f}"
+                    st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
+                    st.experimental_rerun()
+                elif gps_data and "error" in gps_data:
+                    st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
+                else:
+                    st.error("Không lấy được GPS từ trình duyệt.")
     
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f", key="input_dt")
