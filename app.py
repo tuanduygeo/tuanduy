@@ -27,9 +27,7 @@ import geomag
 
 st.set_page_config(layout="wide")
 def get_magnetic_declination(lat, lon):
-    gm = geomag.GeoMag()
-    result = gm.GeoMag(lat, lon)
-    return result.dec  # Độ từ thiên
+    return geomag.declination(lat, lon)
 def extract_phongthuy_data(n_text):
     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
     doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
