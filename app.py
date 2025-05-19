@@ -475,7 +475,7 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
-                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) |  {diem_tong}", 
+                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) |  {diem_tong}| Độ từ thiên: {declination:+.1f}°", 
              fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
