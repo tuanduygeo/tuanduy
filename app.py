@@ -339,11 +339,12 @@ def main():
                 
                 for door in doors:
                     idx = get_label_index(door, labels_24)
+                    st.write(f"Đang thử gắn icon cho cửa: {door} (idx={idx})")
                     if idx is not None:
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
+                        ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20,fontsize=30, color='red', zorder=99)
                 
 
                 ax.set_axis_off()
