@@ -361,16 +361,16 @@ def main():
                     
                             # --- Icon & màu sắc ---
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                                icon = "⛰️"
+                                icon = "Sơn"
                                 color = "#ffd600"
                             elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
-                                icon = "🏔️"
+                                icon = "S"
                                 color = "#e65100"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                                icon = "💧"
+                                icon = "Thủy"
                                 color = "#00b8d4"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
-                                icon = "💦"
+                                icon = "T"
                                 color = "#01579b"
                             else:
                                 continue
@@ -378,7 +378,7 @@ def main():
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
-                                fontsize=19,
+                                fontsize=14,
                                 fontweight='bold',
                                 zorder=98,
                                 color=color
