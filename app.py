@@ -172,8 +172,8 @@ def main():
                         angle = np.deg2rad(deg) - np.pi/2  # Đưa 0° ra phía Bắc (trên cùng), thuận chiều kim đồng hồ
                         # Xác định độ dài vạch
                         if deg % 15 == 0:
-                            r0 = radius * 0.96  # Vạch dài cho 15°
-                            lw = 1
+                            r0 = radius * 0.99  # Vạch dài cho 15°
+                            lw = 1.2
                         else:
                             r0 = radius * 0.99  # Vạch ngắn cho từng độ
                             lw = 1
