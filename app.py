@@ -499,12 +499,6 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 plt.tight_layout()
                 st.pyplot(fig)
-                st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
-                # Nếu muốn hiển thị chi tiết:
-                df_diem = pd.DataFrame(diem_chi_tiet)
-                if not df_diem.empty:
-                    st.dataframe(df_diem)
-                plt.close(fig)
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=200, bbox_inches="tight")  # dpi cao cho ảnh nét
                 buf.seek(0)
@@ -514,6 +508,13 @@ def main():
                     file_name=f"ban_do_{x:.6f}_{y:.6f}.png"
                     mime="image/png"
                 )
+                st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
+                # Nếu muốn hiển thị chi tiết:
+                df_diem = pd.DataFrame(diem_chi_tiet)
+                if not df_diem.empty:
+                    st.dataframe(df_diem)
+                plt.close(fig)
+                
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
