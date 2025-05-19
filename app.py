@@ -384,7 +384,7 @@ def main():
                             if (row['group'] == "tấn"):
                                 r_icon = 100     # 100m tính từ tâm (theo hệ metric của map EPSG:3857)
                             else:
-                                r_icon = radius  # Mặc định
+                                r_icon = radius*0.9  # Mặc định
                     
                             x_icon = x_center + np.cos(angle) * r_icon
                             y_icon = y_center + np.sin(angle) * r_icon
