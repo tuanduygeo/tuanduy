@@ -348,7 +348,7 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=10, color='red', zorder=99)
+                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='white',fontweight='bold', zorder=99)
                 
 
                 ax.set_axis_off()
