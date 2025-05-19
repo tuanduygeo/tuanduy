@@ -15,7 +15,7 @@ def astrology_block():
     vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
     # Lấy giờ hiện tại ở múi giờ Việt Nam
     now_local = datetime.now(vn_tz)
-
+    decimal_default = now_local.hour + now_local.minute/60
     # Chuyển đổi giờ hiện tại về UTC
     now_utc = now_local.astimezone(pytz.utc)
 
@@ -38,7 +38,7 @@ def astrology_block():
             max_value=date(2100, 12, 31))
         # Nhập giờ kiểu decimal (thập phân)
         if "decimal_hour" not in st.session_state:
-            st.session_state.decimal_hour = 12.0  # float, không phải 12 (int)
+            st.session_state.decimal_hour = decimal_default  # float, không phải 12 (int)
     
         decimal_hour = st.number_input(
         "⏰ Nhập giờ(ví dụ: 14.5 = 14h30)",
