@@ -168,25 +168,25 @@ def main():
                 
                 def draw_degree_ticks(ax, x_center, y_center, radius, tick_length_major=30, tick_length_minor=15):
                     """
-                    Vẽ 360 vạch chia độ quanh vòng tròn: 0° ở Bắc, thuận chiều kim đồng hồ
+                    Vẽ 360 vạch chia độ quanh vòng tròn: 0° ở phía trên, 90° bên phải, 180° dưới, 270° bên trái.
                     """
                     for deg in range(360):
-                        # Đặt 0° lên Bắc (trên cùng), xoay thuận chiều
+                        # Đổi góc: 0° phía trên, tăng thuận chiều kim đồng hồ
                         angle_rad = np.deg2rad(deg - 90)
-                        # Chia vạch lớn nhỏ
                         if deg % 15 == 0:
                             length = tick_length_major
-                            # Số độ (chỉ hiển thị từ 0 đến 345, mỗi 15°)
-                            x_text = x_center + np.cos(angle_rad) * (radius + length + 16)
-                            y_text = y_center + np.sin(angle_rad) * (radius + length + 16)
+                            # Vẽ số độ mỗi 15°
+                            x_text = x_center + np.cos(angle_rad) * (radius + length + 20)
+                            y_text = y_center + np.sin(angle_rad) * (radius + length + 20)
                             ax.text(
                                 x_text, y_text, f"{deg}",
-                                color='orange', fontsize=9, ha='center', va='center', alpha=0.6,
-                                rotation=deg if deg <= 180 else deg-180, rotation_mode='anchor'
+                                color='orange', fontsize=11,
+                                ha='center', va='center', fontweight='bold', alpha=0.93,
+                                rotation=deg, rotation_mode='anchor'
                             )
                         else:
                             length = tick_length_minor
-                        # Vẽ vạch
+                
                         x_start = x_center + np.cos(angle_rad) * radius
                         y_start = y_center + np.sin(angle_rad) * radius
                         x_end = x_center + np.cos(angle_rad) * (radius + length)
@@ -194,7 +194,7 @@ def main():
                         ax.plot(
                             [x_start, x_end], [y_start, y_end],
                             color='orange' if deg % 15 == 0 else '#ffe082',
-                            linewidth=2 if deg % 15 == 0 else 0.7, zorder=6
+                            linewidth=2 if deg % 15 == 0 else 0.7, zorder=10
                         )
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
