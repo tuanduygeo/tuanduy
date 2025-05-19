@@ -269,59 +269,59 @@ def main():
                 else:
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn:      sơn nhâm hợi(tôn), cấn(tử), ất mão(tử)    là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> -   sơn mùi khôn, tân dậu, bính tý, sửu    là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ:    canh thân(tử), tuất(tử), quý tý(tôn)   là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn   là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 
-                def extract_phongthuy_data(n_text):
-                    door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
-                    doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
-                    son_thoai, son_tan, thuy_thoai, thuy_tan = [], [], [], []
-                
-                    match_son_thoai = re.search(r'3\.Cung vị sơn:.*?sơn\s+([^<]*)\s+là thoái thần', n_text)
-                    if match_son_thoai:
-                        block = match_son_thoai.group(1)
-                        for ten_loai in block.split(','):
-                            ten_loai = ten_loai.strip()
-                            if ten_loai:
-                                m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
-                                if m:
-                                    son_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị sơn'})
-                                else:
-                                    son_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị sơn'})
-                    match_son_tan = re.search(r'-\s*sơn\s+([^<]*)\s+là tấn thần', n_text)
-                    if match_son_tan:
-                        block = match_son_tan.group(1)
-                        for ten_loai in block.split(','):
-                            ten_loai = ten_loai.strip()
-                            if ten_loai:
-                                m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
-                                if m:
-                                    son_tan.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'tấn', 'zone': 'cung vị sơn'})
-                                else:
-                                    son_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị sơn'})
-                    match_thuy_thoai = re.search(r'4\. Các cung vị thuỷ:\s*([^<]*)\s+là thoái thần', n_text)
-                    if match_thuy_thoai:
-                        block = match_thuy_thoai.group(1)
-                        for ten_loai in block.split(','):
-                            ten_loai = ten_loai.strip()
-                            if ten_loai:
-                                m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
-                                if m:
-                                    thuy_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị thủy'})
-                                else:
-                                    thuy_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị thủy'})
-                    match_thuy_tan = re.search(r'-\s*Các sơn\s+([^<]*)\s+là tấn thần', n_text)
-                    if match_thuy_tan:
-                        block = match_thuy_tan.group(1)
-                        for ten_loai in block.split(','):
-                            ten_loai = ten_loai.strip()
-                            if ten_loai:
-                                m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
-                                if m:
-                                    thuy_tan.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'tấn', 'zone': 'cung vị thủy'})
-                                else:
-                                    thuy_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị thủy'})
-                
-                    all_son = son_thoai + son_tan + thuy_thoai + thuy_tan
-                    df_son = pd.DataFrame(all_son) if all_son else pd.DataFrame()
-                    return doors, df_son
+        def extract_phongthuy_data(n_text):
+            door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
+            doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
+            son_thoai, son_tan, thuy_thoai, thuy_tan = [], [], [], []
+        
+            match_son_thoai = re.search(r'3\.Cung vị sơn:.*?sơn\s+([^<]*)\s+là thoái thần', n_text)
+            if match_son_thoai:
+                block = match_son_thoai.group(1)
+                for ten_loai in block.split(','):
+                    ten_loai = ten_loai.strip()
+                    if ten_loai:
+                        m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
+                        if m:
+                            son_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị sơn'})
+                        else:
+                            son_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị sơn'})
+            match_son_tan = re.search(r'-\s*sơn\s+([^<]*)\s+là tấn thần', n_text)
+            if match_son_tan:
+                block = match_son_tan.group(1)
+                for ten_loai in block.split(','):
+                    ten_loai = ten_loai.strip()
+                    if ten_loai:
+                        m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
+                        if m:
+                            son_tan.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'tấn', 'zone': 'cung vị sơn'})
+                        else:
+                            son_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị sơn'})
+            match_thuy_thoai = re.search(r'4\. Các cung vị thuỷ:\s*([^<]*)\s+là thoái thần', n_text)
+            if match_thuy_thoai:
+                block = match_thuy_thoai.group(1)
+                for ten_loai in block.split(','):
+                    ten_loai = ten_loai.strip()
+                    if ten_loai:
+                        m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
+                        if m:
+                            thuy_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị thủy'})
+                        else:
+                            thuy_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị thủy'})
+            match_thuy_tan = re.search(r'-\s*Các sơn\s+([^<]*)\s+là tấn thần', n_text)
+            if match_thuy_tan:
+                block = match_thuy_tan.group(1)
+                for ten_loai in block.split(','):
+                    ten_loai = ten_loai.strip()
+                    if ten_loai:
+                        m = re.match(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', ten_loai)
+                        if m:
+                            thuy_tan.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'tấn', 'zone': 'cung vị thủy'})
+                        else:
+                            thuy_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị thủy'})
+        
+            all_son = son_thoai + son_tan + thuy_thoai + thuy_tan
+            df_son = pd.DataFrame(all_son) if all_son else pd.DataFrame()
+            return doors, df_son
                 doors, df_son = extract_phongthuy_data(n)
                 label_pos = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
