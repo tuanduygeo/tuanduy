@@ -87,11 +87,9 @@ def main():
                     dst.write(dem_crop, 1)
     
                 st.success("✅ Đã cắt file thành công.")
-                # Sau đoạn code crop DEM
-                if st.checkbox("Hiển thị DEM 3D"):
-                    st.markdown("#### DEM 3D - Xoay, nghiêng tự do")
-                    fig_3d = plot_dem_3d(Xx, Yx, data_array)
-                    st.plotly_chart(fig_3d, use_container_width=True)
+                st.markdown("#### DEM 3D - Xoay, nghiêng tự do")
+                fig_3d = plot_dem_3d(Xx, Yx, data_array)
+                st.plotly_chart(fig_3d, use_container_width=True)
                 with rasterio.open(out_path) as data:
                     data_array = data.read(1).astype(np.float64)
                     transform = data.transform
