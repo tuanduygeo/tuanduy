@@ -185,9 +185,9 @@ def main():
                         ax.plot([x0, x1], [y0, y1], color='white', linewidth=lw, zorder=101)
                         # Hiển thị số độ mỗi 15°
                         if deg % 15 == 0:
-                            xt = x_center + np.cos(angle) * (radius * 1.07)
-                            yt = y_center - np.sin(angle) * (radius * 1.07)
-                            ax.text(xt, yt, f"{deg}", fontsize=12, color='white', ha='center', va='center', fontweight='bold', zorder=102)
+                            xt = x_center + np.cos(angle) * (radius * 1.05)
+                            yt = y_center - np.sin(angle) * (radius * 1.05)
+                            ax.text(xt, yt, f"{deg}", fontsize=9, color='white', ha='center', va='center',  zorder=45)
 
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
