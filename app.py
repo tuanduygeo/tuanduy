@@ -360,9 +360,9 @@ def main():
                 
                             # Chọn icon phù hợp từng loại
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                                icon = "⛰️"
+                                icon = "Sơn"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                                icon = "💧"
+                                icon = "Thủy"
                             else:
                                 continue  # Bỏ qua các loại khác nếu chưa cần vẽ
                 
