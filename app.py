@@ -98,7 +98,7 @@ def main():
     col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
 
     with col1:
-    input_str = st.text_input("Nhập x,y", value="", key="input_xy")
+        input_str = st.text_input("Nhập x,y", value="", key="input_xy")
 
     # Lấy GPS trình duyệt
     with col5:
