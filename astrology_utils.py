@@ -79,7 +79,7 @@ def astrology_block():
                         selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
 
         st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-        st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} **Giờ**: {selected_utc.hour+7}")
+        st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}**Giờ**: {selected_datetime_vn.hour:02d}:{selected_datetime_vn.minute:02d}")
 
 
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
