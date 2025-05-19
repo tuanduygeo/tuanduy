@@ -10,3 +10,4 @@ contextily
 Pillow
 scipy
 plotly
+geomag
