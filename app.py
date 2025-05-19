@@ -484,6 +484,7 @@ def main():
                 ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
+                ax.set_ylim(ax.get_ylim()[::-1])
                 plot_bearing_circle(ax, x_center, y_center, radius*0.665)
                 plt.tight_layout()
                 st.pyplot(fig)
