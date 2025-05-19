@@ -36,8 +36,22 @@ def astrology_block():
         # Giao diện chọn ngày và giờ
         st.session_state.selected_date = st.date_input("📅 Chọn ngày", value=st.session_state.selected_date,min_value=date(1900, 1, 1),
             max_value=date(2100, 12, 31))
-        st.session_state.selected_time = st.time_input("⏰ Chọn giờ", value=st.session_state.selected_time)
-
+        # Nhập giờ kiểu decimal (thập phân)
+        if "decimal_hour" not in st.session_state:
+            st.session_state.decimal_hour = 12.0
+    
+        decimal_hour = st.number_input(
+            "⏰ Nhập giờ dưới dạng thập phân (ví dụ: 14.5 = 14h30)",
+            min_value=0.0, max_value=23.99, value=st.session_state.decimal_hour, 
+            step=0.01, format="%.2f", key="decimal_hour"
+        )
+        st.session_state.decimal_hour = decimal_hour
+    
+        # Convert về hour, minute
+        hour = int(decimal_hour)
+        minute = int(round((decimal_hour - hour) * 60))
+        st.session_state.selected_time = datetime.now().time().replace(hour=hour, minute=minute, second=0, microsecond=0)
+    
         # Gộp lại thành datetime hoàn chỉnh
         selected_datetime = datetime.combine(
             st.session_state.selected_date,
