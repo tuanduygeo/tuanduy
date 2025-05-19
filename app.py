@@ -369,7 +369,7 @@ def main():
                                 zorder=98,
                                 color='yellow'
                                 )
-                            )
+                            
 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
