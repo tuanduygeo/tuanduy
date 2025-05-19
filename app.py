@@ -21,19 +21,15 @@ import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
-
+import geomag
 
 
 
 st.set_page_config(layout="wide")
-def get_magnetic_declination(lat, lon, alt=0):
-    now = datetime.utcnow()
-    jd = swe.julday(now.year, now.month, now.day, now.hour)
-    # swe.get_mag_decl(longitude, latitude, altitude, tjd_ut)
-    # Kết quả trả về: (declination, annual_change, dip, horizontal_intensity, total_intensity, north_comp, east_comp, vert_comp)
-    result = swe.get_mag_decl(lon, lat, alt, jd)
-    declination = result[0]
-    return declination
+def get_declination(lat, lon):
+    gm = geomag.GeoMag()
+    result = gm.GeoMag(lat, lon)
+    return result.dec  # Độ từ thiên
 def extract_phongthuy_data(n_text):
     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
     doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
