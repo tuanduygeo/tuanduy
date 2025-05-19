@@ -49,7 +49,7 @@ def astrology_block():
         format="%.2f", 
         key="decimal_hour"
     )
-        st.session_state.decimal_hour = decimal_hour
+        
     
         # Convert về hour, minute
         hour = int(decimal_hour)
