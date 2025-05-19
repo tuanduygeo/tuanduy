@@ -196,7 +196,7 @@ def main():
                     dir_y = dy / length
                 
                 # Đặt độ dài arrow mong muốn = radius
-                arrow_length = radius   # hoặc radius*1.2 nếu muốn dài hơn một chút
+                arrow_length = radius*0.95   # hoặc radius*1.2 nếu muốn dài hơn một chút
                 arrow_dx = -dir_x * arrow_length   # hoặc dir_x nếu muốn cùng chiều
                 arrow_dy = -dir_y * arrow_length
                 
