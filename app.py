@@ -26,7 +26,7 @@ import geomag
 
 
 st.set_page_config(layout="wide")
-def get_declination(lat, lon):
+def get_magnetic_declination(lat, lon):
     gm = geomag.GeoMag()
     result = gm.GeoMag(lat, lon)
     return result.dec  # Độ từ thiên
