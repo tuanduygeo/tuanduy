@@ -9,4 +9,4 @@ pyproj
 contextily
 Pillow
 scipy
-fpdf
+plotly
