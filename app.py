@@ -23,7 +23,14 @@ from scipy.ndimage import gaussian_filter
 import re
 import geomag
 import io
-
+def get_location_by_ip():
+    try:
+        res = requests.get('https://ipinfo.io/json')
+        data = res.json()
+        lat, lon = map(float, data['loc'].split(','))
+        return lat, lon
+    except:
+        return None, None
 
 st.set_page_config(layout="wide")
 def get_magnetic_declination(lat, lon):
@@ -93,16 +100,25 @@ def main():
     """, unsafe_allow_html=True)
     
     st.markdown("### 1. Địa mạch") 
-    # 1. tính ========================
-       # --- Giao diện nhập ---
-    col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
+    col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
+    
+    # Thêm nút lấy tự động
+    with col4:
+        if st.button("auto"):
+            lat, lon = get_location_by_ip()
+            if lat and lon:
+                input_str = f"{lat:.6f}, {lon:.6f}"
+                st.success(f"Đã lấy vị trí hiện tại: {lat:.6f}, {lon:.6f}")
+            else:
+                st.warning("Không lấy được vị trí từ IP!")
+    
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
-    with col4:
+    with col5:
         run = st.button("Run", use_container_width=True)
    
     x = y = None
