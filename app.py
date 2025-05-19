@@ -350,8 +350,8 @@ def main():
                 scale_length = 100  # 100m
 
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
-                x_start = x0 + 30   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
-                y_start = y0 + 30   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
+                x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
+                y_start = y0 + 10   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
                 
                 # Vẽ thanh thước
