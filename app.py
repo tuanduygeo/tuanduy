@@ -343,6 +343,26 @@ def main():
                         st.dataframe(df_son)
                     else:
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
+                
+                ax.set_axis_off()
+                scale_length = 100  # 100m
+
+                # Chọn vị trí đặt scale bar (ở góc trái dưới)
+                x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
+                y_start = y0 + 10   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
+                x_end = x_start + scale_length
+                
+                # Vẽ thanh thước
+                ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
+                # Vẽ hai gạch đứng ở hai đầu (nếu thích)
+                ax.plot([x_start, x_start], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
+                ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
+                # Thêm chú thích "100m"
+                ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
+                plt.tight_layout()
+                st.pyplot(fig)
+                st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
+                extract_and_show_phongthuy(n)  
                 label_pos = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
                     'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
@@ -379,25 +399,6 @@ def main():
                             ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
                         if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
                             ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
-                ax.set_axis_off()
-                scale_length = 100  # 100m
-
-                # Chọn vị trí đặt scale bar (ở góc trái dưới)
-                x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
-                y_start = y0 + 10   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
-                x_end = x_start + scale_length
-                
-                # Vẽ thanh thước
-                ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
-                # Vẽ hai gạch đứng ở hai đầu (nếu thích)
-                ax.plot([x_start, x_start], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
-                ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
-                # Thêm chú thích "100m"
-                ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
-                plt.tight_layout()
-                st.pyplot(fig)
-                st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
-                extract_and_show_phongthuy(n)             
                 plt.close(fig)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
