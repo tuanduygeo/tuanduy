@@ -433,10 +433,7 @@ def main():
             
                 # Hiển thị tổng điểm
                 st.markdown(f"### 🔢 Tổng điểm phong thủy: `{diem_tong}`")
-                # Nếu muốn hiển thị chi tiết:
-                df_diem = pd.DataFrame(diem_chi_tiet)
-                if not df_diem.empty:
-                    st.dataframe(df_diem)
+                
 
 
                 
@@ -458,7 +455,10 @@ def main():
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
-                
+                # Nếu muốn hiển thị chi tiết:
+                df_diem = pd.DataFrame(diem_chi_tiet)
+                if not df_diem.empty:
+                    st.dataframe(df_diem)
                 plt.close(fig)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
