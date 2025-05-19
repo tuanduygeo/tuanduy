@@ -159,7 +159,7 @@ def main():
                         color = cmap(norm(level))
                         ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=2)
                 # Vẽ vòng Fibonacci
-                plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius)
+                plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius*0.7)
                 
                 # --- Tìm điểm cao nhất trong mask ---
                 z = data_array  # <-- Đồng nhất biến!
@@ -183,23 +183,31 @@ def main():
                 x_center_map, y_center_map = transformer.transform(lon0, lat0)
                 x_max, y_max = transformer.transform(lon_max, lat_max)
                 
-                # Vẽ arrow từ max về center
-                arrow_scale = 2.3  # gấp đôi độ dài gốc, tuỳ bạn
-
+               
+                # Tính vector hướng từ center đến max
                 dx = x_max - x_center_map
                 dy = y_max - y_center_map
-                # Điểm cuối ngược hướng max (so với center)
-                arrow_dx = -arrow_scale * dx
-                arrow_dy = -arrow_scale * dy
+                length = np.sqrt(dx**2 + dy**2)
+                if length == 0:
+                    # Tránh chia 0, chọn hướng bất kỳ
+                    dir_x, dir_y = 1, 0
+                else:
+                    dir_x = dx / length
+                    dir_y = dy / length
                 
-                # Vẽ arrow từ center ra đối diện với max
+                # Đặt độ dài arrow mong muốn = radius
+                arrow_length = radius   # hoặc radius*1.2 nếu muốn dài hơn một chút
+                arrow_dx = -dir_x * arrow_length   # hoặc dir_x nếu muốn cùng chiều
+                arrow_dy = -dir_y * arrow_length
+                
+                # Vẽ arrow từ center ra ngoài (ngược hướng max)
                 ax.arrow(
                     x_center_map, y_center_map,   # Gốc là center
-                    arrow_dx, arrow_dy,           # Vector ngược hướng max
+                    arrow_dx, arrow_dy,           # Vector chuẩn hóa, độ dài cố định
                     head_width=10,
                     head_length=5,
                     linewidth=2,
-                    color='white',        # Mũi tên trắng, viền đen nổi bật
+                    color='white',
                     length_includes_head=True,
                     zorder=10
                 )
