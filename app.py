@@ -23,7 +23,7 @@ from scipy.ndimage import gaussian_filter
 import re
 
 st.set_page_config(layout="wide")
-doors, df_son = extract_phongthuy_data(n)
+
 
 
 def main():
@@ -343,7 +343,7 @@ def main():
                         
                     else:
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
-                doors, df_son = extract_phongthuy_data(n)
+                doors, df_son = extract_and_show_phongthuy(n)
                 
                 
                 # --- VẼ ICON LÊN MATPLOTLIB ---
