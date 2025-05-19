@@ -27,39 +27,7 @@ from streamlit_javascript import st_javascript
 
 
 st.set_page_config(layout="wide")
-gps_data = st_javascript(
-    """
-    () => new Promise((resolve, reject) => {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    resolve({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    });
-                },
-                (error) => {
-                    resolve({
-                        error: error.message,
-                        code: error.code
-                    });
-                }
-            );
-        } else {
-            resolve({error: "Geolocation not supported"});
-        }
-    })
-    """
-)
-if st.button("Lấy GPS trình duyệt"):
-    st.write("Dữ liệu GPS trả về:", gps_data)
-    if gps_data and "latitude" in gps_data and "longitude" in gps_data:
-        lat, lon = gps_data['latitude'], gps_data['longitude']
-        st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
-    elif gps_data and "error" in gps_data:
-        st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
-    else:
-        st.error("Không lấy được GPS từ trình duyệt.")
+
 def get_magnetic_declination(lat, lon):
     return geomag.declination(lat, lon)
 def extract_phongthuy_data(n_text):
@@ -130,9 +98,10 @@ def main():
     col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
 
     with col1:
-        input_str = st.text_input("Nhập x,y", value="")
-    
-    with col4:
+    input_str = st.text_input("Nhập x,y", value="", key="input_xy")
+
+    # Lấy GPS trình duyệt
+    with col5:
         gps_data = st_javascript(
             """
             () => new Promise((resolve, reject) => {
@@ -145,29 +114,36 @@ def main():
                             });
                         },
                         (error) => {
-                            resolve(null);
+                            resolve({
+                                error: error.message,
+                                code: error.code
+                            });
                         }
                     );
                 } else {
-                    resolve(null);
+                    resolve({error: "Geolocation not supported"});
                 }
             })
             """
         )
-        if st.button("Lấy GPS trình duyệt"):
-            if gps_data:
+        if st.button("Lấy GPS trình duyệt", key="btn_get_gps"):
+            if gps_data and "latitude" in gps_data and "longitude" in gps_data:
                 lat, lon = gps_data['latitude'], gps_data['longitude']
                 input_str = f"{lat:.6f}, {lon:.6f}"
                 st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
+                # Cập nhật lại vào ô nhập (giúp đồng bộ UI)
+                st.experimental_rerun()
+            elif gps_data and "error" in gps_data:
+                st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
             else:
-                st.warning("Không lấy được GPS từ trình duyệt.")
+                st.error("Không lấy được GPS từ trình duyệt.")
     
     with col2:
-        dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
+        dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f", key="input_dt")
     with col3:
-        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
-    with col5:
-        run = st.button("Run", use_container_width=True)
+        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f", key="input_bearing")
+    with col4:
+        run = st.button("Run", use_container_width=True, key="btn_run")
    
     x = y = None
     if input_str:
