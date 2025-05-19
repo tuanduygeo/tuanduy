@@ -348,7 +348,7 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='white',fontweight='bold', zorder=99)
+                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='yellow',fontweight='bold', zorder=99)
                 if not df_son.empty:
                     df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
                     for _, row in df_son.iterrows():
@@ -369,14 +369,10 @@ def main():
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
-                                fontsize=19,
+                                fontsize=14,
                                 fontweight='bold',
                                 zorder=98,
-                                bbox=dict(
-                                    facecolor='white',
-                                    edgecolor='black',
-                                    boxstyle='circle,pad=0.18',
-                                    linewidth=1,
+                                color='yellow'
                                 )
                             )
 
