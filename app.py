@@ -23,6 +23,15 @@ from scipy.ndimage import gaussian_filter
 import re
 
 st.set_page_config(layout="wide")
+def get_declination(lat, lon):
+    try:
+        url = f"https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1={lat}&lon1={lon}&model=WMM&startYear=2024&resultFormat=csv"
+        r = requests.get(url)
+        # Kết quả dòng thứ 2, cột 5 (Declination)
+        value = float(r.text.split("\n")[1].split(",")[4])
+        return value
+    except Exception:
+        return 0
 def extract_phongthuy_data(n_text):
     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
     doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
@@ -267,8 +276,9 @@ def main():
                 dlon = lon_max - lon0
                 dlat = lat_max - lat0
                 bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
-                bearing = (bearing1 + 180) % 360   # Bearing hướng từ max về tâm
                 
+                declination = get_declination(lat0, lon0)
+                bearing= (bearing1 +180+ declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
                     n=(" 1.Toạ Bính(-2) Tấn 6 kim khắc xuất hướng Nhâm -1 thuỷ nên là cục toạ Tấn nghi Thoái. Hùng dự Hùng<br>     2. Cửa chính,phụ: Mở ở hướng bính,tỵ, Tân, Dậu, mùi, khôn, Sửu <br>      3.Cung vị sơn:            sơn nhâm, hợi(tôn), Cấn(tử), ất,mão(tử)     là thoái thần <br>  Cần cao, xa> 100m không đáp ứng ảnh hưởng đinh   <br>   -   sơn mùi, khôn, tân, dậu, sửu, bính,tỵ    là tấn thần.<br>Cần cao , xa <100m.<br>    4. Các cung vị thuỷ:    tý quý(tôn), thân canh(tử), tuất(tử)   là thoái thần. <br>    Cần thấp , xa >100m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài.<br>     - Các sơn giáp, dần, tốn,thìn, ngọ,đinh, càn   là tấn thần. Cần có thủy trong 100m." )
