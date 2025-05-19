@@ -334,7 +334,7 @@ def main():
                             return i
                     return None
                 
-                radius_icon = radius*0.72
+                radius_icon = radius*0.7
                 theta = np.linspace(0, 2*np.pi, len(labels_24), endpoint=False) + np.pi/2
                 def chuan_hoa_ten(ten):
                     # Chỉ in hoa ký tự đầu, còn lại thường (tốt nhất cho trường hợp tiếng Việt không dấu)
@@ -354,8 +354,8 @@ def main():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
                             angle = theta[idx]
-                            x_icon = x_center + np.cos(angle) * radius * 1.05
-                            y_icon = y_center + np.sin(angle) * radius * 1.05
+                            x_icon = x_center + np.cos(angle) * radius_icon*1.1
+                            y_icon = y_center + np.sin(angle) * radius_icon*1.1
                 
                             # Chọn icon phù hợp từng loại
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
