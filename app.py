@@ -342,7 +342,7 @@ def main():
                         
                     else:
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
-                doors, df_son = extract_phongthuy_data(n)
+                doors, df_son = extract_phongthuy_data(n_text)
                 
                 
                 # --- VẼ ICON LÊN MATPLOTLIB ---
