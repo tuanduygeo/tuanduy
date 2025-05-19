@@ -166,31 +166,36 @@ def main():
                 
                 radius = dt * 111320
                 
-                # --- Hàm vẽ vòng Fibonacci ---
                 def draw_degree_ticks(ax, x_center, y_center, radius, tick_length_major=30, tick_length_minor=15):
                     """
-                    Vẽ 360 vạch chia độ quanh vòng tròn, vạch to mỗi 15 độ có số, vạch nhỏ mỗi độ.
+                    Vẽ 360 vạch chia độ quanh vòng tròn: 0° ở Bắc, thuận chiều kim đồng hồ
                     """
                     for deg in range(360):
-                        angle_rad = np.deg2rad(deg - 90)  # 0 độ ở phía bắc
-                        # Xác định độ dài vạch
+                        # Đặt 0° lên Bắc (trên cùng), xoay thuận chiều
+                        angle_rad = np.deg2rad(deg - 90)
+                        # Chia vạch lớn nhỏ
                         if deg % 15 == 0:
                             length = tick_length_major
-                            # Vẽ số độ
-                            x_text = x_center + np.cos(angle_rad) * (radius + length + 18)
-                            y_text = y_center + np.sin(angle_rad) * (radius + length + 18)
-                            ax.text(x_text, y_text, f"{deg}", color='orange', fontsize=11,
-                                    ha='center', va='center', fontweight='bold', alpha=0.85)
+                            # Số độ (chỉ hiển thị từ 0 đến 345, mỗi 15°)
+                            x_text = x_center + np.cos(angle_rad) * (radius + length + 16)
+                            y_text = y_center + np.sin(angle_rad) * (radius + length + 16)
+                            ax.text(
+                                x_text, y_text, f"{deg}",
+                                color='orange', fontsize=9, ha='center', va='center', alpha=0.6,
+                                rotation=deg if deg <= 180 else deg-180, rotation_mode='anchor'
+                            )
                         else:
                             length = tick_length_minor
-                
-                        # Tính tọa độ vạch
+                        # Vẽ vạch
                         x_start = x_center + np.cos(angle_rad) * radius
                         y_start = y_center + np.sin(angle_rad) * radius
                         x_end = x_center + np.cos(angle_rad) * (radius + length)
                         y_end = y_center + np.sin(angle_rad) * (radius + length)
-                        # Vẽ vạch
-                        ax.plot([x_start, x_end], [y_start, y_end], color='orange' if deg % 15 == 0 else '#ffe082', linewidth=2 if deg % 15 == 0 else 0.7, zorder=5)
+                        ax.plot(
+                            [x_start, x_end], [y_start, y_end],
+                            color='orange' if deg % 15 == 0 else '#ffe082',
+                            linewidth=2 if deg % 15 == 0 else 0.7, zorder=6
+                        )
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
                     theta = np.linspace(0, 2 * np.pi, n, endpoint=False) + np.pi / 2
@@ -486,7 +491,7 @@ def main():
                 ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
-                draw_degree_ticks(ax, x_center, y_center, radius*0.67)
+                draw_degree_ticks(ax, x_center, y_center, radius*0.665)
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
