@@ -321,11 +321,11 @@ def main():
                 else:
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi, khôn, tân, dậu, bính,tỵ, sửu <br> 3.Cung vị sơn:      sơn nhâm, hợi(tôn), cấn(tử), ất,mão(tử)    là thoái thần <br> Cần cao, xa> 100m không đáp ứng ảnh hưởng đinh <br> -   sơn mùi, khôn, tân, dậu, bính tý, sửu    là tấn thần. <br> Cần cao , xa <100m.  <br>4. Các cung vị thuỷ:    canh,thân(tử), tuất(tử), quý, tý(tôn)   là thoái thần. <br> Cần thấp , xa >100m. không đáp ứng ảnh hưởng tài<br> - Các sơn đinh,ngọ, càn, giáp, dần, tốn,thìn   là tấn thần.<br> Cần thấp, xa< 100m ")
 
-                
+                doors, df_son = extract_phongthuy_data(n)
                 st.write("🚪 Cửa:", doors)
                 if not df_son.empty:
                     st.dataframe(df_son)
-                doors, df_son = extract_phongthuy_data(n)
+                
     
                 label_pos = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
