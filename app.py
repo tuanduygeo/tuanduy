@@ -296,13 +296,14 @@ def main():
                     )
                 dlon = lon_max - lon0
                 dlat = lat_max - lat0
+                declination = get_magnetic_declination(x, y)
+                huong = "E" if declination >= 0 else "W"
+                declination_str = f"{abs(declination):.1f}°{huong}"
                 if manual_bearing is not None:
                     bearing = manual_bearing
                 else:
                     bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
-                    declination = get_magnetic_declination(x, y)
-                    huong = "E" if declination >= 0 else "W"
-                    declination_str = f"{abs(declination):.1f}°{huong}"
+                    
                     bearing = (bearing1 + 180 - declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
