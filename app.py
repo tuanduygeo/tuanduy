@@ -343,15 +343,15 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='yellow',fontweight='bold', zorder=99)
+                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='purple',fontweight='bold', zorder=99)
                 if not df_son.empty:
                     df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
                     for _, row in df_son.iterrows():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
                             angle = theta[idx]
-                            x_icon = x_center + np.cos(angle) * radius_icon*1.1
-                            y_icon = y_center + np.sin(angle) * radius_icon*1.1
+                            x_icon = x_center + np.cos(angle) * radius_icon*1.2
+                            y_icon = y_center + np.sin(angle) * radius_icon*1.2
                 
                             # Chọn icon phù hợp từng loại
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
