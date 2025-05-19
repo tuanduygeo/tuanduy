@@ -277,23 +277,30 @@ def main():
                     dir_x = dx / length
                     dir_y = dy / length
                 
+              
+                arrow_length = radius * 0.75
                 if manual_bearing is not None:
-                    # 0 độ hướng lên trên, tăng theo chiều kim đồng hồ
+                    # Vẽ theo góc nhập tay (màu đỏ)
                     angle_rad = np.deg2rad(manual_bearing) - np.pi / 2
-                    arrow_length = radius * 0.75
                     arrow_dx = np.cos(angle_rad) * arrow_length
                     arrow_dy = np.sin(angle_rad) * arrow_length
-                    # Vẽ mũi tên từ center theo góc nhập vào
-                    ax.arrow(
-                        x_center_map, y_center_map,
-                        arrow_dx, arrow_dy,
-                        head_width=4,
-                        head_length=4,
-                        linewidth=2,
-                        color='red',
-                        length_includes_head=True,
-                        zorder=15
-                    )
+                    arrow_color = 'red'
+                else:
+                    # Vẽ theo hướng DEM tự động (màu trắng)
+                    arrow_dx = -dir_x * arrow_length
+                    arrow_dy = -dir_y * arrow_length
+                    arrow_color = 'white'
+                
+                ax.arrow(
+                    x_center_map, y_center_map,
+                    arrow_dx, arrow_dy,
+                    head_width=4,
+                    head_length=4,
+                    linewidth=2,
+                    color=arrow_color,
+                    length_includes_head=True,
+                    zorder=15
+                )
                 dlon = lon_max - lon0
                 dlat = lat_max - lat0
                 declination = get_magnetic_declination(x, y)
