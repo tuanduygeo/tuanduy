@@ -350,26 +350,41 @@ def main():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
                             angle = theta[idx]
-                            x_icon = x_center + np.cos(angle) * radius_icon*1.2
-                            y_icon = y_center + np.sin(angle) * radius_icon*1.2
-                
-                            # Chọn icon phù hợp từng loại
-                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                                icon = "Sơn"
-                            elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                                icon = "Thủy"
+                            # --- Xác định bán kính vẽ icon ---
+                            if (row['group'] == "tấn"):
+                                r_icon = 100      # 100m tính từ tâm (theo hệ metric của map EPSG:3857)
                             else:
-                                continue  # Bỏ qua các loại khác nếu chưa cần vẽ
-                
+                                r_icon = radius_icon*1.2  # Mặc định
+                    
+                            x_icon = x_center + np.cos(angle) * r_icon
+                            y_icon = y_center + np.sin(angle) * r_icon
+                    
+                            # --- Icon & màu sắc ---
+                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
+                                icon = "⛰️"
+                                color = "#ffd600"
+                            elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
+                                icon = "🏔️"
+                                color = "#e65100"
+                            elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
+                                icon = "💧"
+                                color = "#00b8d4"
+                            elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
+                                icon = "💦"
+                                color = "#01579b"
+                            else:
+                                continue
+                    
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
-                                fontsize=14,
+                                fontsize=19,
                                 fontweight='bold',
                                 zorder=98,
-                                color='yellow'
-                                )
-                            
+                                color=color
+                            )   
+                      
+    
 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
