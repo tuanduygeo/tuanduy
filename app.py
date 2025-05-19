@@ -22,12 +22,10 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-import io
-from streamlit_javascript import st_javascript
+
 
 
 st.set_page_config(layout="wide")
-
 def get_magnetic_declination(lat, lon):
     return geomag.declination(lat, lon)
 def extract_phongthuy_data(n_text):
@@ -95,55 +93,17 @@ def main():
     """, unsafe_allow_html=True)
     
     st.markdown("### 1. Địa mạch") 
-    col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
-
+    # 1. tính ========================
+       # --- Giao diện nhập ---
+    col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
     with col1:
-        input_str = st.text_input("Nhập x,y", value="", key="input_xy")
-
-    # Lấy GPS trình duyệt
-    with col5:
-       gps_data = st_javascript(
-        """
-        () => new Promise((resolve, reject) => {
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        resolve({
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        });
-                    },
-                    (error) => {
-                        resolve({
-                            error: error.message,
-                            code: error.code
-                        });
-                    }
-                );
-            } else {
-                resolve({error: "Geolocation not supported"});
-            }
-        })
-        """
-    )
-    if st.button("Lấy GPS trình duyệt", key="btn_get_gps"):
-        st.write("Dữ liệu GPS trả về:", gps_data, type(gps_data))
-        if isinstance(gps_data, dict) and "latitude" in gps_data and "longitude" in gps_data:
-            lat, lon = gps_data['latitude'], gps_data['longitude']
-            st.session_state["input_xy"] = f"{lat:.6f}, {lon:.6f}"
-            st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
-            st.experimental_rerun()
-        elif isinstance(gps_data, dict) and "error" in gps_data:
-            st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
-        else:
-            st.error(f"Không lấy được GPS từ trình duyệt. Dữ liệu kiểu: {type(gps_data)}, giá trị: {gps_data}")
-    
+        input_str = st.text_input("Nhập x,y", value="")
     with col2:
-        dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f", key="input_dt")
+        dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
     with col3:
-        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f", key="input_bearing")
+        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
     with col4:
-        run = st.button("Run", use_container_width=True, key="btn_run")
+        run = st.button("Run", use_container_width=True)
    
     x = y = None
     if input_str:
@@ -539,16 +499,6 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 plt.tight_layout()
                 st.pyplot(fig)
-                
-                buf_img = io.BytesIO()
-                fig.savefig(buf_img, format="png", bbox_inches='tight', dpi=200)
-                buf_img.seek(0)
-                st.download_button(
-                    label="⬇️ Download ảnh bản đồ DEM",
-                    data=buf_img,
-                    file_name="dem_map.png",
-                    mime="image/png"
-                )
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
                 df_diem = pd.DataFrame(diem_chi_tiet)
