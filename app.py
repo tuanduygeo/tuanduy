@@ -349,7 +349,35 @@ def main():
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
                         ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='white',fontweight='bold', zorder=99)
+                if not df_son.empty:
+                    for _, row in df_son.iterrows():
+                        idx = get_label_index(row['son'], labels_24)
+                        if idx is not None:
+                            angle = theta[idx]
+                            x_icon = x_center + np.cos(angle) * radius * 1.05
+                            y_icon = y_center + np.sin(angle) * radius * 1.05
                 
+                            # Chọn icon phù hợp từng loại
+                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
+                                icon = "⛰️"
+                            elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
+                                icon = "💧"
+                            else:
+                                continue  # Bỏ qua các loại khác nếu chưa cần vẽ
+                
+                            ax.text(
+                                x_icon, y_icon, icon,
+                                ha='center', va='center',
+                                fontsize=19,
+                                fontweight='bold',
+                                zorder=98,
+                                bbox=dict(
+                                    facecolor='white',
+                                    edgecolor='black',
+                                    boxstyle='circle,pad=0.18',
+                                    linewidth=1,
+                                )
+                            )
 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
