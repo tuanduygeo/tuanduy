@@ -20,6 +20,7 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
+import re
 
 st.set_page_config(layout="wide")
 
@@ -267,7 +268,45 @@ def main():
                     n=(" 1.Toạ Tốn(6) Thoái 4 mộc sinh xuất hướng Càn 9 hỏa nên là cục toạ Thoái nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng càn, thìn, đinh ngọ <br> 3.Cung vị sơn: Vì toạ hướng là 16 nên cần thu sơn 16.<br> Trong đó sơn càn(tử), thìn(tôn), đinh ngọ(tôn) sinh xuất, khắc xuất là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> - Với sơn tuất, quý tý, canh thân, giáp dần, tốn sinh khắc nhập nên là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ: là các sơn có số 27. Các sơn sửu(tử), bính tỵ(tôn), khôn(tôn) sinh khắc xuất là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn nhâm hợi, cấn, ất mão, dậu, tân, mùi sinh khắc nhập là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 else:
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn: Vì toạ hướng là 27 nên cần thu sơn 27.<br> Trong đó sơn nhâm hợi(tôn), cấn(tử), ất mão(tử) sinh xuất, khắc xuất là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> - Với sơn mùi khôn, tân dậu, bính tý, sửu sinh khắc nhập nên là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ: là các sơn có số 16. Các sơn canh thân(tử), tuất(tử), quý tý(tôn) sinh khắc xuất là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn sinh khắc nhập là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
+            def extract_zones(n_text):
+                # 1. Cửa chính, phụ
+                door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
+                doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
+            
+                # 2. Các nhóm “sơn ... (tôn|tử)... là tấn thần/thoái thần” trong cung vị sơn và thủy
+                son_items = []
+                # Tìm tất cả các đoạn: sơn ... (tôn|tử)... là tấn thần hoặc thoái thần
+                for match in re.finditer(r'sơn ([^.<\n]*) (?:sinh xuất, khắc xuất|sinh khắc nhập)? ?là ([\w ]+thần)', n_text):
+                    son_block = match.group(1)
+                    group_label = match.group(2).replace(" thần", "").strip()
+                    for son, loai in re.findall(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', son_block):
+                        son_items.append({'son': son.strip(), 'loai': loai.strip(), 'group': group_label, 'zone': 'cung vị sơn'})
+            
+                # 3. Các nhóm trong cung vị thủy: “Các sơn ... (tôn|tử)... là tấn thần/thoái thần”
+                for match in re.finditer(r'Các sơn ([^.<\n]*) sinh khắc xuất là ([\w ]+thần)', n_text):
+                    son_block = match.group(1)
+                    group_label = match.group(2).replace(" thần", "").strip()
+                    for son, loai in re.findall(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', son_block):
+                        son_items.append({'son': son.strip(), 'loai': loai.strip(), 'group': group_label, 'zone': 'cung vị thủy'})
+            
+                # 4. Tìm thêm nhóm tấn/thoái khác: “Các sơn ... sinh khắc nhập là tấn thần/thoái thần”
+                for match in re.finditer(r'Các sơn ([^.<\n]*) sinh khắc nhập là ([\w ]+thần)', n_text):
+                    son_block = match.group(1)
+                    group_label = match.group(2).replace(" thần", "").strip()
+                    for son, loai in re.findall(r'([A-Za-zÀ-ỹ\s]+)\((tôn|tử)\)', son_block):
+                        son_items.append({'son': son.strip(), 'loai': loai.strip(), 'group': group_label, 'zone': 'cung vị thủy'})
+            
+                return doors, son_items
                 
+                # ----------------------------
+                # Ví dụ sử dụng
+                
+                doors, son_items = extract_zones(n)
+                
+                # Xuất DataFrame cho toàn bộ sơn (cung vị sơn, cung vị thủy)
+                df_son = pd.DataFrame(son_items)
+                print("Cửa chính, phụ:", doors)
+                print(df_son)
                 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
