@@ -20,7 +20,7 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
-import plotly.graph_objects as go
+
 st.set_page_config(layout="wide")
 
 
@@ -44,21 +44,7 @@ def main():
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
     with col4:
         run = st.button("Run", use_container_width=True)
-    def plot_dem_3d(Xx, Yx, Z):
-                    fig = go.Figure(data=[go.Surface(z=Z, x=Xx, y=Yx, colorscale='Viridis')])
-                    fig.update_layout(
-                        title="DEM 3D Model",
-                        autosize=True,
-                        width=800, height=600,
-                        scene=dict(
-                            xaxis_title="Longitude",
-                            yaxis_title="Latitude",
-                            zaxis_title="Độ cao (m)",
-                            aspectratio=dict(x=1, y=1, z=0.3),
-                            camera_eye=dict(x=1.2, y=1.2, z=0.6)
-                        )
-                    )
-                    return fig
+   
     x = y = None
     if input_str:
         try:
@@ -102,11 +88,6 @@ def main():
     
                 with rasterio.open(out_path, "w", **profile) as dst:
                     dst.write(dem_crop, 1)
-    
-                st.success("✅ Đã cắt file thành công.")
-                st.markdown("#### DEM 3D - Xoay, nghiêng tự do")
-                fig_3d = plot_dem_3d(Xx, Yx, data_array)
-                st.plotly_chart(fig_3d, use_container_width=True)
                 with rasterio.open(out_path) as data:
                     data_array = data.read(1).astype(np.float64)
                     transform = data.transform
