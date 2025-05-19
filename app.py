@@ -298,7 +298,7 @@ def main():
                 declination = get_magnetic_declination(x, y)
                 huong = "E" if declination >= 0 else "W"
                 declination_str = f"{abs(declination):.1f}°{huong}"
-                bearing= (bearing1 +180+ declination) % 360
+                bearing= (bearing1 +180- declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
                     n=(" 1.Toạ Bính(-2) Tấn 6 kim khắc xuất hướng Nhâm -1 thuỷ nên là cục toạ Tấn nghi Thoái. Hùng dự Hùng<br>     2. Cửa chính,phụ: Mở ở hướng bính,tỵ, Tân, Dậu, mùi, khôn, Sửu <br>      3.Cung vị sơn:            sơn nhâm, hợi(tôn), Cấn(tử), ất,mão(tử)     là thoái thần <br>  Cần cao, xa> 100m không đáp ứng ảnh hưởng đinh   <br>   -   sơn mùi, khôn, tân, dậu, sửu, bính,tỵ    là tấn thần.<br>Cần cao , xa <100m.<br>    4. Các cung vị thuỷ:    tý quý(tôn), thân canh(tử), tuất(tử)   là thoái thần. <br>    Cần thấp , xa >100m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài.<br>     - Các sơn giáp, dần, tốn,thìn, ngọ,đinh, càn   là tấn thần. Cần có thủy trong 100m." )
