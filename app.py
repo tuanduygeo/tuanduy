@@ -23,14 +23,8 @@ from scipy.ndimage import gaussian_filter
 import re
 import geomag
 import io
-def get_location_by_ip():
-    try:
-        res = requests.get('https://ipinfo.io/json')
-        data = res.json()
-        lat, lon = map(float, data['loc'].split(','))
-        return lat, lon
-    except:
-        return None, None
+from streamlit_javascript import st_javascript
+
 
 st.set_page_config(layout="wide")
 def get_magnetic_declination(lat, lon):
@@ -101,18 +95,39 @@ def main():
     
     st.markdown("### 1. Địa mạch") 
     col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 1, 1])
+
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
     
-    # Thêm nút lấy tự động
     with col4:
-        if st.button("auto"):
-            lat, lon = get_location_by_ip()
-            if lat and lon:
+        gps_data = st_javascript(
+            """
+            () => new Promise((resolve, reject) => {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            resolve({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            });
+                        },
+                        (error) => {
+                            resolve(null);
+                        }
+                    );
+                } else {
+                    resolve(null);
+                }
+            })
+            """
+        )
+        if st.button("Lấy GPS trình duyệt"):
+            if gps_data:
+                lat, lon = gps_data['latitude'], gps_data['longitude']
                 input_str = f"{lat:.6f}, {lon:.6f}"
-                st.success(f"Đã lấy vị trí hiện tại: {lat:.6f}, {lon:.6f}")
+                st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
             else:
-                st.warning("Không lấy được vị trí từ IP!")
+                st.warning("Không lấy được GPS từ trình duyệt.")
     
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
