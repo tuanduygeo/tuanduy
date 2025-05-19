@@ -173,7 +173,7 @@ def main():
                         # Xác định độ dài vạch
                         if deg % 15 == 0:
                             r0 = radius * 0.96  # Vạch dài cho 15°
-                            lw = 2
+                            lw = 1.2
                         else:
                             r0 = radius * 0.99  # Vạch ngắn cho từng độ
                             lw = 1
