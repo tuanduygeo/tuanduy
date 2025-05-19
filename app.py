@@ -216,7 +216,7 @@ def main():
                     'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
                 ]
                 
-                fig, ax = plt.subplots(figsize=(12, 12))
+                fig, ax = plt.subplots(figsize=(14, 14))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
                 img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
