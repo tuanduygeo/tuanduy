@@ -281,10 +281,10 @@ def main():
                 arrow_length = radius * 0.75
                 if manual_bearing is not None:
                     # Vẽ theo góc nhập tay (màu đỏ)
-                    angle_rad = np.deg2rad(manual_bearing)
-                    arrow_dx = np.cos(angle_rad) * arrow_length
-                    arrow_dy = np.sin(angle_rad) * arrow_length
-                    arrow_color = 'red'
+                    angle_rad = np.deg2rad(manual_bearing)-np.pi/2
+                    arrow_dx = np.sin(angle_rad) * arrow_length
+                    arrow_dy = np.cos(angle_rad) * arrow_length
+                    arrow_color = 'white'
                 else:
                     # Vẽ theo hướng DEM tự động (màu trắng)
                     arrow_dx = -dir_x * arrow_length
