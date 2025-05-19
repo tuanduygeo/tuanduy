@@ -22,16 +22,18 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 
+
+
+
 st.set_page_config(layout="wide")
-def get_declination(lat, lon):
-    try:
-        url = f"https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1={lat}&lon1={lon}&model=WMM&startYear=2024&resultFormat=csv"
-        r = requests.get(url)
-        # Kết quả dòng thứ 2, cột 5 (Declination)
-        value = float(r.text.split("\n")[1].split(",")[4])
-        return value
-    except Exception:
-        return 0
+def get_magnetic_declination(lat, lon, alt=0):
+    now = datetime.utcnow()
+    jd = swe.julday(now.year, now.month, now.day, now.hour)
+    # swe.get_mag_decl(longitude, latitude, altitude, tjd_ut)
+    # Kết quả trả về: (declination, annual_change, dip, horizontal_intensity, total_intensity, north_comp, east_comp, vert_comp)
+    result = swe.get_mag_decl(lon, lat, alt, jd)
+    declination = result[0]
+    return declination
 def extract_phongthuy_data(n_text):
     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
     doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
@@ -299,7 +301,9 @@ def main():
                 dlat = lat_max - lat0
                 bearing1 = (np.degrees(np.arctan2(dlon, dlat)) + 360) % 360
                 
-                declination = get_declination(lat0, lon0)
+                declination = get_magnetic_declination(x, y)
+                huong = "E" if declination >= 0 else "W"
+                declination_str = f"{abs(declination):.1f}°{huong}"
                 bearing= (bearing1 +180+ declination) % 360
                 st.markdown(f"**Chỉ số Bearing :** `{bearing:.1f}°`")
                 if 337.5<=float(bearing)<352.5:
@@ -475,7 +479,7 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
-                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) |  {diem_tong}| Độ từ thiên: {declination:+.1f}°", 
+                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) | Hiệu số: {diem_tong}| Độ từ thiên: {declination_str}°", 
              fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
