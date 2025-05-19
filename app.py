@@ -362,7 +362,7 @@ def main():
                             return i
                     return None
                 
-                radius_icon = radius*0.72
+                radius_icon = radius*0.75
                 theta = np.linspace(0, 2*np.pi, len(labels_24), endpoint=False) + np.pi/2
                 def chuan_hoa_ten(ten):
                     # Chỉ in hoa ký tự đầu, còn lại thường (tốt nhất cho trường hợp tiếng Việt không dấu)
