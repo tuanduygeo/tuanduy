@@ -22,7 +22,7 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-
+import io
 
 
 st.set_page_config(layout="wide")
@@ -505,6 +505,15 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
+                buf = io.BytesIO()
+                fig.savefig(buf, format="png", dpi=300, bbox_inches="tight")  # dpi cao cho ảnh nét
+                buf.seek(0)
+                st.download_button(
+                    label="📥 Tải ảnh bản đồ chất lượng cao",
+                    data=buf,
+                    file_name="ban_do_phong_thuy.png",
+                    mime="image/png"
+                )
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
