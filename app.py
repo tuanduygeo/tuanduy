@@ -343,42 +343,42 @@ def main():
                         st.dataframe(df_son)
                     else:
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
-                label_pos = [
-                    'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
-                    'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
-                    'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
-                ]
-                label_to_idx = {name: i for i, name in enumerate(label_pos)}
-                
-                def get_label_index(name):
-                    # Tìm phần đầu tiên là tên hướng trong chuỗi (ví dụ "Bính" -> "Bính")
-                    for n in label_pos:
-                        if n in name:
-                            return label_to_idx[n]
-                    return None              
-               # Đặt các icon ở gần ngoài cùng vòng tròn 24 hướng
-                radius_icon = radius*0.97
-                theta = np.linspace(0, 2*np.pi, len(label_pos), endpoint=False) + np.pi/2
-                
-                # Vẽ icon cửa
-                for door in doors:
-                    idx = get_label_index(door)
-                    if idx is not None:
-                        angle = theta[idx]
-                        x_icon = x_center + np.cos(angle)*radius_icon
-                        y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
-                for _, row in df_son.iterrows():
-                    idx = get_label_index(row['son'])
-                    if idx is not None:
-                        angle = theta[idx]
-                        # Đẩy ra vòng ngoài hơn để không đè số
-                        x_icon = x_center + np.cos(angle)*radius*1.05
-                        y_icon = y_center + np.sin(angle)*radius*1.05
-                        if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                            ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
-                        if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                            ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
+            label_pos = [
+                'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
+                'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
+                'Thìn', 'Ất', 'Mão', 'Giáp', 'Dần', 'Cấn', 'Sửu', 'Quý'
+            ]
+            label_to_idx = {name: i for i, name in enumerate(label_pos)}
+            
+            def get_label_index(name):
+                # Tìm phần đầu tiên là tên hướng trong chuỗi (ví dụ "Bính" -> "Bính")
+                for n in label_pos:
+                    if n in name:
+                        return label_to_idx[n]
+                return None              
+           # Đặt các icon ở gần ngoài cùng vòng tròn 24 hướng
+            radius_icon = radius*0.97
+            theta = np.linspace(0, 2*np.pi, len(label_pos), endpoint=False) + np.pi/2
+            
+            # Vẽ icon cửa
+            for door in doors:
+                idx = get_label_index(door)
+                if idx is not None:
+                    angle = theta[idx]
+                    x_icon = x_center + np.cos(angle)*radius_icon
+                    y_icon = y_center + np.sin(angle)*radius_icon
+                    ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
+            for _, row in df_son.iterrows():
+                idx = get_label_index(row['son'])
+                if idx is not None:
+                    angle = theta[idx]
+                    # Đẩy ra vòng ngoài hơn để không đè số
+                    x_icon = x_center + np.cos(angle)*radius*1.05
+                    y_icon = y_center + np.sin(angle)*radius*1.05
+                    if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
+                        ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
+                    if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
+                        ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
                 ax.set_axis_off()
                 scale_length = 100  # 100m
 
