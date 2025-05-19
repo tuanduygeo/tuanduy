@@ -27,6 +27,39 @@ from streamlit_javascript import st_javascript
 
 
 st.set_page_config(layout="wide")
+gps_data = st_javascript(
+    """
+    () => new Promise((resolve, reject) => {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    });
+                },
+                (error) => {
+                    resolve({
+                        error: error.message,
+                        code: error.code
+                    });
+                }
+            );
+        } else {
+            resolve({error: "Geolocation not supported"});
+        }
+    })
+    """
+)
+if st.button("Lấy GPS trình duyệt"):
+    st.write("Dữ liệu GPS trả về:", gps_data)
+    if gps_data and "latitude" in gps_data and "longitude" in gps_data:
+        lat, lon = gps_data['latitude'], gps_data['longitude']
+        st.success(f"Đã lấy vị trí GPS: {lat:.6f}, {lon:.6f}")
+    elif gps_data and "error" in gps_data:
+        st.error(f"Lỗi lấy GPS: {gps_data['error']} (code: {gps_data.get('code', '')})")
+    else:
+        st.error("Không lấy được GPS từ trình duyệt.")
 def get_magnetic_declination(lat, lon):
     return geomag.declination(lat, lon)
 def extract_phongthuy_data(n_text):
