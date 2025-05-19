@@ -20,6 +20,7 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
+import plotly.graph_objects as go
 st.set_page_config(layout="wide")
 def main():
     
@@ -86,7 +87,11 @@ def main():
                     dst.write(dem_crop, 1)
     
                 st.success("✅ Đã cắt file thành công.")
-    
+                # Sau đoạn code crop DEM
+                if st.checkbox("Hiển thị DEM 3D"):
+                    st.markdown("#### DEM 3D - Xoay, nghiêng tự do")
+                    fig_3d = plot_dem_3d(Xx, Yx, data_array)
+                    st.plotly_chart(fig_3d, use_container_width=True)
                 with rasterio.open(out_path) as data:
                     data_array = data.read(1).astype(np.float64)
                     transform = data.transform
@@ -102,7 +107,21 @@ def main():
                 x_center, y_center = transformer.transform(y, x)  # x=lat, y=lon
                 
                 radius = dt * 111320
-                
+                def plot_dem_3d(Xx, Yx, Z):
+                    fig = go.Figure(data=[go.Surface(z=Z, x=Xx, y=Yx, colorscale='Viridis')])
+                    fig.update_layout(
+                        title="DEM 3D Model",
+                        autosize=True,
+                        width=800, height=600,
+                        scene=dict(
+                            xaxis_title="Longitude",
+                            yaxis_title="Latitude",
+                            zaxis_title="Độ cao (m)",
+                            aspectratio=dict(x=1, y=1, z=0.3),
+                            camera_eye=dict(x=1.2, y=1.2, z=0.6)
+                        )
+                    )
+                    return fig
                 # --- Hàm vẽ vòng Fibonacci ---
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
