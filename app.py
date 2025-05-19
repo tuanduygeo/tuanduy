@@ -345,7 +345,7 @@ def main():
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
                               
                
-                extract_and_show_phongthuy(n)
+                
                 ax.set_axis_off()
                 scale_length = 100  # 100m
 
@@ -364,7 +364,7 @@ def main():
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
-                             
+                extract_and_show_phongthuy(n)             
                 plt.close(fig)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
