@@ -166,36 +166,29 @@ def main():
                 
                 radius = dt * 111320
                 
-                def draw_degree_ticks(ax, x_center, y_center, radius, tick_length_major=30, tick_length_minor=15):
-                    """
-                    Vẽ 360 vạch chia độ quanh vòng tròn: 0° ở phía trên, 90° bên phải, 180° dưới, 270° bên trái.
-                    """
+                def plot_bearing_circle(ax, x_center, y_center, radius):
+                    # 360 vạch chia, mỗi 1 độ
                     for deg in range(360):
-                        # Đổi góc: 0° phía trên, tăng thuận chiều kim đồng hồ
-                        angle_rad = np.deg2rad(deg - 90)
+                        angle = np.deg2rad(deg) - np.pi/2  # Đưa 0° ra phía Bắc (trên cùng), thuận chiều kim đồng hồ
+                        # Xác định độ dài vạch
                         if deg % 15 == 0:
-                            length = tick_length_major
-                            # Vẽ số độ mỗi 15°
-                            x_text = x_center + np.cos(angle_rad) * (radius + length + 20)
-                            y_text = y_center + np.sin(angle_rad) * (radius + length + 20)
-                            ax.text(
-                                x_text, y_text, f"{deg}",
-                                color='orange', fontsize=11,
-                                ha='center', va='center', fontweight='bold', alpha=0.93,
-                                rotation=deg, rotation_mode='anchor'
-                            )
+                            r0 = radius * 0.96  # Vạch dài cho 15°
+                            lw = 2
                         else:
-                            length = tick_length_minor
-                
-                        x_start = x_center + np.cos(angle_rad) * radius
-                        y_start = y_center + np.sin(angle_rad) * radius
-                        x_end = x_center + np.cos(angle_rad) * (radius + length)
-                        y_end = y_center + np.sin(angle_rad) * (radius + length)
-                        ax.plot(
-                            [x_start, x_end], [y_start, y_end],
-                            color='orange' if deg % 15 == 0 else '#ffe082',
-                            linewidth=2 if deg % 15 == 0 else 0.7, zorder=10
-                        )
+                            r0 = radius * 0.99  # Vạch ngắn cho từng độ
+                            lw = 1
+                        r1 = radius * 1.03     # Mép ngoài
+                        x0 = x_center + np.cos(angle) * r0
+                        y0 = y_center + np.sin(angle) * r0
+                        x1 = x_center + np.cos(angle) * r1
+                        y1 = y_center + np.sin(angle) * r1
+                        ax.plot([x0, x1], [y0, y1], color='white', linewidth=lw, zorder=101)
+                        # Hiển thị số độ mỗi 15°
+                        if deg % 15 == 0:
+                            xt = x_center + np.cos(angle) * (radius * 1.07)
+                            yt = y_center + np.sin(angle) * (radius * 1.07)
+                            ax.text(xt, yt, f"{deg}", fontsize=12, color='white', ha='center', va='center', fontweight='bold', zorder=102)
+
                 def plot_fibonacci_labels_only(ax, x_center, y_center, labels_inner, radius=radius):
                     n = len(labels_inner)
                     theta = np.linspace(0, 2 * np.pi, n, endpoint=False) + np.pi / 2
@@ -491,7 +484,7 @@ def main():
                 ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
-                draw_degree_ticks(ax, x_center, y_center, radius*0.665)
+                plot_bearing_circle(ax, x_center, y_center, radius*0.665)
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
