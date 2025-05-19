@@ -336,7 +336,11 @@ def main():
                 
                 radius_icon = radius*0.97
                 theta = np.linspace(0, 2*np.pi, len(labels_24), endpoint=False) + np.pi/2
+                def chuan_hoa_ten(ten):
+                    # Chỉ in hoa ký tự đầu, còn lại thường (tốt nhất cho trường hợp tiếng Việt không dấu)
+                    return ten.strip().capitalize()
                 
+                doors = [chuan_hoa_ten(d) for d in doors]
                 for door in doors:
                     idx = get_label_index(door, labels_24)
                     st.write(f"Đang thử gắn icon cho cửa: {door} (idx={idx})")
