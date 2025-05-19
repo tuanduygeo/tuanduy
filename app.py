@@ -283,7 +283,7 @@ def main():
                     # Vẽ theo góc nhập tay (màu đỏ)
                     angle_rad = np.deg2rad(90 - manual_bearing)  # trừ đi 90 độ để hướng Bắc là "lên trên"
                     arrow_dx = x_center_map + radius * np.cos( angle_rad)
-                    arrow_dy = y_center_map + radius * np.sin( angle_rad)
+                    arrow_dy = y_center_map - radius * np.sin( angle_rad)
                     arrow_color = 'white'
                     
                 else:
