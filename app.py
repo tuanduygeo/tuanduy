@@ -269,13 +269,11 @@ def main():
                 else:
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn:      sơn nhâm hợi(tôn), cấn(tử), ất mão(tử)    là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> -   sơn mùi khôn, tân dậu, bính tý, sửu    là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ:    canh thân(tử), tuất(tử), quý tý(tôn)   là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn   là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 
-                def extract_and_show_phongthuy(n_text):
-                    # 1. Cửa chính, phụ
+                def extract_phongthuy_data(n_text):
                     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
                     doors = [h.strip() for h in door_match.group(1).split(',')] if door_match else []
+                    son_thoai, son_tan, thuy_thoai, thuy_tan = [], [], [], []
                 
-                    # 2. Cung vị sơn - thoái thần
-                    son_thoai = []
                     match_son_thoai = re.search(r'3\.Cung vị sơn:.*?sơn\s+([^<]*)\s+là thoái thần', n_text)
                     if match_son_thoai:
                         block = match_son_thoai.group(1)
@@ -287,9 +285,6 @@ def main():
                                     son_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị sơn'})
                                 else:
                                     son_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị sơn'})
-                
-                    # 3. Cung vị sơn - tấn thần
-                    son_tan = []
                     match_son_tan = re.search(r'-\s*sơn\s+([^<]*)\s+là tấn thần', n_text)
                     if match_son_tan:
                         block = match_son_tan.group(1)
@@ -301,9 +296,6 @@ def main():
                                     son_tan.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'tấn', 'zone': 'cung vị sơn'})
                                 else:
                                     son_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị sơn'})
-                
-                    # 4. Cung vị thủy - thoái thần
-                    thuy_thoai = []
                     match_thuy_thoai = re.search(r'4\. Các cung vị thuỷ:\s*([^<]*)\s+là thoái thần', n_text)
                     if match_thuy_thoai:
                         block = match_thuy_thoai.group(1)
@@ -315,9 +307,6 @@ def main():
                                     thuy_thoai.append({'son': m.group(1).strip(), 'loai': m.group(2).strip(), 'group': 'thoái', 'zone': 'cung vị thủy'})
                                 else:
                                     thuy_thoai.append({'son': ten_loai.strip(), 'loai': None, 'group': 'thoái', 'zone': 'cung vị thủy'})
-                
-                    # 5. Cung vị thủy - tấn thần
-                    thuy_tan = []
                     match_thuy_tan = re.search(r'-\s*Các sơn\s+([^<]*)\s+là tấn thần', n_text)
                     if match_thuy_tan:
                         block = match_thuy_tan.group(1)
@@ -330,23 +319,10 @@ def main():
                                 else:
                                     thuy_tan.append({'son': ten_loai.strip(), 'loai': None, 'group': 'tấn', 'zone': 'cung vị thủy'})
                 
-                    # Gộp kết quả
                     all_son = son_thoai + son_tan + thuy_thoai + thuy_tan
-                
-                    # Hiển thị trên Streamlit
-                    if doors:
-                        st.markdown("#### 🚪 Cửa chính, phụ:")
-                        st.success(", ".join(doors))
-                
-                    if all_son:
-                        df_son = pd.DataFrame(all_son)
-                        
-                    else:
-                        st.info("Không có dữ liệu cung vị sơn/thủy.")
-                doors, df_son = extract_and_show_phongthuy(n)
-                
-                
-                # --- VẼ ICON LÊN MATPLOTLIB ---
+                    df_son = pd.DataFrame(all_son) if all_son else pd.DataFrame()
+                    return doors, df_son
+                doors, df_son = extract_phongthuy_data(n)
                 label_pos = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
                     'Thân', 'Khôn', 'Mùi', 'Đinh', 'Ngọ', 'Bính', 'Tỵ', 'Tốn',
@@ -362,7 +338,6 @@ def main():
                 radius_icon = radius*0.97
                 theta = np.linspace(0, 2*np.pi, len(label_pos), endpoint=False) + np.pi/2
                 
-                # 🚪 Vẽ icon cửa
                 for door in doors:
                     idx = get_label_index(door)
                     if idx is not None:
@@ -370,17 +345,17 @@ def main():
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
                         ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
-                # ⛰️💧 Vẽ icon núi/nước (chỉ lấy loại "thoái")
-                for _, row in df_son.iterrows():
-                    idx = get_label_index(row['son'])
-                    if idx is not None:
-                        angle = theta[idx]
-                        x_icon = x_center + np.cos(angle)*radius*1.05
-                        y_icon = y_center + np.sin(angle)*radius*1.05
-                        if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                            ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
-                        if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                            ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
+                if not df_son.empty:
+                    for _, row in df_son.iterrows():
+                        idx = get_label_index(row['son'])
+                        if idx is not None:
+                            angle = theta[idx]
+                            x_icon = x_center + np.cos(angle)*radius*1.05
+                            y_icon = y_center + np.sin(angle)*radius*1.05
+                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
+                                ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
+                            if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
+                                ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
