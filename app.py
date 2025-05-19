@@ -385,10 +385,63 @@ def main():
                             )   
                       
     
+                if not df_son.empty:
+                    df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
+                    # Tính median địa hình
+                    median_z = np.median(data_array)
+                    diem_tong = 0
+                    diem_chi_tiet = []
+                
+                    for _, row in df_son.iterrows():
+                        idx = get_label_index(row['son'], labels_24)
+                        if idx is not None:
+                            # Lấy vị trí pixel theo chỉ số idx trên vòng 24
+                            # Tìm góc
+                            angle = theta[idx]
+                            # Lấy vị trí trên bản đồ (vòng tròn cách tâm bán kính radius*0.7)
+                            px = x_center + np.cos(angle)*radius*0.7
+                            py = y_center + np.sin(angle)*radius*0.7
+                            # Chuyển đổi ngược về lat,lon (EPSG:3857 -> EPSG:4326)
+                            lon_px, lat_px = transformer.transform(px, py, direction="INVERSE")
+                            # Tìm chỉ số gần nhất trên lưới DEM
+                            i = np.argmin(np.abs(yt - lat_px))
+                            j = np.argmin(np.abs(xt - lon_px))
+                            value = data_array[i, j]
+                
+                            # Tính điểm
+                            if row['zone'] == "cung vị sơn":
+                                if value > median_z:
+                                    diem = 1
+                                else:
+                                    diem = -1
+                            elif row['zone'] == "cung vị thủy":
+                                if value > median_z:
+                                    diem = -1
+                                else:
+                                    diem = 1
+                            else:
+                                diem = 0
+                            diem_tong += diem
+                            diem_chi_tiet.append({
+                                'son': row['son'],
+                                'zone': row['zone'],
+                                'group': row['group'],
+                                'giatri': value,
+                                'median': median_z,
+                                'diem': diem
+                            })
+                
+                    # Hiển thị tổng điểm
+                    st.markdown(f"### 🔢 Tổng điểm phong thủy: `{diem_tong}`")
+                    # Nếu muốn hiển thị chi tiết:
+                    df_diem = pd.DataFrame(diem_chi_tiet)
+                    if not df_diem.empty:
+                        st.dataframe(df_diem)
 
+
+                
                 ax.set_axis_off()
                 scale_length = 100  # 100m
-
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
