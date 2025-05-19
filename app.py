@@ -150,7 +150,7 @@ def main():
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="rainbow", levels=levels, alpha=0)
                 ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='rainbow', linewidths=1)
                 threshold = np.percentile(data_array, 90)
-                threshold1 = np.percentile(data_array, 2)
+                threshold1 = np.percentile(data_array, 5)
                 for level in levels:
                     if level >= threshold:
                         color = cmap(norm(level))
