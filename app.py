@@ -505,7 +505,7 @@ def main():
                 st.download_button(
                     label="📥 Tải ảnh bản đồ chất lượng cao",
                     data=buf,
-                    file_name=f"ban_do_{x:.6f}_{y:.6f}.png"
+                    file_name=f"ban_do_{x:.6f}_{y:.6f}.png",
                     mime="image/png"
                 )
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
