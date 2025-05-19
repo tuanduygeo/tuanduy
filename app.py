@@ -486,7 +486,7 @@ def main():
                 ax.plot([x_end, x_end], [y_start-10, y_start+10], color='white', linewidth=2, zorder=20)
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
-                draw_degree_ticks(ax, x_center, y_center, radius*0.93)
+                draw_degree_ticks(ax, x_center, y_center, radius*0.705)
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
