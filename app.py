@@ -345,17 +345,7 @@ def main():
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
                         ax.text(x_icon, y_icon, "🚪", ha='center', va='center', fontsize=20, zorder=50)
-                if not df_son.empty:
-                    for _, row in df_son.iterrows():
-                        idx = get_label_index(row['son'])
-                        if idx is not None:
-                            angle = theta[idx]
-                            x_icon = x_center + np.cos(angle)*radius*1.05
-                            y_icon = y_center + np.sin(angle)*radius*1.05
-                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                                ax.text(x_icon, y_icon, "⛰️", ha='center', va='center', fontsize=19, zorder=51)
-                            if row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                                ax.text(x_icon, y_icon, "💧", ha='center', va='center', fontsize=19, zorder=51)
+                
 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
