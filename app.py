@@ -345,7 +345,7 @@ def main():
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
                               
                
-                
+                extract_and_show_phongthuy(n)
                 ax.set_axis_off()
                 scale_length = 100  # 100m
 
