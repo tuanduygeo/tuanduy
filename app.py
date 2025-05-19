@@ -268,6 +268,7 @@ def main():
                     n=(" 1.Toạ Tốn(6) Thoái 4 mộc sinh xuất hướng Càn 9 hỏa nên là cục toạ Thoái nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng càn, thìn, đinh ngọ <br> 3.Cung vị sơn:    sơn càn(tử), thìn(tôn), đinh ngọ(tôn)    là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> -   sơn tuất, quý tý, canh thân, giáp dần, tốn    là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ:   sửu(tử), bính tỵ(tôn), khôn(tôn)   là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn nhâm hợi, cấn, ất mão, dậu, tân, mùi   là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
                 else:
                     n=(" 1.Toạ Tỵ(-7) Tấn 6 kim khắc xuất hướng Hợi 1 thuỷ nên là cục toạ Tấn nghi Thoái. Thư dự Thư<br> 2. Cửa chính,phụ: Mở ở hướng mùi khôn, tân dậu, bính tỵ, sửu <br> 3.Cung vị sơn:      sơn nhâm hợi(tôn), cấn(tử), ất mão(tử)    là thoái thần <br> cần có núi, nhà cao, nhiều nhà ở xa từ 100 đến 1500m. Nếu ở sơn có thủy thì là phản ngâm chủ bại nhân đinh <br> -   sơn mùi khôn, tân dậu, bính tý, sửu    là tấn thần. <br> Các sơn này có núi, nhà cao tầng, nhiều nhà trong 100m trở lại.  <br>4. Các cung vị thuỷ:    canh thân(tử), tuất(tử), quý tý(tôn)   là thoái thần. <br> Các sơn này có thuỷ, ngã tư đường, công viên bãi đỗ xe từ 100 đến 1500m. Nếu các thủy này lại có sơn là phục ngâm, chủ bại tài   <br> - Các sơn đinh ngọ, càn, giáp dần, tốn thìn   là tấn thần.<br> Các sơn này cần có thủy trong 100m ")
+                
                 def extract_and_show_phongthuy(n_text):
                     # 1. Cửa chính, phụ
                     door_match = re.search(r'Cửa chính,phụ: Mở ở hướng ([^<]*)<br>', n_text)
@@ -342,7 +343,7 @@ def main():
                         
                     else:
                         st.info("Không có dữ liệu cung vị sơn/thủy.")
-                doors, df_son = extract_phongthuy_data(n_text)
+                doors, df_son = extract_phongthuy_data(n)
                 
                 
                 # --- VẼ ICON LÊN MATPLOTLIB ---
