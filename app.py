@@ -305,8 +305,7 @@ def main():
                 
                 # Xuất DataFrame cho toàn bộ sơn (cung vị sơn, cung vị thủy)
                 df_son = pd.DataFrame(son_items)
-                print("Cửa chính, phụ:", doors)
-                print(df_son)
+               
                 
                 ax.set_axis_off()
                 scale_length = 100  # 100m
@@ -326,6 +325,20 @@ def main():
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
+                doors, son_items = extract_zones(n)
+                df_son = pd.DataFrame(son_items)
+                
+                if doors:
+                    st.markdown("#### Bảng cửa chính/phụ")
+                    st.write(", ".join(doors))
+                else:
+                    st.markdown("#### Không tìm thấy thông tin cửa chính/phụ")
+                
+                if not df_son.empty:
+                    st.markdown("#### Bảng cung vị sơn, cung vị thủy")
+                    st.dataframe(df_son)
+                else:
+                    st.markdown("#### Không có dữ liệu sơn/tử/tôn")
                 plt.close(fig)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
