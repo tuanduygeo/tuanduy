@@ -30,7 +30,7 @@ def main():
     st.markdown("""
     <div style="background:linear-gradient(90deg,#f9d423,#ff4e50);padding:24px 8px 20px 8px;border-radius:16px;margin-bottom:24px;">
         <h1 style='color:white;text-align:center;margin:0;font-size:36px;'>🔯 ỨNG DỤNG  ĐỊA LÝ & CHIÊM TINH </h1>
-        <p style='color:white;text-align:center;font-size:20px;margin:0;'>Kết hợp Chiêm tinh, Địa mạch, số liệu Từ trường</p>
+        <p style='color:white;text-align:center;font-size:20px;margin:0;'>Tác giả: Nguyễn Duy Tuấn</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -298,7 +298,9 @@ def main():
     Nguồn: [Tomsk, Russia Space Observing System]
     """)
     st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
-    st.markdown("---\n### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. SĐT&ZALO: 0377442597. DONATE: nguyenduytuan techcombank 19033167089018")
+    st.markdown("---\n### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. 
+    Dữ liệu code nguồn không sao chép dưới mọi hình thức. 
+    SĐT&ZALO: 0377442597. DONATE: nguyenduytuan techcombank 19033167089018")
 
 if __name__ == "__main__":
     main()
