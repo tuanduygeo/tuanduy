@@ -282,8 +282,8 @@ def main():
                 if manual_bearing is not None:
                     # Vẽ theo góc nhập tay (màu đỏ)
                     angle_rad = np.deg2rad(90 - manual_bearing)  # trừ đi 90 độ để hướng Bắc là "lên trên"
-                    x_end = x_center_map + radius * np.cos(angle_math)
-                    y_end = y_center_map - radius * np.sin(angle_math)
+                    x_end = x_center_map + radius * np.cos( angle_rad)
+                    y_end = y_center_map + radius * np.sin( angle_rad)
                     ax.plot([x_center, x_end], [y_center, y_end], 'r-', linewidth=2)
                     
                 else:
