@@ -506,7 +506,7 @@ def main():
                     st.dataframe(df_diem)
                 plt.close(fig)
                 buf = io.BytesIO()
-                fig.savefig(buf, format="png", dpi=300, bbox_inches="tight")  # dpi cao cho ảnh nét
+                fig.savefig(buf, format="png", dpi=200, bbox_inches="tight")  # dpi cao cho ảnh nét
                 buf.seek(0)
                 st.download_button(
                     label="📥 Tải ảnh bản đồ chất lượng cao",
