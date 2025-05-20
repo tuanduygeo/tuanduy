@@ -12,6 +12,20 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
+    rashi_rulers = {
+    "Bạch Dương": "Mars",        # Aries
+    "Kim Ngưu": "Venus",         # Taurus
+    "Song Tử": "Mercury",        # Gemini
+    "Cự Giải": "Moon",           # Cancer
+    "Sư Tử": "Sun",              # Leo
+    "Xử Nữ": "Mercury",          # Virgo
+    "Thiên Bình": "Venus",       # Libra
+    "Bọ Cạp": "Mars",            # Scorpio
+    "Nhân Mã": "Jupiter",        # Sagittarius
+    "Ma Kết": "Saturn",          # Capricorn
+    "Bảo Bình": "Saturn",        # Aquarius
+    "Song Ngư": "Jupiter"        # Pisces
+}
     res = []
     def dms_str_to_float(dms_str):
         match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
@@ -68,7 +82,11 @@ def detect_yoga_dosha(df_planets, asc_rashi):
             return False, "Moon hoặc Jupiter bị tử/suy yếu"
     
         return True, "Thỏa mãn các điều kiện mạnh của Gaja-Kesari Yoga"
-    
+    is_gk, note = is_gaja_kerasi(df_planets)
+    if is_gk:
+        res.append(f"- **Gaja-Kesari Yoga**: {note}")
+    elif "Thỏa mãn" not in note:
+        res.append(f"- **(Cảnh báo Gaja-Kesari)**: {note}")
     # 3. Chandra-Mangal Yoga (Moon & Mars cùng Kendra tính từ nhau)
     mars = get_planet("Mars")
     if moon is not None and mars is not None:
