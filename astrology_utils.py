@@ -157,7 +157,7 @@ def astrology_block():
     }
     nakshatra_to_gana = {
         "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
-        "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Quỷ thần",
+        "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Nhân",
         "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
         "Magha": "Quỷ thần", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
         "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
