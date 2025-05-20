@@ -88,7 +88,7 @@ def detect_yoga_dosha(df_planets):
         malefic_names = ["Rahu", "Ketu", "Saturn"]
         for m in malefic_names:
             m_p = get_planet(m)
-            if m_p and (m_p["Nhà"] == moon_house or m_p["Nhà"] == jupiter_house):
+            if m_p is not None and (m_p["Nhà"] == moon_house or m_p["Nhà"] == jupiter_house):
                 return False, f"{m} đồng cung với Moon/Jupiter"
     
         # Không tử/suy yếu
