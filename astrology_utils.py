@@ -17,7 +17,7 @@ def astrology_block():
 
     # Lấy chỉ số timezone mặc định là Việt Nam
     
-    vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
+    vn_tz = pytz.timezone("Asia/Bangkok")
     now_local = datetime.now(vn_tz)
     decimal_default = now_local.hour + now_local.minute / 60
     
