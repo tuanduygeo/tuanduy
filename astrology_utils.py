@@ -14,12 +14,13 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     """
     res = []
     def dms_str_to_float(dms_str):
-        """
-        Chuyển chuỗi góc dạng '12°34\'56"' thành float độ thập phân.
-        """
         match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
         if not match:
-            return 0.0  # hoặc raise Exception nếu cần chặt chẽ hơn
+            # Nếu chỉ có số độ, không có phút/giây, ví dụ "12°"
+            try:
+                return float(dms_str.replace("°",""))
+            except:
+                return 0.0
         d, m, s = map(int, match.groups())
         return d + m/60 + s/3600
     # Lấy các vị trí nhanh
@@ -112,7 +113,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
         others = [p for p in df_planets.to_dict("records") if p["Hành tinh"] not in ["Rahu","Ketu"]]
         in_between = True
         for p in others:
-            deg = float(p["Vị trí"].replace("°",""))
+            deg = dms_str_to_float(p["Vị trí"])
             if rahu_deg < ketu_deg:
                 if not (rahu_deg < deg < ketu_deg):
                     in_between = False
