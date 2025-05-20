@@ -212,15 +212,7 @@ def detect_yoga_dosha(df_planets):
                 break
         if in_one_arc:
             res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
-    # 9. Kemadruma Dosha (Moon cô độc)
-    left = get_planet("Moon")
-    if left is not None:
-        moon_cung = left["Cung"]
-        same_cung = [p for p in df_planets.to_dict("records") if p["Cung"] == moon_cung and p["Hành tinh"] != "Moon"]
-        if len(same_cung) == 0:
-            res.append(
-                "- **Kemadruma Dosha:** Moon cô độc (không có hành tinh nào cùng cung) – dễ bất ổn tâm lý, khó ổn định tình cảm."
-            )
+    
     
     
     
@@ -234,7 +226,7 @@ def detect_yoga_dosha(df_planets):
         next_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == next_house and p["Hành tinh"] in malefics)
         if prev_malefic and next_malefic:
             res.append(
-                f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại lớn."
+                f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại."
             )
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
