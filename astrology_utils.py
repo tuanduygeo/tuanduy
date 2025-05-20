@@ -330,8 +330,10 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data):
+    def draw_chart(planet_data, title="")::
         fig, ax = plt.subplots(figsize=(4,4))
+        if title:
+            ax.set_title(title, fontsize=10)
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
         ax.axis("off")
