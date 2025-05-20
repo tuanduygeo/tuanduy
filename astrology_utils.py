@@ -895,6 +895,7 @@ def astrology_block():
     plt.close(fig)
     st.markdown("### Vị trí hành tinh")
     st.dataframe(df_planets, use_container_width=False)
+    st.markdown(detect_yoga_dosha(df_planets, asc_rashi), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
@@ -903,7 +904,7 @@ def astrology_block():
         
         st.dataframe(df_all_antar, use_container_width=False)
 
-    st.markdown(detect_yoga_dosha(df_planets, asc_rashi), unsafe_allow_html=True)
+    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
