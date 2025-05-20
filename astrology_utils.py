@@ -559,8 +559,8 @@ def astrology_block():
 
     # Quy tắc điểm số theo nhà
 
-    benefic_house_scores = {1:3  ,2:2  ,3:-2  ,4:2  ,5:3  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2  ,12:-3 }
-    malefic_house_scores = {1:2  ,2:2  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
+    benefic_house_scores = {1:3  ,2:2.5  ,3:-2  ,4:2  ,5:2.5  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2.5  ,12:-3 }
+    malefic_house_scores = {1:2  ,2:1.5  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
     benefics = {"Jupiter", "Venus", "Moon","Mercury"}
     malefics = {"Mars", "Saturn", "Rahu", "Ketu","Sun"}
     def get_house_score(house, planet):
@@ -601,9 +601,9 @@ def astrology_block():
                 m_score -= 1
             # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
             if m_lord in ["Jupiter", "Venus", "Moon"]:
-                m_score += 0.7
+                m_score += 0.5
             elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
-                m_score -= 0.7
+                m_score -= 0.5
             m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if "R" in m_status and "C" in m_status:
                 m_score -= 0.5
@@ -615,9 +615,10 @@ def astrology_block():
                     rule_bonus -= 3.5
                 elif rh in [1, 5, 9]:
                     rule_bonus += 3.5
-                elif rh in [2, 4, 7, 10,11]:
+                elif rh in [ 4, 7, 10]:
                     rule_bonus += 1.5
-            
+                elif rh in [ 2,11]:
+                    rule_bonus += 2.5
             m_score += rule_bonus
             m_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if m_gana == "Thiên thần":
@@ -626,23 +627,28 @@ def astrology_block():
                 m_score -= 1
             # Gán nhãn mục tiêu dựa theo nhà
             purpose = ""
-            if m_house in [2, 11]:
+            if m_house in [2]:
                 purpose = " (tài ↑)"
             elif m_house in [1]:
-                purpose = " (mệnh ↑)"
+                purpose = " (bản mệnh ↑)"
             elif m_house in [ 9]:
                 purpose = " (đạo ↑)"
             elif m_house in [5]:
                 purpose = " (học ↑)"
             elif m_house in [10]:
                 purpose = " (danh ↑)"
+            elif m_house in [4]:
+                purpose = " (An ↑)"
             elif m_house == 7:
                 purpose = " (Quan hệ ↑)"
             elif m_house == 3:
                 purpose = " (Thị phi ↓)"
-            elif m_house in [6,8,12]:
-                purpose = " (tài,mệnh ↓)"
-                
+            elif m_house in [8,12]:
+                purpose = " (họa, thiệt ↓)"
+            elif m_house in [6]:
+                purpose = " (bệnh ↓)"
+            elif m_house in [11]:
+                purpose = " (Thuận ↑)"
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
             for _, antar in antars.iterrows():
                 a_lord = antar["Antardasha"].split("/")[-1]
