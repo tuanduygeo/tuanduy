@@ -162,7 +162,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào, hoặc các điều kiện phức tạp hơn cần kiểm tra bằng mắt chuyên gia."
     else:
-        return "### 📜 **Tổng hợp các Yoga/Dosha nổi bật:**\n" + "\n".join(res)
+        return "### 📜 **Tổng hợp các cách cục cát/hung nổi bật:**\n" + "\n".join(res)
 def astrology_block():
     
 
