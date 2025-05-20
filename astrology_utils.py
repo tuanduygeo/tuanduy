@@ -716,7 +716,8 @@ def astrology_block():
             ax.text(x, y + 0.5, label, fontsize=8,  ha='left', va='bottom')
             shown_mahadashas.add(label)
     ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
-    ax.set_title("Biểu đồ đại vận (tham khảo)")
+    median_score = round(filtered_df["Điểm số"].median(), 2)
+    ax.set_title(f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}")
 
     ax.set_xlabel("Năm")
     ax.set_ylabel("Điểm số")
@@ -725,8 +726,8 @@ def astrology_block():
     st.pyplot(fig)
     plt.close(fig)
     filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
-    median_score = round(filtered_df["Điểm số"].median(), 2)
-    st.markdown(f"#### **Điểm(Thang từ -10 đến 10):** `{median_score}`")
+   
+    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
