@@ -698,15 +698,14 @@ def astrology_block():
     chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
 
     # Vẽ biểu đồ zigzag và đường cong mượt
+    chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
+
     fig, ax = plt.subplots(figsize=(12, 4))
-    ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
+    ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
     ax.axhline(y=0, color='black', linestyle='-', linewidth=2)
-    ax.axvspan(0, 70, color='grey', alpha=0.2)
-    ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
-    ax.spines['left'].set_position(('data', birth_x))
-    ax.spines['left'].set_color('purple')
-    ax.spines['left'].set_linewidth(2)
-    ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
+    ax.axvline(x=0, color='purple', linestyle=':', linewidth=2)  # Birth_x giờ là 0
+    ax.spines['left'].set_position('zero')  # Đặt OY đúng tại x=0 mới
+    ax.text(0, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
     ax.set_ylim(-12, 12)
 
     # Cài đặt chi tiết cho trục hoành
