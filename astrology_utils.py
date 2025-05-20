@@ -123,13 +123,20 @@ def detect_yoga_dosha(df_planets):
             if p2["Hành tinh"] == p1["Hành tinh"]:
                 continue
             if rashi_rulers.get(p2["Cung"], None) == p1["Hành tinh"]:
-                # Cặp định danh không phân biệt thứ tự
-                pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
+                # Cặp định danh không phân biệt thứ tự, gồm cả số nhà
+                # Để loại trùng lặp ngược, luôn để hành tinh có tên nhỏ hơn lên trước
+                if p1["Hành tinh"] < p2["Hành tinh"]:
+                    pair = (p1["Hành tinh"], p1["Nhà"], p2["Hành tinh"], p2["Nhà"])
+                else:
+                    pair = (p2["Hành tinh"], p2["Nhà"], p1["Hành tinh"], p1["Nhà"])
                 parivartana_pairs.add(pair)
     
     if parivartana_pairs:
-        cặp_txt = ", ".join([f"{a}-{b}" for a, b in sorted(parivartana_pairs)])
+        # Ví dụ ra: Mercury (nhà 3) ↔ Jupiter (nhà 6), Venus (nhà 4) ↔ Mars (nhà 11)
+        cặp_txt = ", ".join([f"{a} (nhà {a_n}) ↔ {b} (nhà {b_n})" for a, a_n, b, b_n in sorted(parivartana_pairs)])
         res.append(f"- **Parivartana Yoga**: {cặp_txt}")
+    
+   
                 
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu nằm trong nhà xấu khác)
