@@ -157,18 +157,18 @@ def detect_yoga_dosha(df_planets, asc_rashi):
             )
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
-dhana_houses = [2, 5, 9, 11]
-for p in df_planets.to_dict("records"):
-    # Chủ của nhà này là gì?
-    for house in dhana_houses:
-        # Lấy danh sách chủ tinh của nhà này
-        rulers = p.get("Chủ tinh của nhà", [])
-        if rulers:
-            for r in rulers:
-                # Nếu chủ là 2,5,9,11 và ở đúng các nhà tài lộc
-                if r in dhana_houses and p["Nhà"] in dhana_houses:
-                    res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
-                    break
+    dhana_houses = [2, 5, 9, 11]
+    for p in df_planets.to_dict("records"):
+        # Chủ của nhà này là gì?
+        for house in dhana_houses:
+            # Lấy danh sách chủ tinh của nhà này
+            rulers = p.get("Chủ tinh của nhà", [])
+            if rulers:
+                for r in rulers:
+                    # Nếu chủ là 2,5,9,11 và ở đúng các nhà tài lộc
+                    if r in dhana_houses and p["Nhà"] in dhana_houses:
+                        res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
+                        break
     houses_with_planets = set([p["Nhà"] for p in df_planets.to_dict("records")])
     if all(h in houses_with_planets for h in [1, 4, 7, 10]):
         res.append("- **Chatusagara Yoga**: Có hành tinh ở cả 4 nhà Kendra – nổi tiếng, có tiếng tăm rộng khắp.")
