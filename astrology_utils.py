@@ -157,7 +157,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
             )
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
-    dhana_houses = [2, 11]
+    dhana_houses = [9,2, 11]
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
         for house in dhana_houses:
