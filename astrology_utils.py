@@ -50,7 +50,7 @@ def astrology_block():
         min_value=0.0,            # float
         max_value=23.99,          # float
         value=float(st.session_state.decimal_hour), # float
-        step=0.25,                # float
+        step=1,                # float
         format="%.2f", 
         key="decimal_hour"
     )
