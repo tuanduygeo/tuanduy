@@ -40,6 +40,18 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     # Lấy các vị trí nhanh
     def get_planet(name):
         return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
+
+    # === Khai báo các biến hành tinh cần dùng toàn hàm ===
+    moon = get_planet("Moon")
+    mars = get_planet("Mars")
+    jupiter = get_planet("Jupiter")
+    mercury = get_planet("Mercury")
+    sun = get_planet("Sun")
+    venus = get_planet("Venus")
+    rahu = get_planet("Rahu")
+    ketu = get_planet("Ketu")
+    saturn = get_planet("Saturn")
+    
     
     # 1. Pancha Mahapurusha Yoga
     mahapurusha = []
