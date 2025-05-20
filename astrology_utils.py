@@ -48,7 +48,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     if moon is not None and jupiter is not None:
         moon_house = moon["Nhà"]
         jup_house = jupiter["Nhà"]
-        if jup_house in [(moon_house + x - 2) % 12 + 1 for x in [1,4,7,10]]:
+        if jup_house in [(moon_house + x - 1) % 12  for x in [1,4,7,10]]:
             res.append(
                 "- **Gaja-Kesari Yoga**: Jupiter ở nhà Kendra từ Moon – trí tuệ, quyền lực, nổi bật."
             )
