@@ -5,7 +5,151 @@ import numpy as np
 import pytz
 from datetime import datetime, date
 import matplotlib.pyplot as plt
+def detect_yoga_dosha(df_planets, asc_rashi):
+"""
+Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
+"""
+res = []
 
+# Lấy các vị trí nhanh
+def get_planet(name):
+    return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
+
+# 1. Pancha Mahapurusha Yoga
+mahapurusha = []
+kendra_houses = [1, 4, 7, 10]
+pmy_data = [
+    ("Mars", "Ruchaka", "Mars ở nhà 1,4,7,10 và vượng/tướng"),
+    ("Mercury", "Bhadra", "Mercury ở nhà 1,4,7,10 và vượng/tướng"),
+    ("Jupiter", "Hamsa", "Jupiter ở nhà 1,4,7,10 và vượng/tướng"),
+    ("Venus", "Malavya", "Venus ở nhà 1,4,7,10 và vượng/tướng"),
+    ("Saturn", "Shasha", "Saturn ở nhà 1,4,7,10 và vượng/tướng"),
+]
+for planet, yoga, explain in pmy_data:
+    p = get_planet(planet)
+    if p is not None and p['Nhà'] in kendra_houses and p['Tính chất'] in ["vượng", "tướng"]:
+        mahapurusha.append(f"- **{yoga} Yoga**: {explain} (đang có hiệu lực)")
+
+# 2. Gaja-Kesari Yoga (Jupiter ở Kendra từ Moon)
+moon = get_planet("Moon")
+jupiter = get_planet("Jupiter")
+if moon is not None and jupiter is not None:
+    moon_house = moon["Nhà"]
+    jup_house = jupiter["Nhà"]
+    if jup_house in [(moon_house + x - 1) % 12 + 1 for x in [1,4,7,10]]:
+        res.append(
+            "- **Gaja-Kesari Yoga**: Jupiter ở nhà Kendra từ Moon – trí tuệ, quyền lực, nổi bật."
+        )
+
+# 3. Chandra-Mangal Yoga (Moon & Mars cùng Kendra tính từ nhau)
+mars = get_planet("Mars")
+if moon is not None and mars is not None:
+    moon_house = moon["Nhà"]
+    mars_house = mars["Nhà"]
+    kendra = [(moon_house + x - 1) % 12 + 1 for x in [1,4,7,10]]
+    if mars_house in kendra:
+        res.append(
+            "- **Chandra-Mangal Yoga**: Mars ở nhà Kendra từ Moon – khả năng kinh doanh, quyết đoán."
+        )
+
+# 4. Budha-Aditya Yoga (Sun & Mercury đồng cung)
+sun = get_planet("Sun")
+mercury = get_planet("Mercury")
+if sun is not None and mercury is not None and sun["Cung"] == mercury["Cung"]:
+    res.append(
+        "- **Budha-Aditya Yoga**: Sun và Mercury đồng cung – thông minh, học hành xuất sắc."
+    )
+
+# 5. Parivartana Yoga (Hoán đổi chủ tinh)
+# Ví dụ: Venus ở cung Mercury, Mercury ở cung Venus
+venus = get_planet("Venus")
+if venus is not None and mercury is not None:
+    if venus["Cung"] == "Song Tử" and mercury["Cung"] == "Kim Ngưu":
+        res.append(
+            "- **Parivartana Yoga**: Venus & Mercury hoán đổi cung – kết hợp tài năng, sáng tạo."
+        )
+    # Có thể mở rộng thêm cho các tổ hợp khác
+
+# 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
+dusthana = [6, 8, 12]
+for planet in ["Mars", "Saturn", "Rahu", "Ketu"]:
+    p = get_planet(planet)
+    if p is not None and p["Nhà"] in dusthana and p["Chủ tinh của nhà"] and any(h in dusthana for h in p["Chủ tinh của nhà"]):
+        res.append(
+            f"- **Viparita Raja Yoga**: {planet} chủ Dusthana nằm trong Dusthana – chuyển hung thành cát, vượt khó."
+        )
+
+# 7. Neecha Bhanga Raja Yoga (cứu giải vị trí tử)
+# Nếu một hành tinh ở vị trí "tử" (Neecha) nhưng hành tinh chủ cung đó mạnh hoặc ở Kendra
+for _, row in df_planets.iterrows():
+    if row["Tính chất"] == "tử":
+        lord = row["Hành tinh"]
+        cung = row["Cung"]
+        # Kiểm tra các cứu giải thường gặp (ví dụ: chủ tinh cung đó mạnh/vượng, hoặc đồng cung với cát tinh)
+        # Ở đây chỉ cảnh báo phát hiện tử thôi, còn cứu giải chi tiết nên mở rộng
+        res.append(
+            f"- **Neecha Bhanga Raja (Cần kiểm tra cứu giải):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra cứu giải."
+        )
+
+# 8. Kala Sarpa Dosha (tất cả hành tinh nằm giữa Rahu – Ketu)
+rahu = get_planet("Rahu")
+ketu = get_planet("Ketu")
+if rahu is not None and ketu is not None:
+    rahu_deg = float(rahu["Vị trí"].replace("°",""))
+    ketu_deg = float(ketu["Vị trí"].replace("°",""))
+    others = [p for p in df_planets.to_dict("records") if p["Hành tinh"] not in ["Rahu","Ketu"]]
+    in_between = True
+    for p in others:
+        deg = float(p["Vị trí"].replace("°",""))
+        if rahu_deg < ketu_deg:
+            if not (rahu_deg < deg < ketu_deg):
+                in_between = False
+                break
+        else:
+            if not (deg > rahu_deg or deg < ketu_deg):
+                in_between = False
+                break
+    if in_between:
+        res.append(
+            "- **Kala Sarpa Dosha:** Toàn bộ các hành tinh nằm giữa trục Rahu–Ketu – nghiệp lực mạnh, nhiều thử thách."
+        )
+
+# 9. Kemadruma Dosha (Moon cô độc)
+left = get_planet("Moon")
+if left is not None:
+    moon_cung = left["Cung"]
+    same_cung = [p for p in df_planets.to_dict("records") if p["Cung"] == moon_cung and p["Hành tinh"] != "Moon"]
+    if len(same_cung) == 0:
+        res.append(
+            "- **Kemadruma Dosha:** Moon cô độc (không có hành tinh nào cùng cung) – dễ bất ổn tâm lý, khó ổn định tình cảm."
+        )
+
+# 10. Kuja Dosha (Manglik) – Mars ở 1,4,7,8,12 từ Ascendant
+if mars is not None and mars["Nhà"] in [1,4,7,8,12]:
+    res.append(
+        "- **Kuja Dosha (Manglik):** Mars ở nhà 1,4,7,8,12 – trắc trở hôn nhân, dễ xung đột vợ chồng."
+    )
+
+# 11. Paap Kartari Yoga – một cung bị kẹp giữa hai hung tinh
+malefics = ["Mars", "Saturn", "Sun", "Rahu", "Ketu"]
+for i, row in df_planets.iterrows():
+    curr_house = row["Nhà"]
+    prev_house = (curr_house - 2) % 12 + 1
+    next_house = curr_house % 12 + 1
+    prev_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == prev_house and p["Hành tinh"] in malefics)
+    next_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == next_house and p["Hành tinh"] in malefics)
+    if prev_malefic and next_malefic:
+        res.append(
+            f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại lớn."
+        )
+
+# Tổng hợp
+if mahapurusha:
+    res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
+if not res:
+    return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào, hoặc các điều kiện phức tạp hơn cần kiểm tra bằng mắt chuyên gia."
+else:
+    return "### 📜 **Tổng hợp các Yoga/Dosha nổi bật:**\n" + "\n".join(res)
 def astrology_block():
     
 
@@ -745,151 +889,7 @@ def astrology_block():
     if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
         
         st.dataframe(df_all_antar, use_container_width=False)
-def detect_yoga_dosha(df_planets, asc_rashi):
-"""
-Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
-"""
-res = []
 
-# Lấy các vị trí nhanh
-def get_planet(name):
-    return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
-
-# 1. Pancha Mahapurusha Yoga
-mahapurusha = []
-kendra_houses = [1, 4, 7, 10]
-pmy_data = [
-    ("Mars", "Ruchaka", "Mars ở nhà 1,4,7,10 và vượng/tướng"),
-    ("Mercury", "Bhadra", "Mercury ở nhà 1,4,7,10 và vượng/tướng"),
-    ("Jupiter", "Hamsa", "Jupiter ở nhà 1,4,7,10 và vượng/tướng"),
-    ("Venus", "Malavya", "Venus ở nhà 1,4,7,10 và vượng/tướng"),
-    ("Saturn", "Shasha", "Saturn ở nhà 1,4,7,10 và vượng/tướng"),
-]
-for planet, yoga, explain in pmy_data:
-    p = get_planet(planet)
-    if p is not None and p['Nhà'] in kendra_houses and p['Tính chất'] in ["vượng", "tướng"]:
-        mahapurusha.append(f"- **{yoga} Yoga**: {explain} (đang có hiệu lực)")
-
-# 2. Gaja-Kesari Yoga (Jupiter ở Kendra từ Moon)
-moon = get_planet("Moon")
-jupiter = get_planet("Jupiter")
-if moon is not None and jupiter is not None:
-    moon_house = moon["Nhà"]
-    jup_house = jupiter["Nhà"]
-    if jup_house in [(moon_house + x - 1) % 12 + 1 for x in [1,4,7,10]]:
-        res.append(
-            "- **Gaja-Kesari Yoga**: Jupiter ở nhà Kendra từ Moon – trí tuệ, quyền lực, nổi bật."
-        )
-
-# 3. Chandra-Mangal Yoga (Moon & Mars cùng Kendra tính từ nhau)
-mars = get_planet("Mars")
-if moon is not None and mars is not None:
-    moon_house = moon["Nhà"]
-    mars_house = mars["Nhà"]
-    kendra = [(moon_house + x - 1) % 12 + 1 for x in [1,4,7,10]]
-    if mars_house in kendra:
-        res.append(
-            "- **Chandra-Mangal Yoga**: Mars ở nhà Kendra từ Moon – khả năng kinh doanh, quyết đoán."
-        )
-
-# 4. Budha-Aditya Yoga (Sun & Mercury đồng cung)
-sun = get_planet("Sun")
-mercury = get_planet("Mercury")
-if sun is not None and mercury is not None and sun["Cung"] == mercury["Cung"]:
-    res.append(
-        "- **Budha-Aditya Yoga**: Sun và Mercury đồng cung – thông minh, học hành xuất sắc."
-    )
-
-# 5. Parivartana Yoga (Hoán đổi chủ tinh)
-# Ví dụ: Venus ở cung Mercury, Mercury ở cung Venus
-venus = get_planet("Venus")
-if venus is not None and mercury is not None:
-    if venus["Cung"] == "Song Tử" and mercury["Cung"] == "Kim Ngưu":
-        res.append(
-            "- **Parivartana Yoga**: Venus & Mercury hoán đổi cung – kết hợp tài năng, sáng tạo."
-        )
-    # Có thể mở rộng thêm cho các tổ hợp khác
-
-# 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
-dusthana = [6, 8, 12]
-for planet in ["Mars", "Saturn", "Rahu", "Ketu"]:
-    p = get_planet(planet)
-    if p is not None and p["Nhà"] in dusthana and p["Chủ tinh của nhà"] and any(h in dusthana for h in p["Chủ tinh của nhà"]):
-        res.append(
-            f"- **Viparita Raja Yoga**: {planet} chủ Dusthana nằm trong Dusthana – chuyển hung thành cát, vượt khó."
-        )
-
-# 7. Neecha Bhanga Raja Yoga (cứu giải vị trí tử)
-# Nếu một hành tinh ở vị trí "tử" (Neecha) nhưng hành tinh chủ cung đó mạnh hoặc ở Kendra
-for _, row in df_planets.iterrows():
-    if row["Tính chất"] == "tử":
-        lord = row["Hành tinh"]
-        cung = row["Cung"]
-        # Kiểm tra các cứu giải thường gặp (ví dụ: chủ tinh cung đó mạnh/vượng, hoặc đồng cung với cát tinh)
-        # Ở đây chỉ cảnh báo phát hiện tử thôi, còn cứu giải chi tiết nên mở rộng
-        res.append(
-            f"- **Neecha Bhanga Raja (Cần kiểm tra cứu giải):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra cứu giải."
-        )
-
-# 8. Kala Sarpa Dosha (tất cả hành tinh nằm giữa Rahu – Ketu)
-rahu = get_planet("Rahu")
-ketu = get_planet("Ketu")
-if rahu is not None and ketu is not None:
-    rahu_deg = float(rahu["Vị trí"].replace("°",""))
-    ketu_deg = float(ketu["Vị trí"].replace("°",""))
-    others = [p for p in df_planets.to_dict("records") if p["Hành tinh"] not in ["Rahu","Ketu"]]
-    in_between = True
-    for p in others:
-        deg = float(p["Vị trí"].replace("°",""))
-        if rahu_deg < ketu_deg:
-            if not (rahu_deg < deg < ketu_deg):
-                in_between = False
-                break
-        else:
-            if not (deg > rahu_deg or deg < ketu_deg):
-                in_between = False
-                break
-    if in_between:
-        res.append(
-            "- **Kala Sarpa Dosha:** Toàn bộ các hành tinh nằm giữa trục Rahu–Ketu – nghiệp lực mạnh, nhiều thử thách."
-        )
-
-# 9. Kemadruma Dosha (Moon cô độc)
-left = get_planet("Moon")
-if left is not None:
-    moon_cung = left["Cung"]
-    same_cung = [p for p in df_planets.to_dict("records") if p["Cung"] == moon_cung and p["Hành tinh"] != "Moon"]
-    if len(same_cung) == 0:
-        res.append(
-            "- **Kemadruma Dosha:** Moon cô độc (không có hành tinh nào cùng cung) – dễ bất ổn tâm lý, khó ổn định tình cảm."
-        )
-
-# 10. Kuja Dosha (Manglik) – Mars ở 1,4,7,8,12 từ Ascendant
-if mars is not None and mars["Nhà"] in [1,4,7,8,12]:
-    res.append(
-        "- **Kuja Dosha (Manglik):** Mars ở nhà 1,4,7,8,12 – trắc trở hôn nhân, dễ xung đột vợ chồng."
-    )
-
-# 11. Paap Kartari Yoga – một cung bị kẹp giữa hai hung tinh
-malefics = ["Mars", "Saturn", "Sun", "Rahu", "Ketu"]
-for i, row in df_planets.iterrows():
-    curr_house = row["Nhà"]
-    prev_house = (curr_house - 2) % 12 + 1
-    next_house = curr_house % 12 + 1
-    prev_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == prev_house and p["Hành tinh"] in malefics)
-    next_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == next_house and p["Hành tinh"] in malefics)
-    if prev_malefic and next_malefic:
-        res.append(
-            f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại lớn."
-        )
-
-# Tổng hợp
-if mahapurusha:
-    res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
-if not res:
-    return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào, hoặc các điều kiện phức tạp hơn cần kiểm tra bằng mắt chuyên gia."
-else:
-    return "### 📜 **Tổng hợp các Yoga/Dosha nổi bật:**\n" + "\n".join(res)
     st.markdown(detect_yoga_dosha(df_planets, asc_rashi), unsafe_allow_html=True)
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
