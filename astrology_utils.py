@@ -71,7 +71,7 @@ def astrology_block():
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
         longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
-       tz_options = [
+        tz_options = [
             "Etc/GMT+12",        # UTC-12:00
             "Pacific/Honolulu",  # UTC-10:00 (Hawaii)
             "America/Anchorage", # UTC-9:00  (Alaska)
