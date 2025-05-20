@@ -699,16 +699,15 @@ def astrology_block():
 
     # Vẽ biểu đồ zigzag và đường cong mượt
     fig, ax = plt.subplots(figsize=(12, 4))
-
     ax.plot(chart_df["Năm"], chart_df["Điểm số"], marker='o')
-    # Đường kẻ ngang tại 0 (trục điểm)
     ax.axhline(y=0, color='black', linestyle='-', linewidth=2)
-    # Phủ vùng từ năm 80 đến 120 bằng lớp mờ
     ax.axvspan(0, 70, color='grey', alpha=0.2)
-    # Đánh dấu thời điểm sinh
     ax.axvline(x=birth_x, color='purple', linestyle=':', linewidth=2)
+    ax.spines['left'].set_position(('data', birth_x))
+    ax.spines['left'].set_color('purple')
+    ax.spines['left'].set_linewidth(2)
     ax.text(birth_x, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
-    ax.set_ylim(-11, 11)
+    ax.set_ylim(-12, 12)
 
     # Cài đặt chi tiết cho trục hoành
     ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
@@ -744,7 +743,7 @@ def astrology_block():
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
     - Các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
-    - Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình và thường diễn biến đời người cũng hay lên xuống tại điểm này.
+    - Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình, điểm >0 được coi là chấp nhận được.
     - Biểu đồ được tính từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay nghịch hành, v.v.
     """)
     pass
