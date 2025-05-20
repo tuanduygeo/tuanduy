@@ -99,8 +99,7 @@ def detect_yoga_dosha(df_planets):
     is_gk, note = is_gaja_kerasi(df_planets)
     if is_gk:
         res.append(f"- **Gaja-Kesari Yoga**: {note}")
-    elif "Thỏa mãn" not in note:
-        res.append(f"- **(Cảnh báo Gaja-Kesari)**: {note}")
+    
     # 3. Chandra-Mangal Yoga (Moon & Mars cùng Kendra tính từ nhau)
     mars = get_planet("Mars")
     if moon is not None and mars is not None:
@@ -114,7 +113,7 @@ def detect_yoga_dosha(df_planets):
     
     
     
-   # 5. Parivartana Yoga (Hoán đổi chủ tinh cho mọi cặp, không lặp cặp ngược)
+   # 5. Parivartana Yoga (chỉ in ra 1 dòng, gồm các cặp hành tinh)
     parivartana_pairs = set()
     for p1 in df_planets.to_dict("records"):
         ruler_p1 = rashi_rulers.get(p1["Cung"], None)
@@ -124,14 +123,13 @@ def detect_yoga_dosha(df_planets):
             if p2["Hành tinh"] == p1["Hành tinh"]:
                 continue
             if rashi_rulers.get(p2["Cung"], None) == p1["Hành tinh"]:
-                # Tạo cặp định danh không phân biệt thứ tự
+                # Cặp định danh không phân biệt thứ tự
                 pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
-                if pair not in parivartana_pairs:
-                    res.append(
-                        f"- **Parivartana Yoga**: {p1['Hành tinh']} ở cung {p2['Cung']} ({ruler_p1} chủ), "
-                        f"{p2['Hành tinh']} ở cung {p1['Cung']} ({rashi_rulers[p1['Cung']]} chủ) – kết hợp tạo ra cát lợi."
-                    )
-                    parivartana_pairs.add(pair)
+                parivartana_pairs.add(pair)
+    
+    if parivartana_pairs:
+        cặp_txt = ", ".join([f"{a}-{b}" for a, b in sorted(parivartana_pairs)])
+        res.append(f"- **Parivartana Yoga**: {cặp_txt}")
                 
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
