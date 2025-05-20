@@ -872,7 +872,7 @@ def astrology_block():
             m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
             m_score = get_house_score(m_house, m_lord)
             if m_lord in vry_planets:
-                m_score += 1.5 # hoặc +1 tuỳ bạn
+                m_score += 5 # hoặc +1 tuỳ bạn
             m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if m_dignity in ["vượng", "tướng"]:
                 m_score += 1
