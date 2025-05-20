@@ -851,7 +851,12 @@ def astrology_block():
         year_labels = []
         current_year = 0
         birth_offset = None
-        
+        vry_planets = set()
+        dusthana = [6, 8, 12]
+        for planet in planet_data:
+            for ruled_house in planet.get("Chủ tinh của nhà", []):
+                if ruled_house in dusthana and planet["Nhà"] in dusthana:
+                    vry_planets.add(planet['Hành tinh'])
     
         # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
         for _, m_row in df_dasha.iterrows():
@@ -999,8 +1004,13 @@ def astrology_block():
     shown_mahadashas = set()
 
     for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mahadasha"]):
+        base_name = label.split(" ")[0]  # lấy tên hành tinh
         if label not in shown_mahadashas:
-            ax.text(x, y + 0.5, label, fontsize=8,  ha='left', va='bottom')
+            if base_name in vry_planets:
+                label_show = f"{label} ⭐"
+            else:
+                label_show = label
+            ax.text(x, y + 0.5, label_show, fontsize=8,  ha='left', va='bottom')
             shown_mahadashas.add(label)
     ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
