@@ -12,6 +12,8 @@ def detect_yoga_dosha(df_planets):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
+          "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     rashi_rulers = {
         "Bạch Dương": "Mars",        # Aries
         "Kim Ngưu": "Venus",         # Taurus
@@ -130,7 +132,7 @@ def detect_yoga_dosha(df_planets):
                         f"{p2['Hành tinh']} ở cung {p1['Cung']} ({rashi_rulers[p1['Cung']]} chủ) – kết hợp tạo ra cát lợi."
                     )
                     parivartana_pairs.add(pair)
-                )
+                
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
     dusthana = [6, 8, 12]
