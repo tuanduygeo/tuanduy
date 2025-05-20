@@ -859,9 +859,6 @@ def astrology_block():
                     vry_planets.add(planet['Hành tinh'])
     
         # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
-        
-            
-            
         for _, m_row in df_dasha.iterrows():
             m_lord = m_row["Dasha"]
             m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
@@ -875,7 +872,7 @@ def astrology_block():
             m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
             m_score = get_house_score(m_house, m_lord)
             if m_lord in vry_planets:
-                m_score += 1 # hoặc +1 tuỳ bạn
+                m_score += 2 # hoặc +1 tuỳ bạn
             m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if m_dignity in ["vượng", "tướng"]:
                 m_score += 1
@@ -943,7 +940,7 @@ def astrology_block():
                 a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
                 a_score = get_house_score(a_house, a_lord) 
                 if a_lord in vry_planets:
-                    a_score += 0.3
+                    a_score += 1
                 # ✅ Thêm điểm từ nhà mà antardasha làm chủ
                 ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
                 rule_bonus_a = 0
