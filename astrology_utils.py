@@ -74,7 +74,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     if moon is not None and mars is not None:
         moon_house = moon["Nhà"]
         mars_house = mars["Nhà"]
-        kendra = [(moon_house + x - 1) % 12 + 1 for x in [0.3.6.9]]
+        kendra = [(moon_house + x - 1) % 12 + 1 for x in [0,3,6,9]]
         if mars_house in kendra:
             res.append(
                 "- **Chandra-Mangal Yoga**: Mars ở nhà Kendra từ Moon – khả năng kinh doanh, quyết đoán."
@@ -997,4 +997,4 @@ def astrology_block():
     """)
     pass
 
-# Thêm các hàm phụ trợ cho Chiêm tinh ở dưới (nếu cần)
+
