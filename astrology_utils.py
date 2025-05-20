@@ -12,7 +12,20 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
-    
+    rashi_rulers = {
+        "Bạch Dương": "Mars",        # Aries
+        "Kim Ngưu": "Venus",         # Taurus
+        "Song Tử": "Mercury",        # Gemini
+        "Cự Giải": "Moon",           # Cancer
+        "Sư Tử": "Sun",              # Leo
+        "Xử Nữ": "Mercury",          # Virgo
+        "Thiên Bình": "Venus",       # Libra
+        "Bọ Cạp": "Mars",            # Scorpio
+        "Nhân Mã": "Jupiter",        # Sagittarius
+        "Ma Kết": "Saturn",          # Capricorn
+        "Bảo Bình": "Saturn",        # Aquarius
+        "Song Ngư": "Jupiter"        # Pisces
+    }
     res = []
     def dms_str_to_float(dms_str):
         match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
