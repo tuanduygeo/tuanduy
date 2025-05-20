@@ -43,44 +43,60 @@ def detect_yoga_dosha(df_planets, asc_rashi):
             mahapurusha.append(f"- **{yoga} Yoga**: {explain} (đang có hiệu lực)")
     
     # 2. Gaja-Kesari Yoga (Jupiter ở Kendra từ Moon)
-    moon = get_planet("Moon")
-    jupiter = get_planet("Jupiter")
-    if moon is not None and jupiter is not None:
+    def is_gaja_kerasi(df_planets):
+        moon = get_planet("Moon")
+        jupiter = get_planet("Jupiter")
+        if moon is None or jupiter is None:
+            return False, "Thiếu Moon hoặc Jupiter"
+    
         moon_house = moon["Nhà"]
-        jup_house = jupiter["Nhà"]
-        if jup_house in [(moon_house + x - 1) % 12  for x in [1,4,7,10]]:
-            res.append(
-                "- **Gaja-Kesari Yoga**: Jupiter ở nhà Kendra từ Moon – trí tuệ, quyền lực, nổi bật."
-            )
+        jupiter_house = jupiter["Nhà"]
+        kendra_from_moon = [(moon_house - 1 + x) % 12 + 1 for x in [0,3,6,9]]  # 1,4,7,10 từ Moon
+    
+        if jupiter_house not in kendra_from_moon:
+            return False, "Jupiter không ở Kendra từ Moon"
+    
+        # Không đồng cung với Rahu/Ketu/Saturn
+        malefic_names = ["Rahu", "Ketu", "Saturn"]
+        for m in malefic_names:
+            m_p = get_planet(m)
+            if m_p and (m_p["Nhà"] == moon_house or m_p["Nhà"] == jupiter_house):
+                return False, f"{m} đồng cung với Moon/Jupiter"
+    
+        # Không tử/suy yếu
+        if moon["Tính chất"] == "tử" or jupiter["Tính chất"] == "tử":
+            return False, "Moon hoặc Jupiter bị tử/suy yếu"
+    
+        return True, "Thỏa mãn các điều kiện mạnh của Gaja-Kesari Yoga"
     
     # 3. Chandra-Mangal Yoga (Moon & Mars cùng Kendra tính từ nhau)
     mars = get_planet("Mars")
     if moon is not None and mars is not None:
         moon_house = moon["Nhà"]
         mars_house = mars["Nhà"]
-        kendra = [(moon_house + x - 1) % 12 + 1 for x in [1,4,7,10]]
+        kendra = [(moon_house + x - 1) % 12 + 1 for x in [0.3.6.9]]
         if mars_house in kendra:
             res.append(
                 "- **Chandra-Mangal Yoga**: Mars ở nhà Kendra từ Moon – khả năng kinh doanh, quyết đoán."
             )
     
-    # 4. Budha-Aditya Yoga (Sun & Mercury đồng cung)
-    sun = get_planet("Sun")
-    mercury = get_planet("Mercury")
-    if sun is not None and mercury is not None and sun["Cung"] == mercury["Cung"]:
-        res.append(
-            "- **Budha-Aditya Yoga**: Sun và Mercury đồng cung – thông minh, học hành xuất sắc."
-        )
     
-    # 5. Parivartana Yoga (Hoán đổi chủ tinh)
-    # Ví dụ: Venus ở cung Mercury, Mercury ở cung Venus
-    venus = get_planet("Venus")
-    if venus is not None and mercury is not None:
-        if venus["Cung"] == "Song Tử" and mercury["Cung"] == "Kim Ngưu":
-            res.append(
-                "- **Parivartana Yoga**: Venus & Mercury hoán đổi cung – kết hợp tài năng, sáng tạo."
-            )
-        # Có thể mở rộng thêm cho các tổ hợp khác
+    
+   # 5. Parivartana Yoga (Hoán đổi chủ tinh cho mọi cặp)
+    for p1 in df_planets.to_dict("records"):
+        ruler_p1 = rashi_rulers.get(p1["Cung"], None)
+        if ruler_p1 is None or p1["Hành tinh"] == "Asc":
+            continue
+        # tìm hành tinh P2 đứng tại cung do P1 làm chủ
+        for p2 in df_planets.to_dict("records"):
+            if p2["Hành tinh"] == p1["Hành tinh"]:
+                continue
+            if rashi_rulers.get(p2["Cung"], None) == p1["Hành tinh"]:
+                # Hoán đổi chủ tinh, và không phải là Asc
+                res.append(
+                    f"- **Parivartana Yoga**: {p1['Hành tinh']} ở cung {p2['Cung']} ({ruler_p1} chủ), "
+                    f"{p2['Hành tinh']} ở cung {p1['Cung']} ({rashi_rulers[p1['Cung']]} chủ) – kết hợp tạo ra cát lợi."
+                )
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
     dusthana = [6, 8, 12]
@@ -88,20 +104,46 @@ def detect_yoga_dosha(df_planets, asc_rashi):
         p = get_planet(planet)
         if p is not None and p["Nhà"] in dusthana and p["Chủ tinh của nhà"] and any(h in dusthana for h in p["Chủ tinh của nhà"]):
             res.append(
-                f"- **Viparita Raja Yoga**: {planet} chủ Dusthana nằm trong Dusthana – chuyển hung thành cát, vượt khó."
+                f"- **Viparita Raja Yoga**: {planet} chủ Dusthana nằm trong Dusthana – lấy độc trị độc, chuyển hung thành cát, thành công nhờ vượt khó."
             )
     
-    # 7. Neecha Bhanga Raja Yoga (cứu giải vị trí tử)
-    # Nếu một hành tinh ở vị trí "tử" (Neecha) nhưng hành tinh chủ cung đó mạnh hoặc ở Kendra
+    # 7. Neecha Bhanga Raja Yoga (chi tiết cứu giải tử)
     for _, row in df_planets.iterrows():
         if row["Tính chất"] == "tử":
             lord = row["Hành tinh"]
             cung = row["Cung"]
-            # Kiểm tra các cứu giải thường gặp (ví dụ: chủ tinh cung đó mạnh/vượng, hoặc đồng cung với cát tinh)
-            # Ở đây chỉ cảnh báo phát hiện tử thôi, còn cứu giải chi tiết nên mở rộng
-            res.append(
-                f"- **Neecha Bhanga Raja (Cần kiểm tra cứu giải):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra cứu giải."
-            )
+            # Chủ của cung đó (Neecha sign lord)
+            neecha_ruler = rashi_rulers.get(cung, None)
+            # Tìm vị trí chủ cung tử
+            ruler_info = get_planet(neecha_ruler) if neecha_ruler else None
+            kendra_houses = [1, 4, 7, 10]
+            rescue = False
+            # Điều kiện 1: chủ cung tử ở Kendra từ Asc
+            if ruler_info is not None and ruler_info["Nhà"] in kendra_houses:
+                rescue = True
+                note = f"Chủ {cung} ({neecha_ruler}) ở Kendra"
+            # Điều kiện 2: chủ cung tử đồng cung với hành tinh tử
+            elif ruler_info is not None and ruler_info["Cung"] == cung:
+                rescue = True
+                note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
+            # Điều kiện 3: chủ cung đối diện ở Kendra hoặc đồng cung
+            doi_dien = rashis[(rashis.index(cung) + 6) % 12]
+            doi_dien_ruler = rashi_rulers.get(doi_dien, None)
+            doi_dien_info = get_planet(doi_dien_ruler) if doi_dien_ruler else None
+            if doi_dien_info is not None and (
+                doi_dien_info["Nhà"] in kendra_houses or doi_dien_info["Cung"] == cung
+            ):
+                rescue = True
+                note = f"Chủ đối diện ({doi_dien_ruler}) ở Kendra hoặc đồng cung với {lord}"
+            # Nếu cứu giải, báo Neecha Bhanga, nếu không thì chỉ cảnh báo thông thường
+            if rescue:
+                res.append(
+                    f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
+                )
+            else:
+                res.append(
+                    f"- **Neecha Bhanga Raja (Cảnh báo):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra thêm cứu giải."
+                )
     
     # 8. Kala Sarpa Dosha (tất cả hành tinh nằm giữa Rahu – Ketu)
     rahu = get_planet("Rahu")
