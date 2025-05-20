@@ -619,6 +619,11 @@ def astrology_block():
                     rule_bonus += 1.5
             
             m_score += rule_bonus
+            m_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == m_lord), "")
+            if m_gana == "Thiên thần":
+                m_score += 1
+            elif m_gana == "Quỷ thần":
+                m_score -= 1
             # Gán nhãn mục tiêu dựa theo nhà
             purpose = ""
             if m_house in [2, 11]:
@@ -669,12 +674,17 @@ def astrology_block():
                     a_score -= 0.2
                 elif a_dignity in ["tù", "tử"]:
                     a_score -= 0.5
-                    # 4️⃣ Điểm từ phân loại Cát/Hung tinh
+                a_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == a_lord), "")
+                if a_gana == "Thiên thần":
+                    a_score += 0.5
+                elif a_gana == "Quỷ thần":
+                    a_score -= 0.5    
+                # 4️⃣ Điểm từ phân loại Cát/Hung tinh
                 if a_lord in ["Jupiter", "Venus", "Moon"]:
                     a_score += 0.2
                 elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                     a_score -= 0.2
-                total_score = round(0.33 *a_score +  m_score, 2)
+                total_score = round(0.5 *a_score +  m_score, 2)
 
                 life_years.append(current_year)
                 life_scores.append(total_score)
