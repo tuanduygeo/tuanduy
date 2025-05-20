@@ -982,10 +982,10 @@ def astrology_block():
                 current_year += a_years
 
         birth_x = round(birth_offset, 2) if birth_offset else 0
-        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
+        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x, vry_planets
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
-    chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
+    chart_df, birth_x, vry_planets = build_life_chart(df_dasha, planet_data, jd)
 
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
