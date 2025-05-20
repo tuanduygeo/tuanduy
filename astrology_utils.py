@@ -181,39 +181,37 @@ def detect_yoga_dosha(df_planets):
                     f"- **Neecha Bhanga Raja (Cảnh báo):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra thêm cứu giải."
                 )
     
-    # 8. Kala Sarpa Dosha (Tất cả hành tinh chính nằm giữa Rahu-Ketu)
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
-    def normalize_deg(x):
-        return x % 360
-    def is_in_arc(x, start, end):
-        # Kiểm tra x nằm trên cung start -> end (thuận chiều kim đồng hồ)
-        x = normalize_deg(x)
-        start = normalize_deg(start)
-        end = normalize_deg(end)
-        if start < end:
-            return start < x < end
-        else:
-            return start < x or x < end
-    rahu = get_planet("Rahu")
-    ketu = get_planet("Ketu")
-    if rahu is not None and ketu is not None:
-        rahu_deg = dms_str_to_float(rahu["Vị trí"])
-        ketu_deg = dms_str_to_float(ketu["Vị trí"])
-        rahu_deg = normalize_deg(rahu_deg)
-        ketu_deg = normalize_deg(ketu_deg)
-        if rahu_deg == ketu_deg:
-            ketu_deg = (rahu_deg + 180) % 360
-        in_one_arc = True
-        for planet in main_planets:
-            p = get_planet(planet)
-            if not p:
-                continue
-            deg = dms_str_to_float(p["Vị trí"])
-            if not is_in_arc(deg, rahu_deg, ketu_deg):
-                in_one_arc = False
-                break
-        if in_one_arc:
-            res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
+def normalize_deg(x):
+    return x % 360
+def is_in_arc(x, start, end):
+    x = normalize_deg(x)
+    start = normalize_deg(start)
+    end = normalize_deg(end)
+    if start < end:
+        return start < x < end
+    else:
+        return start < x or x < end
+rahu = get_planet("Rahu")
+ketu = get_planet("Ketu")
+if rahu is not None and ketu is not None:
+    rahu_deg = dms_str_to_float(rahu["Vị trí"])
+    ketu_deg = dms_str_to_float(ketu["Vị trí"])
+    rahu_deg = normalize_deg(rahu_deg)
+    ketu_deg = normalize_deg(ketu_deg)
+    if rahu_deg == ketu_deg:
+        ketu_deg = (rahu_deg + 180) % 360
+    in_one_arc = True
+    for planet in main_planets:
+        p = get_planet(planet)
+        if p is None:
+            continue
+        deg = dms_str_to_float(p["Vị trí"])
+        if not is_in_arc(deg, rahu_deg, ketu_deg):
+            in_one_arc = False
+            break
+    if in_one_arc:
+        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
     # 9. Kemadruma Dosha (Moon cô độc)
     left = get_planet("Moon")
     if left is not None:
