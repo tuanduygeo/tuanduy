@@ -16,22 +16,11 @@ def astrology_block():
     tz_options = pytz.all_timezones
 
     # Lấy chỉ số timezone mặc định là Việt Nam
-    default_tz = "Asia/Ho_Chi_Minh"
-    default_index = tz_options.index(default_tz) if default_tz in tz_options else 0
     
-    selected_tz = st.selectbox(
-        "🌐 Chọn múi giờ địa phương",
-        tz_options,
-        index=default_index
-    )
-    local_tz = pytz.timezone(selected_tz)
-    
-    # Lấy giờ hiện tại theo múi giờ vừa chọn
-    now_local = datetime.now(local_tz)
-    decimal_default = now_local.hour + now_local.minute / 60
-    # Lấy giờ hiện tại ở múi giờ Việt Nam
+    vn_tz = pytz.timezone("Asia/Ho_Chi_Minh")
     now_local = datetime.now(vn_tz)
-    decimal_default = now_local.hour + now_local.minute/60
+    decimal_default = now_local.hour + now_local.minute / 60
+    
     # Chuyển đổi giờ hiện tại về UTC
     now_utc = now_local.astimezone(pytz.utc)
 
@@ -82,21 +71,35 @@ def astrology_block():
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
         longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
+        tz_options = pytz.all_timezones
+        default_tz = "Asia/Ho_Chi_Minh"
+        default_index = tz_options.index(default_tz) if default_tz in tz_options else 0
+        selected_tz = st.selectbox(
+            "🌐 Chọn múi giờ địa phương",
+            tz_options,
+            index=default_index
+        )
+        local_tz = pytz.timezone(selected_tz)
     # Button to calculate
     if st.button("Tính Toán"):
+        # Gán timezone theo local_tz đã chọn
         if selected_datetime.tzinfo is None:
             selected_datetime_local = local_tz.localize(selected_datetime)
         else:
             selected_datetime_local = selected_datetime.astimezone(local_tz)
-
+    
         selected_utc = selected_datetime_local.astimezone(pytz.utc)
-
-        jd = swe.julday(selected_utc.year, selected_utc.month, selected_utc.day,
-                        selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600)
-
+    
+        jd = swe.julday(
+            selected_utc.year, selected_utc.month, selected_utc.day,
+            selected_utc.hour + selected_utc.minute / 60 + selected_utc.second / 3600
+        )
+    
         st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-        st.markdown(f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day}**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d}")
-
+        st.markdown(
+            f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
+            f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
+        )
 
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
