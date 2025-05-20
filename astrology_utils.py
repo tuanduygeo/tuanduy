@@ -239,7 +239,7 @@ def detect_yoga_dosha(df_planets):
             continue
         for r in rulers:
             if r in dhana_houses and p["Nhà"] in dhana_houses:
-                res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
+                res.append("- **Dhana Yoga**: Chủ tinh nhà tài nằm ở nhà tài. Tài  ↑ .")
                 found_dhana = True
                 break
         if found_dhana:
