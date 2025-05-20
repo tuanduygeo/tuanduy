@@ -330,10 +330,8 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data, title=""):
+    def draw_chart(planet_data):
         fig, ax = plt.subplots(figsize=(4,4))
-        if title:
-            ax.set_title(title, fontsize=10)
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
         ax.axis("off")
@@ -403,11 +401,8 @@ def astrology_block():
             rashi_number = rashi_to_number[rashi_name]
             ax.text(x-2, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
         return fig  
-    date_str = f"Năm: {selected_utc.year} Tháng: {selected_utc.month} Ngày: {selected_utc.day}"
-    time_str = f"Giờ: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
-    title = f"{date_str}\n{time_str}"
-    
-    fig = draw_chart(planet_data, title=title)
+        
+    fig = draw_chart(planet_data)
     st.pyplot(fig, use_container_width=False)
     plt.close(fig)
     df_planets = pd.DataFrame(planet_data)
