@@ -71,7 +71,32 @@ def astrology_block():
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
         longitude = st.number_input("🌐 Kinh độ", min_value=-180.0, max_value=180.0, value=105.8, step=0.1)
-        tz_options = pytz.all_timezones
+        tz_options = [
+    "Etc/GMT+12",        # UTC-12:00
+    "Pacific/Honolulu",  # UTC-10:00 (Hawaii)
+    "America/Anchorage", # UTC-9:00  (Alaska)
+    "America/Los_Angeles", # UTC-8:00 (California)
+    "America/Denver",    # UTC-7:00  (Denver)
+    "America/Chicago",   # UTC-6:00  (Chicago)
+    "America/New_York",  # UTC-5:00  (New York)
+    "America/Santiago",  # UTC-4:00  (Chile)
+    "America/Halifax",   # UTC-3:00  (Nova Scotia)
+    "America/Sao_Paulo", # UTC-3:00  (Brazil)
+    "Atlantic/Azores",   # UTC-1:00
+    "Europe/London",     # UTC+0:00  (UK)
+    "Europe/Berlin",     # UTC+1:00  (Central Europe)
+    "Europe/Helsinki",   # UTC+2:00  (Eastern Europe)
+    "Europe/Moscow",     # UTC+3:00  (Moscow)
+    "Asia/Dubai",        # UTC+4:00  (UAE)
+    "Asia/Karachi",      # UTC+5:00  (Pakistan)
+    "Asia/Dhaka",        # UTC+6:00  (Bangladesh)
+    "Asia/Bangkok",      # UTC+7:00  (Thailand, Việt Nam)
+    "Asia/Shanghai",     # UTC+8:00  (China)
+    "Asia/Tokyo",        # UTC+9:00  (Japan)
+    "Australia/Sydney",  # UTC+10:00 (Sydney)
+    "Pacific/Noumea",    # UTC+11:00 (New Caledonia)
+    "Pacific/Auckland",  # UTC+12:00 (New Zealand)
+]
         default_tz = "Asia/Ho_Chi_Minh"
         default_index = tz_options.index(default_tz) if default_tz in tz_options else 0
         selected_tz = st.selectbox(
