@@ -191,6 +191,7 @@ def detect_yoga_dosha(df_planets):
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
     def normalize_deg(x):
         return x % 360
+
     def is_in_arc(x, start, end):
         x = normalize_deg(x)
         start = normalize_deg(start)
@@ -199,27 +200,30 @@ def detect_yoga_dosha(df_planets):
             return start < x < end
         else:
             return start < x or x < end
-    rahu = get_planet("Rahu")
-    ketu = get_planet("Ketu")
-    if rahu is not None and ketu is not None:
-        rahu_deg = dms_str_to_float(rahu["Vị trí"])
-        ketu_deg = dms_str_to_float(ketu["Vị trí"])
+    
+    main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    
+    def check_kala_sarpa(df_planets):
+        rahu = df_planets[df_planets["Hành tinh"] == "Rahu"].iloc[0]
+        ketu = df_planets[df_planets["Hành tinh"] == "Ketu"].iloc[0]
+        rahu_deg = dms_str_to_float(rahu["Vị trí"]) + 30 * (rashi_to_number[rahu["Cung"]] - 1)
+        ketu_deg = dms_str_to_float(ketu["Vị trí"]) + 30 * (rashi_to_number[ketu["Cung"]] - 1)
         rahu_deg = normalize_deg(rahu_deg)
         ketu_deg = normalize_deg(ketu_deg)
         if rahu_deg == ketu_deg:
             ketu_deg = (rahu_deg + 180) % 360
         in_one_arc = True
         for planet in main_planets:
-            p = get_planet(planet)
-            if p is None:
-                continue
-            deg = dms_str_to_float(p["Vị trí"])
+            p = df_planets[df_planets["Hành tinh"] == planet].iloc[0]
+            deg = dms_str_to_float(p["Vị trí"]) + 30 * (rashi_to_number[p["Cung"]] - 1)
             if not is_in_arc(deg, rahu_deg, ketu_deg):
                 in_one_arc = False
                 break
-        if in_one_arc:
-            res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
+        return in_one_arc
     
+    # Sử dụng:
+    if check_kala_sarpa(df_planets):
+        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
     
     
     
