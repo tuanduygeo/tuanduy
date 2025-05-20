@@ -7,21 +7,21 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 
-def dms_str_to_float(dms_str):
-    """
-    Chuyển chuỗi góc dạng '12°34\'56"' thành float độ thập phân.
-    """
-    match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
-    if not match:
-        return 0.0  # hoặc raise Exception nếu cần chặt chẽ hơn
-    d, m, s = map(int, match.groups())
-    return d + m/60 + s/3600
+
 def detect_yoga_dosha(df_planets, asc_rashi):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
     res = []
-    
+    def dms_str_to_float(dms_str):
+        """
+        Chuyển chuỗi góc dạng '12°34\'56"' thành float độ thập phân.
+        """
+        match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
+        if not match:
+            return 0.0  # hoặc raise Exception nếu cần chặt chẽ hơn
+        d, m, s = map(int, match.groups())
+        return d + m/60 + s/3600
     # Lấy các vị trí nhanh
     def get_planet(name):
         return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
@@ -106,8 +106,9 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     rahu = get_planet("Rahu")
     ketu = get_planet("Ketu")
     if rahu is not None and ketu is not None:
-        rahu_deg = float(rahu["Vị trí"].replace("°",""))
-        ketu_deg = float(ketu["Vị trí"].replace("°",""))
+        rahu_deg = dms_str_to_float(rahu["Vị trí"])
+        ketu_deg = dms_str_to_float(ketu["Vị trí"])
+        deg = dms_str_to_float(p["Vị trí"])
         others = [p for p in df_planets.to_dict("records") if p["Hành tinh"] not in ["Rahu","Ketu"]]
         in_between = True
         for p in others:
