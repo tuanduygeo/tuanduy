@@ -703,7 +703,7 @@ def astrology_block():
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
     ax.axhline(y=0, color='black', linestyle='-', linewidth=2)
-      
+    ax.axvspan(0, 70, color='grey', alpha=0.2)  
     ax.spines['left'].set_position('zero')  # Đặt OY đúng tại x=0 mới
     
     ax.set_ylim(-12, 12)
