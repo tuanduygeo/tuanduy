@@ -112,20 +112,24 @@ def detect_yoga_dosha(df_planets):
     
     
     
-   # 5. Parivartana Yoga (Hoán đổi chủ tinh cho mọi cặp)
+   # 5. Parivartana Yoga (Hoán đổi chủ tinh cho mọi cặp, không lặp cặp ngược)
+    parivartana_pairs = set()
     for p1 in df_planets.to_dict("records"):
         ruler_p1 = rashi_rulers.get(p1["Cung"], None)
         if ruler_p1 is None or p1["Hành tinh"] == "Asc":
             continue
-        # tìm hành tinh P2 đứng tại cung do P1 làm chủ
         for p2 in df_planets.to_dict("records"):
             if p2["Hành tinh"] == p1["Hành tinh"]:
                 continue
             if rashi_rulers.get(p2["Cung"], None) == p1["Hành tinh"]:
-                # Hoán đổi chủ tinh, và không phải là Asc
-                res.append(
-                    f"- **Parivartana Yoga**: {p1['Hành tinh']} ở cung {p2['Cung']} ({ruler_p1} chủ), "
-                    f"{p2['Hành tinh']} ở cung {p1['Cung']} ({rashi_rulers[p1['Cung']]} chủ) – kết hợp tạo ra cát lợi."
+                # Tạo cặp định danh không phân biệt thứ tự
+                pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
+                if pair not in parivartana_pairs:
+                    res.append(
+                        f"- **Parivartana Yoga**: {p1['Hành tinh']} ở cung {p2['Cung']} ({ruler_p1} chủ), "
+                        f"{p2['Hành tinh']} ở cung {p1['Cung']} ({rashi_rulers[p1['Cung']]} chủ) – kết hợp tạo ra cát lợi."
+                    )
+                    parivartana_pairs.add(pair)
                 )
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu trong nhà xấu khác)
@@ -208,11 +212,7 @@ def detect_yoga_dosha(df_planets):
                 "- **Kemadruma Dosha:** Moon cô độc (không có hành tinh nào cùng cung) – dễ bất ổn tâm lý, khó ổn định tình cảm."
             )
     
-    # 10. Kuja Dosha (Manglik) – Mars ở 1,4,7,8,12 từ Ascendant
-    if mars is not None and mars["Nhà"] in [1,4,7,8,12]:
-        res.append(
-            "- **Kuja Dosha (Manglik):** Mars ở nhà 1,4,7,8,12 – trắc trở hôn nhân, dễ xung đột vợ chồng."
-        )
+    
     
     # 11. Paap Kartari Yoga – một cung bị kẹp giữa hai hung tinh
     malefics = ["Mars", "Saturn", "Sun", "Rahu", "Ketu"]
@@ -228,21 +228,22 @@ def detect_yoga_dosha(df_planets):
             )
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
-    dhana_houses = [9,2, 11]
+    dhana_houses = [2, 5, 9, 11]  # đúng quy tắc 2/5/9/11
+    found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
-        for house in dhana_houses:
-            # Lấy danh sách chủ tinh của nhà này
-            rulers = p.get("Chủ tinh của nhà", [])
-            if rulers:
-                for r in rulers:
-                    # Nếu chủ là 2,5,9,11 và ở đúng các nhà tài lộc
-                    if r in dhana_houses and p["Nhà"] in dhana_houses:
-                        res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
-                        break
-    houses_with_planets = set([p["Nhà"] for p in df_planets.to_dict("records")])
-    if all(h in houses_with_planets for h in [1, 4, 7, 10]):
-        res.append("- **Chatusagara Yoga**: Có hành tinh ở cả 4 nhà Kendra – nổi tiếng, có tiếng tăm rộng khắp.")
+        rulers = p.get("Chủ tinh của nhà", [])
+        if not rulers:
+            continue
+        for r in rulers:
+            if r in dhana_houses and p["Nhà"] in dhana_houses:
+                res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
+                found_dhana = True
+                break
+        if found_dhana:
+            break  # Dừng luôn, chỉ hiển thị 1 lần duy nhất
+    
+    
     good_houses = [1, 4, 5, 7, 9, 10]
     saraswati_count = 0
     for planet in ["Mercury", "Jupiter", "Venus"]:
@@ -267,14 +268,14 @@ def detect_yoga_dosha(df_planets):
         if 10 in p.get("Chủ tinh của nhà", []):
             house10_ruler = p
     if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
-        res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – đại thành công sự nghiệp/phúc lộc lớn.")
+        res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – sự nghiệp-phúc tăng.")
     # Tổng hợp
     if mahapurusha:
         res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào, hoặc các điều kiện phức tạp hơn cần kiểm tra bằng mắt chuyên gia."
     else:
-        return "### 📜 **Tổng hợp các cách cục cát/hung nổi bật:**\n" + "\n".join(res)
+        return "#### 📜 **Tổng hợp các cách cục cát/hung nổi bật:**\n" + "\n".join(res)
 def astrology_block():
     
 
