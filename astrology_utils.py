@@ -705,7 +705,7 @@ def astrology_block():
     ax.axhline(y=0, color='black', linestyle='-', linewidth=2)
     ax.axvline(x=0, color='purple', linestyle=':', linewidth=2)  # Birth_x giờ là 0
     ax.spines['left'].set_position('zero')  # Đặt OY đúng tại x=0 mới
-    ax.text(0, min(chart_df["Điểm số"]) - 5, "Sinh", rotation=90, color='purple', ha='center', va='bottom')
+    
     ax.set_ylim(-12, 12)
 
     # Cài đặt chi tiết cho trục hoành
