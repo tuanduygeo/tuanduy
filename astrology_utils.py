@@ -865,7 +865,17 @@ def astrology_block():
         year_labels = []
         current_year = 0
         birth_offset = None
-
+        vry_planets = set()
+        dusthana = [6, 8, 12]
+        for planet in planet_data:   # hoặc df_planets.to_dict("records")
+            for ruled_house in planet.get("Chủ tinh của nhà", []):
+                if ruled_house in dusthana and planet["Nhà"] in dusthana:
+                    vry_planets.add(planet['Hành tinh'])
+    
+        # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
+        
+            
+            
         for _, m_row in df_dasha.iterrows():
             m_lord = m_row["Dasha"]
             m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
@@ -878,6 +888,8 @@ def astrology_block():
             # Điểm từ vị trí hiện tại của hành tinh
             m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
             m_score = get_house_score(m_house, m_lord)
+            if m_lord in vry_planets:
+                m_score += 1 # hoặc +1 tuỳ bạn
             m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if m_dignity in ["vượng", "tướng"]:
                 m_score += 1
@@ -913,6 +925,7 @@ def astrology_block():
                 m_score += 1
             elif m_gana == "Quỷ thần":
                 m_score -= 1
+            
             # Gán nhãn mục tiêu dựa theo nhà
             purpose = ""
             if m_house in [2]:
@@ -943,6 +956,8 @@ def astrology_block():
                 a_years = antar["Số năm"]
                 a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
                 a_score = get_house_score(a_house, a_lord) 
+                if a_lord in vry_planets:
+                    a_score += 0.3
                 # ✅ Thêm điểm từ nhà mà antardasha làm chủ
                 ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
                 rule_bonus_a = 0
