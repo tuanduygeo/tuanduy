@@ -12,20 +12,7 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
-    rashi_rulers = {
-    "Bạch Dương": "Mars",        # Aries
-    "Kim Ngưu": "Venus",         # Taurus
-    "Song Tử": "Mercury",        # Gemini
-    "Cự Giải": "Moon",           # Cancer
-    "Sư Tử": "Sun",              # Leo
-    "Xử Nữ": "Mercury",          # Virgo
-    "Thiên Bình": "Venus",       # Libra
-    "Bọ Cạp": "Mars",            # Scorpio
-    "Nhân Mã": "Jupiter",        # Sagittarius
-    "Ma Kết": "Saturn",          # Capricorn
-    "Bảo Bình": "Saturn",        # Aquarius
-    "Song Ngư": "Jupiter"        # Pisces
-}
+    
     res = []
     def dms_str_to_float(dms_str):
         match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
@@ -181,7 +168,6 @@ def detect_yoga_dosha(df_planets, asc_rashi):
     if rahu is not None and ketu is not None:
         rahu_deg = dms_str_to_float(rahu["Vị trí"])
         ketu_deg = dms_str_to_float(ketu["Vị trí"])
-        deg = dms_str_to_float(p["Vị trí"])
         others = [p for p in df_planets.to_dict("records") if p["Hành tinh"] not in ["Rahu","Ketu"]]
         in_between = True
         for p in others:
