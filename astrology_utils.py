@@ -121,10 +121,7 @@ def astrology_block():
         )
     
         st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-        st.markdown(
-            f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
-            f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
-        )
+        
 
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
@@ -401,6 +398,8 @@ def astrology_block():
             ax.text(x-2, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
         return fig  
     fig = draw_chart(planet_data)
+    ax = fig.axes[0]
+    ax.set_title(f"{date_str} | {time_str}", fontsize=10)
     st.pyplot(fig, use_container_width=False)
     plt.close(fig)
     df_planets = pd.DataFrame(planet_data)
