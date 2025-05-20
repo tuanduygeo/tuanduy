@@ -459,11 +459,7 @@ def astrology_block():
         lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
 
-    st.markdown("### Vị trí hành tinh")
-    st.dataframe(df_planets, use_container_width=False)
-    # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
-    st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
-
+    
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
         "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
@@ -522,7 +518,7 @@ def astrology_block():
 
     # Hiển thị bảng Mahadasha
     df_dasha = pd.DataFrame(dasha_list)
-    st.dataframe(df_dasha, use_container_width=False)
+    
 
 
     # Hàm tính Antardasha chuẩn
@@ -559,10 +555,7 @@ def astrology_block():
         all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years).to_dict("records")
 
     df_all_antar = pd.DataFrame(all_antardasha)
-
-    if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
-        
-        st.dataframe(df_all_antar, use_container_width=False)
+    
 
     # Quy tắc điểm số theo nhà
 
@@ -726,7 +719,15 @@ def astrology_block():
     ax.legend()
     st.pyplot(fig)
     plt.close(fig)
-   
+    st.markdown("### Vị trí hành tinh")
+    st.dataframe(df_planets, use_container_width=False)
+    # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
+    st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
+
+    st.dataframe(df_dasha, use_container_width=False)
+    if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
+        
+        st.dataframe(df_all_antar, use_container_width=False)
    
     
     st.markdown("""#### 📌 Hướng dẫn
