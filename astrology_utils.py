@@ -155,7 +155,48 @@ def detect_yoga_dosha(df_planets, asc_rashi):
             res.append(
                 f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại lớn."
             )
-    
+
+    # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
+dhana_houses = [2, 5, 9, 11]
+for p in df_planets.to_dict("records"):
+    # Chủ của nhà này là gì?
+    for house in dhana_houses:
+        # Lấy danh sách chủ tinh của nhà này
+        rulers = p.get("Chủ tinh của nhà", [])
+        if rulers:
+            for r in rulers:
+                # Nếu chủ là 2,5,9,11 và ở đúng các nhà tài lộc
+                if r in dhana_houses and p["Nhà"] in dhana_houses:
+                    res.append("- **Dhana Yoga**: Chủ nhà tài lộc nằm ở nhà tài lộc – dễ giàu có, giữ tiền tốt.")
+                    break
+    houses_with_planets = set([p["Nhà"] for p in df_planets.to_dict("records")])
+    if all(h in houses_with_planets for h in [1, 4, 7, 10]):
+        res.append("- **Chatusagara Yoga**: Có hành tinh ở cả 4 nhà Kendra – nổi tiếng, có tiếng tăm rộng khắp.")
+    good_houses = [1, 4, 5, 7, 9, 10]
+    saraswati_count = 0
+    for planet in ["Mercury", "Jupiter", "Venus"]:
+        p = get_planet(planet)
+        if p is not None and p["Nhà"] in good_houses:
+            saraswati_count += 1
+    if saraswati_count >= 2 and moon is not None and moon["Nhà"] in good_houses:
+        res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật.")   
+    house9_ruler_list = []
+    for p in df_planets.to_dict("records"):
+        if 9 in p.get("Chủ tinh của nhà", []):
+            house9_ruler_list.append(p)
+    for p in house9_ruler_list:
+        if p["Tính chất"] in ["vượng", "tướng"] and p["Nhà"] in [1, 4, 5, 7, 9, 10]:
+            res.append("- **Lakshmi Yoga**: Chủ nhà 9 vượng/tướng ở Kendra/Trikona – thịnh vượng, may mắn.")
+            break
+    house9_ruler = None
+    house10_ruler = None
+    for p in df_planets.to_dict("records"):
+        if 9 in p.get("Chủ tinh của nhà", []):
+            house9_ruler = p
+        if 10 in p.get("Chủ tinh của nhà", []):
+            house10_ruler = p
+    if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
+        res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – đại thành công sự nghiệp/phúc lộc lớn.")
     # Tổng hợp
     if mahapurusha:
         res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
