@@ -717,7 +717,7 @@ def astrology_block():
             ax.text(x, y + 0.5, label, fontsize=8,  ha='left', va='bottom')
             shown_mahadashas.add(label)
     ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
-    filtered_df = chart_df[chart_df["Năm"].between(0, 70)]
+    filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
     ax.set_title(f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}")
 
