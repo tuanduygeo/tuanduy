@@ -187,8 +187,13 @@ def detect_yoga_dosha(df_planets):
                 res.append(
                     f"- **Neecha Bhanga Raja (Cảnh báo):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra thêm cứu giải."
                 )
-    
+    # 8. kal sarpa dosha
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    rashi_to_number = {
+    "Bạch Dương": 1, "Kim Ngưu": 2, "Song Tử": 3, "Cự Giải": 4,
+    "Sư Tử": 5, "Xử Nữ": 6, "Thiên Bình": 7, "Bọ Cạp": 8,
+    "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
+}
     def normalize_deg(x):
         return x % 360
 
