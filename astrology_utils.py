@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import re
 
 
-def detect_yoga_dosha(df_planets, asc_rashi):
+def detect_yoga_dosha(df_planets):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
     """
@@ -1007,7 +1007,7 @@ def astrology_block():
     plt.close(fig)
     st.markdown("### Vị trí hành tinh")
     st.dataframe(df_planets, use_container_width=False)
-    st.markdown(detect_yoga_dosha(df_planets, asc_rashi), unsafe_allow_html=True)
+    st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
