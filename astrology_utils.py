@@ -1220,7 +1220,7 @@ def astrology_block():
         
         st.dataframe(df_all_antar, use_container_width=False)
     df_bav = compute_ashtakavarga(df_planets)
-    st.markdown("### Bảng Bhinna Ashtakavarga (BAV) từng hành tinh")
+    st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
     
     st.markdown("""#### 📌 Hướng dẫn
