@@ -1052,23 +1052,23 @@ def astrology_block():
             elif m_house in [1]:
                 purpose = " (mệnh ↑)"
             elif m_house in [ 9]:
-                purpose = " (Thuận lợi ↑)"
+                purpose = " (thuận lợi ↑)"
             elif m_house in [5]:
                 purpose = " (học ↑)"
             elif m_house in [10]:
                 purpose = " (danh ↑)"
             elif m_house in [4]:
-                purpose = " (An cư ↑)"
+                purpose = " (an cư ↑)"
             elif m_house == 7:
-                purpose = " (Quan hệ ↑)"
+                purpose = " (quan hệ ↑)"
             elif m_house == 3:
-                purpose = " (Thị phi ↓)"
+                purpose = " (thị phi ↓)"
             elif m_house in [8,12]:
-                purpose = " (Khủng hoảng ↓)"
+                purpose = " (mệnh,tài ↓)"
             elif m_house in [6]:
-                purpose = " (Sức khỏe ↓)"
+                purpose = " (sức khỏe ↓)"
             elif m_house in [11]:
-                purpose = " (Tài ↑)"
+                purpose = " (tài ↑)"
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
             for _, antar in antars.iterrows():
                 a_lord = antar["Antardasha"].split("/")[-1]
