@@ -40,10 +40,6 @@ def detect_yoga_dosha(df_planets):
     }
     res = []
     
-    
-
-    
-    
     # Lấy các vị trí nhanh
     def get_planet(name):
         return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
