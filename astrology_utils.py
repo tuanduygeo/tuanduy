@@ -230,7 +230,7 @@ def detect_yoga_dosha(df_planets):
             pk_yoga_shown.add(curr_house)
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
-    dhana_houses = [2, 5, 9, 11]  # đúng quy tắc 2/5/9/11
+    dhana_houses = [2, 11]  # đúng quy tắc 2/5/9/11
     found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
@@ -913,25 +913,25 @@ def astrology_block():
             if m_house in [2]:
                 purpose = " (tài ↑)"
             elif m_house in [1]:
-                purpose = " (bản mệnh ↑)"
+                purpose = " (mệnh ↑)"
             elif m_house in [ 9]:
-                purpose = " (đạo ↑)"
+                purpose = " (Thuận lợi ↑)"
             elif m_house in [5]:
                 purpose = " (học ↑)"
             elif m_house in [10]:
                 purpose = " (danh ↑)"
             elif m_house in [4]:
-                purpose = " (An ↑)"
+                purpose = " (An cư ↑)"
             elif m_house == 7:
                 purpose = " (Quan hệ ↑)"
             elif m_house == 3:
                 purpose = " (Thị phi ↓)"
             elif m_house in [8,12]:
-                purpose = " (họa, thiệt ↓)"
+                purpose = " (Khủng hoảng ↓)"
             elif m_house in [6]:
-                purpose = " (bệnh ↓)"
+                purpose = " (Sức khỏe ↓)"
             elif m_house in [11]:
-                purpose = " (Thuận ↑)"
+                purpose = " (Tài ↑)"
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
             for _, antar in antars.iterrows():
                 a_lord = antar["Antardasha"].split("/")[-1]
