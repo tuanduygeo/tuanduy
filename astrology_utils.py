@@ -1067,7 +1067,7 @@ def astrology_block():
     st.markdown("### Vị trí hành tinh")
     st.dataframe(df_planets, use_container_width=False)
     df_planets[["D9_Cung", "D9_Độ"]] = df_planets.apply(calc_d9, axis=1)
-    st.write("Columns:", df_planets.columns.tolist())
+    st.write(df_planets[["Hành tinh", "Cung", "Vị trí", "D9_Cung", "D9_Độ"]])
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
