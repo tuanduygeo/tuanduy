@@ -809,7 +809,7 @@ def astrology_block():
             cusp_degree = equal_house_cusps[i - 1]
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
-            ax.text(x-2, y + 2, str(rashi_number), fontsize=7, color='red',weight='bold')
+            ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
         return fig  
         
     fig_d1 = draw_chart(planet_data)
