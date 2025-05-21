@@ -100,7 +100,7 @@ def plot_d9_chart(df_d9):
             if row["D9_Nhà"] == i:
                 name = row["Hành tinh"]
                 deg = row["D9_Độ"]
-                planets.append(f"{name} ({deg:.2f}°)")
+                planets.append(f"{name} ({int(deg)}°)")
         if planets:
             ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=5, color='blue')
     
