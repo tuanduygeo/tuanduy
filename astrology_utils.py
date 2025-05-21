@@ -241,8 +241,11 @@ def detect_yoga_dosha(df_planets):
     
     # 11. Paap Kartari Yoga – một cung bị kẹp giữa hai hung tinh
     malefics = ["Mars", "Saturn", "Sun", "Rahu", "Ketu"]
+    pk_yoga_shown = set()
     for i, row in df_planets.iterrows():
         curr_house = row["Nhà"]
+        if curr_house in pk_yoga_shown:
+            continue  # Bỏ qua nếu đã hiện cho nhà này rồi
         prev_house = (curr_house - 2) % 12 + 1
         next_house = curr_house % 12 + 1
         prev_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == prev_house and p["Hành tinh"] in malefics)
@@ -251,6 +254,7 @@ def detect_yoga_dosha(df_planets):
             res.append(
                 f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại."
             )
+            pk_yoga_shown.add(curr_house)
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
     dhana_houses = [2, 5, 9, 11]  # đúng quy tắc 2/5/9/11
