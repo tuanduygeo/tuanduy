@@ -129,44 +129,39 @@ def detect_yoga_dosha(df_planets):
                     f"- **{vry_name}**: {planet['Hành tinh']} là chủ nhà {ruled_house} nằm ở nhà {planet['Nhà']} (Dusthana) – lấy độc trị độc, chuyển hung thành cát."
                 )
                 break  # Không lặp lại cho cùng hành tinh
-    
     # 7. Neecha Bhanga Raja Yoga (chi tiết cứu giải tử)
     for _, row in df_planets.iterrows():
-        if row["Tính chất"] == "tử":
-            lord = row["Hành tinh"]
-            cung = row["Cung"]
-            # Chủ của cung đó (Neecha sign lord)
-            neecha_ruler = rashi_rulers.get(cung, None)
-            # Tìm vị trí chủ cung tử
-            ruler_info = get_planet(neecha_ruler) if neecha_ruler else None
-            kendra_houses = [1, 4, 7, 10]
-            rescue = False
-            # Điều kiện 1: chủ cung tử ở Kendra từ Asc
-            if ruler_info is not None and ruler_info["Nhà"] in kendra_houses:
-                rescue = True
-                note = f"Chủ {cung} ({neecha_ruler}) ở Kendra"
-            # Điều kiện 2: chủ cung tử đồng cung với hành tinh tử
-            elif ruler_info is not None and ruler_info["Cung"] == cung:
-                rescue = True
-                note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
-            # Điều kiện 3: chủ cung đối diện ở Kendra hoặc đồng cung
-            doi_dien = rashis[(rashis.index(cung) + 6) % 12]
-            doi_dien_ruler = rashi_rulers.get(doi_dien, None)
-            doi_dien_info = get_planet(doi_dien_ruler) if doi_dien_ruler else None
-            if doi_dien_info is not None and (
-                doi_dien_info["Nhà"] in kendra_houses or doi_dien_info["Cung"] == cung
-            ):
-                rescue = True
-                note = f"Chủ đối diện ({doi_dien_ruler}) ở Kendra hoặc đồng cung với {lord}"
-            # Nếu cứu giải, báo Neecha Bhanga, nếu không thì chỉ cảnh báo thông thường
-            if rescue:
-                res.append(
-                    f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
-                )
-            else:
-                res.append(
-                    f"- **Neecha Bhanga Raja (Cảnh báo):** {lord} đang ở vị trí 'tử' ({cung}) – tiềm ẩn thử thách, cần kiểm tra thêm cứu giải."
-                )
+    if row["Tính chất"] == "tử":
+        lord = row["Hành tinh"]
+        cung = row["Cung"]
+        neecha_ruler = rashi_rulers.get(cung, None)
+        ruler_info = get_planet(neecha_ruler) if neecha_ruler else None
+        kendra_houses = [1, 4, 7, 10]
+        rescue = False
+        note = ""
+        # Chỉ giữ 2 điều kiện dễ xảy ra nhất
+        if ruler_info is not None and ruler_info["Nhà"] in kendra_houses:
+            rescue = True
+            note = f"Chủ {cung} ({neecha_ruler}) ở Kendra"
+        elif ruler_info is not None and ruler_info["Cung"] == cung:
+            rescue = True
+            note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
+        if rescue:
+            res.append(
+                f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
+            )
+        
+    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
+    trikona_houses = [1, 5, 9]
+    kendra_houses = [1, 4, 7, 10]
+    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
+    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    for tr in trikona_rulers:
+        for kr in kendra_rulers:
+            if tr["Cung"] == kr["Cung"]:
+                res.append("- **Raja Yoga:** Chủ Kendra và Trikona đồng cung – danh vọng.")
+                break
+    
     # 8. kal sarpa dosha
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
     rashi_to_number = {
@@ -230,7 +225,7 @@ def detect_yoga_dosha(df_planets):
             pk_yoga_shown.add(curr_house)
 
     # Dhana Yoga: Chủ 2/5/9/11 nằm trong 2/5/9/11 hoặc đồng cung nhau
-    dhana_houses = [2, 11]  # đúng quy tắc 2/5/9/11
+    dhana_houses = [2,5,9, 11]  # đúng quy tắc 2/5/9/11
     found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
@@ -244,7 +239,14 @@ def detect_yoga_dosha(df_planets):
                 break
         if found_dhana:
             break  # Dừng luôn, chỉ hiển thị 1 lần duy nhất
-    
+     # Dhana Yoga:Chủ nhà 6, 8, 12 nằm ở các nhà tài hoặc đồng cung nhà tài.
+    daridra_houses = [6, 8, 12]
+    for p in df_planets.to_dict("records"):
+        if not p.get("Chủ tinh của nhà", []): continue
+        for dh in daridra_houses:
+            if dh in p["Chủ tinh của nhà"] and p["Nhà"] in [2, 11]:
+                res.append("- **Daridra Yoga:** Chủ nhà xấu nằm ở nhà tài – tài chính thử thách.")
+
     
     good_houses = [1, 4, 5, 7, 9, 10]
     saraswati_count = 0
