@@ -141,7 +141,7 @@ def detect_yoga_dosha(df_planets):
     
     # 6. Viparita Raja Yoga (Chủ nhà xấu nằm trong nhà xấu khác)
     dusthana = [6, 8, 12]
-    for planet in ["Mars", "Saturn", "Rahu", "Ketu"]:
+    for planet in ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn","Rahu", "Ketu"]:
         p = get_planet(planet)
         if p is not None and p["Nhà"] in dusthana and p["Chủ tinh của nhà"] and any(h in dusthana for h in p["Chủ tinh của nhà"]):
             res.append(
