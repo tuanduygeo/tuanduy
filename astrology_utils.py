@@ -421,9 +421,9 @@ def astrology_block():
             f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
         )
         
-    if "selected_utc" in st.session_state:
-        selected_utc = st.session_state.selected_utc
-        selected_datetime_local = st.session_state.selected_datetime_local
+    st.session_state.selected_utc = selected_utc
+    st.session_state.selected_datetime_local = selected_datetime_local
+    st.session_state.selected_tz = selected_tz
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
