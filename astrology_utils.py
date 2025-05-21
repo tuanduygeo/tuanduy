@@ -22,20 +22,21 @@ def calc_d9(row):
         "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"
     ]
     rashi = row["Cung"]
-    deg = dms_str_to_float(row["Vị trí"])   # deg: vị trí trong cung 0–30°
+    deg = dms_str_to_float(row["Vị trí"])  # Nếu đã là float 0-30° thì dùng luôn, không cần % 30
     rashi_index = rashis.index(rashi)
-    deg_in_sign = deg
-    navamsa_part = int(deg_in_sign // (30 / 9))  # 0~8
-    # Cung dương/âm (bắt đầu từ Bạch Dương là dương, xen kẽ)
-    duong_am = [1,0,1,0,1,0,1,0,1,0,1,0]  # 1 = dương, 0 = âm
-    if duong_am[rashi_index]:  # Cung DƯƠNG
-        d9_rashi_index = (rashi_index + navamsa_part) % 12
-    else:  # Cung ÂM
-        d9_rashi_index = (rashi_index + 8 - navamsa_part) % 12
-    d9_rashi = rashis[d9_rashi_index]
-    # Độ trong D9 là phần dư * 9
-    d9_deg = (deg_in_sign % (30 / 9)) * 9
-    return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
+    deg_in_sign = deg % 30
+    navamsa_index = int(deg_in_sign // (30 / 9))  # 0-8
+    # Dương/âm: Bạch Dương bắt đầu là dương
+    is_male = rashi_index % 2 == 0   # 0,2,4,6,8,10 là dương; 1,3,5... là âm, theo truyền thống.
+    if is_male:  # cung dương
+        d9_index = (rashi_index + navamsa_index) % 12
+    else:  # cung âm
+        d9_index = (rashi_index + 8 - navamsa_index) % 12
+    d9_rashi = rashis[d9_index]
+    d9_deg = round((deg_in_sign % (30 / 9)) * 9, 2)  # Độ trong cung D9 (3°20' mỗi cung)
+    # Debug cho bạn nhìn kết quả từng dòng
+    # print(f"{row['Hành tinh']} ({rashi} {deg:.2f}°) -> D9: {d9_rashi} {d9_deg:.2f}°")
+    return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": d9_deg})
 def detect_yoga_dosha(df_planets):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
