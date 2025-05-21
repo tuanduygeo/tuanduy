@@ -245,7 +245,7 @@ def detect_yoga_dosha(df_planets):
         if not p.get("Chủ tinh của nhà", []): continue
         for dh in daridra_houses:
             if dh in p["Chủ tinh của nhà"] and p["Nhà"] in [2, 11]:
-                res.append("- **Daridra Yoga:** Chủ nhà xấu nằm ở nhà tài – tài chính thử thách.")
+                res.append("- **Daridra Yoga:** Chủ nhà dusthana nằm ở nhà tài. Tài ↓.")
 
     
     good_houses = [1, 4, 5, 7, 9, 10]
