@@ -38,26 +38,34 @@ def navamsa_from_rashi_deg(cung_ten, deg_float):
     nav_cung_ten = rashis[navSign - 1]
     return (nav_cung_ten, navDeg, navMin, navSec)
 def build_navamsa_df(df_planets):
-    
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
               "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    # 1. Lấy vị trí Ascendant trong D1
+    asc_row = df_planets[df_planets["Hành tinh"] == "Asc"].iloc[0]
+    asc_d1_cung = asc_row["Cung"]
+    asc_d1_deg = dms_str_to_float(asc_row["Vị trí"])
+    # 2. Tìm cung của Ascendant trong D9 (dùng hàm navamsa_from_rashi_deg)
+    asc_d9_cung, _, _, _ = navamsa_from_rashi_deg(asc_d1_cung, asc_d1_deg)
+    asc_d9_idx = rashis.index(asc_d9_cung)  # chỉ số bắt đầu
+
+    # 3. Build mapping cung->nhà D9
+    cung2nha_d9 = {}
+    for i in range(12):
+        cung = rashis[(asc_d9_idx + i) % 12]
+        cung2nha_d9[cung] = i + 1  # Nhà bắt đầu từ 1
+
+    # 4. Mapping từng hành tinh
     d9_rows = []
     for _, row in df_planets.iterrows():
-        if row["Hành tinh"] == "Asc":
-            d9_rows.append({
-                "Hành tinh": "Asc",
-                "D9_Cung": "Bạch Dương",
-                "D9_Nhà": 1,
-                "D9_Độ": 0
-            })
-            continue
         deg_float = dms_str_to_float(row["Vị trí"])
         d9_cung, d9_deg, d9_min, d9_sec = navamsa_from_rashi_deg(row["Cung"], deg_float)
         d9_degree_total = d9_deg + d9_min/60 + d9_sec/3600
+        # Gán nhà theo mapping từ Asc D9
+        d9_nha = cung2nha_d9[d9_cung]
         d9_rows.append({
             "Hành tinh": row["Hành tinh"],
             "D9_Cung": d9_cung,
-            "D9_Nhà": rashis.index(d9_cung) + 1,
+            "D9_Nhà": d9_nha,
             "D9_Độ": round(d9_degree_total, 2)
         })
     return pd.DataFrame(d9_rows)
