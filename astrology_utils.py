@@ -14,7 +14,46 @@ def dms_str_to_float(dms_str):
         return float(dms_str.replace("°",""))
     d, m, s = [int(x) if x else 0 for x in match.groups()]
     return d + m/60 + s/3600
+# Cần có danh sách cung đúng thứ tự để mapping lại tên cung
+rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+          "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
 
+def navamsa_from_long(sign, pos_deg, pos_min, pos_sec):
+    """
+    sign: 1-12 (Bạch Dương = 1)
+    pos_deg, pos_min, pos_sec: vị trí hành tinh trong cung, dạng số nguyên
+    Trả về: (nav_sign, nav_deg, nav_min, nav_sec)
+    """
+    # Tổng số giây đã đi qua từ đầu Bạch Dương
+    longi_sec = (((sign - 1) * 30 * 3600) +
+                 (pos_deg * 3600) + (pos_min * 60) + pos_sec)
+    amsa = ((3 * 3600) + (20 * 60)) # một navamsa = 3°20' = 12000 giây
+    # Tìm navamsa thứ mấy (0-107), rồi modulo cho 12 cung
+    navamsa_index = int(longi_sec // amsa)
+    navSign = 1 + navamsa_index % 12 # cung D9
+    # Số giây còn lại trong navamsa
+    longi_pending_sec = longi_sec % amsa
+    # Chuẩn hóa sang thang 30°
+    longi_pending_sec_normalized = ((longi_pending_sec * 30 * 3600) / amsa)
+    navDeg = int(longi_pending_sec_normalized // 3600)
+    longi_pending_sec_normalized = longi_pending_sec_normalized % 3600
+    navMin = int(longi_pending_sec_normalized // 60)
+    navSec = round(longi_pending_sec_normalized % 60, 2)
+    return (navSign, navDeg, navMin, navSec)
+
+def navamsa_from_rashi_deg(cung_ten, deg_float):
+    """
+    cung_ten: tên cung (chuỗi, ví dụ 'Sư Tử')
+    deg_float: vị trí trong cung (ví dụ 13.5 là 13°30')
+    Trả về: (nav_cung, nav_deg, nav_min, nav_sec, nav_cung_ten)
+    """
+    sign = rashis.index(cung_ten) + 1
+    pos_deg = int(deg_float)
+    pos_min = int((deg_float - pos_deg) * 60)
+    pos_sec = int(round((((deg_float - pos_deg) * 60) - pos_min) * 60))
+    navSign, navDeg, navMin, navSec = navamsa_from_long(sign, pos_deg, pos_min, pos_sec)
+    nav_cung_ten = rashis[navSign - 1]
+    return (nav_cung_ten, navDeg, navMin, navSec)
 
 
 
@@ -780,7 +819,10 @@ def astrology_block():
     df_planets["Chiếu hành tinh"] = df_planets.apply(
         lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
-
+    df_planets[["Nav_Cung", "Nav_Deg", "Nav_Min", "Nav_Sec"]] = df_planets.apply(
+    lambda row: pd.Series(navamsa_from_rashi_deg(row["Cung"], dms_str_to_float(row["Vị trí"]))),
+    axis=1
+)
     
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
