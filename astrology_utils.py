@@ -74,7 +74,7 @@ def detect_yoga_dosha(df_planets):
         p = get_planet(planet)
         if p is not None and p['Nhà'] in kendra_houses and p['Tính chất'] in ["vượng", "tướng"]:
             mahapurusha.append(f"- **{yoga} Yoga**: {explain} (đang có hiệu lực)")
-        if mahapurusha:
+    if mahapurusha:
         res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
        
     # 2. Gaja-Kesari Yoga (Jupiter ở Kendra từ Moon)
