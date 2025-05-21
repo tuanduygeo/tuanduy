@@ -1132,7 +1132,7 @@ def astrology_block():
     
     ax.set_title("Navamsa (D9) Chart", fontsize=10)
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig,use_container_width=False)
     plt.close(fig)
     
     
