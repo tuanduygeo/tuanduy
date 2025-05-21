@@ -29,19 +29,15 @@ def detect_yoga_dosha(df_planets):
         "Song Ngư": "Jupiter"        # Pisces
     }
     res = []
+    
+    # Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
     def dms_str_to_float(dms_str):
-        match = re.match(r"(\d+)°(\d+)'(\d+)\"", dms_str)
+        match = re.match(r"(\d+)°(\d+)'(\d+)?", dms_str)
         if not match:
-            # Nếu chỉ có số độ, không có phút/giây, ví dụ "12°"
-            try:
-                return float(dms_str.replace("°",""))
-            except:
-                return 0.0
-        d, m, s = map(int, match.groups())
+            return float(dms_str.replace("°",""))
+        d, m, s = [int(x) if x else 0 for x in match.groups()]
         return d + m/60 + s/3600
-    # Lấy các vị trí nhanh
-    def get_planet(name):
-        return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
+
     def calc_d9(row):
         rashi = row["Cung"]
         deg = dms_str_to_float(row["Vị trí"])
@@ -57,6 +53,11 @@ def detect_yoga_dosha(df_planets):
     
     # Thêm cột D9 vào df_planets
     df_planets[["D9_Cung", "D9_Độ"]] = df_planets.apply(calc_d9, axis=1)
+    
+    # Lấy các vị trí nhanh
+    def get_planet(name):
+        return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
+    
     # === Khai báo các biến hành tinh cần dùng toàn hàm ===
     moon = get_planet("Moon")
     mars = get_planet("Mars")
