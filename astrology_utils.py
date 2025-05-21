@@ -300,6 +300,26 @@ def detect_yoga_dosha(df_planets):
         res.append(f"- **Nabhasa Sankhya Yoga: {name}** – ({n_signs} cung) {meaning}")
     else:
         res.append("Không xác định được Nabhasa Sankhya Yoga.")
+    # --- Kiểm tra Kemadruma Yoga ---
+    moon = get_planet("Moon")
+    if moon is not None:
+        moon_house = moon["Nhà"]
+        bad_planets = {"Sun", "Rahu", "Ketu", "Moon"}
+        houses_around = [((moon_house - 2) % 12) + 1, (moon_house % 12) + 1]
+        planets_around = [p for p in df_planets.to_dict("records") if p["Nhà"] in houses_around and p["Hành tinh"] not in bad_planets]
+        planets_same = [p for p in df_planets.to_dict("records") if p["Nhà"] == moon_house and p["Hành tinh"] not in bad_planets]
+        if len(planets_around) == 0 and len(planets_same) == 0:
+            res.append("- **Kemadruma Yoga:** Moon đứng một mình, dễ gặp cô độc, thử thách nội tâm.")
+    
+    # --- Kiểm tra Adhi Yoga từ Ascendant ---
+    benefics = ["Mercury", "Venus", "Jupiter"]
+    asc_house = 1  # Theo truyền thống Ascendant (Lagna) luôn ở nhà 1
+    houses_6_7_8 = [((asc_house - 1 + x) % 12) + 1 for x in [6, 7, 8]]
+    found_benefics = [p for p in df_planets.to_dict("records") if p["Hành tinh"] in benefics and p["Nhà"] in houses_6_7_8]
+    if len(found_benefics) >= 2:
+        res.append("- **Adhi Yoga:** Mercury, Venus, Jupiter chiếm các nhà 6/7/8 từ Ascendant – địa vị, danh vọng, an nhàn.")
+      
+    
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."
     else:
