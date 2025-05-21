@@ -14,39 +14,22 @@ def dms_str_to_float(dms_str):
         return float(dms_str.replace("°",""))
     d, m, s = [int(x) if x else 0 for x in match.groups()]
     return d + m/60 + s/3600
-# Cần có danh sách cung đúng thứ tự để mapping lại tên cung
-rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
-          "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
-
-def navamsa_from_long(sign, pos_deg, pos_min, pos_sec):
-    """
-    sign: 1-12 (Bạch Dương = 1)
-    pos_deg, pos_min, pos_sec: vị trí hành tinh trong cung, dạng số nguyên
-    Trả về: (nav_sign, nav_deg, nav_min, nav_sec)
-    """
-    # Tổng số giây đã đi qua từ đầu Bạch Dương
-    longi_sec = (((sign - 1) * 30 * 3600) +
-                 (pos_deg * 3600) + (pos_min * 60) + pos_sec)
-    amsa = ((3 * 3600) + (20 * 60)) # một navamsa = 3°20' = 12000 giây
-    # Tìm navamsa thứ mấy (0-107), rồi modulo cho 12 cung
-    navamsa_index = int(longi_sec // amsa)
-    navSign = 1 + navamsa_index % 12 # cung D9
-    # Số giây còn lại trong navamsa
-    longi_pending_sec = longi_sec % amsa
-    # Chuẩn hóa sang thang 30°
-    longi_pending_sec_normalized = ((longi_pending_sec * 30 * 3600) / amsa)
-    navDeg = int(longi_pending_sec_normalized // 3600)
-    longi_pending_sec_normalized = longi_pending_sec_normalized % 3600
-    navMin = int(longi_pending_sec_normalized // 60)
-    navSec = round(longi_pending_sec_normalized % 60, 2)
-    return (navSign, navDeg, navMin, navSec)
 
 def navamsa_from_rashi_deg(cung_ten, deg_float):
-    """
-    cung_ten: tên cung (chuỗi, ví dụ 'Sư Tử')
-    deg_float: vị trí trong cung (ví dụ 13.5 là 13°30')
-    Trả về: (nav_cung, nav_deg, nav_min, nav_sec, nav_cung_ten)
-    """
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+            "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    def navamsa_from_long(sign, pos_deg, pos_min, pos_sec):
+        longi_sec = (((sign - 1) * 30 * 3600) +
+                    (pos_deg * 3600) + (pos_min * 60) + pos_sec)
+        amsa = ((3 * 3600) + (20 * 60))
+        navamsa_index = int(longi_sec // amsa)
+        navSign = 1 + navamsa_index % 12
+        longi_pending_sec = longi_sec % amsa
+        longi_pending_sec_normalized = ((longi_pending_sec * 30 * 3600) / amsa)
+        navDeg = int(longi_pending_sec_normalized // 3600)
+        navMin = int((longi_pending_sec_normalized % 3600) // 60)
+        navSec = round((longi_pending_sec_normalized % 60), 2)
+        return (navSign, navDeg, navMin, navSec)
     sign = rashis.index(cung_ten) + 1
     pos_deg = int(deg_float)
     pos_min = int((deg_float - pos_deg) * 60)
@@ -54,8 +37,68 @@ def navamsa_from_rashi_deg(cung_ten, deg_float):
     navSign, navDeg, navMin, navSec = navamsa_from_long(sign, pos_deg, pos_min, pos_sec)
     nav_cung_ten = rashis[navSign - 1]
     return (nav_cung_ten, navDeg, navMin, navSec)
-
-
+def build_navamsa_df(df_planets):
+    from .astrology_utils import dms_str_to_float  # nếu cần, hoặc copy hàm chuyển đổi dms vào đây
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+              "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    d9_rows = []
+    for _, row in df_planets.iterrows():
+        if row["Hành tinh"] == "Asc":
+            d9_rows.append({
+                "Hành tinh": "Asc",
+                "D9_Cung": "Bạch Dương",
+                "D9_Nhà": 1,
+                "D9_Độ": 0
+            })
+            continue
+        deg_float = dms_str_to_float(row["Vị trí"])
+        d9_cung, d9_deg, d9_min, d9_sec = navamsa_from_rashi_deg(row["Cung"], deg_float)
+        d9_degree_total = d9_deg + d9_min/60 + d9_sec/3600
+        d9_rows.append({
+            "Hành tinh": row["Hành tinh"],
+            "D9_Cung": d9_cung,
+            "D9_Nhà": rashis.index(d9_cung) + 1,
+            "D9_Độ": round(d9_degree_total, 2)
+        })
+    return pd.DataFrame(d9_rows)
+def plot_d9_chart(df_d9):
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+              "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    house_coords = {
+        1: (50, 80), 2: (25, 95), 3: (10, 80), 4: (25, 45), 5: (15, 25), 6: (25, 5),
+        7: (50, 20), 8: (75, 5), 9: (95, 25), 10: (75, 45), 11: (95, 80), 12: (75, 95)
+    }
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+    # Vẽ khung
+    ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
+    ax.plot([0, 100], [0, 100], 'k', linewidth=1)
+    ax.plot([0, 100], [100, 0], 'k', linewidth=1)
+    ax.plot([0, 50], [50, 100], 'k', linewidth=1)
+    ax.plot([50, 100], [100, 50], 'k', linewidth=1)
+    ax.plot([100, 50], [50, 0], 'k', linewidth=1)
+    ax.plot([50, 0], [0, 50], 'k', linewidth=1)
+    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
+    # Vẽ tên cung
+    for i, (x, y) in house_coords.items():
+        cung = rashis[i - 1]
+        ax.text(x - 2, y + 3, f"{i}\n{cung}", fontsize=5, color='red',weight='bold', ha='center')
+    # Vẽ hành tinh
+    for i, (x, y) in house_coords.items():
+        planets = []
+        for _, row in df_d9.iterrows():
+            if row["D9_Nhà"] == i:
+                name = row["Hành tinh"]
+                deg = row["D9_Độ"]
+                planets.append(f"{name} ({deg:.2f}°)")
+        if planets:
+            ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=7, color='blue')
+    ax.set_title("Navamsa Chart (D9)")
+    plt.tight_layout()
+    plt.show()
+    return fig
 
 def detect_yoga_dosha(df_planets):
     """
@@ -819,10 +862,7 @@ def astrology_block():
     df_planets["Chiếu hành tinh"] = df_planets.apply(
         lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
-    df_planets[["Nav_Cung", "Nav_Deg", "Nav_Min", "Nav_Sec"]] = df_planets.apply(
-    lambda row: pd.Series(navamsa_from_rashi_deg(row["Cung"], dms_str_to_float(row["Vị trí"]))),
-    axis=1
-)
+    
     
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
@@ -1117,7 +1157,10 @@ def astrology_block():
     
     st.markdown("### Vị trí hành tinh")
     st.dataframe(df_planets, use_container_width=False)
-      
+    df_d9 = build_navamsa_df(df_planets)
+    fig=plot_d9_chart(df_d9)
+    st.pyplot(fig)
+    plt.close(fig)
     
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
