@@ -131,25 +131,25 @@ def detect_yoga_dosha(df_planets):
                 break  # Không lặp lại cho cùng hành tinh
     # 7. Neecha Bhanga Raja Yoga (chi tiết cứu giải tử)
     for _, row in df_planets.iterrows():
-    if row["Tính chất"] == "tử":
-        lord = row["Hành tinh"]
-        cung = row["Cung"]
-        neecha_ruler = rashi_rulers.get(cung, None)
-        ruler_info = get_planet(neecha_ruler) if neecha_ruler else None
-        kendra_houses = [1, 4, 7, 10]
-        rescue = False
-        note = ""
-        # Chỉ giữ 2 điều kiện dễ xảy ra nhất
-        if ruler_info is not None and ruler_info["Nhà"] in kendra_houses:
-            rescue = True
-            note = f"Chủ {cung} ({neecha_ruler}) ở Kendra"
-        elif ruler_info is not None and ruler_info["Cung"] == cung:
-            rescue = True
-            note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
-        if rescue:
-            res.append(
-                f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
-            )
+        if row["Tính chất"] == "tử":
+            lord = row["Hành tinh"]
+            cung = row["Cung"]
+            neecha_ruler = rashi_rulers.get(cung, None)
+            ruler_info = get_planet(neecha_ruler) if neecha_ruler else None
+            kendra_houses = [1, 4, 7, 10]
+            rescue = False
+            note = ""
+            # Chỉ giữ 2 điều kiện dễ xảy ra nhất
+            if ruler_info is not None and ruler_info["Nhà"] in kendra_houses:
+                rescue = True
+                note = f"Chủ {cung} ({neecha_ruler}) ở Kendra"
+            elif ruler_info is not None and ruler_info["Cung"] == cung:
+                rescue = True
+                note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
+            if rescue:
+                res.append(
+                    f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
+                )
         
     # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
     trikona_houses = [1, 5, 9]
