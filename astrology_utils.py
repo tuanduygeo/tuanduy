@@ -74,9 +74,7 @@ def detect_yoga_dosha(df_planets):
         p = get_planet(planet)
         if p is not None and p['Nhà'] in kendra_houses and p['Tính chất'] in ["vượng", "tướng"]:
             mahapurusha.append(f"- **{yoga} Yoga**: {explain} (đang có hiệu lực)")
-       # Tổng hợp
-        if mahapurusha:
-            res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
+       
        
     # 2. Gaja-Kesari Yoga (Jupiter ở Kendra từ Moon)
     def is_gaja_kerasi(df_planets):
@@ -213,7 +211,12 @@ def detect_yoga_dosha(df_planets):
                 in_one_arc = False
                 break
         return in_one_arc
-    
+    if mahapurusha:
+    res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
+    if not res:
+        return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào, hoặc các điều kiện phức tạp hơn cần kiểm tra bằng mắt chuyên gia."
+    else:
+        return "#### 📜 **Tổng hợp các cách cục cát/hung nổi bật:**\n\n" + "\n\n".join(res)
     # Sử dụng:
     if check_kala_sarpa(df_planets):
         res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – Mât cân đối toàn bàn, nhiều thử thách.")
