@@ -804,12 +804,12 @@ def astrology_block():
                     
                     labels.append(f"{name} ({sign} {deg_str}){arrow}")
             names = "\n".join(labels)
-            ax.text(x, y, names, ha='center', va='center', fontsize=5, color='blue')
+            ax.text(x, y, names, ha='center', va='center', fontsize=7, color='blue')
         for i, (x, y) in house_coords.items():
             cusp_degree = equal_house_cusps[i - 1]
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
-            ax.text(x-2, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
+            ax.text(x-2, y + 3, str(rashi_number), fontsize=7, color='red',weight='bold')
         return fig  
         
     fig_d1 = draw_chart(planet_data)
