@@ -12,3 +12,5 @@ scipy
 plotly
 geomag
 fpdf
+dataframe_image
+kaleido
