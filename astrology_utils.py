@@ -29,7 +29,11 @@ def detect_yoga_dosha(df_planets):
         "Song Ngư": "Jupiter"        # Pisces
     }
     res = []
-    
+    def get_rashi(degree):
+        # Đảm bảo degree là float và nằm trong [0, 360)
+        deg = degree % 360
+        index = int(deg // 30)
+        return rashis[index]
     # Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
     def dms_str_to_float(dms_str):
         match = re.match(r"(\d+)°(\d+)'(\d+)?", dms_str)
