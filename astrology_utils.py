@@ -6,6 +6,36 @@ import pytz
 from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
+from io import BytesIO
+import dataframe_image as dfi
+from fpdf import FPDF
+
+def fig_to_img_bytes(fig):
+    buf = BytesIO()
+    fig.savefig(buf, format="png", bbox_inches='tight', dpi=160)
+    buf.seek(0)
+    return buf
+
+def df_to_img_bytes(df):
+    styler = df.style.set_table_attributes('style="font-size:14px"').background_gradient(axis=None)
+    buf = BytesIO()
+    dfi.export(styler, buf, dpi=200)
+    buf.seek(0)
+    return buf
+
+def pdf_merge_images(image_list):
+    pdf = FPDF()
+    for img_bytes in image_list:
+        img = plt.imread(img_bytes)
+        h, w = img.shape[0:2]
+        width = 180  # mm
+        height = width * h / w
+        pdf.add_page()
+        pdf.image(img_bytes, x=15, y=15, w=width, h=height)
+    output = BytesIO()
+    pdf.output(output)
+    output.seek(0)
+    return output
 
 # Bindhu (benefic point) matrix như chuyên gia đưa
 BAV_BinduMatrix = {
@@ -1222,6 +1252,44 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Bhinna Ashtakavarga (BAV) từng hành tinh")
     st.dataframe(df_bav)
+    # ==== DEMO TRÊN STREAMLIT ====
+    
+    
+    # Demo giả lập dữ liệu
+    df1 = pd.DataFrame({"Hành tinh": ["Sun", "Moon", "Mars"], "Nhà": [1,2,3], "Điểm": [3,4,5]})
+    df2 = pd.DataFrame({"Nhà": range(1,13), "Điểm Sun": range(12), "Điểm Moon": range(11,-1,-1)})
+    
+    fig1, ax = plt.subplots(figsize=(4,4))
+    ax.plot([1,2,3],[4,6,9]); ax.set_title("Chart D1"); plt.tight_layout()
+    fig2, ax2 = plt.subplots(figsize=(2,2))
+    ax2.bar([1,2,3],[2,5,7]); ax2.set_title("Chart D9"); plt.tight_layout()
+    
+    img_list = []
+    
+    # Thông tin chiêm tinh/tóm tắt bảng có thể convert thành dataframe, hoặc đơn giản tạo matplotlib fig text
+    buf1 = df_to_img_bytes(df1)
+    buf2 = df_to_img_bytes(df2)
+    buf_fig1 = fig_to_img_bytes(fig1)
+    buf_fig2 = fig_to_img_bytes(fig2)
+    
+    img_list.extend([buf1, buf_fig1, buf2, buf_fig2])
+    
+    # Nhấn nút tạo PDF
+    if st.button("Tạo PDF và tải xuống"):
+        pdf_bytes = pdf_merge_images(img_list)
+        st.download_button(
+            label="Tải PDF chiêm tinh",
+            data=pdf_bytes,
+            file_name="chiemtinh.pdf",
+            mime="application/pdf"
+        )
+        st.success("Đã tạo PDF. Bạn tải về được luôn!")
+    
+    # Hiển thị các ảnh preview
+    st.image(buf1, caption="Bảng 1", use_column_width=True)
+    st.image(buf_fig1, caption="Biểu đồ D1", use_column_width=True)
+    st.image(buf2, caption="Bảng 2", use_column_width=True)
+    st.image(buf_fig2, caption="Biểu đồ D9", use_column_width=True)
     
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
