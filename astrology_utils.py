@@ -7,7 +7,25 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 
+# Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
+def dms_str_to_float(dms_str):
+    match = re.match(r"(\d+)°(\d+)'(\d+)?", dms_str)
+    if not match:
+        return float(dms_str.replace("°",""))
+    d, m, s = [int(x) if x else 0 for x in match.groups()]
+    return d + m/60 + s/3600
 
+def calc_d9(row):
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
+              "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    rashi = row["Cung"]
+    deg = dms_str_to_float(row["Vị trí"])
+    rashi_index = rashis.index(rashi)
+    part = int(deg // (30 / 9))
+    d9_rashi_index = (rashi_index + part) % 12
+    d9_rashi = rashis[d9_rashi_index]
+    d9_deg = (deg % (30 / 9)) * 9
+    return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
 def detect_yoga_dosha(df_planets):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
@@ -30,25 +48,7 @@ def detect_yoga_dosha(df_planets):
     }
     res = []
     
-    # Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
-    def dms_str_to_float(dms_str):
-        match = re.match(r"(\d+)°(\d+)'(\d+)?", dms_str)
-        if not match:
-            return float(dms_str.replace("°",""))
-        d, m, s = [int(x) if x else 0 for x in match.groups()]
-        return d + m/60 + s/3600
-
-    def calc_d9(row):
-        rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
-                  "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
-        rashi = row["Cung"]
-        deg = dms_str_to_float(row["Vị trí"])
-        rashi_index = rashis.index(rashi)
-        part = int(deg // (30 / 9))
-        d9_rashi_index = (rashi_index + part) % 12
-        d9_rashi = rashis[d9_rashi_index]
-        d9_deg = (deg % (30 / 9)) * 9
-        return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
+    
 
     
     
