@@ -443,10 +443,10 @@ def astrology_block():
         "Sun": {"vượng": "Sư Tử", "tướng": "Bạch Dương", "tù": "Thiên Bình", "tử": "Bảo Bình","bạn bè": {"Cự Giải", "Song Ngư","Nhân mã", "Bọ Cạp" },"địch thủ": {"Kim Ngưu", "Song Tử","Xử Nữ","Ma Kết"  }},
         "Moon": {"vượng": "Cự Giải", "tướng": "Kim Ngưu", "tù": "Bọ Cạp", "tử": "Ma Kết","bạn bè": {"Bạch Dương","Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Thiên Bình", "Song Tử","Xử Nữ","Bảo Bình"  }},
         "Mars": { "vượng": {"Bạch Dương","Bọ Cạp"}, "tướng": "Ma Kết", "tù": "Cự Giải", "tử": {"Kim Ngưu","Thiên Bình"},"bạn bè": {"Sư Tử", "Song Ngư","Nhân mã" },"địch thủ": {"Song Tử","Xử Nữ","Bảo Bình"}},
-        "Mercury": {"vượng": {"Song Tử","Xử Nữ" }, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
-        "Jupiter": {"vượng": {"Nhân Mã","Song Ngư" }, "tướng": "Cự Giải", "tù": "Ma Kết", "tử": {"Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
-        "Venus": {"vượng": {"Kim Ngưu","Thiên Bình" }, "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": {"Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
-        "Saturn": {"vượng": {"Ma Kết","Bảo Bình" }, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Song Ngư"}},
+        "Mercury": {"vượng": {"Song Tử","Xử Nữ"}, "tướng": "Xử Nữ", "tù": "Song Ngư", "tử": "Nhân Mã","bạn bè": {"Kim Ngưu", "Bảo Bình","Thiên Bình" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+        "Jupiter": {"vượng": {"Nhân Mã","Song Ngư"}, "tướng": "Cự Giải", "tù": "Ma Kết", "tử": {"Song Tử","Xử Nữ"},"bạn bè": {"Sư Tử", "Bạch Dương","Nhân mã" },"địch thủ": {"Kim Ngưu", "Thiên Bình","Bảo Bình"}},
+        "Venus": {"vượng": {"Kim Ngưu","Thiên Bình"}, "tướng": "Song Ngư", "tù": "Xử Nữ", "tử": {"Bọ Cạp","Bạch Dương"},"bạn bè": {"Ma Kết","Xử Nữ","Bảo Bình","Song Tử" },"địch thủ": {"Bạch Dương", "Bọ Cạp","Cự Giải","Sư Tử"}},
+        "Saturn": {"vượng": {"Ma Kết","Bảo Bình"}, "tướng": "Thiên Bình", "tù": "Bạch Dương", "tử": {"Cự Giải","Sư Tử"},"bạn bè": {"Kim Ngưu","Song Tử","Thiên Bình" },"địch thủ": {"Nhân Mã", "Bọ Cạp","Song Ngư"}},
                   }
     dasha_sequence = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
     dasha_years = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
@@ -467,24 +467,21 @@ def astrology_block():
         "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
     }
     # ==== Hàm phụ ====
-    def get_rashi(degree):
-        return rashis[int(degree // 30)]
-    def get_gana(nakshatra):
-        return nakshatra_to_gana.get(nakshatra, "")
     def get_dignity(planet, rashi):
         dign = dignities.get(planet, {})
-        if rashi == dign.get("vượng"):
-            return "vượng"
-        elif rashi == dign.get("tướng"):
-            return "tướng"
-        elif rashi == dign.get("tù"):
-            return "tù"
-        elif rashi == dign.get("tử"):
-            return "tử"
-         # Check for "bạn bè" and "địch thủ" (they are sets)
-        elif rashi in dign.get("bạn bè", set()):
+        # Xử lý vượng, tướng, tù, tử (có thể là chuỗi hoặc set)
+        for key in ["vượng", "tướng", "tù", "tử"]:
+            val = dign.get(key)
+            if isinstance(val, set):
+                if rashi in val:
+                    return key
+            elif isinstance(val, str):
+                if rashi == val:
+                    return key
+        # Xử lý bạn bè, địch thủ
+        if rashi in dign.get("bạn bè", set()):
             return "bạn bè"
-        elif rashi in dign.get("địch thủ", set()):
+        if rashi in dign.get("địch thủ", set()):
             return "địch thủ"
         return ""
     def get_nakshatra(degree):
