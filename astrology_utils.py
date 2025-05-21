@@ -186,7 +186,7 @@ def detect_yoga_dosha(df_planets):
         if moon["Tính chất"] == "tử" or jupiter["Tính chất"] == "tử":
             return False, "Moon hoặc Jupiter bị tử/suy yếu"
     
-        return True, "Thỏa mãn các điều kiện mạnh của Gaja-Kesari Yoga"
+        return True, "Thỏa mãn các điều kiện mạnh của Gaja-Kesari Yoga.↑"
     is_gk, note = is_gaja_kerasi(df_planets)
     if is_gk:
         res.append(f"- **Gaja-Kesari Yoga**: {note}")
@@ -239,7 +239,7 @@ def detect_yoga_dosha(df_planets):
                 note = f"Chủ {cung} ({neecha_ruler}) đồng cung với {lord}"
             if rescue:
                 res.append(
-                    f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
+                    f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}.↑"
                 )
         
    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
@@ -252,7 +252,7 @@ def detect_yoga_dosha(df_planets):
     for tr in trikona_rulers:
         for kr in kendra_rulers:
             if tr["Cung"] == kr["Cung"]:
-                res.append("- **Raja Yoga:** Chủ Kendra và Trikona đồng cung – danh vọng.")
+                res.append("- **Raja Yoga:** Chủ Kendra và Trikona đồng cung – danh vọng. ↑")
                 found_raja_yoga = True
                 break  # Dừng vòng lặp nhỏ
         if found_raja_yoga:
@@ -300,7 +300,7 @@ def detect_yoga_dosha(df_planets):
         
     # Sử dụng:
     if check_kala_sarpa(df_planets):
-        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – Mât cân đối toàn bàn, nhiều thử thách.")
+        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – Mât cân đối toàn bàn, nhiều thử thách. ↓↓")
     
     
     
@@ -352,14 +352,14 @@ def detect_yoga_dosha(df_planets):
         if p is not None and p["Nhà"] in good_houses:
             saraswati_count += 1
     if saraswati_count >= 2 and moon is not None and moon["Nhà"] in good_houses:
-        res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật.")   
+        res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật ↑.")   
     house9_ruler_list = []
     for p in df_planets.to_dict("records"):
         if 9 in p.get("Chủ tinh của nhà", []):
             house9_ruler_list.append(p)
     for p in house9_ruler_list:
         if p["Tính chất"] in ["vượng", "tướng"] and p["Nhà"] in [1, 4, 5, 7, 9, 10]:
-            res.append("- **Lakshmi Yoga**: Chủ nhà 9 vượng/tướng ở Kendra/Trikona – thịnh vượng, may mắn.")
+            res.append("- **Lakshmi Yoga**: Chủ nhà 9 vượng/tướng ở Kendra/Trikona – thịnh vượng, may mắn ↑.")
             break
     house9_ruler = None
     house10_ruler = None
@@ -382,7 +382,7 @@ def detect_yoga_dosha(df_planets):
         3: ("Shoola", "Tập trung mục tiêu, tiến về một đích lớn, nghị lực mạnh."),
         4: ("Kedara", "Làm nhiều việc cùng lúc, đa năng nhưng dễ phân tán."),
         5: ("Pasa", "Nhiều mối ràng buộc, sống đa chiều, quan hệ rộng."),
-        6: ("Dama", "Kiểm soát, ngăn nắp, sống có kỷ luật, nhưng dễ thu mình."),
+        6: ("Dama", "Kiểm soát, ngăn nắp, sống có kỷ luật."),
         7: ("Veena", "Đời sống hài hòa, nghệ thuật, hòa nhập nhiều môi trường.")
     }
     if 1 <= n_signs <= 7:
