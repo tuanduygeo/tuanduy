@@ -1041,7 +1041,8 @@ def astrology_block():
     median_score = round(filtered_df["Điểm số"].median(), 2)
     ax.set_title(
     f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}\n"
-    f"{selected_datetime_local.strftime('%Y-%m-%d %H:%M')} ")
+    f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
+            f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz} ")
     ax.set_xlabel("Năm")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
