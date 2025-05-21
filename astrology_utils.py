@@ -1055,6 +1055,18 @@ def astrology_block():
     
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
+    asc_row = df_planets[df_planets["Hành tinh"] == "Asc"].iloc[0]
+    asc_d9_rashi = calc_d9(asc_row)["D9_Cung"]
+    asc_d9_index = rashis.index(asc_d9_rashi)
+    
+    def assign_d9_house(row):
+        if row["Hành tinh"] == "Asc":
+            return 1
+        planet_d9_index = rashis.index(row["D9_Cung"])
+        return get_d9_house(planet_d9_index, asc_d9_index)
+    
+    df_planets["D9_Nhà"] = df_planets.apply(assign_d9_house, axis=1)
+    Tóm lại:
     df_planets[["D9_Cung", "D9_Độ"]] = df_planets.apply(calc_d9, axis=1)
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
