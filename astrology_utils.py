@@ -1091,12 +1091,12 @@ def astrology_block():
         12: (75, 95),
     }
     
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig, ax = plt.subplots(figsize=(4,4))  # Giống D1
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
     
-    # Vẽ khung diamond như D1
+    # Khung D1 (giữ nguyên)
     ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
     ax.plot([0, 100], [0, 100], 'k', linewidth=1)
     ax.plot([0, 100], [100, 0], 'k', linewidth=1)
@@ -1106,16 +1106,31 @@ def astrology_block():
     ax.plot([50, 0], [0, 50], 'k', linewidth=1)
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
     
-    # Gán mỗi cung D9 một số thứ tự như chart truyền thống (bắt đầu từ cung 1 ở trên giữa, thuận chiều kim đồng hồ)
-    for i, (x, y) in house_coords.items():
-        rashi = rashis[i - 1]  # i: 1..12
-        # Hiện số thứ tự cung (tuỳ ý, có thể hiện cả tên cung D9)
-        ax.text(x-2, y + 3, f"{i}", fontsize=7, color='red',weight='bold')
-        # Hiện tên các hành tinh nằm ở cung này (D9)
-        names = "\n".join(d9_house_planets[rashi])
-        ax.text(x, y, names, ha='center', va='center', fontsize=7, color='blue')
+    house_coords = {
+        1: (50, 80),
+        2: (25, 95),
+        3: (10, 80),
+        4: (25, 45),
+        5: (15, 25),
+        6: (25, 5),
+        7: (50, 20),
+        8: (75, 5),
+        9: (95, 25),
+        10: (75, 45),
+        11: (95, 80),
+        12: (75, 95),
+    }
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+              "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     
-    ax.set_title("Navamsa (D9) Chart")
+    # Dữ liệu d9_house_planets (đã tính từ df_planets)
+    for i, (x, y) in house_coords.items():
+        rashi = rashis[i-1]
+        names = "\n".join(d9_house_planets[rashi])
+        ax.text(x, y, names, ha='center', va='center', fontsize=6, color='blue')
+        ax.text(x-2, y+3, str(i), fontsize=6, color='red',weight='bold')
+    
+    ax.set_title("Navamsa (D9) Chart", fontsize=10)
     plt.tight_layout()
     st.pyplot(fig)
     plt.close(fig)
