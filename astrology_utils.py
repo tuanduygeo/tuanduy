@@ -38,7 +38,7 @@ def navamsa_from_rashi_deg(cung_ten, deg_float):
     nav_cung_ten = rashis[navSign - 1]
     return (nav_cung_ten, navDeg, navMin, navSec)
 def build_navamsa_df(df_planets):
-    from .astrology_utils import dms_str_to_float  # nếu cần, hoặc copy hàm chuyển đổi dms vào đây
+    
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
               "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     d9_rows = []
