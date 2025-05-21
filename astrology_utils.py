@@ -468,6 +468,10 @@ def astrology_block():
         "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
     }
     # ==== Hàm phụ ====
+    def get_rashi(degree):
+        return rashis[int(degree // 30)]
+    def get_gana(nakshatra):
+        return nakshatra_to_gana.get(nakshatra, "")
     def get_dignity(planet, rashi):
         dign = dignities.get(planet, {})
         # Xử lý vượng, tướng, tù, tử (có thể là chuỗi hoặc set)
