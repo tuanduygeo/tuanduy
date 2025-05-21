@@ -422,8 +422,8 @@ def astrology_block():
         )
         
     if "selected_utc" in st.session_state:
-    selected_utc = st.session_state.selected_utc
-    selected_datetime_local = st.session_state.selected_datetime_local
+        selected_utc = st.session_state.selected_utc
+        selected_datetime_local = st.session_state.selected_datetime_local
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
