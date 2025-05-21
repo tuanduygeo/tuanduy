@@ -1183,7 +1183,7 @@ def astrology_block():
         if label not in shown_mahadashas:
             # Lấy đúng tên hành tinh gốc (dù label có thêm text khác)
             base_name = label.split(" ")[0]
-            ax.text(x, y + 0.5, label, fontsize=10, ha='left', va='bottom')
+            ax.text(x, y , label, fontsize=10, ha='center', va='center')
             shown_mahadashas.add(label)
     df_d9 = build_navamsa_df(df_planets)
     fig_d9=plot_d9_chart(df_d9)
