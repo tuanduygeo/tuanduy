@@ -15,40 +15,7 @@ def dms_str_to_float(dms_str):
     d, m, s = [int(x) if x else 0 for x in match.groups()]
     return d + m/60 + s/3600
 
-def calc_d9(row):
-    rashis = [
-        "Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải",
-        "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
-        "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"
-    ]
-    rashi = row["Cung"]
-    deg = dms_str_to_float(row["Vị trí"])
-    rashi_index = rashis.index(rashi)
-    degree_in_sign = deg  # deg phải là độ trong cung (0~30)
-    navamsa_no = int(degree_in_sign // (30 / 9)) + 1  # 1~9
 
-    # Nhóm cung
-    fire = ["Bạch Dương", "Sư Tử", "Nhân Mã"]
-    earth = ["Kim Ngưu", "Xử Nữ", "Ma Kết"]
-    air = ["Song Tử", "Thiên Bình", "Bảo Bình"]
-    water = ["Cự Giải", "Bọ Cạp", "Song Ngư"]
-    
-    if rashi in fire:
-        offset = 0
-    elif rashi in earth:
-        offset = 8
-    elif rashi in air:
-        offset = 4
-    elif rashi in water:
-        offset = 3
-    else:
-        offset = 0  # fallback
-
-    d9_index = (rashi_index + offset + navamsa_no - 1) % 12
-    d9_rashi = rashis[d9_index]
-    # Độ trong cung D9 là:
-    d9_deg = (degree_in_sign % (30 / 9)) * 9
-    return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
 
 
 def detect_yoga_dosha(df_planets):
@@ -1056,7 +1023,7 @@ def astrology_block():
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
     
-    df_planets[["D9_Cung", "D9_Độ"]] = df_planets.apply(calc_d9, axis=1)
+    
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
     ax.hlines(y=0, xmin=0, xmax=115, color='black', linestyle='-', linewidth=2)
