@@ -1039,7 +1039,9 @@ def astrology_block():
     ax.tick_params(axis='x')
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
-    ax.set_title(f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}")
+    ax.set_title(
+    f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}\n"
+    f"{selected_datetime_local.strftime('%Y-%m-%d %H:%M')} ")
     ax.set_xlabel("Năm")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
