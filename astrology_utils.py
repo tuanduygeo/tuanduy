@@ -1018,9 +1018,17 @@ def astrology_block():
     shown_mahadashas = set()
 
     for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mahadasha"]):
-        if label not in shown_mahadashas:
-            ax.text(x, y + 0.5, label, fontsize=8,  ha='left', va='bottom')
-            shown_mahadashas.add(label)
+        # Lấy tên hành tinh Mahadasha
+        base_name = label.split(" ")[0]
+        # Nếu là VRY, thêm chú thích "chuyển họa thành cát"
+        if base_name in vry_planets:
+            ax.text(
+                x, y + 0.5, 
+                f"{label} → chuyển họa thành cát",  # hoặc f"{label} [chuyển họa thành cát]"
+                fontsize=8, ha='left', va='bottom', color='purple', fontweight='bold'
+            )
+        else:
+            ax.text(x, y + 0.5, label, fontsize=8, ha='left', va='bottom')
     ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
