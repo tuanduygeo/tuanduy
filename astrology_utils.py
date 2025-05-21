@@ -139,17 +139,23 @@ def detect_yoga_dosha(df_planets):
    
                 
     
-    # 6. Viparita Raja Yoga (Chủ nhà xấu nằm trong nhà xấu khác)
+    # 6. Viparita Raja Yoga (phân biệt 3 loại Harsha, Sarala, Vimala)
     vry_types = {6: "Harsha Yoga", 8: "Sarala Yoga", 12: "Vimala Yoga"}
     dusthana = [6, 8, 12]
+    vry_shown = set()
     for planet in df_planets.to_dict("records"):
         for ruled_house in planet.get("Chủ tinh của nhà", []):
             if ruled_house in dusthana and planet["Nhà"] in dusthana:
+                # Chỉ hiện 1 lần cho từng hành tinh, từng loại
+                key = (planet['Hành tinh'], ruled_house, planet["Nhà"])
+                if key in vry_shown:
+                    continue
+                vry_shown.add(key)
                 vry_name = vry_types.get(ruled_house, "Viparita Raja Yoga")
                 res.append(
                     f"- **{vry_name}**: {planet['Hành tinh']} là chủ nhà {ruled_house} nằm ở nhà {planet['Nhà']} (Dusthana) – lấy độc trị độc, chuyển hung thành cát."
                 )
-                break
+                break  # Không lặp lại cho cùng hành tinh
     
     # 7. Neecha Bhanga Raja Yoga (chi tiết cứu giải tử)
     for _, row in df_planets.iterrows():
