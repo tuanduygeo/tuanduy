@@ -1019,13 +1019,10 @@ def astrology_block():
 
     for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mahadasha"]):
         if label not in shown_mahadashas:
+            # Lấy đúng tên hành tinh gốc (dù label có thêm text khác)
             base_name = label.split(" ")[0]
-            # Nếu là hành tinh Viparita Raja Yoga (VRY), thêm chú thích
             if base_name in vry_planets:
-                ax.text(
-                    x, y + 0.5, f"{label} ↑ chuyển họa thành cát",
-                    fontsize=8, ha='left', va='bottom', color='purple', fontweight='bold'
-                )
+                ax.text(x, y + 0.5, f"{label} ↑ chuyển họa thành cát", fontsize=8, ha='left', va='bottom', color='purple', fontweight='bold')
             else:
                 ax.text(x, y + 0.5, label, fontsize=8, ha='left', va='bottom')
             shown_mahadashas.add(label)
