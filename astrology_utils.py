@@ -38,7 +38,21 @@ def detect_yoga_dosha(df_planets):
         d, m, s = [int(x) if x else 0 for x in match.groups()]
         return d + m/60 + s/3600
 
-   
+    def calc_d9(row):
+        rashi = row["Cung"]
+        deg = dms_str_to_float(row["Vị trí"])
+        rashi_index = rashis.index(rashi)
+        # Vị trí hành tinh trong cung (0~30°)
+        part = int(deg // (30 / 9))  # 0~8
+        # Đếm thuận chiều từ cung chủ, mỗi part nhảy sang 1 cung
+        d9_rashi_index = (rashi_index + part) % 12
+        d9_rashi = rashis[d9_rashi_index]
+        # Độ trong D9 = phần dư sau khi lấy 3°20'
+        d9_deg = (deg % (30 / 9)) * 9
+        return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
+    
+    # Thêm cột D9 vào df_planets
+    df_planets[["D9_Cung", "D9_Độ"]] = df_planets.apply(calc_d9, axis=1)
     
     # Lấy các vị trí nhanh
     def get_planet(name):
