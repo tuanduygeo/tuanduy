@@ -1169,14 +1169,14 @@ def astrology_block():
     fig_d9=plot_d9_chart(df_d9)
     
     col1, col2 = st.columns(2)
-with col1:
-    st.markdown("### Biểu đồ D1 (Rasi)")
-    st.pyplot(fig)
-with col2:
-    st.markdown("### Biểu đồ D9 (Navamsa)")
-    st.pyplot(fig_d9)
-    plt.close(fig)
-    plt.close(fig_d9)
+    with col1:
+        st.markdown("### Biểu đồ D1 (Rasi)")
+        st.pyplot(fig)
+    with col2:
+        st.markdown("### Biểu đồ D9 (Navamsa)")
+        st.pyplot(fig_d9)
+        plt.close(fig)
+        plt.close(fig_d9)
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
