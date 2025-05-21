@@ -76,7 +76,7 @@ def plot_d9_chart(df_d9):
         1: (50, 80), 2: (25, 95), 3: (10, 80), 4: (25, 45), 5: (15, 25), 6: (25, 5),
         7: (50, 20), 8: (75, 5), 9: (95, 25), 10: (75, 45), 11: (95, 80), 12: (75, 95)
     }
-    fig, ax = plt.subplots(figsize=(2, 2))
+    fig, ax = plt.subplots(figsize=(4, 4))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
