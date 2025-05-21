@@ -1091,7 +1091,7 @@ def astrology_block():
         12: (75, 95),
     }
     
-    fig, ax = plt.subplots(figsize=(4,4))  # Giống D1
+    fig, ax = plt.subplots(figsize=(3,3))  # Giống D1
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis("off")
