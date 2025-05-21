@@ -203,7 +203,7 @@ def detect_yoga_dosha(df_planets):
     
     # Sử dụng:
     if check_kala_sarpa(df_planets):
-        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – nghiệp lực mạnh, nhiều thử thách.")
+        res.append("- **Kala Sarpa Dosha:** Tất cả các hành tinh chính đều nằm giữa trục Rahu-Ketu – Mât cân đối toàn bàn, nhiều thử thách.")
     
     
     
@@ -220,7 +220,7 @@ def detect_yoga_dosha(df_planets):
         next_malefic = any(p for p in df_planets.to_dict("records") if p["Nhà"] == next_house and p["Hành tinh"] in malefics)
         if prev_malefic and next_malefic:
             res.append(
-                f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh – ý nghĩa nhà này dễ gặp trở ngại."
+                f"- **Paap Kartari Yoga:** Nhà {curr_house} bị kẹp giữa hai hung tinh. ↓."
             )
             pk_yoga_shown.add(curr_house)
 
@@ -273,6 +273,27 @@ def detect_yoga_dosha(df_planets):
             house10_ruler = p
     if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
         res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – sự nghiệp-phúc tăng.")
+
+    # --- Kiểm tra Nabhasa Sankhya Yoga ---
+    planets_main = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    signs = [row["Cung"] for row in df_planets.to_dict("records") if row["Hành tinh"] in planets_main]
+    unique_signs = set(signs)
+    n_signs = len(unique_signs)
+    sankhya_map = {
+        1: ("Gola", "Cuộc đời tập trung vào một chủ đề chính, số phận thường đơn giản, nhưng thiếu linh hoạt."),
+        2: ("Yuga", "Hai thái cực, cuộc đời chia hai mảng lớn rõ rệt."),
+        3: ("Shoola", "Tập trung mục tiêu, tiến về một đích lớn, nghị lực mạnh."),
+        4: ("Kedara", "Làm nhiều việc cùng lúc, đa năng nhưng dễ phân tán."),
+        5: ("Pasa", "Nhiều mối ràng buộc, sống đa chiều, quan hệ rộng."),
+        6: ("Dama", "Kiểm soát, ngăn nắp, sống có kỷ luật, nhưng dễ thu mình."),
+        7: ("Veena", "Đời sống hài hòa, nghệ thuật, hòa nhập nhiều môi trường.")
+    }
+    if 1 <= n_signs <= 7:
+        name, meaning = sankhya_map[n_signs]
+        res.append(f"- **Nabhasa Sankhya Yoga: {name}** – ({n_signs} cung) {meaning}")
+    else:
+        res.append("Không xác định được Nabhasa Sankhya Yoga.")
+    
     # Tổng hợp
     if mahapurusha:
         res.append("**Pancha Mahapurusha Yoga:**\n" + "\n".join(mahapurusha))
