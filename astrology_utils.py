@@ -7,6 +7,44 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 
+# Bindhu (benefic point) matrix như chuyên gia đưa
+BAV_BinduMatrix = {
+    "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
+    "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
+    "Mars":    {"Sun":[3,5,6,10,11], "Moon":[3,6,11], "Mars":[1,2,4,7,8,10,11], "Mercury":[3,5,6,11], "Jupiter":[6,10,11,12], "Venus":[6,8,11,12], "Saturn":[1,7,8,9,10,11], "Ascendant":[1,3,6,10,11]},
+    "Mercury": {"Sun":[5,6,9,11,12], "Moon":[2,4,6,8,10,11], "Mars":[1,2,4,7,8,9,10,12], "Mercury":[1,3,5,6,9,10,11,12], "Jupiter":[6,8,11,12], "Venus":[1,2,3,4,5,8,9,11], "Saturn":[1,2,4,7,8,9,10,12], "Ascendant":[1,2,4,6,8,10,11]},
+    "Jupiter": {"Sun":[1,2,3,4,7,8,9,10,11], "Moon":[2,5,7,9,11], "Mars":[1,2,4,7,8,10,11], "Mercury":[1,2,4,5,6,9,10,11], "Jupiter":[1,2,3,4,7,8,10,11], "Venus":[2,5,6,9,10,11], "Saturn":[3,5,6,12], "Ascendant":[1,2,4,5,6,7,9,10,11]},
+    "Venus":   {"Sun":[8,11,12], "Moon":[1,2,3,4,5,8,9,11,12], "Mars":[3,4,6,9,11,12], "Mercury":[3,5,6,9,11], "Jupiter":[5,8,9,10,11], "Venus":[1,2,3,4,5,8,9,10,11], "Saturn":[3,4,5,8,9,10,11], "Ascendant":[1,2,3,4,5,8,9,11]},
+    "Saturn":  {"Sun":[1,2,4,7,8,10,11], "Moon":[3,6,11], "Mars":[3,5,6,10,11,12], "Mercury":[6,8,9,10,11,12], "Jupiter":[5,6,11,12], "Venus":[6,11,12], "Saturn":[3,5,6,11], "Ascendant":[1,3,4,10,11]}
+}
+
+def compute_ashtakavarga(df_planets):
+    # Đảm bảo có mapping planet -> house (số thứ tự nhà), lấy luôn Asc là nhà 1
+    planet_houses = {row['Hành tinh']: row['Nhà'] for _, row in df_planets.iterrows()}
+    planet_houses['Ascendant'] = 1
+    planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+
+    # Tạo bảng điểm rỗng
+    bav_points = {pl: [0]*12 for pl in planets}
+    bav_points["Total"] = [0]*12
+
+    # Tính điểm cho từng hành tinh
+    for planet in planets:
+        for ref in BAV_BinduMatrix[planet]:
+            if ref not in planet_houses:
+                continue
+            ref_house = planet_houses[ref]
+            for nth in BAV_BinduMatrix[planet][ref]:
+                idx = (ref_house + nth - 2) % 12   # python 0-based
+                bav_points[planet][idx] += 1
+
+    # Tính tổng
+    for i in range(12):
+        bav_points["Total"][i] = sum(bav_points[pl][i] for pl in planets)
+
+    # Đưa ra dataframe cho đẹp, số cột là 12 nhà (1-12)
+    df_bav = pd.DataFrame(bav_points, index=[f"Nhà {i+1}" for i in range(12)])
+    return df_bav.transpose()
 # Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
 def dms_str_to_float(dms_str):
     match = re.match(r"(\d+)°(\d+)'(\d+)?", dms_str)
@@ -1181,7 +1219,9 @@ def astrology_block():
     if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
         
         st.dataframe(df_all_antar, use_container_width=False)
-
+    df_bav = compute_ashtakavarga(df_planets)
+    st.markdown("### Bảng Bhinna Ashtakavarga (BAV) từng hành tinh")
+    st.dataframe(df_bav)
     
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
