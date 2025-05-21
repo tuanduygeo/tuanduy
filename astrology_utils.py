@@ -308,7 +308,22 @@ def detect_yoga_dosha(df_planets):
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."
     else:
         return "#### 📜 **Tổng hợp các cách cục cát/hung nổi bật:**\n\n" + "\n\n".join(res)
-    
+
+    # --- Parivartana Yoga (Mutual Exchange Yoga) ---
+    records = df_planets.to_dict("records")
+    exchanges = []
+    for p1 in records:
+        ruler1 = rashi_rulers.get(p1["Cung"])
+        if not ruler1:
+            continue
+        # Tìm planet đang ở cung của ruler1
+        p2 = next((p for p in records if p["Hành tinh"] == ruler1), None)
+        if p2 and rashi_rulers.get(p2["Cung"]) == p1["Hành tinh"]:
+            pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
+            if pair not in exchanges:
+                exchanges.append(pair)
+                res.append(f"- **Parivartana Yoga:** {pair[0]} và {pair[1]} hoán đổi cung – sự trợ lực qua lại mạnh mẽ.")
+
 def astrology_block():
     
 
