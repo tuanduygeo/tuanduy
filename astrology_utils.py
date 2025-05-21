@@ -151,16 +151,21 @@ def detect_yoga_dosha(df_planets):
                     f"- **Neecha Bhanga Raja Yoga:** {lord} tử ở {cung}, *được cứu giải*: {note}."
                 )
         
-    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
+   # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
     trikona_houses = [1, 5, 9]
     kendra_houses = [1, 4, 7, 10]
     trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
     kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    
+    found_raja_yoga = False
     for tr in trikona_rulers:
         for kr in kendra_rulers:
             if tr["Cung"] == kr["Cung"]:
                 res.append("- **Raja Yoga:** Chủ Kendra và Trikona đồng cung – danh vọng.")
-                break
+                found_raja_yoga = True
+                break  # Dừng vòng lặp nhỏ
+        if found_raja_yoga:
+            break  # Dừng luôn vòng lặp lớn nếu đã tìm thấy
     
     # 8. kal sarpa dosha
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
