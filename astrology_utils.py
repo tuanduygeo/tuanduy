@@ -91,8 +91,8 @@ def plot_d9_chart(df_d9):
     ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
     # Vẽ tên cung
     for i, (x, y) in house_coords.items():
-        cung = rashis[i - 1]
-        ax.text(x - 2, y + 3, f"{i}\n{cung}", fontsize=5, color='red',weight='bold', ha='center')
+        
+       ax.text(x, y + 8, f"{i}", fontsize=8, color='black',weight='bold', ha='center')
     # Vẽ hành tinh
     for i, (x, y) in house_coords.items():
         planets = []
