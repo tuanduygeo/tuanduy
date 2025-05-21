@@ -1000,7 +1000,7 @@ def astrology_block():
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
     chart_df, birth_x, vry_planets = build_life_chart(df_dasha, planet_data, jd)
-
+    
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
 
@@ -1018,19 +1018,20 @@ def astrology_block():
     shown_mahadashas = set()
 
     for x, y, label in zip(chart_df["Năm"], chart_df["Điểm số"], chart_df["Mahadasha"]):
-        base_name = label.split(" ")[0]  # lấy tên hành tinh
-        if label not in shown_mahadashas:
-            if base_name in vry_planets:
-                label_show = f"{label} ⭐"
-            else:
-                label_show = label
-            ax.text(x, y + 0.5, label_show, fontsize=8,  ha='left', va='bottom')
-            shown_mahadashas.add(label)
-    ax.tick_params(axis='x')  # Nếu bạn muốn nghiêng các nhãn năm cho dễ đọc
+        # Lấy tên hành tinh Mahadasha
+        base_name = label.split(" ")[0]
+        # Nếu là VRY, thêm ký hiệu hoặc text
+        if base_name in vry_planets:
+            ax.text(x, y + 0.5, f"{label} ↑VRY", fontsize=8, ha='left', va='bottom', color='purple', fontweight='bold')
+        else:
+            ax.text(x, y + 0.5, label, fontsize=8, ha='left', va='bottom')
+        shown_mahadashas.add(label)
+    
+    ax.tick_params(axis='x')
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
     ax.set_title(f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}")
-
+    
     ax.set_xlabel("Năm")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
