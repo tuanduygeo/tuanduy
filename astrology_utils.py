@@ -110,34 +110,7 @@ def detect_yoga_dosha(df_planets):
             res.append(
                 "- **Chandra-Mangal Yoga**: Mars ở nhà Kendra từ Moon – khả năng kinh doanh, quyết đoán."
             )
-    
-    
-    
-   # 5. Parivartana Yoga (chỉ in ra 1 dòng, gồm các cặp hành tinh)
-    parivartana_pairs = set()
-    for p1 in df_planets.to_dict("records"):
-        ruler_p1 = rashi_rulers.get(p1["Cung"], None)
-        if ruler_p1 is None or p1["Hành tinh"] == "Asc":
-            continue
-        for p2 in df_planets.to_dict("records"):
-            if p2["Hành tinh"] == p1["Hành tinh"]:
-                continue
-            if rashi_rulers.get(p2["Cung"], None) == p1["Hành tinh"]:
-                # Cặp định danh không phân biệt thứ tự, gồm cả số nhà
-                # Để loại trùng lặp ngược, luôn để hành tinh có tên nhỏ hơn lên trước
-                if p1["Hành tinh"] < p2["Hành tinh"]:
-                    pair = (p1["Hành tinh"], p1["Nhà"], p2["Hành tinh"], p2["Nhà"])
-                else:
-                    pair = (p2["Hành tinh"], p2["Nhà"], p1["Hành tinh"], p1["Nhà"])
-                parivartana_pairs.add(pair)
-    
-    if parivartana_pairs:
-        # Ví dụ ra: Mercury (nhà 3) ↔ Jupiter (nhà 6), Venus (nhà 4) ↔ Mars (nhà 11)
-        cặp_txt = ", ".join([f"{a} (nhà {a_n}) ↔ {b} (nhà {b_n})" for a, a_n, b, b_n in sorted(parivartana_pairs)])
-        res.append(f"- **Parivartana Yoga**: {cặp_txt}")
-    
-   
-                
+             
     
     # 6. Viparita Raja Yoga (phân biệt 3 loại Harsha, Sarala, Vimala)
     vry_types = {6: "Harsha Yoga", 8: "Sarala Yoga", 12: "Vimala Yoga"}
