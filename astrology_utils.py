@@ -1145,10 +1145,7 @@ def astrology_block():
         if label not in shown_mahadashas:
             # Lấy đúng tên hành tinh gốc (dù label có thêm text khác)
             base_name = label.split(" ")[0]
-            if base_name in vry_planets:
-                ax.text(x, y + 0.5, f"{label} ↑ chuyển họa thành cát", fontsize=8, ha='left', va='bottom', color='purple', fontweight='bold')
-            else:
-                ax.text(x, y + 0.5, label, fontsize=8, ha='left', va='bottom')
+            ax.text(x, y + 0.5, label, fontsize=10, ha='left', va='bottom')
             shown_mahadashas.add(label)
     df_d9 = build_navamsa_df(df_planets)
     fig_d9=plot_d9_chart(df_d9)
