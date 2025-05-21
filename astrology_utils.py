@@ -16,15 +16,25 @@ def dms_str_to_float(dms_str):
     return d + m/60 + s/3600
 
 def calc_d9(row):
-    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
-              "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    rashis = [
+        "Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải",
+        "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
+        "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"
+    ]
     rashi = row["Cung"]
-    deg = dms_str_to_float(row["Vị trí"])
+    deg = dms_str_to_float(row["Vị trí"])   # deg: vị trí trong cung 0–30°
     rashi_index = rashis.index(rashi)
-    part = int(deg // (30 / 9))
-    d9_rashi_index = (rashi_index + part) % 12
+    deg_in_sign = deg
+    navamsa_part = int(deg_in_sign // (30 / 9))  # 0~8
+    # Cung dương/âm (bắt đầu từ Bạch Dương là dương, xen kẽ)
+    duong_am = [1,0,1,0,1,0,1,0,1,0,1,0]  # 1 = dương, 0 = âm
+    if duong_am[rashi_index]:  # Cung DƯƠNG
+        d9_rashi_index = (rashi_index + navamsa_part) % 12
+    else:  # Cung ÂM
+        d9_rashi_index = (rashi_index + 8 - navamsa_part) % 12
     d9_rashi = rashis[d9_rashi_index]
-    d9_deg = (deg % (30 / 9)) * 9
+    # Độ trong D9 là phần dư * 9
+    d9_deg = (deg_in_sign % (30 / 9)) * 9
     return pd.Series({"D9_Cung": d9_rashi, "D9_Độ": round(d9_deg, 2)})
 def detect_yoga_dosha(df_planets):
     """
