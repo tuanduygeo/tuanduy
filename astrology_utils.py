@@ -92,7 +92,7 @@ def plot_d9_chart(df_d9):
     # Vẽ tên cung
     for i, (x, y) in house_coords.items():
         
-       ax.text(x, y + 3, f"{i}", fontsize=4, color='red',weight='bold', ha='center')
+       ax.text(x, y + 2, f"{i}", fontsize=4, color='red',weight='bold', ha='center')
     # Vẽ hành tinh
     for i, (x, y) in house_coords.items():
         planets = []
@@ -809,7 +809,7 @@ def astrology_block():
             cusp_degree = equal_house_cusps[i - 1]
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
-            ax.text(x-2, y + 3, str(rashi_number), fontsize=7, color='red',weight='bold')
+            ax.text(x-2, y + 2, str(rashi_number), fontsize=7, color='red',weight='bold')
         return fig  
         
     fig_d1 = draw_chart(planet_data)
