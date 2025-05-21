@@ -103,7 +103,7 @@ def plot_d9_chart(df_d9):
                 planets.append(f"{name} ({deg:.2f}°)")
         if planets:
             ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=7, color='blue')
-    ax.set_title("Navamsa Chart (D9)")
+    
     plt.tight_layout()
     plt.show()
     return fig
@@ -812,9 +812,8 @@ def astrology_block():
             ax.text(x-2, y + 3, str(rashi_number), fontsize=5, color='red',weight='bold')
         return fig  
         
-    fig = draw_chart(planet_data)
-    st.pyplot(fig, use_container_width=False)
-    plt.close(fig)
+    fig_d1 = draw_chart(planet_data)
+    
     df_planets = pd.DataFrame(planet_data)
 
 
@@ -1151,7 +1150,18 @@ def astrology_block():
             else:
                 ax.text(x, y + 0.5, label, fontsize=8, ha='left', va='bottom')
             shown_mahadashas.add(label)
+    df_d9 = build_navamsa_df(df_planets)
+    fig_d9=plot_d9_chart(df_d9)
     
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("### Biểu đồ D1 (Rasi)")
+        st.pyplot(fig_d1,use_container_width=False)
+    with col2:
+        st.markdown("### Biểu đồ D9 (Navamsa)")
+        st.pyplot(fig_d9,use_container_width=False)
+    plt.close(fig_d1)
+    plt.close(fig_d9)
     ax.tick_params(axis='x')
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
@@ -1165,18 +1175,7 @@ def astrology_block():
     
     st.markdown("### Vị trí hành tinh")
     st.dataframe(df_planets, use_container_width=False)
-    df_d9 = build_navamsa_df(df_planets)
-    fig_d9=plot_d9_chart(df_d9)
     
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("### Biểu đồ D1 (Rasi)")
-        st.pyplot(fig)
-    with col2:
-        st.markdown("### Biểu đồ D9 (Navamsa)")
-        st.pyplot(fig_d9)
-        plt.close(fig)
-        plt.close(fig_d9)
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
