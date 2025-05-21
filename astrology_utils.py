@@ -102,7 +102,7 @@ def plot_d9_chart(df_d9):
                 deg = row["D9_Độ"]
                 planets.append(f"{name} ({deg:.2f}°)")
         if planets:
-            ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=7, color='blue')
+            ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=5, color='blue')
     
     plt.tight_layout()
     plt.show()
