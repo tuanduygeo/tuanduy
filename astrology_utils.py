@@ -133,91 +133,19 @@ def compute_digbala(df):
         except:
             results.append({"Hành tinh": planet, "Digbala": np.nan})
     return pd.DataFrame(results)
-def compute_nathonnatabala(birth_time):
-    hour = birth_time.hour
-    if 6 <= hour < 18:
-        # Ban ngày
-        return {
-            "Sun": 60, "Jupiter": 60, "Venus": 60,
-            "Moon": 30, "Mars": 30, "Saturn": 30,
-            "Mercury": 60
-        }
-    else:
-        # Ban đêm
-        return {
-            "Moon": 60, "Mars": 60, "Saturn": 60,
-            "Sun": 30, "Jupiter": 30, "Venus": 30,
-            "Mercury": 60
-        }
-def compute_pakshabala(sun_deg, moon_deg):
-    diff = abs(moon_deg - sun_deg)
-    if diff > 180:
-        diff = 360 - diff
-    paksha = min(diff / 3, 60)
-    return paksha
 
-def compute_kaalabala_full(df_planets, birth_time, birth_date, longitude=None, latitude=None):
-    PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
-
-    # Lấy số độ Sun, Moon (phải là số thực, không phải "12°23'")
-    def get_deg(df, planet_name):
-        row = df[df["Hành tinh"] == planet_name].iloc[0]
-        return dms_str_to_float(row["Vị trí"])
-
-    sun_deg = get_deg(df_planets, "Sun")
-    moon_deg = get_deg(df_planets, "Moon")
-
-    # 1. Nathonnata Bala
-    nathonnata_dict = compute_nathonnatabala(birth_time)
-
-    # 2. Paksha Bala
-    paksha = compute_pakshabala(sun_deg, moon_deg)
-
-    # 3. Tribhaga Bala (placeholder: 20)
-    tribhaga = {p: 20 for p in PLANETS}
-
-    # 4. Varsha-Maasa-Dina-Hora Bala (placeholder: 20)
-    varsha = {p: 20 for p in PLANETS}
-
-    # 5. Ayanabala (Parashara công thức)
-    ayanabala = {}
-    for planet in PLANETS:
-        planet_deg = get_deg(df_planets, planet)
-        # Lấy kinh độ tuyệt đối (0–360)
-        import math
-        # Dùng công thức Parashara (đơn giản)
-        val = 30 * (1 + abs(math.sin(math.radians(planet_deg))))
-        ayanabala[planet] = round(val, 2)
-
-    # 6. Yuddhabala (demo: 0)
-    yuddhabala = {p: 0 for p in PLANETS}
-
-    # Tổng hợp vào DataFrame
-    data = []
-    for planet in PLANETS:
-        data.append({
-            "Hành tinh": planet,
-            "NathonnataBala": nathonnata_dict[planet],
-            "PakshaBala": round(paksha, 2),
-            "TribhagaBala": tribhaga[planet],
-            "VarshaMaasaDinaHoraBala": varsha[planet],
-            "Ayanabala": ayanabala[planet],
-            "Yuddhabala": yuddhabala[planet],
-            "KaalaBala Tổng": round(nathonnata_dict[planet] + paksha + tribhaga[planet] + varsha[planet] + ayanabala[planet] + yuddhabala[planet], 2)
-        })
-    return pd.DataFrame(data)
-def compute_shadbala_full(df, df_d9, birth_time, birth_date, longitude=None, latitude=None):
+def compute_shadbala_full(df, df_d9):
     df_sthana = compute_sthanabala(df, df_d9)
     df_dig = compute_digbala(df)
-    df_kaala = compute_kaalabala_full(df, birth_time, birth_date, longitude, latitude)
+    
     
     # Gộp lại
     df_full = df_sthana.merge(df_dig, on="Hành tinh")\
-                       .merge(df_kaala[["Hành tinh", "KaalaBala Tổng"]], on="Hành tinh")
+                       
     
     # Tổng Shadbala
     df_full["Shadbala Tổng"] = df_full[[
-        "Sthanabala Tổng", "Digbala", "KaalaBala Tổng"
+        "Sthanabala Tổng", "Digbala"
     ]].sum(axis=1)
     return df_full
 
@@ -1558,10 +1486,8 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    from datetime import datetime
-    birth_time = datetime(year, month, day, hour, minute, second)
-    birth_date = datetime(year, month, day) 
-    df_shadbala = compute_shadbala_full(df_planets, df_d9, birth_time, birth_date, longitude, latitude)
+    
+    df_shadbala = compute_shadbala_full(df_planets, df_d9)
     # Sắp xếp và tạo thứ hạng (Rank) theo Shadbala Tổng: cao nhất = hạng 1
     df_shadbala = df_shadbala.sort_values("Shadbala Tổng", ascending=False)
     df_shadbala["Rank"] = range(1, len(df_shadbala) + 1)
