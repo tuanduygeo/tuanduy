@@ -399,6 +399,31 @@ def detect_yoga_dosha(df_planets):
         if found_raja_yoga:
             break  # Dừng luôn vòng lặp lớn nếu đã tìm thấy
     
+    def check_parivartana(df_planets):
+        # Lấy cung mỗi hành tinh
+        records = df_planets.to_dict("records")
+        rashi_rulers = {...}  # bản đồ cung chủ quản
+        exchanges = []
+        for p1 in records:
+            ruler1 = rashi_rulers.get(p1["Cung"])
+            if not ruler1:
+                continue
+            # Tìm planet đang ở cung của ruler1
+            p2 = next((p for p in records if p["Hành tinh"] == ruler1), None)
+            if p2 and rashi_rulers.get(p2["Cung"]) == p1["Hành tinh"]:
+                pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
+                if pair not in exchanges:
+                    exchanges.append(pair)
+        return exchanges
+    
+    parivartana = check_parivartana(df_planets)
+    for p1, p2 in parivartana:
+        res.append(f"- **Parivartana Yoga:** {p1} và {p2} hoán đổi cung – sự trợ lực qua lại mạnh mẽ.")
+
+
+
+
+    
     # 8. kal sarpa dosha
     main_planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
     rashi_to_number = {
