@@ -400,9 +400,7 @@ def detect_yoga_dosha(df_planets):
             break  # Dừng luôn vòng lặp lớn nếu đã tìm thấy
     
     def check_parivartana(df_planets):
-        # Lấy cung mỗi hành tinh
         records = df_planets.to_dict("records")
-        rashi_rulers = {...}  # bản đồ cung chủ quản
         exchanges = []
         for p1 in records:
             ruler1 = rashi_rulers.get(p1["Cung"])
