@@ -1558,6 +1558,7 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
+    from datetime import datetime
     birth_time = datetime(year, month, day, hour, minute, second)
     birth_date = datetime(year, month, day) 
     df_shadbala = compute_shadbala_full(df_planets, df_d9, birth_time, birth_date, longitude, latitude)
