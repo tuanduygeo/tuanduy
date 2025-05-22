@@ -1190,7 +1190,7 @@ def astrology_block():
     
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("### Biểu đồ sinh <div style='padding: 20px 0;'></div>",unsafe_allow_html=True)
+        st.markdown("### Biểu đồ sinh <div style='padding: 0 100px;'></div>",unsafe_allow_html=True)
         
         st.pyplot(fig_d1,use_container_width=False)
     with col2:
