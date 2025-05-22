@@ -1344,6 +1344,18 @@ def astrology_block():
     
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
+    with st.expander("🌿 Xem Yoga/Dosha D9 (Navamsa)", expanded=False):
+        # Đổi tên cột cho đúng chuẩn hàm detect_yoga_dosha
+        df_d9_planet = df_d9.rename(columns={"D9_Cung": "Cung", "D9_Nhà": "Nhà", "D9_Độ": "Vị trí"})
+        # Thêm các cột cần thiết nếu thiếu (tùy hàm detect_yoga_dosha bạn viết yêu cầu gì)
+        df_d9_planet["Hành tinh"] = df_d9["Hành tinh"]
+        st.markdown(detect_yoga_dosha(df_d9_planet), unsafe_allow_html=True)
+
+    with st.expander("🔥 Xem Yoga/Dosha D30 (Trimsamsa)", expanded=False):
+        df_d30_planet = df_d30.rename(columns={"D30_Cung": "Cung", "D30_Nhà": "Nhà", "D30_Độ": "Vị trí"})
+        df_d30_planet["Hành tinh"] = df_d30["Hành tinh"]
+        st.markdown(detect_yoga_dosha(df_d30_planet), unsafe_allow_html=True)
+    
     st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
 
     st.dataframe(df_dasha, use_container_width=False)
