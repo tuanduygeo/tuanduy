@@ -1343,25 +1343,15 @@ def astrology_block():
     st.dataframe(df_planets, use_container_width=False)
     
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
-    # === VIMSHOTTARI DASHA - GIỮ NGÀY KẾT THÚC, TÍNH NGÀY BẮT ĐẦU ===
-   # D9 - Navamsa, có nút ẩn/hiện
-    with st.expander("🌿 Hiện/ẩn Yoga/Dosha D9 (Navamsa)", expanded=False):
-        df_d9_for_yoga = df_d9.rename(columns={"D9_Cung": "Cung", "D9_Nhà": "Nhà", "D9_Độ": "Vị trí"})
-        df_d9_for_yoga["Hành tinh"] = df_d9["Hành tinh"]
-        st.markdown(detect_yoga_dosha(df_d9_for_yoga), unsafe_allow_html=True)
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
+        st.dataframe(df_dasha, use_container_width=False)
+    with col2:
+        if st.checkbox("Antardasha"):
+        st.dataframe(df_all_antar, use_container_width=False)       
     
-    # D30 - Trimsamsa, có nút ẩn/hiện
-    with st.expander("🔥 Hiện/ẩn Yoga/Dosha D30 (Trimsamsa)", expanded=False):
-        df_d30_for_yoga = df_d30.rename(columns={"D30_Cung": "Cung", "D30_Nhà": "Nhà", "D30_Độ": "Vị trí"})
-        df_d30_for_yoga["Hành tinh"] = df_d30["Hành tinh"]
-        st.markdown(detect_yoga_dosha(df_d30_for_yoga), unsafe_allow_html=True)
     
-    st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
-
-    st.dataframe(df_dasha, use_container_width=False)
-    if st.checkbox("👁️ Hiện toàn bộ Antardasha cho 9 Mahadasha"):
-        
-        st.dataframe(df_all_antar, use_container_width=False)
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
