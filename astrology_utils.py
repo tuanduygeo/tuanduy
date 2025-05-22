@@ -1349,7 +1349,7 @@ def astrology_block():
         st.dataframe(df_dasha, use_container_width=False)
     with col2:
         if st.checkbox("Antardasha"):
-        st.dataframe(df_all_antar, use_container_width=False)       
+            st.dataframe(df_all_antar, use_container_width=False)       
     
     
     df_bav = compute_ashtakavarga(df_planets)
