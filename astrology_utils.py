@@ -1315,6 +1315,7 @@ def astrology_block():
             shown_mahadashas.add(label)
     df_d9 = build_navamsa_df(df_planets)
     fig_d9=plot_d9_chart(df_d9)
+    df_d30=build_trimsamsa_df(df_planets)
     fig_d30=plot_d30_chart(df_d30)
     col1, col2 = st.columns([2, 1])
     with col1:
