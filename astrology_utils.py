@@ -130,7 +130,7 @@ def plot_d9_chart(df_d9):
     # Vẽ tên cung
     for i, (x, y) in house_coords.items():
         
-       ax.text(x, y + 2, f"{i}", fontsize=4, color='red',weight='bold', ha='center')
+       ax.text(x, y + 2, f"{i}", fontsize=6, color='red',weight='bold', ha='center')
     # Vẽ hành tinh
     for i, (x, y) in house_coords.items():
         planets = []
