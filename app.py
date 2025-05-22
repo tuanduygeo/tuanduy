@@ -218,7 +218,7 @@ def main():
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
-                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
+                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
                 ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
