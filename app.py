@@ -84,7 +84,14 @@ def extract_phongthuy_data(n_text):
 
 
 def main():
-    
+    st.markdown(
+    """
+    <div style="display: flex; justify-content: center;">
+        <img src="banner.png" alt="Banner chiêm tinh & phong thủy" style="width:100%; max-width:950px; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.16);">
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
     st.markdown("""
     <div style="background:linear-gradient(90deg,#f9d423,#ff4e50);padding:24px 8px 20px 8px;border-radius:16px;margin-bottom:24px;">
         <h1 style='color:white;text-align:center;margin:0;font-size:36px;'>🔯 ỨNG DỤNG  ĐỊA LÝ & CHIÊM TINH </h1>
