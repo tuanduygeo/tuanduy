@@ -133,6 +133,29 @@ def compute_digbala(df):
         except:
             results.append({"Hành tinh": planet, "Digbala": np.nan})
     return pd.DataFrame(results)
+def compute_nathonnatabala(birth_time):
+    hour = birth_time.hour
+    if 6 <= hour < 18:
+        # Ban ngày
+        return {
+            "Sun": 60, "Jupiter": 60, "Venus": 60,
+            "Moon": 30, "Mars": 30, "Saturn": 30,
+            "Mercury": 60
+        }
+    else:
+        # Ban đêm
+        return {
+            "Moon": 60, "Mars": 60, "Saturn": 60,
+            "Sun": 30, "Jupiter": 30, "Venus": 30,
+            "Mercury": 60
+        }
+def compute_pakshabala(sun_deg, moon_deg):
+    diff = abs(moon_deg - sun_deg)
+    if diff > 180:
+        diff = 360 - diff
+    paksha = min(diff / 3, 60)
+    return paksha
+
 def compute_kaalabala_full(df_planets, birth_time, birth_date, longitude=None, latitude=None):
     PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
 
