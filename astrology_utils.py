@@ -17,6 +17,138 @@ BAV_BinduMatrix = {
     "Venus":   {"Sun":[8,11,12], "Moon":[1,2,3,4,5,8,9,11,12], "Mars":[3,4,6,9,11,12], "Mercury":[3,5,6,9,11], "Jupiter":[5,8,9,10,11], "Venus":[1,2,3,4,5,8,9,10,11], "Saturn":[3,4,5,8,9,10,11], "Ascendant":[1,2,3,4,5,8,9,11]},
     "Saturn":  {"Sun":[1,2,4,7,8,10,11], "Moon":[3,6,11], "Mars":[3,5,6,10,11,12], "Mercury":[6,8,9,10,11,12], "Jupiter":[5,6,11,12], "Venus":[6,11,12], "Saturn":[3,5,6,11], "Ascendant":[1,3,4,10,11]}
 }
+RASHIS = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+
+def get_sign_number(rashi):
+    return RASHIS.index(rashi) + 1
+deep_debilit_points = {"Sun": 11, "Moon": 8, "Mars": 4, "Mercury": 12, "Jupiter": 7, "Venus": 6, "Saturn": 1}
+
+def compute_uchhabala(df):
+    results = []
+    for planet in PLANETS:
+        try:
+            row = df[df["Hành tinh"] == planet].iloc[0]
+            sign_num = get_sign_number(row["Cung"])
+            deg = dms_str_to_float(row["Vị trí"])
+            planet_long = (sign_num - 1) * 30 + deg
+            debil_point = (deep_debilit_points[planet] - 1) * 30
+            dist = abs(planet_long - debil_point)
+            if dist > 180:
+                dist = 360 - dist
+            uchhabala = dist / 3   # virupa
+            results.append({"Hành tinh": planet, "Uchhabala": round(uchhabala, 2)})
+        except:
+            results.append({"Hành tinh": planet, "Uchhabala": np.nan})
+    return pd.DataFrame(results)
+def compute_kendradhibala(df):
+    results = []
+    for planet in PLANETS:
+        try:
+            row = df[df["Hành tinh"] == planet].iloc[0]
+            house = int(row["Nhà"])
+            if house in [1, 4, 7, 10]:
+                kendradhibala = 60
+            elif house in [2, 5, 8, 11]:
+                kendradhibala = 30
+            else:
+                kendradhibala = 15
+            results.append({"Hành tinh": planet, "Kendradhibala": kendradhibala})
+        except:
+            results.append({"Hành tinh": planet, "Kendradhibala": np.nan})
+    return pd.DataFrame(results)
+def compute_drekkanabala(df):
+    results = []
+    for planet in PLANETS:
+        try:
+            row = df[df["Hành tinh"] == planet].iloc[0]
+            deg = dms_str_to_float(row["Vị trí"])
+            if planet in ["Sun", "Jupiter", "Mars"] and deg <= 10.0:
+                drekkanabala = 15
+            elif planet in ["Moon", "Venus"] and 10.0 < deg <= 20.0:
+                drekkanabala = 15
+            elif planet in ["Mercury", "Saturn"] and deg > 20.0:
+                drekkanabala = 15
+            else:
+                drekkanabala = 0
+            results.append({"Hành tinh": planet, "Drekkanabala": drekkanabala})
+        except:
+            results.append({"Hành tinh": planet, "Drekkanabala": np.nan})
+    return pd.DataFrame(results)
+def compute_ojhayugmarashiamsabala(df, df_d9):
+    results = []
+    for planet in PLANETS:
+        try:
+            row_d1 = df[df["Hành tinh"] == planet].iloc[0]
+            row_d9 = df_d9[df_d9["Hành tinh"] == planet].iloc[0]
+            signnum_d1 = get_sign_number(row_d1["Cung"])
+            signnum_d9 = get_sign_number(row_d9["D9_Cung"])
+            value = 0
+            if planet in ["Sun", "Mars", "Mercury", "Jupiter", "Saturn"]:
+                if signnum_d1 % 2 == 1:
+                    value += 15
+                if signnum_d9 % 2 == 1:
+                    value += 15
+            else:  # Moon, Venus
+                if signnum_d1 % 2 == 0:
+                    value += 15
+                if signnum_d9 % 2 == 0:
+                    value += 15
+            results.append({"Hành tinh": planet, "Ojhayugmarashiamsabala": value})
+        except:
+            results.append({"Hành tinh": planet, "Ojhayugmarashiamsabala": np.nan})
+    return pd.DataFrame(results)
+def compute_saptavargajabala(df):
+    results = []
+    for planet in PLANETS:
+        results.append({"Hành tinh": planet, "Saptavargajabala": 20})
+    return pd.DataFrame(results)
+def compute_sthanabala(df, df_d9):
+    df_uchha = compute_uchhabala(df)
+    df_kendra = compute_kendradhibala(df)
+    df_drek = compute_drekkanabala(df)
+    df_ojha = compute_ojhayugmarashiamsabala(df, df_d9)
+    df_sapta = compute_saptavargajabala(df)
+    df = df_uchha.merge(df_kendra, on="Hành tinh")\
+                 .merge(df_drek, on="Hành tinh")\
+                 .merge(df_ojha, on="Hành tinh")\
+                 .merge(df_sapta, on="Hành tinh")
+    df["Sthanabala Tổng"] = df[["Uchhabala", "Kendradhibala", "Drekkanabala", "Ojhayugmarashiamsabala", "Saptavargajabala"]].sum(axis=1)
+    return df
+def compute_digbala(df):
+    results = []
+    for planet in PLANETS:
+        try:
+            row = df[df["Hành tinh"] == planet].iloc[0]
+            house = int(row["Nhà"])
+            # Nhà tốt nhất cho digbala (theo kinh điển)
+            best = {"Sun": 10, "Moon": 4, "Mars": 10, "Mercury": 7, "Jupiter": 7, "Venus": 4, "Saturn": 1}
+            if house == best[planet]:
+                digbala = 60
+            elif house in [1, 4, 7, 10]:
+                digbala = 30
+            else:
+                digbala = 15
+            results.append({"Hành tinh": planet, "Digbala": digbala})
+        except:
+            results.append({"Hành tinh": planet, "Digbala": np.nan})
+    return pd.DataFrame(results)
+def compute_shadbala_full(df, df_d9):
+    df_sthana = compute_sthanabala(df, df_d9)
+    df_dig = compute_digbala(df)
+    df_kaala = compute_kaalabala(df)
+    df_chesh = compute_cheshtabala(df)
+    df_drik = compute_drikbala(df)
+    # Gộp tất cả
+    df_full = df_sthana.merge(df_dig, on="Hành tinh")\
+                       .merge(df_kaala, on="Hành tinh")\
+                       .merge(df_chesh, on="Hành tinh")\
+                       .merge(df_drik, on="Hành tinh")
+    # Tổng Shadbala
+    df_full["Shadbala Tổng"] = df_full[[
+        "Sthanabala Tổng", "Digbala", "Kaalabala", "Cheshtabala", "Drikbala"
+    ]].sum(axis=1)
+    return df_full
 
 def compute_ashtakavarga(df_planets):
     # Đảm bảo có mapping planet -> house (số thứ tự nhà), lấy luôn Asc là nhà 1
@@ -1355,7 +1487,8 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    
+    df_shadbala = compute_shadbala_full(df_planets, df_d9)
+    st.dataframe(df_shadbala)
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
