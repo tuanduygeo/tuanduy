@@ -6,7 +6,7 @@ import pytz
 from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
-
+import io
 # Bindhu (benefic point) matrix như chuyên gia đưa
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
@@ -1188,9 +1188,9 @@ def astrology_block():
     df_d9 = build_navamsa_df(df_planets)
     fig_d9=plot_d9_chart(df_d9)
     
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([2, 1])
     with col1:
-        st.markdown("### Biểu đồ sinh <div style='padding: 0 500px;'></div>",unsafe_allow_html=True)
+        st.markdown("### Biểu đồ sinh ")
         
         st.pyplot(fig_d1,use_container_width=False)
     with col2:
