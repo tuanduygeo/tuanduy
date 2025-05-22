@@ -1325,7 +1325,7 @@ def astrology_block():
         st.markdown("### Biểu đồ hậu vận")
         
         st.pyplot(fig_d9,use_container_width=False)
-         st.markdown("### Biểu đồ lực -")
+        st.markdown("### Biểu đồ lực -")
         st.pyplot(fig_d30,use_container_width=False)
     plt.close(fig_d1)
     plt.close(fig_d9)
