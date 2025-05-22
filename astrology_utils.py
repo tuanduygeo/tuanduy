@@ -1558,7 +1558,7 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    df_shadbala = compute_shadbala_full(df_planets, df_d9)
+    df_shadbala = compute_shadbala_full(df_planets, df_d9, birth_time, birth_date, longitude, latitude)
     # Sắp xếp và tạo thứ hạng (Rank) theo Shadbala Tổng: cao nhất = hạng 1
     df_shadbala = df_shadbala.sort_values("Shadbala Tổng", ascending=False)
     df_shadbala["Rank"] = range(1, len(df_shadbala) + 1)
