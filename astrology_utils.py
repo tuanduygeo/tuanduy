@@ -136,17 +136,13 @@ def compute_digbala(df):
 def compute_shadbala_full(df, df_d9):
     df_sthana = compute_sthanabala(df, df_d9)
     df_dig = compute_digbala(df)
-    df_kaala = compute_kaalabala(df)
-    df_chesh = compute_cheshtabala(df)
-    df_drik = compute_drikbala(df)
+    
     # Gộp tất cả
     df_full = df_sthana.merge(df_dig, on="Hành tinh")\
-                       .merge(df_kaala, on="Hành tinh")\
-                       .merge(df_chesh, on="Hành tinh")\
-                       .merge(df_drik, on="Hành tinh")
+                       
     # Tổng Shadbala
     df_full["Shadbala Tổng"] = df_full[[
-        "Sthanabala Tổng", "Digbala", "Kaalabala", "Cheshtabala", "Drikbala"
+        "Sthanabala Tổng", "Digbala", 
     ]].sum(axis=1)
     return df_full
 
