@@ -146,6 +146,109 @@ def plot_d9_chart(df_d9):
     plt.show()
     return fig
 
+def trimsamsa_from_rashi_deg(cung_ten, deg_float):
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+              "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    # Đổi cung sang số thứ tự
+    sign = rashis.index(cung_ten) + 1
+    pos_deg = int(deg_float)
+    pos_min = int((deg_float - pos_deg) * 60)
+    pos_sec = int(round((((deg_float - pos_deg) * 60) - pos_min) * 60))
+    # Tổng số giây trong cung hiện tại
+    longi_sec = (pos_deg * 3600) + (pos_min * 60) + pos_sec
+    amsa = 3600  # 1 Trimsamsa = 1 độ = 3600 giây
+    # Theo quy tắc Parashara
+    if sign % 2 == 0:  # Cung chẵn
+        if longi_sec <= 5 * 3600:
+            trimsamsa_sign = 2
+        elif longi_sec <= 12 * 3600:
+            trimsamsa_sign = 6
+        elif longi_sec <= 20 * 3600:
+            trimsamsa_sign = 12
+        elif longi_sec <= 25 * 3600:
+            trimsamsa_sign = 10
+        else:
+            trimsamsa_sign = 8
+    else:  # Cung lẻ
+        if longi_sec <= 5 * 3600:
+            trimsamsa_sign = 1
+        elif longi_sec <= 10 * 3600:
+            trimsamsa_sign = 11
+        elif longi_sec <= 18 * 3600:
+            trimsamsa_sign = 9
+        elif longi_sec <= 25 * 3600:
+            trimsamsa_sign = 3
+        else:
+            trimsamsa_sign = 7
+    # Vị trí trong cung trimsamsa
+    longi_pending_sec = (longi_sec % amsa)
+    longi_pending_sec_normalized = ((longi_pending_sec * 30 * 3600) / amsa)   # chuẩn hóa sang thang 30°
+    d30_deg = int(longi_pending_sec_normalized / 3600)
+    longi_pending_sec_normalized = (longi_pending_sec_normalized % 3600)
+    d30_min = int(longi_pending_sec_normalized / 60)
+    d30_sec = round(longi_pending_sec_normalized % 60, 2)
+    trimsamsa_cung_ten = rashis[trimsamsa_sign - 1]
+    return (trimsamsa_cung_ten, d30_deg, d30_min, d30_sec)
+def build_trimsamsa_df(df_planets):
+    rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+              "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+    # Xác định cung trimsamsa của Ascendant
+    asc_row = df_planets[df_planets["Hành tinh"] == "Asc"].iloc[0]
+    asc_d1_cung = asc_row["Cung"]
+    asc_d1_deg = dms_str_to_float(asc_row["Vị trí"])
+    asc_d30_cung, _, _, _ = trimsamsa_from_rashi_deg(asc_d1_cung, asc_d1_deg)
+    asc_d30_idx = rashis.index(asc_d30_cung)
+    # Mapping cung -> nhà D30
+    cung2nha_d30 = {}
+    for i in range(12):
+        cung = rashis[(asc_d30_idx + i) % 12]
+        cung2nha_d30[cung] = i + 1  # Nhà bắt đầu từ 1
+    # Build bảng
+    d30_rows = []
+    for _, row in df_planets.iterrows():
+        deg_float = dms_str_to_float(row["Vị trí"])
+        d30_cung, d30_deg, d30_min, d30_sec = trimsamsa_from_rashi_deg(row["Cung"], deg_float)
+        d30_degree_total = d30_deg + d30_min/60 + d30_sec/3600
+        d30_nha = cung2nha_d30[d30_cung]
+        d30_rows.append({
+            "Hành tinh": row["Hành tinh"],
+            "D30_Cung": d30_cung,
+            "D30_Nhà": d30_nha,
+            "D30_Độ": round(d30_degree_total, 2)
+        })
+    return pd.DataFrame(d30_rows)
+def plot_d30_chart(df_d30):
+    house_coords = {
+        1: (50, 80), 2: (25, 95), 3: (10, 80), 4: (25, 45), 5: (15, 25), 6: (25, 5),
+        7: (50, 20), 8: (75, 5), 9: (95, 25), 10: (75, 45), 11: (95, 80), 12: (75, 95)
+    }
+    fig, ax = plt.subplots(figsize=(2.5,2.5))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+    ax.plot([0, 100, 100, 0, 0], [0, 0, 100, 100, 0], 'k', linewidth=2)
+    ax.plot([0, 100], [0, 100], 'k', linewidth=1)
+    ax.plot([0, 100], [100, 0], 'k', linewidth=1)
+    ax.plot([0, 50], [50, 100], 'k', linewidth=1)
+    ax.plot([50, 100], [100, 50], 'k', linewidth=1)
+    ax.plot([100, 50], [50, 0], 'k', linewidth=1)
+    ax.plot([50, 0], [0, 50], 'k', linewidth=1)
+    ax.plot([0, 50, 100, 50, 0], [50, 100, 50, 0, 50], 'k', linewidth=1)
+    # Số nhà
+    for i, (x, y) in house_coords.items():
+        ax.text(x, y+2, f"{i}", fontsize=6, color='red',weight='bold', ha='center')
+    # Hành tinh
+    for i, (x, y) in house_coords.items():
+        planets = []
+        for _, row in df_d30.iterrows():
+            if row["D30_Nhà"] == i:
+                name = row["Hành tinh"]
+                deg = row["D30_Độ"]
+                planets.append(f"{name} ({int(deg)}°)")
+        if planets:
+            ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=7, color='blue')
+    plt.tight_layout()
+    return fig
 def detect_yoga_dosha(df_planets):
     """
     Phát hiện các Yoga/Dosha cơ bản từ bảng hành tinh, trả về markdown cho Streamlit.
@@ -1187,7 +1290,7 @@ def astrology_block():
             shown_mahadashas.add(label)
     df_d9 = build_navamsa_df(df_planets)
     fig_d9=plot_d9_chart(df_d9)
-    
+    fig_d30=plot_d30_chart(df_d30)
     col1, col2 = st.columns([2, 1])
     with col1:
         st.markdown("### Biểu đồ sinh ")
@@ -1197,6 +1300,8 @@ def astrology_block():
         st.markdown("### Biểu đồ hậu vận")
         
         st.pyplot(fig_d9,use_container_width=False)
+         st.markdown("### Biểu đồ lực -")
+        st.pyplot(fig_d30,use_container_width=False)
     plt.close(fig_d1)
     plt.close(fig_d9)
     ax.tick_params(axis='x')
