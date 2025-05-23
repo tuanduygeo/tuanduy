@@ -8,86 +8,8 @@ import matplotlib.pyplot as plt
 import re
 import io
 # Bindhu (benefic point) matrix như chuyên gia đưa
-vastu_remedies = {
-    "Sun": {
-        "direction": "Đông (East)",
-        "actions": [
-            "Giữ hướng Đông luôn sạch sẽ, sáng sủa.",
-            "Đặt đèn/tranh mặt trời ở Đông.",
-            "Thiền, tập thể thao, đón nắng sáng hướng Đông."
-        ]
-    },
-    "Moon": {
-        "direction": "Tây Bắc (North-West)",
-        "actions": [
-            "Đặt bể cá/bình nước/hoa trắng ở Tây Bắc.",
-            "Trang trí màu trắng/bạc, giữ khu vực gọn gàng, sáng sủa."
-        ]
-    },
-    "Mars": {
-        "direction": "Nam (South)",
-        "actions": [
-            "Đặt đèn đỏ/vật đồng, tập thể thao quay về Nam.",
-            "Tránh để nước hoặc vật màu xanh dương ở Nam."
-        ]
-    },
-    "Mercury": {
-        "direction": "Bắc (North)",
-        "actions": [
-            "Đặt cây xanh/bàn học/bàn làm việc ở Bắc.",
-            "Giữ sạch sẽ, tránh đồ kim loại nặng/màu đỏ ở Bắc."
-        ]
-    },
-    "Jupiter": {
-        "direction": "Đông Bắc (North-East)",
-        "actions": [
-            "Đặt bàn thờ, không gian tâm linh, hoặc lọ nước sạch ở Đông Bắc.",
-            "Luôn sạch sẽ, sáng sủa, không để vật nặng."
-        ]
-    },
-    "Venus": {
-        "direction": "Đông Nam (South-East)",
-        "actions": [
-            "Đặt bếp, đèn, nến, hoa tươi/gương/vật sáng bóng ở Đông Nam.",
-            "Tránh nước ở Đông Nam."
-        ]
-    },
-    "Saturn": {
-        "direction": "Tây (West)",
-        "actions": [
-            "Đặt chuông gió, vật kim loại, vật màu xanh thẫm/đen ở Tây.",
-            "Giữ gọn gàng, tránh ẩm thấp/bừa bộn/bếp hoặc bể nước ở Tây."
-        ]
-    },
-    "Rahu": {
-        "direction": "Tây Nam (South-West)",
-        "actions": [
-            "Tránh mở cửa ở Tây Nam.",
-            "Đặt vật nặng, két sắt, đá mã não hoặc cây thấp ở Tây Nam.",
-            "Tránh gương đối diện hướng này."
-        ]
-    },
-    "Ketu": {
-        "direction": "Nam (South) hoặc góc yên tĩnh",
-        "actions": [
-            "Tạo không gian tĩnh lặng, đơn giản ở Nam.",
-            "Tránh để máy móc ồn ào/khu vực bừa bộn ở đây."
-        ]
-    }
-}
-def show_all_vastu_remedies_table():
-    # Tạo data cho DataFrame
-    rows = []
-    for planet, remedy in vastu_remedies.items():
-        row = {
-            "Hành tinh": planet,
-            "Hướng nên tăng cường": remedy["direction"],
-            "Các cách áp dụng": "\n".join([f"- {act}" for act in remedy["actions"]])
-        }
-        rows.append(row)
-    df1 = pd.DataFrame(rows)
-    st.markdown("### 🛡️ Bảng tổng hợp remedy Vastu cho các hành tinh")
-    st.table(df1)
+
+
 
 
 BAV_BinduMatrix = {
@@ -823,6 +745,17 @@ def astrology_block():
         "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "Purva Bhadrapada": "Nhân",
         "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
     }
+    planet_natural_direction = {
+    "Sun": "Đông",
+    "Moon": "Tây Bắc",
+    "Mars": "Nam",
+    "Mercury": "Bắc",
+    "Jupiter": "Đông Bắc",
+    "Venus": "Đông Nam",
+    "Saturn": "Tây",
+    "Rahu": "Tây Nam",
+    "Ketu": "Nam"
+}
     # ==== Hàm phụ ====
     def get_rashi(degree):
         return rashis[int(degree // 30)]
@@ -952,6 +885,7 @@ def astrology_block():
             "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
             "Tính chất": get_dignity(name, get_rashi(lon_deg)),
             "Nghịch hành": status,
+            "Hướng tự nhiên": planet_natural_direction.get(name, "")
         })
     # Tìm Rahu trong planet_data
     rahu_deg = None
@@ -983,6 +917,7 @@ def astrology_block():
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
             "Nghịch hành": "R",  
+            "Hướng tự nhiên": "Nam",
         })
 
 
