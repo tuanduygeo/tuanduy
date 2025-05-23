@@ -7,8 +7,7 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
-import dataframe_image as dfi
-from PIL import Image
+
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
     "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
@@ -1355,10 +1354,8 @@ def astrology_block():
     plt.close(fig)
     
     st.markdown("### Vị trí hành tinh")
-    dfi.export(df_planets, "df_planets.png")
-    # Hiển thị trên web
-    st.image(Image.open("df_planets.png"), caption="Bảng vị trí hành tinh (df_planets)")
-    st.dataframe(df_planets, use_container_width=False)
+   
+    st.table(df_planets, use_container_width=False)
     
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
