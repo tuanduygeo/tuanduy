@@ -17,6 +17,20 @@ BAV_BinduMatrix = {
     "Venus":   {"Sun":[8,11,12], "Moon":[1,2,3,4,5,8,9,11,12], "Mars":[3,4,6,9,11,12], "Mercury":[3,5,6,9,11], "Jupiter":[5,8,9,10,11], "Venus":[1,2,3,4,5,8,9,10,11], "Saturn":[3,4,5,8,9,10,11], "Ascendant":[1,2,3,4,5,8,9,11]},
     "Saturn":  {"Sun":[1,2,4,7,8,10,11], "Moon":[3,6,11], "Mars":[3,5,6,10,11,12], "Mercury":[6,8,9,10,11,12], "Jupiter":[5,6,11,12], "Venus":[6,11,12], "Saturn":[3,5,6,11], "Ascendant":[1,3,4,10,11]}
 }
+HOUSE_MEANINGS = {
+    1: "Thân thể, bản ngã, tính cách, sức khỏe tổng thể, sự khởi đầu, vận mệnh gốc.",
+    2: "Tiền bạc, tài sản, gia đình gốc, khả năng giao tiếp, tích lũy vật chất.",
+    3: "Anh chị em, dũng khí, nỗ lực cá nhân, giao tiếp gần, du lịch ngắn ngày.",
+    4: "Mẹ, nhà cửa, bất động sản, hạnh phúc nội tâm, xe cộ, giáo dục cơ bản.",
+    5: "Con cái, sáng tạo, lãng mạn, trí tuệ, học vấn cao, may mắn ngắn hạn.",
+    6: "Kẻ thù, bệnh tật, khoản nợ, sự phục vụ, sức khoẻ chi tiết, vật nuôi.",
+    7: "Hôn nhân, đối tác, hợp tác, công khai, giao dịch, du lịch xa.",
+    8: "Sinh tử, biến đổi, bí mật, tiền ngoài dự kiến, di sản, nợ nghiệp.",
+    9: "Phúc đức, tôn giáo, học vấn cao, cha, du lịch xa, vận may lâu dài.",
+    10: "Sự nghiệp, danh tiếng, thành tựu xã hội, cấp trên, quyền lực.",
+    11: "Bạn bè, nhóm, tài lộc lớn, mong ước, con út, thu nhập ngoài.",
+    12: "Tâm linh, chi tiêu, mất mát, ẩn dật, bệnh viện, nhà tù, nghiệp cũ."
+}
 def predict_house(df_planets, house_num, house_lords=None, yoga_dosha_dict=None):
     """
     df_planets: DataFrame hành tinh
