@@ -857,7 +857,7 @@ def astrology_block():
         "Gana": asc_gana,
         "Nhà": 1,
         "Tính chất": "",
-        "Nghịch hành": ""
+        "RC": ""
     })
 
     for name, code in planets.items():
@@ -880,8 +880,8 @@ def astrology_block():
             "Gana": get_gana(get_nakshatra(lon_deg)),
             "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
             "Tính chất": get_dignity(name, get_rashi(lon_deg)),
-            "Nghịch hành": status,
-            "Hướng tự nhiên": planet_natural_direction.get(name, "")
+            "RC": status,
+            "Hướng": planet_natural_direction.get(name, "")
         })
     # Tìm Rahu trong planet_data
     rahu_deg = None
@@ -912,8 +912,8 @@ def astrology_block():
             "Gana": get_gana(ketu_nak),
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
-            "Nghịch hành": "R",  
-            "Hướng tự nhiên": "Nam",
+            "RC": "R",  
+            "Hướng": "Nam",
         })
 
 
