@@ -1370,7 +1370,7 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    show_all_vastu_remedies_table()
+    
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
