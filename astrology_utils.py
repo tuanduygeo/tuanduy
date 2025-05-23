@@ -1252,7 +1252,7 @@ def astrology_block():
                 a_lord = antar["Antardasha"].split("/")[-1]
                 a_years = antar["Số năm"]
                 a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-                a_score = get_house_score(a_house, a_lord) 
+                a_score = get_house_score(a_house, a_lord)*0.5 
                 
                 # ✅ Thêm điểm từ nhà mà antardasha làm chủ
                 ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
@@ -1289,7 +1289,7 @@ def astrology_block():
                     a_score += 0.2
                 elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                     a_score -= 0.2
-                total_score = round(0.5 *a_score +  m_score, 2)
+                total_score = round(a_score +  m_score, 2)
 
                 life_years.append(current_year)
                 life_scores.append(total_score)
