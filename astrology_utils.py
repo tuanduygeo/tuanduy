@@ -87,7 +87,7 @@ def show_all_vastu_remedies_table():
         rows.append(row)
     df1 = pd.DataFrame(rows)
     st.markdown("## 🛡️ Bảng tổng hợp remedy Vastu cho các hành tinh")
-    st.table(df)
+    st.table(df1)
 
 def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=0):
     mahadashas = chart_df[["Mahadasha", "Điểm số"]]
