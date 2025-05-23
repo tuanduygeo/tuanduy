@@ -13,8 +13,8 @@ vastu_remedies = {
         "direction": "Đông (East)",
         "actions": [
             "Giữ hướng Đông luôn sạch sẽ, sáng sủa.",
-            "Đặt đèn/cây hướng dương/tranh mặt trời ở Đông.",
-            "Thiền, tập Surya Namaskar, đón nắng sáng hướng Đông."
+            "Đặt đèn/tranh mặt trời ở Đông.",
+            "Thiền, tập thể thao, đón nắng sáng hướng Đông."
         ]
     },
     "Moon": {
@@ -42,14 +42,14 @@ vastu_remedies = {
         "direction": "Đông Bắc (North-East)",
         "actions": [
             "Đặt bàn thờ, không gian tâm linh, hoặc lọ nước sạch ở Đông Bắc.",
-            "Luôn sạch sẽ, sáng sủa, không để vật nặng/toilet/bếp."
+            "Luôn sạch sẽ, sáng sủa, không để vật nặng."
         ]
     },
     "Venus": {
         "direction": "Đông Nam (South-East)",
         "actions": [
             "Đặt bếp, đèn, nến, hoa tươi/gương/vật sáng bóng ở Đông Nam.",
-            "Tránh nước/toilet ở Đông Nam."
+            "Tránh nước ở Đông Nam."
         ]
     },
     "Saturn": {
@@ -71,7 +71,6 @@ vastu_remedies = {
         "direction": "Nam (South) hoặc góc yên tĩnh",
         "actions": [
             "Tạo không gian tĩnh lặng, đơn giản ở Nam.",
-            "Đặt tượng Phật, đá mắt mèo.",
             "Tránh để máy móc ồn ào/khu vực bừa bộn ở đây."
         ]
     }
@@ -80,7 +79,7 @@ def show_vastu_remedy_streamlit(planet):
     remedy = vastu_remedies.get(planet)
     if remedy:
         st.markdown(f"---")
-        st.markdown(f"### Remedy Vastu cho **{planet}**")
+        st.markdown(f"** Remedy Vastu cho **{planet}**")
         st.markdown(f"**Hướng nên tăng cường:** {remedy['direction']}")
         st.markdown("**Các cách áp dụng:**")
         for action in remedy["actions"]:
@@ -88,8 +87,7 @@ def show_vastu_remedy_streamlit(planet):
     else:
         st.markdown(f"Không có remedy Vastu cho {planet}")
 
-def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=2):
-    st.markdown("## 🛡️ Vastu Remedies cho các đại vận yếu (<2 điểm)")
+def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=0.5):
     mahadashas = chart_df[["Mahadasha", "Điểm số"]]
     checked = set()
     count = 0
@@ -101,7 +99,7 @@ def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=2):
             checked.add(planet)
             count += 1
     if count == 0:
-        st.success("Không có đại vận nào dưới ngưỡng yếu (2 điểm).")
+        st.success("Không có đại vận nào dưới ngưỡng yếu .")
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
     "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
