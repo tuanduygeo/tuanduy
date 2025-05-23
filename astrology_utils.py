@@ -408,7 +408,8 @@ def detect_yoga_dosha(df_planets):
                 continue
             # Tìm planet đang ở cung của ruler1
             p2 = next((p for p in records if p["Hành tinh"] == ruler1), None)
-            if p2 and rashi_rulers.get(p2["Cung"]) == p1["Hành tinh"]:
+            # PHẢI kiểm tra hai hành tinh phải khác nhau!
+            if p2 and rashi_rulers.get(p2["Cung"]) == p1["Hành tinh"] and p1["Hành tinh"] != p2["Hành tinh"]:
                 pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
                 if pair not in exchanges:
                     exchanges.append(pair)
