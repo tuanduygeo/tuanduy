@@ -1217,7 +1217,7 @@ def astrology_block():
             elif m_house in [1]:
                 purpose = " (mệnh ↑)"
             elif m_house in [ 9]:
-                purpose = " (thuận lợi ↑)"
+                purpose = " (đạo ↑)"
             elif m_house in [5]:
                 purpose = " (học ↑)"
             elif m_house in [10]:
