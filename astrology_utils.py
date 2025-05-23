@@ -1306,7 +1306,7 @@ def astrology_block():
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
     
     
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 5))
     ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
     ax.hlines(y=0, xmin=0, xmax=115, color='black', linestyle='-', linewidth=2)
 
