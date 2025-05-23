@@ -1244,7 +1244,7 @@ def astrology_block():
             elif m_house in [8,12]:
                 purpose = " (mệnh,tài ↓)"
             elif m_house in [6]:
-                purpose = " (sức khỏe ↓)"
+                purpose = " (mệnh ↓)"
             elif m_house in [11]:
                 purpose = " (tài ↑)"
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
