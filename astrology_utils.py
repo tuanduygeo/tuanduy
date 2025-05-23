@@ -85,7 +85,7 @@ def show_all_vastu_remedies_table():
             "Các cách áp dụng": "\n".join([f"- {act}" for act in remedy["actions"]])
         }
         rows.append(row)
-    df = pd.DataFrame(rows)
+    df1 = pd.DataFrame(rows)
     st.markdown("## 🛡️ Bảng tổng hợp remedy Vastu cho các hành tinh")
     st.table(df)
 
@@ -1449,7 +1449,8 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    print_weak_mahadasha_remedies_streamlit(chart_df, threshold=2)
+    show_all_vastu_remedies_table()
+   
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
