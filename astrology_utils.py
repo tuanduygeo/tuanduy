@@ -8,6 +8,100 @@ import matplotlib.pyplot as plt
 import re
 import io
 # Bindhu (benefic point) matrix như chuyên gia đưa
+vastu_remedies = {
+    "Sun": {
+        "direction": "Đông (East)",
+        "actions": [
+            "Giữ hướng Đông luôn sạch sẽ, sáng sủa.",
+            "Đặt đèn/cây hướng dương/tranh mặt trời ở Đông.",
+            "Thiền, tập Surya Namaskar, đón nắng sáng hướng Đông."
+        ]
+    },
+    "Moon": {
+        "direction": "Tây Bắc (North-West)",
+        "actions": [
+            "Đặt bể cá/bình nước/hoa trắng ở Tây Bắc.",
+            "Trang trí màu trắng/bạc, giữ khu vực gọn gàng, sáng sủa."
+        ]
+    },
+    "Mars": {
+        "direction": "Nam (South)",
+        "actions": [
+            "Đặt đèn đỏ/vật đồng, tập thể thao quay về Nam.",
+            "Tránh để nước hoặc vật màu xanh dương ở Nam."
+        ]
+    },
+    "Mercury": {
+        "direction": "Bắc (North)",
+        "actions": [
+            "Đặt cây xanh/bàn học/bàn làm việc ở Bắc.",
+            "Giữ sạch sẽ, tránh đồ kim loại nặng/màu đỏ ở Bắc."
+        ]
+    },
+    "Jupiter": {
+        "direction": "Đông Bắc (North-East)",
+        "actions": [
+            "Đặt bàn thờ, không gian tâm linh, hoặc lọ nước sạch ở Đông Bắc.",
+            "Luôn sạch sẽ, sáng sủa, không để vật nặng/toilet/bếp."
+        ]
+    },
+    "Venus": {
+        "direction": "Đông Nam (South-East)",
+        "actions": [
+            "Đặt bếp, đèn, nến, hoa tươi/gương/vật sáng bóng ở Đông Nam.",
+            "Tránh nước/toilet ở Đông Nam."
+        ]
+    },
+    "Saturn": {
+        "direction": "Tây (West)",
+        "actions": [
+            "Đặt chuông gió, vật kim loại, vật màu xanh thẫm/đen ở Tây.",
+            "Giữ gọn gàng, tránh ẩm thấp/bừa bộn/bếp hoặc bể nước ở Tây."
+        ]
+    },
+    "Rahu": {
+        "direction": "Tây Nam (South-West)",
+        "actions": [
+            "Tránh mở cửa ở Tây Nam.",
+            "Đặt vật nặng, két sắt, đá mã não hoặc cây thấp ở Tây Nam.",
+            "Tránh gương đối diện hướng này."
+        ]
+    },
+    "Ketu": {
+        "direction": "Nam (South) hoặc góc yên tĩnh",
+        "actions": [
+            "Tạo không gian tĩnh lặng, đơn giản ở Nam.",
+            "Đặt tượng Phật, đá mắt mèo.",
+            "Tránh để máy móc ồn ào/khu vực bừa bộn ở đây."
+        ]
+    }
+}
+def show_vastu_remedy_streamlit(planet):
+    remedy = vastu_remedies.get(planet)
+    if remedy:
+        st.markdown(f"---")
+        st.markdown(f"### Remedy Vastu cho **{planet}**")
+        st.markdown(f"**Hướng nên tăng cường:** {remedy['direction']}")
+        st.markdown("**Các cách áp dụng:**")
+        for action in remedy["actions"]:
+            st.markdown(f"- {action}")
+    else:
+        st.markdown(f"Không có remedy Vastu cho {planet}")
+
+def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=2):
+    st.markdown("## 🛡️ Vastu Remedies cho các đại vận yếu (<2 điểm)")
+    mahadashas = chart_df[["Mahadasha", "Điểm số"]]
+    checked = set()
+    count = 0
+    for idx, row in mahadashas.iterrows():
+        planet = row["Mahadasha"].split()[0]
+        score = row["Điểm số"]
+        if planet not in checked and score < threshold:
+            show_vastu_remedy_streamlit(planet)
+            checked.add(planet)
+            count += 1
+    if count == 0:
+        st.success("Không có đại vận nào dưới ngưỡng yếu (2 điểm).")
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
     "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
@@ -1356,7 +1450,7 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-   
+    print_weak_mahadasha_remedies_streamlit(chart_df, threshold=2)
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
