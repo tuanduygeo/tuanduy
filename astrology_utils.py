@@ -75,25 +75,19 @@ vastu_remedies = {
         ]
     }
 }
-def show_vastu_remedy_streamlit(planet):
-    remedy = vastu_remedies.get(planet)
-    if remedy:
-        st.markdown(f"---")
-        st.markdown(f"### Remedy Vastu cho **{planet}**")
-        data = {
-            "Nội dung": [
-                "Hướng nên tăng cường",
-                *[f"Cách {i+1}" for i in range(len(remedy['actions']))]
-            ],
-            "Chi tiết": [
-                remedy["direction"],
-                *remedy["actions"]
-            ]
+def show_all_vastu_remedies_table():
+    # Tạo data cho DataFrame
+    rows = []
+    for planet, remedy in vastu_remedies.items():
+        row = {
+            "Hành tinh": planet,
+            "Hướng nên tăng cường": remedy["direction"],
+            "Các cách áp dụng": "\n".join([f"- {act}" for act in remedy["actions"]])
         }
-        df = pd.DataFrame(data)
-        st.table(df)
-    else:
-        st.markdown(f"Không có remedy Vastu cho {planet}")
+        rows.append(row)
+    df = pd.DataFrame(rows)
+    st.markdown("## 🛡️ Bảng tổng hợp remedy Vastu cho các hành tinh")
+    st.table(df)
 
 def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=0):
     mahadashas = chart_df[["Mahadasha", "Điểm số"]]
