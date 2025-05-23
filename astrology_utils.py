@@ -1394,8 +1394,8 @@ def astrology_block():
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
     for i in range(1, 13):
-    with st.expander(f"Nhà {i}: {HOUSE_MEANINGS[i]}"):
-        st.markdown(predict_house(df_planets, i, house_lords=my_house_lords, yoga_dosha_dict=my_yoga_dosha_dict))
+        with st.expander(f"Nhà {i}: {HOUSE_MEANINGS[i]}"):
+            st.markdown(predict_house(df_planets, i, house_lords=my_house_lords, yoga_dosha_dict=my_yoga_dosha_dict))
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
