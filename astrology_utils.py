@@ -1355,7 +1355,7 @@ def astrology_block():
     
     st.markdown("### Vị trí hành tinh")
    
-    st.table(df_planets)
+    st.dataframes(df_planets, use_container_width=False)
     
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
