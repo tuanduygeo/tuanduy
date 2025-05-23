@@ -26,7 +26,7 @@ def compute_ashtakavarga(df_planets):
 
     # Tạo bảng điểm rỗng
     bav_points = {pl: [0]*12 for pl in planets}
-    bav_points["Total"] = [0]*12
+    bav_points["Tổng"] = [0]*12
 
     # Tính điểm cho từng hành tinh
     for planet in planets:
@@ -43,7 +43,7 @@ def compute_ashtakavarga(df_planets):
         bav_points["Total"][i] = sum(bav_points[pl][i] for pl in planets)
 
     # Đưa ra dataframe cho đẹp, số cột là 12 nhà (1-12)
-    df_bav = pd.DataFrame(bav_points, index=[f"Nhà {i+1}" for i in range(12)])
+    df_bav = pd.DataFrame(bav_points, index=[f"{i+1}" for i in range(12)])
     return df_bav.transpose()
 # Hàm chuyển đổi dms (ví dụ "12°30'15\"") thành số độ thập phân
 def dms_str_to_float(dms_str):
