@@ -40,7 +40,7 @@ def compute_ashtakavarga(df_planets):
 
     # Tính tổng
     for i in range(12):
-        bav_points["Total"][i] = sum(bav_points[pl][i] for pl in planets)
+        bav_points["Tổng"][i] = sum(bav_points[pl][i] for pl in planets)
 
     # Đưa ra dataframe cho đẹp, số cột là 12 nhà (1-12)
     df_bav = pd.DataFrame(bav_points, index=[f"{i+1}" for i in range(12)])
