@@ -87,7 +87,7 @@ def show_vastu_remedy_streamlit(planet):
     else:
         st.markdown(f"Không có remedy Vastu cho {planet}")
 
-def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=0.5):
+def print_weak_mahadasha_remedies_streamlit(chart_df, threshold=0):
     mahadashas = chart_df[["Mahadasha", "Điểm số"]]
     checked = set()
     count = 0
