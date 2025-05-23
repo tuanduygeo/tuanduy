@@ -474,12 +474,6 @@ def main():
                             'diem': diem
                         })
             
-                # Hiển thị tổng điểm
-                st.markdown(f"### 🔢 Tổng điểm phong thủy: `{diem_tong}`")
-                
-
-
-                
                 ax.set_axis_off()
                 scale_length = 100  # 100m
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
