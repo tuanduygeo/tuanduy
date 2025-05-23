@@ -1159,6 +1159,33 @@ def astrology_block():
             return malefic_house_scores.get(house, 0)
         else:
             return 0  # Trung lập hoặc không rõ
+    def calc_aspect_and_conj_score(planet, df_planets):
+        # 1. Chiếu: lấy từ cột "Chiếu hành tinh"
+        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "Chiếu hành tinh"].values
+        aspected = []
+        if len(chiếu) > 0 and chiếu[0]:
+            aspected = [x.strip().split(" ")[0] for x in chiếu[0].split(",") if x.strip()]
+        # 2. Conjunction: đồng cung với hành tinh nào?
+        this_row = df_planets[df_planets["Hành tinh"] == planet]
+        conjunction = []
+        if not this_row.empty:
+            cung = this_row.iloc[0]["Cung"]
+            others = df_planets[(df_planets["Cung"] == cung) & (df_planets["Hành tinh"] != planet)]
+            conjunction = list(others["Hành tinh"])
+        # 3. Tính điểm từng hành tinh chiếu/đồng cung (không double count nếu vừa chiếu vừa đồng cung)
+        interacted = set(aspected + conjunction)
+        plus03 = {"Jupiter", "Venus", "Moon"}
+        minus03 = {"Mars", "Saturn", "Ketu", "Rahu"}
+        score = 0
+        for asp in interacted:
+            if asp in plus03:
+                score += 0.3
+            elif asp in minus03:
+                score -= 0.3
+            # Mercury, Sun thì không cộng trừ gì
+        # 4. Giới hạn điểm cộng/trừ tối đa ±1.0
+        score = max(min(score, 1.0), -1.0)
+        return score
     # Tính dữ liệu vẽ biểu đồ
     def build_life_chart(df_dasha, planet_data, birth_jd):
         life_years = []
@@ -1222,7 +1249,7 @@ def astrology_block():
                 m_score += 1
             elif m_gana == "Quỷ thần":
                 m_score -= 1
-            
+            m_score += calc_aspect_and_conj_score(m_lord, df_planets)
             # Gán nhãn mục tiêu dựa theo nhà
             purpose = ""
             if m_house in [2]:
@@ -1262,8 +1289,10 @@ def astrology_block():
                         rule_bonus_a -= 1
                     elif rh in [1, 5, 9]:
                         rule_bonus_a += 1
-                    elif rh in [2, 4, 7, 10,11]:
+                    elif rh in [4, 7, 10]:
                         rule_bonus_a += 0.5
+                    elif rh in [ 2,11]:
+                        rule_bonus_a += 0.7
                 a_score += rule_bonus_a
                 
                 a_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == a_lord), "")
@@ -1289,6 +1318,7 @@ def astrology_block():
                     a_score += 0.2
                 elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                     a_score -= 0.2
+                a_score =a_score+0.5* calc_aspect_and_conj_score(a_lord, df_planets)
                 total_score = round(a_score +  m_score, 2)
 
                 life_years.append(current_year)
