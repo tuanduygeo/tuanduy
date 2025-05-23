@@ -79,11 +79,19 @@ def show_vastu_remedy_streamlit(planet):
     remedy = vastu_remedies.get(planet)
     if remedy:
         st.markdown(f"---")
-        st.markdown(f"** Remedy Vastu cho **{planet}**")
-        st.markdown(f"**Hướng nên tăng cường:** {remedy['direction']}")
-        st.markdown("**Các cách áp dụng:**")
-        for action in remedy["actions"]:
-            st.markdown(f"- {action}")
+        st.markdown(f"### Remedy Vastu cho **{planet}**")
+        data = {
+            "Nội dung": [
+                "Hướng nên tăng cường",
+                *[f"Cách {i+1}" for i in range(len(remedy['actions']))]
+            ],
+            "Chi tiết": [
+                remedy["direction"],
+                *remedy["actions"]
+            ]
+        }
+        df = pd.DataFrame(data)
+        st.table(df)
     else:
         st.markdown(f"Không có remedy Vastu cho {planet}")
 
