@@ -17,58 +17,7 @@ BAV_BinduMatrix = {
     "Venus":   {"Sun":[8,11,12], "Moon":[1,2,3,4,5,8,9,11,12], "Mars":[3,4,6,9,11,12], "Mercury":[3,5,6,9,11], "Jupiter":[5,8,9,10,11], "Venus":[1,2,3,4,5,8,9,10,11], "Saturn":[3,4,5,8,9,10,11], "Ascendant":[1,2,3,4,5,8,9,11]},
     "Saturn":  {"Sun":[1,2,4,7,8,10,11], "Moon":[3,6,11], "Mars":[3,5,6,10,11,12], "Mercury":[6,8,9,10,11,12], "Jupiter":[5,6,11,12], "Venus":[6,11,12], "Saturn":[3,5,6,11], "Ascendant":[1,3,4,10,11]}
 }
-HOUSE_MEANINGS = {
-    1: "Thân thể, bản ngã, tính cách, sức khỏe tổng thể, sự khởi đầu, vận mệnh gốc.",
-    2: "Tiền bạc, tài sản, gia đình gốc, khả năng giao tiếp, tích lũy vật chất.",
-    3: "Anh chị em, dũng khí, nỗ lực cá nhân, giao tiếp gần, du lịch ngắn ngày.",
-    4: "Mẹ, nhà cửa, bất động sản, hạnh phúc nội tâm, xe cộ, giáo dục cơ bản.",
-    5: "Con cái, sáng tạo, lãng mạn, trí tuệ, học vấn cao, may mắn ngắn hạn.",
-    6: "Kẻ thù, bệnh tật, khoản nợ, sự phục vụ, sức khoẻ chi tiết, vật nuôi.",
-    7: "Hôn nhân, đối tác, hợp tác, công khai, giao dịch, du lịch xa.",
-    8: "Sinh tử, biến đổi, bí mật, tiền ngoài dự kiến, di sản, nợ nghiệp.",
-    9: "Phúc đức, tôn giáo, học vấn cao, cha, du lịch xa, vận may lâu dài.",
-    10: "Sự nghiệp, danh tiếng, thành tựu xã hội, cấp trên, quyền lực.",
-    11: "Bạn bè, nhóm, tài lộc lớn, mong ước, con út, thu nhập ngoài.",
-    12: "Tâm linh, chi tiêu, mất mát, ẩn dật, bệnh viện, nhà tù, nghiệp cũ."
-}
-def predict_house(df_planets, house_num, house_lords=None, yoga_dosha_dict=None):
-    """
-    df_planets: DataFrame hành tinh
-    house_num: số nhà cần dự đoán (1–12)
-    house_lords: dict {nhà số: hành tinh chủ} (nếu có)
-    yoga_dosha_dict: dict liệt kê các yoga/dosha chính liên quan tới nhà này (nếu có)
-    """
-    content = []
-    content.append(f"**Nhà {house_num}:** {HOUSE_MEANINGS[house_num]}")
 
-    # Chủ nhà (ruler) – nếu có
-    if house_lords:
-        ruler = house_lords.get(house_num, None)
-        if ruler:
-            pos = df_planets[df_planets["Hành tinh"] == ruler].iloc[0]
-            content.append(f"- Chủ nhà: **{ruler}** (hiện ở nhà {pos['Nhà']}, cung {pos['Cung']})")
-    
-    # Các hành tinh cư trú
-    planets_in_house = [row["Hành tinh"] for _, row in df_planets.iterrows() if row["Nhà"] == house_num]
-    if planets_in_house:
-        content.append(f"- Hành tinh trong nhà: {', '.join(planets_in_house)}")
-
-    # Yoga/Dosha nổi bật liên quan (nếu có)
-    if yoga_dosha_dict and house_num in yoga_dosha_dict:
-        for note in yoga_dosha_dict[house_num]:
-            content.append(f"- **{note}**")
-    
-    # Mẫu dự đoán tự động
-    if "Saturn" in planets_in_house or (house_lords and house_lords.get(house_num) == "Saturn"):
-        content.append("=> Cần kiên nhẫn vượt qua thử thách, thành quả thường đến chậm nhưng bền.")
-    if "Jupiter" in planets_in_house:
-        content.append("=> Dễ có quý nhân trợ giúp, cơ hội mở rộng kiến thức hoặc phước báu.")
-    if "Mars" in planets_in_house:
-        content.append("=> Động lực mạnh, dễ có va chạm/đấu tranh hoặc năng lượng nổi bật.")
-    if "Rahu" in planets_in_house or "Ketu" in planets_in_house:
-        content.append("=> Cần đề phòng biến động bất ngờ, nên phát triển tâm linh để hóa giải.")
-
-    return "\n".join(content)
 def compute_ashtakavarga(df_planets):
     # Đảm bảo có mapping planet -> house (số thứ tự nhà), lấy luôn Asc là nhà 1
     planet_houses = {row['Hành tinh']: row['Nhà'] for _, row in df_planets.iterrows()}
@@ -1407,9 +1356,6 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.dataframe(df_bav)
-    for i in range(1, 13):
-        with st.expander(f"Nhà {i}: {HOUSE_MEANINGS[i]}"):
-            st.markdown(predict_house(df_planets, i, house_lords=my_house_lords, yoga_dosha_dict=my_yoga_dosha_dict))
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
