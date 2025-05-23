@@ -1333,7 +1333,7 @@ def astrology_block():
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
     ax.set_title(f"Biểu đồ đại vận/ Điểm (Thang từ -10 đến 10): {median_score}")
-    ax.set_xlabel("Năm")
+    ax.set_xlabel("Tuổi")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
     ax.legend()
