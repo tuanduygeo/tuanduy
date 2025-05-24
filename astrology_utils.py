@@ -1396,27 +1396,27 @@ def astrology_block():
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     scores = filtered_df["Điểm số"].values
     
-    # Tính median, mean, std
     median_score = np.median(scores)
     mean_score = np.mean(scores)
     std_score = np.std(scores)
     
-    # Vẽ histogram
     fig, ax = plt.subplots(figsize=(6, 3))
     counts, bins, patches = ax.hist(scores, bins=15, color='skyblue', edgecolor='black', alpha=0.7, density=True, label="Histogram")
     
-    # Vẽ đường phân bố chuẩn
     x = np.linspace(min(bins), max(bins), 300)
     y = norm.pdf(x, mean_score, std_score)
     ax.plot(x, y, color='green', linewidth=2, label=f'Phân bố chuẩn\nμ={mean_score:.2f}, σ={std_score:.2f}')
     
-    # Vẽ đường median
+    # Median & mean
     ax.axvline(median_score, color='red', linestyle='dashed', linewidth=2, label=f'Median: {median_score:.2f}')
+    ax.axvline(mean_score, color='purple', linestyle='dashdot', linewidth=2, label=f'Mean: {mean_score:.2f}')
     
-    ax.set_xlabel("Điểm số")
-    ax.set_ylabel("Mật độ/Tần suất")
-    ax.set_title("Histogram & Phân bố chuẩn\nĐiểm số đại vận (0–70 tuổi)")
-    ax.legend()
+    ax.set_xlabel("Điểm số", fontsize=10)
+    ax.set_ylabel("Mật độ/Tần suất", fontsize=10)
+    ax.set_title("Histogram & Phân bố chuẩn\nĐiểm số đại vận (0–70 tuổi)", fontsize=11)
+    ax.legend(fontsize=9)  # Chỉnh cỡ chữ chú thích
+    plt.xticks(fontsize=9)
+    plt.yticks(fontsize=9)
     plt.tight_layout()
     st.pyplot(fig)
     plt.close(fig)
