@@ -1258,12 +1258,7 @@ def astrology_block():
         year_labels = []
         current_year = 0
         birth_offset = None
-        vry_planets = set()
-        dusthana = [6, 8, 12]
-        for planet in planet_data:
-            for ruled_house in planet.get("chủ nhà", []):
-                if ruled_house in dusthana and planet["Nhà"] in dusthana:
-                    vry_planets.add(planet['Hành tinh'])
+        
     
         # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
         for _, m_row in df_dasha.iterrows():
