@@ -699,6 +699,8 @@ def astrology_block():
         )
         user_name = st.text_input("Nhập tên")
         user_name = user_name.title().strip()
+        gio_dia_phuong = selected_datetime_local.strftime('%Y-%m-%d %H:%M')
+        user_name = f"{user_name} – {gio_dia_phuong} ({selected_tz})"
     with col2:
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
