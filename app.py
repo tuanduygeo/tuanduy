@@ -224,7 +224,17 @@ def main():
                 ax.set_ylim(y0, y1)
                 
                 # Vẽ contour DEM
-                levels = np.linspace(data_array.min(), data_array.max(), 21)
+                # Tạo 21 levels đều nhau giữa min và max
+                z_min, z_max = float(data_array.min()), float(data_array.max())
+                if z_min == z_max:
+                    # Nếu dữ liệu phẳng (không có biến động)
+                    levels = np.linspace(z_min - 1, z_max + 1, 21)
+                else:
+                    # Nếu khoảng cách quá nhỏ, mở rộng một chút cho đẹp
+                    if abs(z_max - z_min) < 1e-3:
+                        z_max = z_min + 1e-3
+                    levels = np.linspace(z_min, z_max, 21)
+                
                 cmap = cm.get_cmap('rainbow')
                 norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.2)
