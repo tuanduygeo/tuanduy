@@ -1322,7 +1322,7 @@ def astrology_block():
 
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
-    chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
+    chart_df, birth_x = build_life_chart(df_dasha, planet_data, birth_jd, df_planets, planet_to_ruled_houses, config=scoring_config)
     
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
