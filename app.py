@@ -509,7 +509,6 @@ def main():
                     st.dataframe(df_diem)
                 plt.close(fig)
                 mean = np.mean(data)
-                std = np.std(data)
                 median_z = np.median(data)
                 p90 = np.percentile(data, 90)
                 p5 = np.percentile(data, 5)
