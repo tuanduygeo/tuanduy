@@ -1398,9 +1398,11 @@ def astrology_block():
     # Vẽ histogram
     fig, ax = plt.subplots(figsize=(6, 3))
     ax.hist(filtered_df["Điểm số"], bins=15, color='skyblue', edgecolor='black')
+    ax.axvline(median_score, color='red', linestyle='dashed', linewidth=2, label=f'Median: {round(median_score,2)}')
     ax.set_xlabel("Điểm số")
     ax.set_ylabel("Tần suất (số lần xuất hiện)")
     ax.set_title("Histogram phân bố Điểm số đại vận (0–70 tuổi)")
+    ax.legend()
     plt.tight_layout()
     st.pyplot(fig)
     plt.close(fig)
