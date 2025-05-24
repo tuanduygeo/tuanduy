@@ -508,6 +508,7 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
+                data = data_array.ravel()
                 mean = np.mean(data)
                 median_z = np.median(data)
                 p90 = np.percentile(data, 90)
