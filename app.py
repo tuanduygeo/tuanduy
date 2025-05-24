@@ -569,10 +569,19 @@ def main():
                 diff = kde(x_kde) - norm.pdf(x_kde, mean, std)
                 crossings = np.where(np.diff(np.sign(diff)))[0]  # vị trí các điểm giao
                 cross_x = x_kde[crossings]
-                for xc in cross_x:
-                    ax_hist.axvline(xc, color='purple', linestyle=':', linewidth=1)
-                    ax_hist.text(xc, 0, f'{xc:.2f}', color='purple', fontsize=7, rotation=90, ha='right', va='bottom')
-                st.write("Các giá trị KDE cắt normal fit:", cross_x)
+                if len(cross_x) > 0:
+                    min_cross = cross_x.min()
+                    max_cross = cross_x.max()
+                    ax_hist.axvline(min_cross, color='purple', linestyle=':', linewidth=1.5, label=f'Min crossing: {min_cross:.2f}')
+                    ax_hist.axvline(max_cross, color='brown', linestyle=':', linewidth=1.5, label=f'Max crossing: {max_cross:.2f}')
+                    st.write(f"Điểm giao nhỏ nhất: {min_cross:.2f}")
+                    st.write(f"Điểm giao lớn nhất: {max_cross:.2f}")
+                else:
+                    st.write("Không tìm thấy điểm giao cắt giữa KDE và normal fit.")
+                
+                ax_hist.legend(prop={'size': 7})
+                st.pyplot(fig_hist)
+                plt.close(fig_hist)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
