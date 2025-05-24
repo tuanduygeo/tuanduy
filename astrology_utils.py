@@ -7,24 +7,6 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
-from scipy.stats import norm
-
-def plot_planet_table(df_planets):
-    fig, ax = plt.subplots(figsize=(9, 0.6 + 0.3 * len(df_planets)))
-    ax.axis('off')
-    # Vẽ bảng từ DataFrame
-    table = ax.table(
-        cellText=df_planets.values,
-        colLabels=df_planets.columns,
-        cellLoc='center',
-        loc='center'
-    )
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
-    table.scale(1.2, 1.2)  # scale bảng cho đẹp
-    plt.tight_layout()
-    plt.show()
-    return fig
 
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
@@ -367,7 +349,7 @@ def detect_yoga_dosha(df_planets):
     dusthana = [6, 8, 12]
     vry_shown = set()
     for planet in df_planets.to_dict("records"):
-        for ruled_house in planet.get("Chủ tinh", []):
+        for ruled_house in planet.get("Chủ tinh của nhà", []):
             if ruled_house in dusthana and planet["Nhà"] in dusthana:
                 # Chỉ hiện 1 lần cho từng hành tinh, từng loại
                 key = (planet['Hành tinh'], ruled_house, planet["Nhà"])
@@ -404,8 +386,8 @@ def detect_yoga_dosha(df_planets):
    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
     trikona_houses = [1, 5, 9]
     kendra_houses = [1, 4, 7, 10]
-    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ tinh", [])) & set(trikona_houses)]
-    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ tinh", [])) & set(kendra_houses)]
+    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
+    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
     
     found_raja_yoga = False
     for tr in trikona_rulers:
@@ -509,7 +491,7 @@ def detect_yoga_dosha(df_planets):
     found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
-        rulers = p.get("chủ tinh", [])
+        rulers = p.get("Chủ tinh của nhà", [])
         if not rulers:
             continue
         for r in rulers:
@@ -522,9 +504,9 @@ def detect_yoga_dosha(df_planets):
      # Dhana Yoga:Chủ nhà 6, 8, 12 nằm ở các nhà tài hoặc đồng cung nhà tài.
     daridra_houses = [6, 8, 12]
     for p in df_planets.to_dict("records"):
-        if not p.get("chủ tinh", []): continue
+        if not p.get("Chủ tinh của nhà", []): continue
         for dh in daridra_houses:
-            if dh in p["chủ tinh"] and p["Nhà"] in [2, 11]:
+            if dh in p["Chủ tinh của nhà"] and p["Nhà"] in [2, 11]:
                 res.append("- **Daridra Yoga:** Chủ nhà dusthana nằm ở nhà tài. Tài ↓.")
 
     
@@ -538,7 +520,7 @@ def detect_yoga_dosha(df_planets):
         res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật ↑.")   
     house9_ruler_list = []
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("chủ tinh", []):
+        if 9 in p.get("Chủ tinh của nhà", []):
             house9_ruler_list.append(p)
     for p in house9_ruler_list:
         if p["Tính chất"] in ["vượng", "tướng"] and p["Nhà"] in [1, 4, 5, 7, 9, 10]:
@@ -547,9 +529,9 @@ def detect_yoga_dosha(df_planets):
     house9_ruler = None
     house10_ruler = None
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("chủ tinh", []):
+        if 9 in p.get("Chủ tinh của nhà", []):
             house9_ruler = p
-        if 10 in p.get("chủ tinh", []):
+        if 10 in p.get("Chủ tinh của nhà", []):
             house10_ruler = p
     if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
         res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – sự nghiệp-phúc tăng.")
@@ -723,10 +705,10 @@ def astrology_block():
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
     nakshatras = [
-        "Ashwini", "Bharani", "Krittika", "Rohini", "Mriga", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
-        "Magha", "P.Phal", "U.Phal", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
-        "Jyeshtha", "Mula", "P.Ashad", "U.Ashad", "Shravana", "Dhanishta", "Shatabhisha",
-        "P.Bhad", "U.Bhad", "Revati"
+        "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+        "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+        "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+        "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
     ]
     planets = {
         'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
@@ -749,26 +731,26 @@ def astrology_block():
         "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
     }
     nakshatra_to_gana = {
-        "Ashwini": "Thần", "Bharani": "Nhân", "Krittika": "Quỷ",
-        "Rohini": "Nhân", "Mriga": "Thần", "Ardra": "Nhân",
-        "Punarvasu": "Thần", "Pushya": "Thần", "Ashlesha": "Quỷ",
-        "Magha": "Quỷ", "P.Phal": "Nhân", "U.Phal": "Nhân",
-        "Hasta": "Thần", "Chitra": "Quỷ", "Swati": "Thần", "Vishakha": "Quỷ",
-        "Anuradha": "Thần", "Jyeshtha": "Quỷ", "Mula": "Quỷ",
-        "P.Ashad": "Nhân", "U.Ashad": "Nhân", "Shravana": "Thần",
-        "Dhanishta": "Quỷ", "Shatabhisha": "Quỷ", "P.Bhad": "Nhân",
-        "U.Bhad": "Nhân", "Revati": "Thần"
+        "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
+        "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Nhân",
+        "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
+        "Magha": "Quỷ thần", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
+        "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
+        "Anuradha": "Thiên thần", "Jyeshtha": "Quỷ thần", "Mula": "Quỷ thần",
+        "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thiên thần",
+        "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "Purva Bhadrapada": "Nhân",
+        "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
     }
     planet_natural_direction = {
-    "Sun": "Đ",
-    "Moon": "TB",
-    "Mars": "N",
-    "Mercury": "B",
-    "Jupiter": "ĐB",
-    "Venus": "ĐN",
-    "Saturn": "T",
-    "Rahu": "TN",
-    "Ketu": "N"
+    "Sun": "Đông",
+    "Moon": "Tây Bắc",
+    "Mars": "Nam",
+    "Mercury": "Bắc",
+    "Jupiter": "Đông Bắc",
+    "Venus": "Đông Nam",
+    "Saturn": "Tây",
+    "Rahu": "Tây Nam",
+    "Ketu": "Nam"
 }
     # ==== Hàm phụ ====
     def get_rashi(degree):
@@ -931,7 +913,7 @@ def astrology_block():
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
             "Nghịch hành": "R",  
-            "Hướng": "N",
+            "Hướng": "Nam",
         })
 
 
@@ -1029,7 +1011,7 @@ def astrology_block():
     for house, ruler in house_rulers.items():
         planet_to_ruled_houses.setdefault(ruler, []).append(house)
 
-    df_planets["chủ tinh"] = df_planets["Hành tinh"].apply(
+    df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
         lambda p: planet_to_ruled_houses.get(p, [])
     )
     # === Định nghĩa quy tắc chiếu Vedic ===
@@ -1062,7 +1044,7 @@ def astrology_block():
         return ", ".join(result)
 
     # Thêm cột vào bảng
-    df_planets[""] = df_planets.apply(
+    df_planets["Chiếu hành tinh"] = df_planets.apply(
         lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
     
@@ -1070,14 +1052,14 @@ def astrology_block():
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
         "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
-        "Rohini": "Moon", "Mriga": "Mars", "Ardra": "Rahu",
+        "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
         "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
-        "Magha": "Ketu", "P.Phal": "Venus", "U.Phal": "Sun",
+        "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
         "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
         "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
-        "Mula": "Ketu", "P.Ashad": "Venus", "U.Ashad": "Sun",
+        "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
         "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
-        "P.Bhad": "Jupiter", "U.Bhad": "Saturn", "Revati": "Mercury"
+        "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
     }
 
     # Dasha sequence và số năm
@@ -1164,124 +1146,123 @@ def astrology_block():
     df_all_antar = pd.DataFrame(all_antardasha)
     
 
-    scoring_config = {
-    "house_scores": {
-        "benefic": {1:3, 2:2.5, 3:-2, 4:2, 5:2.5, 6:-2, 7:2, 8:-3, 9:3, 10:2, 11:2.5, 12:-3},
-        "malefic": {1:2, 2:1.5, 3:0, 4:1, 5:2, 6:1, 7:2, 8:-3, 9:2, 10:2, 11:3, 12:-3}
-    },
-    "benefics": {"Jupiter", "Venus", "Moon", "Mercury"},
-    "malefics": {"Mars", "Saturn", "Rahu", "Ketu", "Sun"},
-    "dignity_weight": {"vượng": 1, "tướng": 1, "bạn bè": 0.5, "địch thủ": -0.5, "tù": -1, "tử": -1},
-    "status_weight": {"retrograde_combust": -0.5, "antar_retrograde_combust": -0.2},
-    "nature_weight": {"Jupiter": 0.5, "Venus": 0.5, "Moon": 0.5, "Mars": -0.5, "Saturn": -0.5, "Rahu": -0.5, "Ketu": -0.5},
-    "antar_nature_weight": {"Jupiter": 0.2, "Venus": 0.2, "Moon": 0.2, "Mars": -0.2, "Saturn": -0.2, "Rahu": -0.2, "Ketu": -0.2},
-    "rulership_weight": {
-        "maha": {6:-2.5, 8:-3.5, 12:-3.5, 1:3.5, 5:3, 9:3.5, 4:1.5, 7:1.5, 10:2, 2:2.5, 11:2.5},
-        "antar": {6:-0.7, 8:-1, 12:-1, 1:1, 5:1, 9:1, 4:0.5, 7:0.5, 10:0.7, 2:0.8, 11:0.8}
-    },
-    "gana_weight": {"Thần": 1, "Quỷ": -1, "antar_Thần": 0.5, "antar_Quỷ": -0.5},
-    "aspect_weight": {"plus": 0.5, "minus": -0.5, "max": 1.5, "antar_mult": 0.5},
-}
-    def get_house_score(house, planet, config=scoring_config):
-        if planet in config["benefics"]:
-            return config["house_scores"]["benefic"].get(house, 0)
-        elif planet in config["malefics"]:
-            return config["house_scores"]["malefic"].get(house, 0)
+    # Quy tắc điểm số theo nhà
+
+    benefic_house_scores = {1:3  ,2:2.5  ,3:-2  ,4:2  ,5:2.5  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2.5  ,12:-3 }
+    malefic_house_scores = {1:2  ,2:1.5  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
+    benefics = {"Jupiter", "Venus", "Moon","Mercury"}
+    malefics = {"Mars", "Saturn", "Rahu", "Ketu","Sun"}
+    def get_house_score(house, planet):
+        if planet in benefics:
+            return benefic_house_scores.get(house, 0)
+        elif planet in malefics:
+            return malefic_house_scores.get(house, 0)
         else:
-            return 0
-    def calc_aspect_and_conj_score(planet, df_planets, config=scoring_config, mult=1.0):
-        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "chiếu"].values
+            return 0  # Trung lập hoặc không rõ
+    def calc_aspect_and_conj_score(planet, df_planets):
+        # 1. Chiếu: lấy từ cột "Chiếu hành tinh"
+        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "Chiếu hành tinh"].values
         aspected = []
         if len(chiếu) > 0 and chiếu[0]:
             aspected = [x.strip().split(" ")[0] for x in chiếu[0].split(",") if x.strip()]
+        # 2. Conjunction: đồng cung với hành tinh nào?
         this_row = df_planets[df_planets["Hành tinh"] == planet]
         conjunction = []
         if not this_row.empty:
             cung = this_row.iloc[0]["Cung"]
             others = df_planets[(df_planets["Cung"] == cung) & (df_planets["Hành tinh"] != planet)]
             conjunction = list(others["Hành tinh"])
+        # 3. Tính điểm từng hành tinh chiếu/đồng cung (không double count nếu vừa chiếu vừa đồng cung)
         interacted = set(aspected + conjunction)
-        plus = {"Jupiter", "Venus", "Moon"}
-        minus = {"Mars", "Saturn", "Ketu", "Rahu"}
+        plus03 = {"Jupiter", "Venus", "Moon"}
+        minus03 = {"Mars", "Saturn", "Ketu", "Rahu"}
         score = 0
         for asp in interacted:
-            if asp in plus:
-                score += config["aspect_weight"]["plus"]
-            elif asp in minus:
-                score += config["aspect_weight"]["minus"]
-        # Clamp score
-        score = max(min(score * mult, config["aspect_weight"]["max"]), -config["aspect_weight"]["max"])
+            if asp in plus03:
+                score += 0.3
+            elif asp in minus03:
+                score -= 0.3
+            # Mercury, Sun thì không cộng trừ gì
+        # 4. Giới hạn điểm cộng/trừ tối đa ±1.0
+        score = max(min(score, 1.0), -1.0)
         return score
-    def build_life_chart(df_dasha, planet_data, birth_jd, df_planets, planet_to_ruled_houses, config=scoring_config):
+    # Tính dữ liệu vẽ biểu đồ
+    def build_life_chart(df_dasha, planet_data, birth_jd):
         life_years = []
         life_scores = []
         year_labels = []
         current_year = 0
         birth_offset = None
-        # Tính điểm VRY (Viparita Raja Yoga) nếu cần
-        dusthana = [6, 8, 12]
         vry_planets = set()
+        dusthana = [6, 8, 12]
         for planet in planet_data:
-            for ruled_house in planet.get("Chủ tinh", []):
+            for ruled_house in planet.get("Chủ tinh của nhà", []):
                 if ruled_house in dusthana and planet["Nhà"] in dusthana:
                     vry_planets.add(planet['Hành tinh'])
     
+        # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
         for _, m_row in df_dasha.iterrows():
             m_lord = m_row["Dasha"]
             m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
             m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
             m_duration = m_row["Số năm"]
-    
+
             if birth_offset is None and birth_jd >= m_start_jd:
                 birth_offset = (birth_jd - m_start_jd) / 365.25
-    
+
             # Điểm từ vị trí hiện tại của hành tinh
             m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
-            m_score = get_house_score(m_house, m_lord, config)
-    
-            # Điểm theo dignity
+            m_score = get_house_score(m_house, m_lord)
+            
             m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
-            m_score += config["dignity_weight"].get(m_dignity, 0)
-    
-            # Cát/hung theo tự nhiên
-            m_score += config["nature_weight"].get(m_lord, 0)
-    
-            # Nghịch hành + đốt cháy
+            if m_dignity in ["vượng", "tướng"]:
+                m_score += 1
+            elif m_dignity == "bạn bè":
+                m_score += 0.5
+            elif m_dignity == "địch thủ":
+                m_score -= 0.5
+            elif m_dignity in ["tù", "tử"]:
+                m_score -= 1
+            # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
+            if m_lord in ["Jupiter", "Venus", "Moon"]:
+                m_score += 0.5
+            elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
+                m_score -= 0.5
             m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if "R" in m_status and "C" in m_status:
-                m_score += config["status_weight"]["retrograde_combust"]
-    
-            # Chủ tinh của các nhà
+                m_score -= 0.5
+            # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
             ruled_houses = planet_to_ruled_houses.get(m_lord, [])
             rule_bonus = 0
             for rh in ruled_houses:
-                rule_bonus += config["rulership_weight"]["maha"].get(rh, 0)
+                if rh in [6, 8, 12]:
+                    rule_bonus -= 3.5
+                elif rh in [1, 5, 9]:
+                    rule_bonus += 3.5
+                elif rh in [ 4, 7, 10]:
+                    rule_bonus += 1.5
+                elif rh in [ 2,11]:
+                    rule_bonus += 2.5
             m_score += rule_bonus
-    
-            # Gana
             m_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == m_lord), "")
-            m_score += config["gana_weight"].get(m_gana, 0)
-    
-            # Chiếu + conjunction
-            m_score += calc_aspect_and_conj_score(m_lord, df_planets, config)
-    
-            # VRY (Viparita Raja Yoga) nếu có
-            if m_lord in vry_planets:
+            if m_gana == "Thiên thần":
                 m_score += 1
-    
-            # Gán nhãn mục tiêu dựa theo nhà (bạn có thể điều chỉnh mapping cho chuẩn)
+            elif m_gana == "Quỷ thần":
+                m_score -= 1
+            m_score += calc_aspect_and_conj_score(m_lord, df_planets)
+            # Gán nhãn mục tiêu dựa theo nhà
             purpose = ""
-            if m_house == 2:
+            if m_house in [2]:
                 purpose = " (tài ↑)"
-            elif m_house == 1:
+            elif m_house in [1]:
                 purpose = " (mệnh ↑)"
-            elif m_house == 9:
+            elif m_house in [ 9]:
                 purpose = " (đạo ↑)"
-            elif m_house == 5:
+            elif m_house in [5]:
                 purpose = " (học ↑)"
-            elif m_house == 10:
+            elif m_house in [10]:
                 purpose = " (danh ↑)"
-            elif m_house == 4:
+            elif m_house in [4]:
                 purpose = " (an cư ↑)"
             elif m_house == 7:
                 purpose = " (quan hệ ↑)"
@@ -1289,58 +1270,67 @@ def astrology_block():
                 purpose = " (thị phi ↓)"
             elif m_house in [8,12]:
                 purpose = " (mệnh,tài ↓)"
-            elif m_house == 6:
+            elif m_house in [6]:
                 purpose = " (mệnh ↓)"
-            elif m_house == 11:
+            elif m_house in [11]:
                 purpose = " (tài ↑)"
-    
-            # Tính điểm cho antardasha
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
             for _, antar in antars.iterrows():
                 a_lord = antar["Antardasha"].split("/")[-1]
                 a_years = antar["Số năm"]
                 a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-                a_score = get_house_score(a_house, a_lord, config) * 0.5
-    
-                # Chủ tinh các nhà (antardasha)
+                a_score = get_house_score(a_house, a_lord)*0.5 
+                
+                # ✅ Thêm điểm từ nhà mà antardasha làm chủ
                 ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
                 rule_bonus_a = 0
                 for rh in ruled_houses_a:
-                    rule_bonus_a += config["rulership_weight"]["antar"].get(rh, 0)
+                    if rh in [6, 8, 12]:
+                        rule_bonus_a -= 1
+                    elif rh in [1, 5, 9]:
+                        rule_bonus_a += 1
+                    elif rh in [4, 7, 10]:
+                        rule_bonus_a += 0.5
+                    elif rh in [ 2,11]:
+                        rule_bonus_a += 0.7
                 a_score += rule_bonus_a
-    
-                # Nghịch hành + đốt cháy (antar)
+                
                 a_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == a_lord), "")
                 if "R" in a_status and "C" in a_status:
-                    a_score += config["status_weight"]["antar_retrograde_combust"]
-    
-                # Dignity (antar)
+                    a_score -= 0.2
+                # ✅ Thêm điểm theo dignity (tính chất) của Antardasha lord
                 a_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == a_lord), "")
-                a_score += 0.5 * config["dignity_weight"].get(a_dignity, 0)
-    
-                # Gana (antar)
+                if a_dignity in ["vượng", "tướng"]:
+                    a_score += 0.5
+                elif a_dignity == "bạn bè":
+                    a_score += 0.2
+                elif a_dignity == "địch thủ":
+                    a_score -= 0.2
+                elif a_dignity in ["tù", "tử"]:
+                    a_score -= 0.5
                 a_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == a_lord), "")
-                a_score += config["gana_weight"].get(f"antar_{a_gana}", 0)
-    
-                # Tự nhiên (antar)
-                a_score += config["antar_nature_weight"].get(a_lord, 0)
-    
-                # Điểm chiếu + conjunction (antar, giảm hệ số)
-                a_score += config["aspect_weight"]["antar_mult"] * calc_aspect_and_conj_score(a_lord, df_planets, config)
-    
-                total_score = round(a_score + m_score, 2)
-    
+                if a_gana == "Thiên thần":
+                    a_score += 0.5
+                elif a_gana == "Quỷ thần":
+                    a_score -= 0.5    
+                # 4️⃣ Điểm từ phân loại Cát/Hung tinh
+                if a_lord in ["Jupiter", "Venus", "Moon"]:
+                    a_score += 0.2
+                elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
+                    a_score -= 0.2
+                a_score =a_score+0.5* calc_aspect_and_conj_score(a_lord, df_planets)
+                total_score = round(a_score +  m_score, 2)
+
                 life_years.append(current_year)
                 life_scores.append(total_score)
                 year_labels.append(m_lord + purpose)
                 current_year += a_years
-    
-        birth_x = round(birth_offset, 2) if birth_offset else 0
-        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
 
+        birth_x = round(birth_offset, 2) if birth_offset else 0
+        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x, vry_planets
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
-    chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd, df_planets, planet_to_ruled_houses)
+    chart_df, birth_x, vry_planets = build_life_chart(df_dasha, planet_data, jd)
     
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
@@ -1395,10 +1385,8 @@ def astrology_block():
     
     st.markdown("### Vị trí hành tinh")
    
+    st.dataframe(df_planets, use_container_width=False)
     
-    fig1 = plot_planet_table(df_planets)
-    st.pyplot(fig1)
-    plt.close(fig1)
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -1412,34 +1400,7 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.table(df_bav)
-    # Lọc vùng màu xám (0–70 tuổi)
-    filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
-    scores = filtered_df["Điểm số"].values
     
-    median_score = np.median(scores)
-    mean_score = np.mean(scores)
-    std_score = np.std(scores)
-    
-    fig, ax = plt.subplots(figsize=(6, 3))
-    counts, bins, patches = ax.hist(scores, bins=15, color='skyblue', edgecolor='black', alpha=0.7, density=True, label="Histogram")
-    
-    x = np.linspace(min(bins), max(bins), 300)
-    y = norm.pdf(x, mean_score, std_score)
-    ax.plot(x, y, color='green', linewidth=2, label=f'Phân bố chuẩn\nμ={mean_score:.2f}, σ={std_score:.2f}')
-    
-    # Median & mean
-    ax.axvline(median_score, color='red', linestyle='dashed', linewidth=2, label=f'Median: {median_score:.2f}')
-    ax.axvline(mean_score, color='purple', linestyle='dashdot', linewidth=2, label=f'Mean: {mean_score:.2f}')
-    
-    ax.set_xlabel("Điểm số", fontsize=10)
-    ax.set_ylabel("Mật độ/Tần suất", fontsize=10)
-    ax.set_title("Histogram & Phân bố chuẩn\nĐiểm số đại vận (0–70 tuổi)", fontsize=11)
-    ax.legend(fontsize=9)  # Chỉnh cỡ chữ chú thích
-    plt.xticks(fontsize=9)
-    plt.yticks(fontsize=9)
-    plt.tight_layout()
-    st.pyplot(fig)
-    plt.close(fig)
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
