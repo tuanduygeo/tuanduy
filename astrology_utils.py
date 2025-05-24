@@ -749,26 +749,26 @@ def astrology_block():
         "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
     }
     nakshatra_to_gana = {
-        "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
-        "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Nhân",
-        "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
-        "Magha": "Quỷ thần", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
-        "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
-        "Anuradha": "Thiên thần", "Jyeshtha": "Quỷ thần", "Mula": "Quỷ thần",
-        "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thiên thần",
-        "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "Purva Bhadrapada": "Nhân",
-        "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
+        "Ashwini": "Thần", "Bharani": "Nhân", "Krittika": "Quỷ",
+        "Rohini": "Nhân", "Mrigashirsha": "Thần", "Ardra": "Nhân",
+        "Punarvasu": "Thần", "Pushya": "Thần", "Ashlesha": "Quỷ",
+        "Magha": "Quỷ", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
+        "Hasta": "Thần", "Chitra": "Quỷ", "Swati": "Thần", "Vishakha": "Quỷ",
+        "Anuradha": "Thần", "Jyeshtha": "Quỷ", "Mula": "Quỷ",
+        "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thần",
+        "Dhanishta": "Quỷ", "Shatabhisha": "Quỷ", "Purva Bhadrapada": "Nhân",
+        "Uttara Bhadrapada": "Nhân", "Revati": "Thần"
     }
     planet_natural_direction = {
-    "Sun": "Đông",
-    "Moon": "Tây Bắc",
-    "Mars": "Nam",
-    "Mercury": "Bắc",
-    "Jupiter": "Đông Bắc",
-    "Venus": "Đông Nam",
-    "Saturn": "Tây",
-    "Rahu": "Tây Nam",
-    "Ketu": "Nam"
+    "Sun": "Đ",
+    "Moon": "TB",
+    "Mars": "N",
+    "Mercury": "B",
+    "Jupiter": "ĐB",
+    "Venus": "ĐN",
+    "Saturn": "T",
+    "Rahu": "TN",
+    "Ketu": "N"
 }
     # ==== Hàm phụ ====
     def get_rashi(degree):
@@ -1062,8 +1062,8 @@ def astrology_block():
         return ", ".join(result)
 
     # Thêm cột vào bảng
-    df_planets["Chiếu hành tinh"] = df_planets.apply(
-        lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
+    df_planets["Chiếu"] = df_planets.apply(
+        lambda row: get_aspected_planets(row["Hành tinh"]), axis=1
     )
     
     
@@ -1179,7 +1179,7 @@ def astrology_block():
         "maha": {6:-2.5, 8:-3.5, 12:-3.5, 1:3.5, 5:3, 9:3.5, 4:1.5, 7:1.5, 10:2, 2:2.5, 11:2.5},
         "antar": {6:-0.7, 8:-1, 12:-1, 1:1, 5:1, 9:1, 4:0.5, 7:0.5, 10:0.7, 2:0.8, 11:0.8}
     },
-    "gana_weight": {"Thiên thần": 1, "Quỷ thần": -1, "antar_Thiên thần": 0.5, "antar_Quỷ thần": -0.5},
+    "gana_weight": {"Thần": 1, "Quỷ": -1, "antar_Thần": 0.5, "antar_Quỷ": -0.5},
     "aspect_weight": {"plus": 0.5, "minus": -0.5, "max": 1.5, "antar_mult": 0.5},
 }
     def get_house_score(house, planet, config=scoring_config):
@@ -1222,7 +1222,7 @@ def astrology_block():
         dusthana = [6, 8, 12]
         vry_planets = set()
         for planet in planet_data:
-            for ruled_house in planet.get("Chủ tinh của nhà", []):
+            for ruled_house in planet.get("Chủ tinh", []):
                 if ruled_house in dusthana and planet["Nhà"] in dusthana:
                     vry_planets.add(planet['Hành tinh'])
     
