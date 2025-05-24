@@ -566,6 +566,13 @@ def main():
                     st.write("Các giá trị outlier (IQR):", outliers)
                 else:
                     st.write("Không phát hiện outlier.")
+                diff = kde(x_kde) - normal_dist.pdf(x_kde, mean, std)
+                crossings = np.where(np.diff(np.sign(diff)))[0]  # vị trí các điểm giao
+                cross_x = x_kde[crossings]
+                for xc in cross_x:
+                    ax_hist.axvline(xc, color='purple', linestyle=':', linewidth=1)
+                    ax_hist.text(xc, 0, f'{xc:.2f}', color='purple', fontsize=7, rotation=90, ha='right', va='bottom')
+                st.write("Các giá trị KDE cắt normal fit:", cross_x)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
