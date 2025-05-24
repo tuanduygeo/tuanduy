@@ -349,7 +349,7 @@ def detect_yoga_dosha(df_planets):
     dusthana = [6, 8, 12]
     vry_shown = set()
     for planet in df_planets.to_dict("records"):
-        for ruled_house in planet.get("Chủ tinh của nhà", []):
+        for ruled_house in planet.get("chủ nhà", []):
             if ruled_house in dusthana and planet["Nhà"] in dusthana:
                 # Chỉ hiện 1 lần cho từng hành tinh, từng loại
                 key = (planet['Hành tinh'], ruled_house, planet["Nhà"])
@@ -386,8 +386,8 @@ def detect_yoga_dosha(df_planets):
    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
     trikona_houses = [1, 5, 9]
     kendra_houses = [1, 4, 7, 10]
-    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
-    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ nhà", [])) & set(trikona_houses)]
+    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ nhà", [])) & set(kendra_houses)]
     
     found_raja_yoga = False
     for tr in trikona_rulers:
@@ -491,7 +491,7 @@ def detect_yoga_dosha(df_planets):
     found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
-        rulers = p.get("Chủ tinh của nhà", [])
+        rulers = p.get("chủ nhà", [])
         if not rulers:
             continue
         for r in rulers:
@@ -504,9 +504,9 @@ def detect_yoga_dosha(df_planets):
      # Dhana Yoga:Chủ nhà 6, 8, 12 nằm ở các nhà tài hoặc đồng cung nhà tài.
     daridra_houses = [6, 8, 12]
     for p in df_planets.to_dict("records"):
-        if not p.get("Chủ tinh của nhà", []): continue
+        if not p.get("chủ nhà", []): continue
         for dh in daridra_houses:
-            if dh in p["Chủ tinh của nhà"] and p["Nhà"] in [2, 11]:
+            if dh in p["chủ nhà"] and p["Nhà"] in [2, 11]:
                 res.append("- **Daridra Yoga:** Chủ nhà dusthana nằm ở nhà tài. Tài ↓.")
 
     
@@ -520,7 +520,7 @@ def detect_yoga_dosha(df_planets):
         res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật ↑.")   
     house9_ruler_list = []
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("Chủ tinh của nhà", []):
+        if 9 in p.get("chủ nhà", []):
             house9_ruler_list.append(p)
     for p in house9_ruler_list:
         if p["Tính chất"] in ["vượng", "tướng"] and p["Nhà"] in [1, 4, 5, 7, 9, 10]:
@@ -529,9 +529,9 @@ def detect_yoga_dosha(df_planets):
     house9_ruler = None
     house10_ruler = None
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("Chủ tinh của nhà", []):
+        if 9 in p.get("chủ nhà", []):
             house9_ruler = p
-        if 10 in p.get("Chủ tinh của nhà", []):
+        if 10 in p.get("chủ nhà", []):
             house10_ruler = p
     if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
         res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – sự nghiệp-phúc tăng.")
@@ -705,10 +705,10 @@ def astrology_block():
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
     nakshatras = [
-        "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
-        "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
-        "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-        "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+        "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+        "Magha", "P.Phal", "U.Phal", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+        "Jyeshtha", "Mula", "P.Asad", "U.Asad", "Shravana", "Dhanishta", "Shatabhisha",
+        "P.Bhad", "U.Bhad", "Revati"
     ]
     planets = {
         'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
@@ -732,14 +732,14 @@ def astrology_block():
     }
     nakshatra_to_gana = {
         "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
-        "Rohini": "Nhân", "Mrigashirsha": "Thiên thần", "Ardra": "Nhân",
+        "Rohini": "Nhân", "Mrigashira": "Thiên thần", "Ardra": "Nhân",
         "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
-        "Magha": "Quỷ thần", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
+        "Magha": "Quỷ thần", "P.Phal": "Nhân", "U.Phal": "Nhân",
         "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
         "Anuradha": "Thiên thần", "Jyeshtha": "Quỷ thần", "Mula": "Quỷ thần",
-        "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thiên thần",
-        "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "Purva Bhadrapada": "Nhân",
-        "Uttara Bhadrapada": "Nhân", "Revati": "Thiên thần"
+        "P.Asad": "Nhân", "U.Asad": "Nhân", "Shravana": "Thiên thần",
+        "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "P.Bhad": "Nhân",
+        "U.Bhad": "Nhân", "Revati": "Thiên thần"
     }
     planet_natural_direction = {
     "Sun": "Đông",
@@ -1011,7 +1011,7 @@ def astrology_block():
     for house, ruler in house_rulers.items():
         planet_to_ruled_houses.setdefault(ruler, []).append(house)
 
-    df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
+    df_planets["chủ nhà"] = df_planets["Hành tinh"].apply(
         lambda p: planet_to_ruled_houses.get(p, [])
     )
     # === Định nghĩa quy tắc chiếu Vedic ===
@@ -1052,14 +1052,14 @@ def astrology_block():
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
         "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
-        "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
+        "Rohini": "Moon", "Mrigashira": "Mars", "Ardra": "Rahu",
         "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
-        "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
+        "Magha": "Ketu", "P.Phal": "Venus", "U.Phal": "Sun",
         "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
         "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
-        "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
+        "Mula": "Ketu", "P.Asad": "Venus", "U.Asad": "Sun",
         "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
-        "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
+        "P.Bhad": "Jupiter", "U.Bhad": "Saturn", "Revati": "Mercury"
     }
 
     # Dasha sequence và số năm
@@ -1196,7 +1196,7 @@ def astrology_block():
         vry_planets = set()
         dusthana = [6, 8, 12]
         for planet in planet_data:
-            for ruled_house in planet.get("Chủ tinh của nhà", []):
+            for ruled_house in planet.get("chủ nhà", []):
                 if ruled_house in dusthana and planet["Nhà"] in dusthana:
                     vry_planets.add(planet['Hành tinh'])
     
