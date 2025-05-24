@@ -7,65 +7,7 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
-def plot_bav_table_arrow(df_bav):
-    # Sao chép bảng để không làm thay đổi dữ liệu gốc
-    df = df_bav.copy()
-    # Định vị dòng "Tổng" (có thể là "Tổng" hoặc "Total" tùy code, sửa cho khớp!)
-    row_total = "Tổng"
-    if row_total in df.index:
-        total_row = df.loc[row_total].copy()
-        total_annot = []
-        for val in total_row:
-            try:
-                val_num = float(val)
-            except:
-                val_num = None
-            if val_num is not None:
-                if val_num > 28:
-                    total_annot.append(f"{val} ↑")
-                elif val_num < 25:
-                    total_annot.append(f"{val} ↓")
-                else:
-                    total_annot.append(str(val))
-            else:
-                total_annot.append(str(val))
-        # Thay dòng Tổng bằng dòng có annotation
-        df.loc[row_total] = total_annot
 
-    fig, ax = plt.subplots(figsize=(1.8 + 0.7 * df.shape[1], 0.8 + 0.3 * df.shape[0]))
-    ax.axis('off')
-    table = ax.table(
-        cellText=df.values,
-        rowLabels=df.index,
-        colLabels=df.columns,
-        cellLoc='center',
-        loc='center'
-    )
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
-    table.scale(1.2, 1.2)
-    plt.tight_layout()
-    plt.show()
-    return fig
-
-
-def plot_planet_table(df_planets):
-    # Bỏ cột cuối cùng
-    df_no_last_col = df_planets.iloc[:, :-1]
-    fig, ax = plt.subplots(figsize=(9, 0.6 + 0.3 * len(df_no_last_col)))
-    ax.axis('off')
-    table = ax.table(
-        cellText=df_no_last_col.values,
-        colLabels=df_no_last_col.columns,
-        cellLoc='center',
-        loc='center'
-    )
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
-    table.scale(1.2, 1.2)
-    plt.tight_layout()
-    plt.show()
-    return fig
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
     "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
@@ -758,10 +700,7 @@ def astrology_block():
             f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
             f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
         )
-        datetime_info = (
-        f"{selected_utc.year}-{selected_utc.month:02d}-{selected_utc.day:02d} "
-        f"{selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} ({selected_tz})"
-    )    
+        
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
@@ -803,15 +742,15 @@ def astrology_block():
         "U.Bhad": "Nhân", "Revati": "Thần"
     }
     planet_natural_direction = {
-    "Sun": "Đ",
-    "Moon": "TB",
-    "Mars": "N",
-    "Mercury": "B",
-    "Jupiter": "ĐB",
-    "Venus": "ĐN",
-    "Saturn": "T",
-    "Rahu": "TN",
-    "Ketu": "N"
+    "Sun": "Đông",
+    "Moon": "Tây Bắc",
+    "Mars": "Nam",
+    "Mercury": "Bắc",
+    "Jupiter": "Đông Bắc",
+    "Venus": "Đông Nam",
+    "Saturn": "Tây",
+    "Rahu": "Tây Nam",
+    "Ketu": "Nam"
 }
     # ==== Hàm phụ ====
     def get_rashi(degree):
@@ -918,8 +857,7 @@ def astrology_block():
         "Gana": asc_gana,
         "Nhà": 1,
         "Tính chất": "",
-        "retro": "",
-        "vastu": ""
+        "retro": ""
     })
 
     for name, code in planets.items():
@@ -943,7 +881,7 @@ def astrology_block():
             "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
             "Tính chất": get_dignity(name, get_rashi(lon_deg)),
             "retro": status,
-            "vastu": planet_natural_direction.get(name, "")
+            "Hướng": planet_natural_direction.get(name, "")
         })
     # Tìm Rahu trong planet_data
     rahu_deg = None
@@ -975,12 +913,12 @@ def astrology_block():
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
             "retro": "R",  
-            "vastu": "N",
+            "Hướng": "Nam",
         })
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data, equal_house_cusps, datetime_info=None):
+    def draw_chart(planet_data):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
@@ -1050,13 +988,10 @@ def astrology_block():
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
             ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
-        if datetime_info:
-            ax.set_title(f"Biểu đồ D1 (Rasi) - {datetime_info}", fontsize=11, pad=8)
-        else:
-            ax.set_title("Biểu đồ D1 (Rasi)", fontsize=11, pad=8)
-        return fig
+        return fig  
         
-    fig_d1 = draw_chart(planet_data, equal_house_cusps, datetime_info)
+    fig_d1 = draw_chart(planet_data)
+    
     df_planets = pd.DataFrame(planet_data)
 
 
@@ -1450,10 +1385,8 @@ def astrology_block():
     
     st.markdown("### Vị trí hành tinh")
    
+    st.dataframe(df_planets, use_container_width=False)
     
-    fig = plot_planet_table(df_planets)
-    st.pyplot(fig)
-    plt.close(fig)
     st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -1466,9 +1399,7 @@ def astrology_block():
     
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
-    fig = plot_bav_table_arrow(df_bav)
-    st.pyplot(fig)
-    plt.close(fig)
+    st.table(df_bav)
     
    
     st.markdown("""#### 📌 Hướng dẫn
@@ -1479,5 +1410,4 @@ def astrology_block():
     - Biểu đồ được tính từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay retro, v.v.
     """)
     pass
-
 
