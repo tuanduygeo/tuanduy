@@ -693,7 +693,7 @@ def astrology_block():
             st.session_state.selected_date,
             st.session_state.selected_time
         )
-
+        user_name = st.text_input("Nhập tên")
     with col2:
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
@@ -971,7 +971,7 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data):
+    def draw_chart(planet_data, user_name=None):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
@@ -1041,9 +1041,14 @@ def astrology_block():
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
             ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
+        # Thêm tiêu đề (title) có tên người xem lá số
+        if user_name:
+            ax.set_title(f"Biểu đồ D1 (Rasi) - {user_name}", fontsize=11, pad=8)
+        else:
+            ax.set_title("Biểu đồ D1 (Rasi)", fontsize=11, pad=8)
         return fig  
         
-    fig_d1 = draw_chart(planet_data)
+    fig_d1 = draw_chart(planet_data, user_name)
     
     df_planets = pd.DataFrame(planet_data)
 
