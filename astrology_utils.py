@@ -8,28 +8,39 @@ import matplotlib.pyplot as plt
 import re
 import io
 def plot_yoga_table(yoga_list, user_name=None):
-    # Nếu là string markdown, tách thành list
     if isinstance(yoga_list, str):
         lines = [line.strip('-* ') for line in yoga_list.split('\n') if line.startswith('-')]
     else:
         lines = yoga_list[:]
-    # Tạo bảng với 1 cột (tên cách cục)
     n = len(lines)
-    fig, ax = plt.subplots(figsize=(8, 0.8 + 0.4 * n))
+    fig, ax = plt.subplots(figsize=(6, 0.8 + 0.5 * n))
     ax.axis('off')
-    # Đưa vào dạng list of list cho table
     cell_text = [[s] for s in lines]
     col_labels = ["Các cách cục Yoga/Dosha nổi bật"]
-    table = ax.table(cellText=cell_text, colLabels=col_labels, cellLoc='left', loc='center')
+    table = ax.table(
+        cellText=cell_text,
+        colLabels=col_labels,
+        cellLoc='left',
+        loc='center'
+    )
     table.auto_set_font_size(False)
     table.set_fontsize(11)
-    table.scale(1.1, 1.2)
-    # Thêm tiêu đề
+    table.scale(1.0, 1.0)
+    # Ẩn toàn bộ lines
+    for key, cell in table.get_celld().items():
+        cell.set_linewidth(0)   # bỏ line
+    # (Nếu muốn có border ngoài: có thể set lại 4 cạnh)
+    # for col in range(table._ncols):
+    #     table[(0, col)].set_linewidth(1)  # dòng đầu
+    #     table[(n, col)].set_linewidth(1)  # dòng cuối
+    # for row in range(n+1):
+    #     table[(row, 0)].set_linewidth(1)  # cột đầu
+    #     table[(row, table._ncols-1)].set_linewidth(1)  # cột cuối
     if user_name:
-        ax.set_title(f"Danh sách Yoga/Dosha – {user_name}", fontsize=12, pad=12)
+        ax.set_title(f"Danh sách Yoga/Dosha – {user_name}", fontsize=12, pad=4)
     else:
-        ax.set_title("Danh sách Yoga/Dosha", fontsize=12, pad=12)
-    plt.tight_layout()
+        ax.set_title("Danh sách Yoga/Dosha", fontsize=12, pad=4)
+    plt.subplots_adjust(top=0.80, bottom=0.15)  # Căn lại cho gọn
     return fig
 
 def plot_varga_table_arrow(df_varga, row_total="Tổng"):
