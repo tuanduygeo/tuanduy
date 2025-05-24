@@ -1062,7 +1062,7 @@ def astrology_block():
         return ", ".join(result)
 
     # Thêm cột vào bảng
-    df_planets["Chiếu hành tinh"] = df_planets.apply(
+    df_planets[""] = df_planets.apply(
         lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
     
@@ -1190,7 +1190,7 @@ def astrology_block():
         else:
             return 0
     def calc_aspect_and_conj_score(planet, df_planets, config=scoring_config, mult=1.0):
-        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "Chiếu hành tinh"].values
+        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "chiếu"].values
         aspected = []
         if len(chiếu) > 0 and chiếu[0]:
             aspected = [x.strip().split(" ")[0] for x in chiếu[0].split(",") if x.strip()]
