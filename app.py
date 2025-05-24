@@ -20,7 +20,7 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
-from scipy.stats import norm
+from scipy.stats import norm as scipy_norm
 import re
 import geomag
 
@@ -523,7 +523,7 @@ def main():
                 
                 # Vẽ đường phân phối chuẩn
                 x = np.linspace(np.min(data), np.max(data), 300)
-                y = norm.pdf(x, mean, std)
+                y = scipy_norm.pdf(x, mean, std)
                 ax_hist.plot(x, y, color='black', linewidth=2, label='Phân phối chuẩn')
                 
                 # Vẽ các đường thẳng
