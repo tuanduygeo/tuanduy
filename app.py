@@ -228,12 +228,12 @@ def main():
                 z_min, z_max = float(data_array.min()), float(data_array.max())
                 if z_min == z_max:
                     # Nếu dữ liệu phẳng (không có biến động)
-                    levels = np.linspace(z_min - 1, z_max + 1, 21)
+                    levels = np.linspace(z_min - 1, z_max + 1, 30)
                 else:
                     # Nếu khoảng cách quá nhỏ, mở rộng một chút cho đẹp
                     if abs(z_max - z_min) < 1e-3:
                         z_max = z_min + 1e-3
-                    levels = np.linspace(z_min, z_max, 21)
+                    levels = np.linspace(z_min, z_max, 30)
                 st.markdown(f"**Chỉ số Bearing :** `{levels}°`")
                 cmap = cm.get_cmap('rainbow')
                 norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
