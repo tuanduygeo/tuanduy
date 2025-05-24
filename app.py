@@ -508,21 +508,26 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
-                # VẼ HISTOGRAM cho data_array (DEM gốc)
+                # VẼ HISTOGRAM cho data_array
                 fig_hist, ax_hist = plt.subplots(figsize=(6,3))
                 n, bins, patches = ax_hist.hist(
                     data_array.ravel(), bins=30, color='gold', alpha=0.75, edgecolor='k'
                 )
-                ax_hist.set_title('Phân bố độ cao địa hình')
-                ax_hist.set_xlabel('Giá trị độ cao (m)')
+                ax_hist.set_title('Biểu đồ phân bố ')
+                ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Tần suất')
                 ax_hist.grid(True, linestyle='--', alpha=0.5)
                 
                 # Nếu muốn vẽ vertical lines cho median, min, max:
-                median_z = np.median(data_array)
-                ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
-                ax_hist.legend()
+                p90 = np.percentile(data_array, 90)
+                p5 = np.percentile(data_array, 5)
                 
+                # Vẽ các đường thẳng
+                ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
+                ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
+                ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
+                median_z = np.median(data_array)
+                ax_hist.legend()
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
         except Exception as e:
