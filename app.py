@@ -560,6 +560,8 @@ def main():
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
                 plt.close(fig_hist)
+                outlier_mask = detect_outlier_iqr(data)
+                outliers = data[outlier_mask]
                 if len(outliers) > 0:
                     st.write("Các giá trị outlier (IQR):", outliers)
                 else:
