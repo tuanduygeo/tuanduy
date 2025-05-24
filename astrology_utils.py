@@ -973,7 +973,7 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data, user_name=None,selected_datetime_local):
+    def draw_chart(planet_data, user_name=None,selected_datetime_local=None):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
