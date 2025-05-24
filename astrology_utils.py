@@ -1392,7 +1392,18 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.table(df_bav)
+    # Lọc vùng màu xám
+    filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     
+    # Vẽ histogram
+    fig, ax = plt.subplots(figsize=(6, 3))
+    ax.hist(filtered_df["Điểm số"], bins=15, color='skyblue', edgecolor='black')
+    ax.set_xlabel("Điểm số")
+    ax.set_ylabel("Tần suất (số lần xuất hiện)")
+    ax.set_title("Histogram phân bố Điểm số đại vận (0–70 tuổi)")
+    plt.tight_layout()
+    st.pyplot(fig)
+    plt.close(fig)
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
