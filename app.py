@@ -562,10 +562,7 @@ def main():
                 
                 outlier_mask = detect_outlier_iqr(data)
                 outliers = data[outlier_mask]
-                if len(outliers) > 0:
-                    st.write("Các giá trị outlier (IQR):", outliers)
-                else:
-                    st.write("Không phát hiện outlier.")
+                
                 diff = kde(x_kde) - norm.pdf(x_kde, mean, std)
                 crossings = np.where(np.diff(np.sign(diff)))[0]  # vị trí các điểm giao
                 cross_x = x_kde[crossings]
