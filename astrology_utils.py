@@ -1051,7 +1051,7 @@ def astrology_block():
         if user_name:
             ax.set_title(f"{user_name}{selected_datetime_local}", fontsize=8, pad=8)
         else:
-            ax.set_title("{selected_datetime_local}", fontsize=8, pad=8)
+            ax.set_title("", fontsize=8, pad=8)
         return fig  
         
     fig_d1 = draw_chart(planet_data, user_name,selected_datetime_local)
