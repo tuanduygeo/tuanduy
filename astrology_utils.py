@@ -367,7 +367,7 @@ def detect_yoga_dosha(df_planets):
     dusthana = [6, 8, 12]
     vry_shown = set()
     for planet in df_planets.to_dict("records"):
-        for ruled_house in planet.get("Chủ tinh của nhà", []):
+        for ruled_house in planet.get("Chủ tinh", []):
             if ruled_house in dusthana and planet["Nhà"] in dusthana:
                 # Chỉ hiện 1 lần cho từng hành tinh, từng loại
                 key = (planet['Hành tinh'], ruled_house, planet["Nhà"])
