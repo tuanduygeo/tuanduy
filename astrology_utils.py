@@ -1260,7 +1260,7 @@ def astrology_block():
         birth_offset = None
         
     
-        # 2. Tính điểm từng Mahadasha, cộng điểm nếu là VRY
+        # 2. Tính điểm từng Mahadasha
         for _, m_row in df_dasha.iterrows():
             m_lord = m_row["Dasha"]
             m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
@@ -1387,7 +1387,7 @@ def astrology_block():
                 current_year += a_years
 
         birth_x = round(birth_offset, 2) if birth_offset else 0
-        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x, vry_planets
+        return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
     chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
