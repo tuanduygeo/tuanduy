@@ -699,8 +699,7 @@ def astrology_block():
         )
         user_name = st.text_input("Nhập tên")
         user_name = user_name.title().strip()
-        gio_dia_phuong = selected_datetime_local.strftime('%Y-%m-%d %H:%M')
-        user_name = f"{user_name} – {gio_dia_phuong} ({selected_tz})"
+                
     with col2:
         # Giao diện nhập tọa độ
         latitude = st.number_input("🌐 Vĩ độ", min_value=-90.0, max_value=90.0, value=21.0, step=0.1)
@@ -755,10 +754,6 @@ def astrology_block():
         )
     
         st.markdown(f"**Vĩ độ**: {latitude}° **Kinh độ**: {longitude}° ")
-        st.markdown(
-            f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
-            f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
-        )
         st.markdown(selected_datetime_local)
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
@@ -978,7 +973,7 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data, user_name=None):
+    def draw_chart(planet_data, user_name=None,selected_datetime_local):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
@@ -1050,12 +1045,12 @@ def astrology_block():
             ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
         # Thêm tiêu đề (title) có tên người xem lá số
         if user_name:
-            ax.set_title(f"{user_name}", fontsize=8, pad=8)
+            ax.set_title(f"{user_name}{selected_datetime_local}", fontsize=8, pad=8)
         else:
-            ax.set_title("", fontsize=8, pad=8)
+            ax.set_title("{selected_datetime_local}", fontsize=8, pad=8)
         return fig  
         
-    fig_d1 = draw_chart(planet_data, user_name)
+    fig_d1 = draw_chart(planet_data, user_name,selected_datetime_local)
     
     df_planets = pd.DataFrame(planet_data)
 
