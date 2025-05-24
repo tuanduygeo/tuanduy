@@ -1449,7 +1449,7 @@ def astrology_block():
     st.pyplot(fig,use_container_width=False)
     plt.close(fig)
     
-    st.markdown("### Vị trí hành tinh")
+    
     fig = plot_planet_table(df_planets)
     st.pyplot(fig)
     plt.close(fig)
