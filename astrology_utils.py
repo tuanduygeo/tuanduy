@@ -971,7 +971,11 @@ def astrology_block():
             "vastu": "N",
         })
 
-
+    selected_datetime_local = None
+    if selected_datetime.tzinfo is None:
+        selected_datetime_local = local_tz.localize(selected_datetime)
+    else:
+        selected_datetime_local = selected_datetime.astimezone(local_tz)
     # Hàm vẽ biểu đồ
     def draw_chart(planet_data, user_name=None,selected_datetime_local=None):
         fig, ax = plt.subplots(figsize=(4,4))
