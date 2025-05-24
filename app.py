@@ -235,11 +235,11 @@ def main():
                         z_max = z_min + 1e-3
                     levels = np.linspace(z_min, z_max, 30)
                 
-                cmap = cm.get_cmap('turbo')
+                cmap = cm.get_cmap('jet')
                 norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.5)
-                ax.contourf(Xx3857, Yx3857, data_smooth, cmap="turbo", levels=levels, alpha=0)
-                ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='turbo', linewidths=1)
+                ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
+                ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='jet', linewidths=1)
                 threshold = np.percentile(data_array, 90)
                 threshold1 = np.percentile(data_array, 5)
                 for level in levels:
