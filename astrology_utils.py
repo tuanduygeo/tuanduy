@@ -723,10 +723,10 @@ def astrology_block():
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
     nakshatras = [
-        "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashirsha", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
-        "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
-        "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-        "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+        "Ashwini", "Bharani", "Krittika", "Rohini", "Mriga", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+        "Magha", "P.Phal", "U.Phal", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+        "Jyeshtha", "Mula", "P.Ashad", "U.Ashad", "Shravana", "Dhanishta", "Shatabhisha",
+        "P.Bhad", "U.Bhad", "Revati"
     ]
     planets = {
         'Sun': swe.SUN, 'Moon': swe.MOON, 'Mars': swe.MARS, 'Mercury': swe.MERCURY,
@@ -750,14 +750,14 @@ def astrology_block():
     }
     nakshatra_to_gana = {
         "Ashwini": "Thần", "Bharani": "Nhân", "Krittika": "Quỷ",
-        "Rohini": "Nhân", "Mrigashirsha": "Thần", "Ardra": "Nhân",
+        "Rohini": "Nhân", "Mriga": "Thần", "Ardra": "Nhân",
         "Punarvasu": "Thần", "Pushya": "Thần", "Ashlesha": "Quỷ",
-        "Magha": "Quỷ", "Purva Phalguni": "Nhân", "Uttara Phalguni": "Nhân",
+        "Magha": "Quỷ", "P.Phal": "Nhân", "U.Phal": "Nhân",
         "Hasta": "Thần", "Chitra": "Quỷ", "Swati": "Thần", "Vishakha": "Quỷ",
         "Anuradha": "Thần", "Jyeshtha": "Quỷ", "Mula": "Quỷ",
-        "Purva Ashadha": "Nhân", "Uttara Ashadha": "Nhân", "Shravana": "Thần",
-        "Dhanishta": "Quỷ", "Shatabhisha": "Quỷ", "Purva Bhadrapada": "Nhân",
-        "Uttara Bhadrapada": "Nhân", "Revati": "Thần"
+        "P.Ashad": "Nhân", "U.Ashad": "Nhân", "Shravana": "Thần",
+        "Dhanishta": "Quỷ", "Shatabhisha": "Quỷ", "P.Bhad": "Nhân",
+        "U.Bhad": "Nhân", "Revati": "Thần"
     }
     planet_natural_direction = {
     "Sun": "Đ",
@@ -931,7 +931,7 @@ def astrology_block():
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
             "Nghịch hành": "R",  
-            "Hướng": "Nam",
+            "Hướng": "N",
         })
 
 
@@ -1070,14 +1070,14 @@ def astrology_block():
     # Bảng ánh xạ Nakshatra → Dasha Lord
     nakshatra_to_dasha_lord = {
         "Ashwini": "Ketu", "Bharani": "Venus", "Krittika": "Sun",
-        "Rohini": "Moon", "Mrigashirsha": "Mars", "Ardra": "Rahu",
+        "Rohini": "Moon", "Mriga": "Mars", "Ardra": "Rahu",
         "Punarvasu": "Jupiter", "Pushya": "Saturn", "Ashlesha": "Mercury",
-        "Magha": "Ketu", "Purva Phalguni": "Venus", "Uttara Phalguni": "Sun",
+        "Magha": "Ketu", "P.Phal": "Venus", "U.Phal": "Sun",
         "Hasta": "Moon", "Chitra": "Mars", "Swati": "Rahu",
         "Vishakha": "Jupiter", "Anuradha": "Saturn", "Jyeshtha": "Mercury",
-        "Mula": "Ketu", "Purva Ashadha": "Venus", "Uttara Ashadha": "Sun",
+        "Mula": "Ketu", "P.Ashad": "Venus", "U.Ashad": "Sun",
         "Shravana": "Moon", "Dhanishta": "Mars", "Shatabhisha": "Rahu",
-        "Purva Bhadrapada": "Jupiter", "Uttara Bhadrapada": "Saturn", "Revati": "Mercury"
+        "P.Bhad": "Jupiter", "U.Bhad": "Saturn", "Revati": "Mercury"
     }
 
     # Dasha sequence và số năm
