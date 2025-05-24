@@ -20,7 +20,6 @@ from pyproj import Transformer
 import contextily as ctx
 from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
-from scipy.stats import norm as scipy_norm
 import re
 import geomag
 
@@ -509,8 +508,6 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
-                # Tính toán dữ liệu cần thiết
-                data = data_array.ravel()
                 mean = np.mean(data)
                 std = np.std(data)
                 median_z = np.median(data)
@@ -521,10 +518,7 @@ def main():
                 # Vẽ histogram
                 n, bins, patches = ax_hist.hist(data, bins=30, color='gold', alpha=0.75, edgecolor='k', density=True)
                 
-                # Vẽ đường phân phối chuẩn
-                x = np.linspace(np.min(data), np.max(data), 300)
-                y = scipy_norm.pdf(x, mean, std)
-                ax_hist.plot(x, y, color='black', linewidth=2, label='Phân phối chuẩn')
+                
                 
                 # Vẽ các đường thẳng
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
