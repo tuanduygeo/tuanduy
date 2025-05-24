@@ -22,7 +22,7 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-from scipy.stats import norm_dist, gaussian_kde
+from scipy.stats import norm, gaussian_kde
 
 
 st.set_page_config(layout="wide")
