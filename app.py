@@ -22,7 +22,7 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-from scipy.stats import norm, gaussian_kde
+from scipy.stats import norm_dist, gaussian_kde
 
 
 st.set_page_config(layout="wide")
@@ -511,25 +511,26 @@ def main():
                 
                 data = data_array.ravel()
                 mean = np.mean(data)
+                std = np.std(data)
                 median_z = np.median(data)
                 p90 = np.percentile(data, 90)
                 p5 = np.percentile(data, 5)
                 
                 fig_hist, ax_hist = plt.subplots(figsize=(6, 3))
                 
-                # Vẽ histogram
+                # Histogram
                 n, bins, patches = ax_hist.hist(data, bins=30, color='gold', alpha=0.75, edgecolor='k', density=True, label='Histogram')
                 
-                # Vẽ KDE
+                # KDE
                 kde = gaussian_kde(data)
                 x_kde = np.linspace(data.min(), data.max(), 200)
-                ax_hist.plot(x_kde, kde(x_kde), color='green', linewidth=2, linestyle='-', label='KDE (Mật độ thực tế)')
+                ax_hist.plot(x_kde, kde(x_kde), color='green', linewidth=2, label='KDE (Mật độ thực tế)')
                 
-                # Vẽ đường phân phối chuẩn lý thuyết
+                # Normal distribution fit (dùng alias normal_dist)
                 x_norm = np.linspace(data.min(), data.max(), 200)
-                ax_hist.plot(x_norm, norm.pdf(x_norm, mean, np.std(data)), 'r-', linewidth=2, label='Normal fit (chuẩn)')
+                ax_hist.plot(x_norm, normal_dist.pdf(x_norm, mean, std), 'r-', linewidth=2, label='Normal fit (chuẩn)')
                 
-                # Các đường thẳng tham khảo
+                # Các đường thẳng
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
                 ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
                 ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
