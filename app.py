@@ -528,28 +528,37 @@ def main():
                     upper_bound = Q3 + k * IQR
                     return (data < lower_bound) | (data > upper_bound)
                 
+                # Tính mask outlier trước đó
                 outlier_mask = detect_outlier_iqr(data)
+                
                 # KDE
                 kde = gaussian_kde(data)
                 x_kde = np.linspace(data.min(), data.max(), 200)
                 ax_hist.plot(x_kde, kde(x_kde), color='green', linewidth=2, label='KDE (Mật độ thực tế)')
                 
-                # Normal distribution fit (dùng alias normal_dist)
+                # Normal distribution fit
                 x_norm = np.linspace(data.min(), data.max(), 200)
                 ax_hist.plot(x_norm, norm.pdf(x_norm, mean, std), 'r-', linewidth=2, label='Normal fit (chuẩn)')
+                
+                # Đánh dấu các outlier lên biểu đồ
+                # Lấy tọa độ y cho scatter (đặt ở đáy đồ thị)
+                y_min, y_max = ax_hist.get_ylim()
+                y_outlier = np.full(np.sum(outlier_mask), y_min + 0.02*(y_max-y_min))  # đặt sát đáy, cao hơn tí cho dễ nhìn
+                ax_hist.scatter(data[outlier_mask], y_outlier, color='red', marker='x', s=60, label='Outlier (IQR)')
                 
                 # Các đường thẳng
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
                 ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
                 ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
-                ax_hist.scatter(data[outlier_mask], np.zeros_like(data[outlier_mask]), color='red', label='Outliers')
-                ax_hist.set_title('Phân bố dữ liệu, KDE và Normal overlay')
+                
+                ax_hist.set_title('Phân bố dữ liệu, KDE, Normal và Outlier')
                 ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Mật độ xác suất')
                 ax_hist.legend()
                 ax_hist.grid(True, linestyle='--', alpha=0.5)
                 
                 st.pyplot(fig_hist)
+                plt.close(fig_hist)
                 plt.close(fig_hist)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
