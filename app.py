@@ -520,7 +520,15 @@ def main():
                 
                 # Histogram
                 n, bins, patches = ax_hist.hist(data, bins=30, color='gold', alpha=0.75, edgecolor='k', density=True, label='Histogram')
+                def detect_outlier_iqr(data, k=1.5):
+                    Q1 = np.percentile(data, 25)
+                    Q3 = np.percentile(data, 75)
+                    IQR = Q3 - Q1
+                    lower_bound = Q1 - k * IQR
+                    upper_bound = Q3 + k * IQR
+                    return (data < lower_bound) | (data > upper_bound)
                 
+                outlier_mask = detect_outlier_iqr(data)
                 # KDE
                 kde = gaussian_kde(data)
                 x_kde = np.linspace(data.min(), data.max(), 200)
@@ -534,7 +542,7 @@ def main():
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
                 ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
                 ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
-                
+                ax_hist.scatter(data[outlier_mask], np.zeros_like(data[outlier_mask]), color='red', label='Outliers')
                 ax_hist.set_title('Phân bố dữ liệu, KDE và Normal overlay')
                 ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Mật độ xác suất')
