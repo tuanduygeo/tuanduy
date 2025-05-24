@@ -560,6 +560,10 @@ def main():
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
                 plt.close(fig_hist)
+                if len(outliers) > 0:
+                    st.write("Các giá trị outlier (IQR):", outliers)
+                else:
+                    st.write("Không phát hiện outlier.")
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
