@@ -508,6 +508,23 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
+                # VẼ HISTOGRAM cho data_array (DEM gốc)
+                fig_hist, ax_hist = plt.subplots(figsize=(6,3))
+                n, bins, patches = ax_hist.hist(
+                    data_array.ravel(), bins=30, color='gold', alpha=0.75, edgecolor='k'
+                )
+                ax_hist.set_title('Phân bố độ cao địa hình')
+                ax_hist.set_xlabel('Giá trị độ cao (m)')
+                ax_hist.set_ylabel('Tần suất')
+                ax_hist.grid(True, linestyle='--', alpha=0.5)
+                
+                # Nếu muốn vẽ vertical lines cho median, min, max:
+                median_z = np.median(data_array)
+                ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
+                ax_hist.legend()
+                
+                st.pyplot(fig_hist)
+                plt.close(fig_hist)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
