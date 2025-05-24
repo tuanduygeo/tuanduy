@@ -55,7 +55,7 @@ def calc_aspect_and_conj_score(planet, df_planets, config=scoring_config, mult=1
     # Clamp score
     score = max(min(score * mult, config["aspect_weight"]["max"]), -config["aspect_weight"]["max"])
     return score
-def build_life_chart(df_dasha, planet_data,jd, df_planets, planet_to_ruled_houses, config=scoring_config):
+def build_life_chart(df_dasha, planet_data, birth_jd, df_planets, planet_to_ruled_houses, config=scoring_config):
     life_years = []
     life_scores = []
     year_labels = []
@@ -1427,7 +1427,7 @@ def astrology_block():
     
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
-    chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd, df_planets, planet_to_ruled_houses, scoring_config)
+    chart_df, birth_x = build_life_chart(df_dasha, planet_data,birth_jd,, df_planets, planet_to_ruled_houses, scoring_config)
     
     # Vẽ biểu đồ zigzag và đường cong mượt
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
