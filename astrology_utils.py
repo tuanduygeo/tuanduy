@@ -731,15 +731,15 @@ def astrology_block():
         "Nhân Mã": 9, "Ma Kết": 10, "Bảo Bình": 11, "Song Ngư": 12
     }
     nakshatra_to_gana = {
-        "Ashwini": "Thiên thần", "Bharani": "Nhân", "Krittika": "Quỷ thần",
-        "Rohini": "Nhân", "Mrigashira": "Thiên thần", "Ardra": "Nhân",
-        "Punarvasu": "Thiên thần", "Pushya": "Thiên thần", "Ashlesha": "Quỷ thần",
-        "Magha": "Quỷ thần", "P.Phal": "Nhân", "U.Phal": "Nhân",
-        "Hasta": "Thiên thần", "Chitra": "Quỷ thần", "Swati": "Thiên thần", "Vishakha": "Quỷ thần",
-        "Anuradha": "Thiên thần", "Jyeshtha": "Quỷ thần", "Mula": "Quỷ thần",
-        "P.Asad": "Nhân", "U.Asad": "Nhân", "Shravana": "Thiên thần",
-        "Dhanishta": "Quỷ thần", "Shatabhisha": "Quỷ thần", "P.Bhad": "Nhân",
-        "U.Bhad": "Nhân", "Revati": "Thiên thần"
+        "Ashwini": "Thần", "Bharani": "Nhân", "Krittika": "Quỷ",
+        "Rohini": "Nhân", "Mrigashira": "Thần", "Ardra": "Nhân",
+        "Punarvasu": "Thần", "Pushya": "Thần", "Ashlesha": "Quỷ",
+        "Magha": "Quỷ", "P.Phal": "Nhân", "U.Phal": "Nhân",
+        "Hasta": "Thần", "Chitra": "Quỷ", "Swati": "Thần", "Vishakha": "Quỷ",
+        "Anuradha": "Thần", "Jyeshtha": "Quỷ", "Mula": "Quỷ",
+        "P.Asad": "Nhân", "U.Asad": "Nhân", "Shravana": "Thần",
+        "Dhanishta": "Quỷ", "Shatabhisha": "Quỷ", "P.Bhad": "Nhân",
+        "U.Bhad": "Nhân", "Revati": "Thần"
     }
     planet_natural_direction = {
     "Sun": "Đông",
@@ -1245,9 +1245,9 @@ def astrology_block():
                     rule_bonus += 2.5
             m_score += rule_bonus
             m_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == m_lord), "")
-            if m_gana == "Thiên thần":
+            if m_gana == "Thần":
                 m_score += 1
-            elif m_gana == "Quỷ thần":
+            elif m_gana == "Quỷ":
                 m_score -= 1
             m_score += calc_aspect_and_conj_score(m_lord, df_planets)
             # Gán nhãn mục tiêu dựa theo nhà
@@ -1309,9 +1309,9 @@ def astrology_block():
                 elif a_dignity in ["tù", "tử"]:
                     a_score -= 0.5
                 a_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == a_lord), "")
-                if a_gana == "Thiên thần":
+                if a_gana == "Thần":
                     a_score += 0.5
-                elif a_gana == "Quỷ thần":
+                elif a_gana == "Quỷ":
                     a_score -= 0.5    
                 # 4️⃣ Điểm từ phân loại Cát/Hung tinh
                 if a_lord in ["Jupiter", "Venus", "Moon"]:
