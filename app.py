@@ -236,7 +236,7 @@ def main():
                     levels = np.linspace(z_min, z_max, 30)
                 
                 cmap = cm.get_cmap('jet')
-                norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
+                norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.5)
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
                 ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='jet', linewidths=1)
@@ -244,10 +244,10 @@ def main():
                 threshold1 = np.percentile(data_array, 5)
                 for level in levels:
                     if level >= threshold:
-                        color = cmap(norm(level))
+                        color = cmap(norm1(level))
                         ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=4)
                     if level <= threshold1:
-                        color = cmap(norm(level))
+                        color = cmap(norm1(level))
                         ax.contour(Xx3857, Yx3857, data_smooth, levels=[level], colors=[color], linewidths=3)
                 # Vẽ vòng Fibonacci
                 plot_fibonacci_labels_only(ax, x_center, y_center, labels_24, radius=radius*0.7)
