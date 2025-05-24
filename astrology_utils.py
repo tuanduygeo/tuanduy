@@ -1149,7 +1149,7 @@ def astrology_block():
     scoring_config = {
     "house_scores": {
         "benefic": {1:3, 2:2.5, 3:-2, 4:2, 5:2.5, 6:-2, 7:2, 8:-3, 9:3, 10:2, 11:2.5, 12:-3},
-        "malefic": {1:2, 2:1.5, 3:0, 4:1, 5:2, 6:0, 7:2, 8:-3, 9:2, 10:2, 11:3, 12:-3}
+        "malefic": {1:2, 2:1.5, 3:0, 4:1, 5:2, 6:1, 7:2, 8:-3, 9:2, 10:2, 11:3, 12:-3}
     },
     "benefics": {"Jupiter", "Venus", "Moon", "Mercury"},
     "malefics": {"Mars", "Saturn", "Rahu", "Ketu", "Sun"},
@@ -1158,11 +1158,11 @@ def astrology_block():
     "nature_weight": {"Jupiter": 0.5, "Venus": 0.5, "Moon": 0.5, "Mars": -0.5, "Saturn": -0.5, "Rahu": -0.5, "Ketu": -0.5},
     "antar_nature_weight": {"Jupiter": 0.2, "Venus": 0.2, "Moon": 0.2, "Mars": -0.2, "Saturn": -0.2, "Rahu": -0.2, "Ketu": -0.2},
     "rulership_weight": {
-        "maha": {6:-3.5, 8:-3.5, 12:-3.5, 1:3.5, 5:3.5, 9:3.5, 4:1.5, 7:1.5, 10:1.5, 2:2.5, 11:2.5},
-        "antar": {6:-1, 8:-1, 12:-1, 1:1, 5:1, 9:1, 4:0.5, 7:0.5, 10:0.5, 2:0.7, 11:0.7}
+        "maha": {6:-2.5, 8:-3.5, 12:-3.5, 1:3.5, 5:3, 9:3.5, 4:1.5, 7:1.5, 10:2, 2:2.5, 11:2.5},
+        "antar": {6:-0.7, 8:-1, 12:-1, 1:1, 5:1, 9:1, 4:0.5, 7:0.5, 10:0.7, 2:0.8, 11:0.8}
     },
     "gana_weight": {"Thiên thần": 1, "Quỷ thần": -1, "antar_Thiên thần": 0.5, "antar_Quỷ thần": -0.5},
-    "aspect_weight": {"plus": 0.3, "minus": -0.3, "max": 1.0, "antar_mult": 0.5},
+    "aspect_weight": {"plus": 0.5, "minus": -0.5, "max": 1.5, "antar_mult": 0.5},
 }
     def get_house_score(house, planet, config=scoring_config):
         if planet in config["benefics"]:
