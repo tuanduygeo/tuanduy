@@ -980,7 +980,7 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data, datetime_info=None):
+    def draw_chart(planet_data, equal_house_cusps, datetime_info=None):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
@@ -1056,8 +1056,7 @@ def astrology_block():
             ax.set_title("Biểu đồ D1 (Rasi)", fontsize=11, pad=8)
         return fig
         
-    fig_d1 = draw_chart(planet_data, datetime_info)
-    
+    fig_d1 = draw_chart(planet_data, equal_house_cusps, datetime_info)
     df_planets = pd.DataFrame(planet_data)
 
 
