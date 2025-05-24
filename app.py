@@ -557,9 +557,9 @@ def main():
                 ax_hist.legend(prop={'size': 7})
                 ax_hist.grid(True, linestyle='--', alpha=0.5)
                 
-                st.pyplot(fig_hist)
-                plt.close(fig_hist)
-                plt.close(fig_hist)
+                
+                
+                
                 outlier_mask = detect_outlier_iqr(data)
                 outliers = data[outlier_mask]
                 if len(outliers) > 0:
