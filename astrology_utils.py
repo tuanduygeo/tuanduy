@@ -1050,7 +1050,7 @@ def astrology_block():
             rashi_name = get_rashi(cusp_degree)
             rashi_number = rashi_to_number[rashi_name]
             ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
-         if datetime_info:
+        if datetime_info:
             ax.set_title(f"Biểu đồ D1 (Rasi) - {datetime_info}", fontsize=11, pad=8)
         else:
             ax.set_title("Biểu đồ D1 (Rasi)", fontsize=11, pad=8)
