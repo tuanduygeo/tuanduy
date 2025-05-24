@@ -826,7 +826,7 @@ def astrology_block():
         lon_deg_previous = res_previous[0]
         
         # Kiểm tra xem vị trí có thay đổi hướng không
-        # Nếu sự thay đổi giữa hai ngày có dấu hiệu quay ngược, hành tinh đang nghịch hành
+        # Nếu sự thay đổi giữa hai ngày có dấu hiệu quay ngược, hành tinh đang retro
         if lon_deg_current < lon_deg_previous:
             return True
         return False
@@ -857,14 +857,14 @@ def astrology_block():
         "Gana": asc_gana,
         "Nhà": 1,
         "Tính chất": "",
-        "Nghịch hành": ""
+        "retro": ""
     })
 
     for name, code in planets.items():
         # Tính độ của hành tinh ở hiện tại và trước đó
         lon_deg = swe.calc(jd, code, swe.FLG_SIDEREAL)[0][0]
         sun_lon = swe.calc(jd, swe.SUN, swe.FLG_SIDEREAL)[0][0]
-        # Kiểm tra nghịch hành với hai ngày
+        # Kiểm tra retro với hai ngày
         retrograde_status = "R" if is_retrograde(code, jd, jd_previous) else ""
         is_c = is_combust(name, lon_deg, sun_lon, retrograde=(retrograde_status == "R"))
         status = retrograde_status
@@ -880,7 +880,7 @@ def astrology_block():
             "Gana": get_gana(get_nakshatra(lon_deg)),
             "Nhà": get_house_for_planet(lon_deg, equal_house_cusps),
             "Tính chất": get_dignity(name, get_rashi(lon_deg)),
-            "Nghịch hành": status,
+            "retro": status,
             "Hướng": planet_natural_direction.get(name, "")
         })
     # Tìm Rahu trong planet_data
@@ -912,7 +912,7 @@ def astrology_block():
             "Gana": get_gana(ketu_nak),
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
-            "Nghịch hành": "R",  
+            "retro": "R",  
             "Hướng": "Nam",
         })
 
@@ -1228,7 +1228,7 @@ def astrology_block():
                 m_score += 0.5
             elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
                 m_score -= 0.5
-            m_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == m_lord), "")
+            m_status = next((p["retro"] for p in planet_data if p["Hành tinh"] == m_lord), "")
             if "R" in m_status and "C" in m_status:
                 m_score -= 0.5
             # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
@@ -1295,7 +1295,7 @@ def astrology_block():
                         rule_bonus_a += 0.7
                 a_score += rule_bonus_a
                 
-                a_status = next((p["Nghịch hành"] for p in planet_data if p["Hành tinh"] == a_lord), "")
+                a_status = next((p["retro"] for p in planet_data if p["Hành tinh"] == a_lord), "")
                 if "R" in a_status and "C" in a_status:
                     a_score -= 0.2
                 # ✅ Thêm điểm theo dignity (tính chất) của Antardasha lord
@@ -1407,7 +1407,7 @@ def astrology_block():
       được tính từ trước thời điểm người đó sinh và cả sau khi người đó chết. 
     - Các đại vận được hiển thị bằng tên các hành tinh; trong đó quan trọng nhất được tô màu xám hiển thị khoảng 70 năm đời người. 
     - Thang điểm từ -10 đến 10, tức điểm 0 được tô đậm là điểm trung bình, điểm >0 được coi là chấp nhận được.
-    - Biểu đồ được tính từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay nghịch hành, v.v.
+    - Biểu đồ được tính từ các trọng số quan trọng như chủ tinh, vị trí hành tinh, vượng tướng tù tử, đốt cháy hay retro, v.v.
     """)
     pass
 
