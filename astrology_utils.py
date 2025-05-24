@@ -7,6 +7,23 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
+def plot_bav_table(df_bav):
+    fig, ax = plt.subplots(figsize=(1.8 + 0.7 * df_bav.shape[1], 0.8 + 0.3 * df_bav.shape[0]))
+    ax.axis('off')
+    table = ax.table(
+        cellText=df_bav.values,
+        rowLabels=df_bav.index,
+        colLabels=df_bav.columns,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1.2, 1.2)
+    plt.tight_layout()
+    plt.show()
+    return fig
+
 def plot_planet_table(df_planets):
     # Bỏ cột cuối cùng
     df_no_last_col = df_planets.iloc[:, :-1]
@@ -1418,7 +1435,9 @@ def astrology_block():
     
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
-    st.table(df_bav)
+    fig = plot_bav_table(df_bav)
+    st.pyplot(fig)
+    plt.close(fig)
     
    
     st.markdown("""#### 📌 Hướng dẫn
