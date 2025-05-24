@@ -29,6 +29,7 @@ def plot_varga_table_arrow(df_varga, row_total="Tổng"):
                     total_annot.append(str(val))
             else:
                 total_annot.append(str(val))
+        df = df.astype(str)
         df.loc[row_total] = total_annot
 
     fig, ax = plt.subplots(figsize=(1.6 + 0.7 * df.shape[1], 0.8 + 0.3 * df.shape[0]))
