@@ -7,6 +7,31 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
+def plot_yoga_table(yoga_list, user_name=None):
+    # Nếu là string markdown, tách thành list
+    if isinstance(yoga_list, str):
+        lines = [line.strip('-* ') for line in yoga_list.split('\n') if line.startswith('-')]
+    else:
+        lines = yoga_list[:]
+    # Tạo bảng với 1 cột (tên cách cục)
+    n = len(lines)
+    fig, ax = plt.subplots(figsize=(8, 0.8 + 0.4 * n))
+    ax.axis('off')
+    # Đưa vào dạng list of list cho table
+    cell_text = [[s] for s in lines]
+    col_labels = ["Các cách cục Yoga/Dosha nổi bật"]
+    table = ax.table(cellText=cell_text, colLabels=col_labels, cellLoc='left', loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(11)
+    table.scale(1.1, 1.2)
+    # Thêm tiêu đề
+    if user_name:
+        ax.set_title(f"Danh sách Yoga/Dosha – {user_name}", fontsize=12, pad=12)
+    else:
+        ax.set_title("Danh sách Yoga/Dosha", fontsize=12, pad=12)
+    plt.tight_layout()
+    return fig
+
 def plot_varga_table_arrow(df_varga, row_total="Tổng"):
     # Tạo bản sao để không ảnh hưởng dữ liệu gốc
     df = df_varga.copy()
@@ -1454,8 +1479,9 @@ def astrology_block():
     fig = plot_planet_table(df_planets, user_name)
     st.pyplot(fig)
     plt.close(fig)
-    
-    st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
+    fig_yoga = plot_yoga_table(detect_yoga_dosha(df_planets), user_name)
+    st.pyplot(fig_yoga)
+    plt.close(fig_yoga)
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
