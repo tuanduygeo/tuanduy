@@ -44,7 +44,7 @@ def plot_varga_table_arrow(df_varga, row_total="Tổng"):
     table.scale(1.1, 1.2)
     plt.tight_layout()
     return fig
-def plot_planet_table(df_planets):
+def plot_planet_table(df_planets, user_name=None):
     # Bỏ cột cuối cùng (dù tên là gì)
     df_no_last_col = df_planets.iloc[:, :-1]
     fig, ax = plt.subplots(figsize=(1.6 + 0.7 * df_no_last_col.shape[1], 0.8 + 0.3 * df_no_last_col.shape[0]))
@@ -1450,7 +1450,7 @@ def astrology_block():
     plt.close(fig)
     
     
-    fig = plot_planet_table(df_planets)
+    fig = plot_planet_table(df_planets, user_name)
     st.pyplot(fig)
     plt.close(fig)
     
