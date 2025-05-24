@@ -1047,23 +1047,17 @@ def astrology_block():
     def get_aspected_planets(planet_name, current_house):
         if current_house is None:
             return ""
-        
-        # Lấy danh sách khoảng cách các nhà bị chiếu
         aspect_offsets = vedic_aspects.get(planet_name, vedic_aspects["Default"])
-        
-        # Tính các nhà bị chiếu
         aspected_houses = [((current_house + offset - 2) % 12) + 1 for offset in aspect_offsets]
-        
-        # Tìm hành tinh nằm trong các nhà bị chiếu
         result = []
         for other_planet, house in planet_house_map.items():
             if other_planet != planet_name and house in aspected_houses:
-                result.append(f"{other_planet} ( {house})")
+                result.append(f"{other_planet}")  # <-- chỉ lấy tên
         return ", ".join(result)
 
     # Thêm cột vào bảng
     df_planets["Chiếu"] = df_planets.apply(
-        lambda row: get_aspected_planets(row["Hành tinh"]), axis=1
+        lambda row: get_aspected_planets(row["Hành tinh"], row["Nhà"]), axis=1
     )
     
     
