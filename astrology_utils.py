@@ -7,7 +7,7 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
-
+from scipy.stats import norm
 BAV_BinduMatrix = {
     "Sun":     {"Sun":[1,2,4,7,8,9,10,11], "Moon":[3,6,10,11], "Mars":[1,2,4,7,8,9,10,11], "Mercury":[3,5,6,9,10,11,12], "Jupiter":[5,6,9,11], "Venus":[6,7,12], "Saturn":[1,2,4,7,8,9,10,11], "Ascendant":[3,4,6,10,11,12]},
     "Moon":    {"Sun":[3,6,7,8,10,11], "Moon":[1,3,6,7,10,11], "Mars":[2,3,5,6,9,10,11], "Mercury":[1,3,5,6,9,10,11], "Jupiter":[1,4,7,8,10,11,12], "Venus":[3,4,5,7,9,10,11], "Saturn":[3,5,6,11], "Ascendant":[3,6,10,11]},
@@ -1392,16 +1392,30 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
     st.table(df_bav)
-    # Lọc vùng màu xám
+    # Lọc vùng màu xám (0–70 tuổi)
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
+    scores = filtered_df["Điểm số"].values
+    
+    # Tính median, mean, std
+    median_score = np.median(scores)
+    mean_score = np.mean(scores)
+    std_score = np.std(scores)
     
     # Vẽ histogram
     fig, ax = plt.subplots(figsize=(6, 3))
-    ax.hist(filtered_df["Điểm số"], bins=15, color='skyblue', edgecolor='black')
-    ax.axvline(median_score, color='red', linestyle='dashed', linewidth=2, label=f'Median: {round(median_score,2)}')
+    counts, bins, patches = ax.hist(scores, bins=15, color='skyblue', edgecolor='black', alpha=0.7, density=True, label="Histogram")
+    
+    # Vẽ đường phân bố chuẩn
+    x = np.linspace(min(bins), max(bins), 300)
+    y = norm.pdf(x, mean_score, std_score)
+    ax.plot(x, y, color='green', linewidth=2, label=f'Phân bố chuẩn\nμ={mean_score:.2f}, σ={std_score:.2f}')
+    
+    # Vẽ đường median
+    ax.axvline(median_score, color='red', linestyle='dashed', linewidth=2, label=f'Median: {median_score:.2f}')
+    
     ax.set_xlabel("Điểm số")
-    ax.set_ylabel("Tần suất (số lần xuất hiện)")
-    ax.set_title("Histogram phân bố Điểm số đại vận (0–70 tuổi)")
+    ax.set_ylabel("Mật độ/Tần suất")
+    ax.set_title("Histogram & Phân bố chuẩn\nĐiểm số đại vận (0–70 tuổi)")
     ax.legend()
     plt.tight_layout()
     st.pyplot(fig)
