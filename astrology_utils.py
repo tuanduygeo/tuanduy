@@ -7,13 +7,37 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
-def plot_bav_table(df_bav):
-    fig, ax = plt.subplots(figsize=(1.8 + 0.7 * df_bav.shape[1], 0.8 + 0.3 * df_bav.shape[0]))
+def plot_bav_table_arrow(df_bav):
+    # Sao chép bảng để không làm thay đổi dữ liệu gốc
+    df = df_bav.copy()
+    # Định vị dòng "Tổng" (có thể là "Tổng" hoặc "Total" tùy code, sửa cho khớp!)
+    row_total = "Tổng"
+    if row_total in df.index:
+        total_row = df.loc[row_total].copy()
+        total_annot = []
+        for val in total_row:
+            try:
+                val_num = float(val)
+            except:
+                val_num = None
+            if val_num is not None:
+                if val_num > 28:
+                    total_annot.append(f"{val} ↑")
+                elif val_num < 25:
+                    total_annot.append(f"{val} ↓")
+                else:
+                    total_annot.append(str(val))
+            else:
+                total_annot.append(str(val))
+        # Thay dòng Tổng bằng dòng có annotation
+        df.loc[row_total] = total_annot
+
+    fig, ax = plt.subplots(figsize=(1.8 + 0.7 * df.shape[1], 0.8 + 0.3 * df.shape[0]))
     ax.axis('off')
     table = ax.table(
-        cellText=df_bav.values,
-        rowLabels=df_bav.index,
-        colLabels=df_bav.columns,
+        cellText=df.values,
+        rowLabels=df.index,
+        colLabels=df.columns,
         cellLoc='center',
         loc='center'
     )
@@ -23,6 +47,7 @@ def plot_bav_table(df_bav):
     plt.tight_layout()
     plt.show()
     return fig
+
 
 def plot_planet_table(df_planets):
     # Bỏ cột cuối cùng
