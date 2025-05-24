@@ -404,8 +404,8 @@ def detect_yoga_dosha(df_planets):
    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
     trikona_houses = [1, 5, 9]
     kendra_houses = [1, 4, 7, 10]
-    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
-    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ tinh", [])) & set(trikona_houses)]
+    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("chủ tinh", [])) & set(kendra_houses)]
     
     found_raja_yoga = False
     for tr in trikona_rulers:
@@ -509,7 +509,7 @@ def detect_yoga_dosha(df_planets):
     found_dhana = False
     for p in df_planets.to_dict("records"):
         # Chủ của nhà này là gì?
-        rulers = p.get("Chủ tinh của nhà", [])
+        rulers = p.get("chủ tinh", [])
         if not rulers:
             continue
         for r in rulers:
@@ -522,9 +522,9 @@ def detect_yoga_dosha(df_planets):
      # Dhana Yoga:Chủ nhà 6, 8, 12 nằm ở các nhà tài hoặc đồng cung nhà tài.
     daridra_houses = [6, 8, 12]
     for p in df_planets.to_dict("records"):
-        if not p.get("Chủ tinh của nhà", []): continue
+        if not p.get("chủ tinh", []): continue
         for dh in daridra_houses:
-            if dh in p["Chủ tinh của nhà"] and p["Nhà"] in [2, 11]:
+            if dh in p["chủ tinh"] and p["Nhà"] in [2, 11]:
                 res.append("- **Daridra Yoga:** Chủ nhà dusthana nằm ở nhà tài. Tài ↓.")
 
     
@@ -538,7 +538,7 @@ def detect_yoga_dosha(df_planets):
         res.append("- **Saraswati Yoga**: Mercury, Jupiter, Venus mạnh ở Kendra/Trikona với Moon mạnh – học vấn, nghệ thuật nổi bật ↑.")   
     house9_ruler_list = []
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("Chủ tinh của nhà", []):
+        if 9 in p.get("chủ tinh", []):
             house9_ruler_list.append(p)
     for p in house9_ruler_list:
         if p["Tính chất"] in ["vượng", "tướng"] and p["Nhà"] in [1, 4, 5, 7, 9, 10]:
@@ -547,9 +547,9 @@ def detect_yoga_dosha(df_planets):
     house9_ruler = None
     house10_ruler = None
     for p in df_planets.to_dict("records"):
-        if 9 in p.get("Chủ tinh của nhà", []):
+        if 9 in p.get("chủ tinh", []):
             house9_ruler = p
-        if 10 in p.get("Chủ tinh của nhà", []):
+        if 10 in p.get("chủ tinh", []):
             house10_ruler = p
     if house9_ruler and house10_ruler and house9_ruler["Cung"] == house10_ruler["Cung"]:
         res.append("- **Dharma-Karmadhipati Yoga**: Chủ nhà 9 và 10 đồng cung – sự nghiệp-phúc tăng.")
@@ -1029,7 +1029,7 @@ def astrology_block():
     for house, ruler in house_rulers.items():
         planet_to_ruled_houses.setdefault(ruler, []).append(house)
 
-    df_planets["Chủ tinh của nhà"] = df_planets["Hành tinh"].apply(
+    df_planets["chủ tinh"] = df_planets["Hành tinh"].apply(
         lambda p: planet_to_ruled_houses.get(p, [])
     )
     # === Định nghĩa quy tắc chiếu Vedic ===
