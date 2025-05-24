@@ -234,7 +234,7 @@ def main():
                     if abs(z_max - z_min) < 1e-3:
                         z_max = z_min + 1e-3
                     levels = np.linspace(z_min, z_max, 30)
-                st.markdown(f"**Chỉ số Bearing :** `{levels}°`")
+                
                 cmap = cm.get_cmap('rainbow')
                 norm = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.5)
