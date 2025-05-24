@@ -554,7 +554,7 @@ def main():
                 ax_hist.set_title('Phân bố dữ liệu, KDE, Normal và Outlier')
                 ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Mật độ xác suất')
-                ax_hist.legend()
+                ax_hist.legend(prop={'size': 7})
                 ax_hist.grid(True, linestyle='--', alpha=0.5)
                 
                 st.pyplot(fig_hist)
