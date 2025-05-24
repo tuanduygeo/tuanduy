@@ -758,7 +758,10 @@ def astrology_block():
             f"**Năm**: {selected_utc.year} **Tháng**: {selected_utc.month} **Ngày**: {selected_utc.day} "
             f"**Giờ**: {selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} (timezone: {selected_tz})"
         )
-        
+        datetime_info = (
+        f"{selected_utc.year}-{selected_utc.month:02d}-{selected_utc.day:02d} "
+        f"{selected_datetime_local.hour:02d}:{selected_datetime_local.minute:02d} ({selected_tz})"
+    )    
     rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ", "Thiên Bình", "Bọ Cạp",
               "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
     # Danh sách Nakshatra
@@ -977,7 +980,7 @@ def astrology_block():
 
 
     # Hàm vẽ biểu đồ
-    def draw_chart(planet_data):
+    def draw_chart(planet_data, datetime_info=None):
         fig, ax = plt.subplots(figsize=(4,4))
         ax.set_xlim(0, 100)
         ax.set_ylim(0, 100)
@@ -1051,10 +1054,9 @@ def astrology_block():
             ax.set_title(f"Biểu đồ D1 (Rasi) - {datetime_info}", fontsize=11, pad=8)
         else:
             ax.set_title("Biểu đồ D1 (Rasi)", fontsize=11, pad=8)
+        return fig
         
-        return fig  
-        
-    fig_d1 = draw_chart(planet_data)
+    fig_d1 = draw_chart(planet_data, datetime_info)
     
     df_planets = pd.DataFrame(planet_data)
 
