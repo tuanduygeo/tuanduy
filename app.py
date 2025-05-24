@@ -22,7 +22,7 @@ from astrology_utils import astrology_block
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
-
+from scipy.stats import norm, gaussian_kde
 
 
 st.set_page_config(layout="wide")
@@ -508,6 +508,7 @@ def main():
                 if not df_diem.empty:
                     st.dataframe(df_diem)
                 plt.close(fig)
+                
                 data = data_array.ravel()
                 mean = np.mean(data)
                 median_z = np.median(data)
@@ -515,16 +516,25 @@ def main():
                 p5 = np.percentile(data, 5)
                 
                 fig_hist, ax_hist = plt.subplots(figsize=(6, 3))
+                
                 # Vẽ histogram
-                n, bins, patches = ax_hist.hist(data, bins=30, color='gold', alpha=0.75, edgecolor='k', density=True)
+                n, bins, patches = ax_hist.hist(data, bins=30, color='gold', alpha=0.75, edgecolor='k', density=True, label='Histogram')
                 
+                # Vẽ KDE
+                kde = gaussian_kde(data)
+                x_kde = np.linspace(data.min(), data.max(), 200)
+                ax_hist.plot(x_kde, kde(x_kde), color='green', linewidth=2, linestyle='-', label='KDE (Mật độ thực tế)')
                 
+                # Vẽ đường phân phối chuẩn lý thuyết
+                x_norm = np.linspace(data.min(), data.max(), 200)
+                ax_hist.plot(x_norm, norm.pdf(x_norm, mean, np.std(data)), 'r-', linewidth=2, label='Normal fit (chuẩn)')
                 
-                # Vẽ các đường thẳng
+                # Các đường thẳng tham khảo
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
                 ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
                 ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
-                ax_hist.set_title('Phân bố ')
+                
+                ax_hist.set_title('Phân bố dữ liệu, KDE và Normal overlay')
                 ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Mật độ xác suất')
                 ax_hist.legend()
