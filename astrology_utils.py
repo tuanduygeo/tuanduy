@@ -1460,7 +1460,7 @@ def astrology_block():
     
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
-    fig = plot_bav_table(df_bav)
+    fig = plot_bav_table_arrow(df_bav)
     st.pyplot(fig)
     plt.close(fig)
     
