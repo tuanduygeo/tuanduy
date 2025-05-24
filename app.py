@@ -528,7 +528,7 @@ def main():
                 
                 # Normal distribution fit (dùng alias normal_dist)
                 x_norm = np.linspace(data.min(), data.max(), 200)
-                ax_hist.plot(x_norm, normal_dist.pdf(x_norm, mean, std), 'r-', linewidth=2, label='Normal fit (chuẩn)')
+                ax_hist.plot(x_norm, norm.pdf(x_norm, mean, std), 'r-', linewidth=2, label='Normal fit (chuẩn)')
                 
                 # Các đường thẳng
                 ax_hist.axvline(median_z, color='red', linestyle='--', linewidth=2, label=f'Median: {median_z:.2f}')
