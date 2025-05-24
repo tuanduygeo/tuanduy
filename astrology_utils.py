@@ -8,18 +8,19 @@ import matplotlib.pyplot as plt
 import re
 import io
 def plot_planet_table(df_planets):
-    fig, ax = plt.subplots(figsize=(9, 0.6 + 0.3 * len(df_planets)))
+    # Bỏ cột cuối cùng
+    df_no_last_col = df_planets.iloc[:, :-1]
+    fig, ax = plt.subplots(figsize=(9, 0.6 + 0.3 * len(df_no_last_col)))
     ax.axis('off')
-    # Vẽ bảng từ DataFrame
     table = ax.table(
-        cellText=df_planets.values,
-        colLabels=df_planets.columns,
+        cellText=df_no_last_col.values,
+        colLabels=df_no_last_col.columns,
         cellLoc='center',
         loc='center'
     )
     table.auto_set_font_size(False)
     table.set_fontsize(10)
-    table.scale(1.2, 1.2)  # scale bảng cho đẹp
+    table.scale(1.2, 1.2)
     plt.tight_layout()
     plt.show()
     return fig
