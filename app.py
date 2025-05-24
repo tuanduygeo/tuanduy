@@ -551,14 +551,11 @@ def main():
                 ax_hist.axvline(p90, color='darkorange', linestyle='-', linewidth=2, label=f'90%: {p90:.2f}')
                 ax_hist.axvline(p5, color='blue', linestyle='-', linewidth=2, label=f'5%: {p5:.2f}')
                 
-                ax_hist.set_title('Phân bố dữ liệu, KDE, Normal và Outlier')
+                ax_hist.set_title('Phân bố dữ liệu')
                 ax_hist.set_xlabel('Giá trị')
                 ax_hist.set_ylabel('Mật độ xác suất')
                 ax_hist.legend(prop={'size': 7})
                 ax_hist.grid(True, linestyle='--', alpha=0.5)
-                
-                
-                
                 
                 outlier_mask = detect_outlier_iqr(data)
                 outliers = data[outlier_mask]
