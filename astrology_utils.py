@@ -7,6 +7,43 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
+def plot_varga_table_arrow(df_varga, row_total="Tổng"):
+    # Tạo bản sao để không ảnh hưởng dữ liệu gốc
+    df = df_varga.copy()
+    # Nếu có dòng "Tổng", thực hiện thêm mũi tên
+    if row_total in df.index:
+        total_row = df.loc[row_total].copy()
+        total_annot = []
+        for val in total_row:
+            try:
+                val_num = float(val)
+            except:
+                val_num = None
+            if val_num is not None:
+                if val_num > 28:
+                    total_annot.append(f"{val} ↑")
+                elif val_num < 25:
+                    total_annot.append(f"{val} ↓")
+                else:
+                    total_annot.append(str(val))
+            else:
+                total_annot.append(str(val))
+        df.loc[row_total] = total_annot
+
+    fig, ax = plt.subplots(figsize=(1.6 + 0.7 * df.shape[1], 0.8 + 0.3 * df.shape[0]))
+    ax.axis('off')
+    table = ax.table(
+        cellText=df.values,
+        rowLabels=df.index,
+        colLabels=df.columns,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(11)
+    table.scale(1.1, 1.2)
+    plt.tight_layout()
+    return fig
 def plot_planet_table(df_planets):
     # Bỏ cột cuối cùng (dù tên là gì)
     df_no_last_col = df_planets.iloc[:, :-1]
@@ -1416,8 +1453,9 @@ def astrology_block():
     
     df_bav = compute_ashtakavarga(df_planets)
     st.markdown("### Bảng Ashtakavarga ")
-    st.table(df_bav)
-    
+    fig = plot_varga_table_arrow(df_bav)  # hoặc df bất kỳ, miễn có dòng "Tổng"
+    st.pyplot(fig)
+    plt.close(fig)
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
