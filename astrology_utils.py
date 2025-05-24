@@ -58,6 +58,10 @@ def plot_planet_table(df_planets):
     table.auto_set_font_size(False)
     table.set_fontsize(11)
     table.scale(1.1, 1.2)
+    if user_name:
+        plt.title(f"Vị trí hành tinh – {user_name}", fontsize=12, pad=12)
+    else:
+        plt.title("Vị trí hành tinh", fontsize=12, pad=12)
     plt.tight_layout()
     return fig
 BAV_BinduMatrix = {
