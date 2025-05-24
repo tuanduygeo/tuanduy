@@ -1043,9 +1043,9 @@ def astrology_block():
             ax.text(x-2, y + 2, str(rashi_number), fontsize=5, color='red',weight='bold')
         # Thêm tiêu đề (title) có tên người xem lá số
         if user_name:
-            ax.set_title(f"Biểu đồ sinh - {user_name}", fontsize=8, pad=8)
+            ax.set_title(f"{user_name}", fontsize=8, pad=8)
         else:
-            ax.set_title("Biểu đồ sinh ", fontsize=8, pad=8)
+            ax.set_title("", fontsize=8, pad=8)
         return fig  
         
     fig_d1 = draw_chart(planet_data, user_name)
