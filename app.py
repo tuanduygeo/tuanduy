@@ -451,7 +451,24 @@ def main():
                                 zorder=98,
                                 color=color
                             )   
-                      
+                            # === Thêm điểm ngay bên cạnh ===
+                            # Tìm điểm tương ứng
+                            diem_val = None
+                            for diem in diem_chi_tiet:
+                                if diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']:
+                                    diem_val = diem['diem']
+                                    break
+                            if diem_val is not None:
+                                # In điểm (vd: +1 hoặc -1), dịch ra bên phải một chút cho dễ nhìn
+                                ax.text(
+                                    x_icon + 18, y_icon,    # bạn có thể chỉnh offset này tuỳ map
+                                    f"{'+' if diem_val>0 else ''}{diem_val}",
+                                    ha='left', va='center',
+                                    fontsize=14,
+                                    fontweight='bold',
+                                    color='red' if diem_val>0 else 'blue',
+                                    zorder=100
+                                )
     
             if not df_son.empty:
                 df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
