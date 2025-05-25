@@ -250,9 +250,34 @@ def main():
                 
                 cmap = matplotlib.colormaps['jet']
                 norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
+                data = data_array.ravel()
+
+                # Phát hiện outlier bằng IQR
+                def detect_outlier_iqr(data, k=1.5):
+                    Q1 = np.percentile(data, 25)
+                    Q3 = np.percentile(data, 75)
+                    IQR = Q3 - Q1
+                    lower_bound = Q1 - k * IQR
+                    upper_bound = Q3 + k * IQR
+                    return (data < lower_bound) | (data > upper_bound)
+                outlier_mask = detect_outlier_iqr(data)
+                data_no_outlier = data[~outlier_mask]
+                
+                # Xác định min/max cho levels contour trên data đã loại outlier
+                z_min, z_max = float(data_no_outlier.min()), float(data_no_outlier.max())
+                if z_min == z_max:
+                    levels = np.linspace(z_min - 1, z_max + 1, 30)
+                else:
+                    if abs(z_max - z_min) < 1e-3:
+                        z_max = z_min + 1e-3
+                    levels = np.linspace(z_min, z_max, 30)
+                
+                cmap = matplotlib.colormaps['jet']
+                norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.5)
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
                 ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='jet', linewidths=1)
+
                 threshold = np.percentile(data_array, 90)
                 threshold1 = np.percentile(data_array, 5)
                 for level in levels:
