@@ -510,7 +510,7 @@ def main():
                                 zorder=100,
                                 alpha=0.85
                             )
-            
+                            st.write(diem_chi_tiet)
                 ax.set_axis_off()
                 scale_length = 100  # 100m
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
