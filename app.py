@@ -126,7 +126,7 @@ def main():
     with col4:
         diachi = st.text_input("địa chỉ", value="")
     with col5:
-        st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
         run = st.button("Run", use_container_width=True)
    
     x = y = None
