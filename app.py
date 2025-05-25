@@ -626,21 +626,25 @@ def main():
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
+                # === Vẽ dải Mạch chính ===
+                bearing_main = manual_bearing if manual_bearing is not None else bearing
+                
                 plot_parallel_zones(
                     ax, x_center, y_center,
                     radius=100,
-                    bearing_deg=(manual_bearing if manual_bearing is not None else bearing),
+                    bearing_deg=bearing_main,
                     d=distance_between_zones,
                     offset_d=offset_d,
                     rotate_angle=rotate_angle
                 )
-                # Dải phụ, thường vuông góc (có thể để bearing_deg2 = bearing_deg + 90)
-                bearing_main = manual_bearing if manual_bearing is not None else bearing
+                
+                # === Vẽ dải Mạch phụ (vuông góc với mạch chính) ===
                 bearing_deg2 = (bearing_main + 90) % 360
+                
                 plot_parallel_zones2(
                     ax, x_center, y_center,
                     radius=100,
-                    bearing_deg2 = bearing_deg2,
+                    bearing_deg2=bearing_deg2,
                     d2=distance_between_zones2,
                     offset_d2=offset_d2,
                     rotate_angle2=rotate_angle2
