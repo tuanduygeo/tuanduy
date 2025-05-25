@@ -235,33 +235,24 @@ def main():
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
                 
+                # Vẽ contour DEM
+                # Tạo 21 levels đều nhau giữa min và max
+                z_min, z_max = float(data_array.min()), float(data_array.max())
+                if z_min == z_max:
+                    # Nếu dữ liệu phẳng (không có biến động)
+                    levels = np.linspace(z_min - 1, z_max + 1, 30)
+                else:
+                    # Nếu khoảng cách quá nhỏ, mở rộng một chút cho đẹp
+                    if abs(z_max - z_min) < 1e-3:
+                        z_max = z_min + 1e-3
+                    levels = np.linspace(z_min, z_max, 30)
                 
-                
-
-                # Phát hiện outlier bằng IQR
-                def detect_outlier_iqr(data, k=1.5):
-                    Q1 = np.percentile(data, 25)
-                    Q3 = np.percentile(data, 75)
-                    IQR = Q3 - Q1
-                    lower_bound = Q1 - k * IQR
-                    upper_bound = Q3 + k * IQR
-                    return (data < lower_bound) | (data > upper_bound)
-                data_1d = data_array.ravel()
-                low_thres = np.percentile(data_1d, 0.001)
-                high_thres = np.percentile(data_1d, 99.99)
-                mask_keep = (data_array >= low_thres) & (data_array <= high_thres)
-                data_no_extreme = np.where(mask_keep, data_array, np.nan)
-                
-                valid_data = data_no_extreme[~np.isnan(data_no_extreme)]
-                z_min, z_max = valid_data.min(), valid_data.max()
-                levels = np.linspace(z_min, z_max, 30)
                 
                 cmap = matplotlib.colormaps['jet']
                 norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
-                data_smooth = gaussian_filter(data_no_extreme, sigma=1.5)
+                data_smooth = gaussian_filter(data_array, sigma=1.5)
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
                 ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='jet', linewidths=1)
-
                 threshold = np.percentile(data_array, 90)
                 threshold1 = np.percentile(data_array, 5)
                 for level in levels:
