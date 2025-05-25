@@ -1406,7 +1406,6 @@ def astrology_block():
     ax.set_xlabel("Tuổi")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
-    ax.legend()
     st.pyplot(fig,use_container_width=False)
     plt.close(fig)
     
