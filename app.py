@@ -233,8 +233,8 @@ def main():
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
-                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=17)
-                ax.imshow(img, extent=ext, origin="upper")
+                # img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=17)
+                # ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
                 
@@ -541,6 +541,19 @@ def main():
                 df_diem = pd.DataFrame(diem_chi_tiet)
                 if not df_diem.empty:
                     st.dataframe(df_diem)
+                st.session_state['fig'] = fig
+                st.session_state['ax'] = ax
+                st.session_state['img_extent'] = (x0, y0, x1, y1)
+                if 'fig' in st.session_state and st.button("Thêm nền vệ tinh"):
+                fig = st.session_state['fig']
+                ax = st.session_state['ax']
+                x0, y0, x1, y1 = st.session_state['img_extent']
+            
+                import contextily as ctx
+                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=17)
+                ax.imshow(img, extent=ext, origin="upper", zorder=0)  # zorder=0 để không đè lên các icon/dấu
+            
+                st.pyplot(fig)
                 plt.close(fig)
                 
                 data = data_array.ravel()
@@ -610,6 +623,7 @@ def main():
                 ax_hist.legend(prop={'size': 7})
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
+                
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
