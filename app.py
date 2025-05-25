@@ -39,15 +39,15 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
 
     # Độ rộng từng màu
     d_red = d
-    d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d  # để tránh chia 0
+    d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d
 
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    offset = offset_d
-    i = 0
-    while abs(offset) < radius * 1.5:  # để đảm bảo phủ kín
+    # *** Sửa offset chạy từ -radius ***
+    offset = -radius
+    while offset < radius:
         # Vẽ dải đỏ
         cx = x_center + nx * offset
         cy = y_center + ny * offset
@@ -73,12 +73,10 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         ax.add_patch(rect_blue)
 
         offset += d_blue
-        i += 1
 
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
 def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red=0.5):
-    n = int(2 * radius // d2) + 2
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
     dx = np.cos(theta)
     dy = np.sin(theta)
@@ -89,12 +87,14 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
     d_red = d2
     d_blue = d2 * (1 - ratio_red) / ratio_red if ratio_red > 0 else d2  # tránh chia 0
 
+    # Tạo clip vòng tròn
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    offset = offset_d2
-    while abs(offset) < radius * 1.5:  # để phủ kín vòng tròn
+    # **Chạy offset từ -radius đến +radius**
+    offset = -radius + offset_d2
+    while offset < radius:
         # Vẽ dải đỏ
         cx = x_center + nx * offset
         cy = y_center + ny * offset
@@ -121,6 +121,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
 
         offset += d_blue
 
+    # Vẽ lại viền vòng tròn cho đẹp
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
 
