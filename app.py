@@ -230,25 +230,29 @@ def main():
     col1, col2, col3, col4, col5 = st.columns([1 ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
-        
-        ratio_red=st.number_input("tỷ số tốt/xấu- chính", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
-        ratio_red2=st.number_input("tỷ số tốt/xấu- phụ", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
-    with col2:
-        dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
-        distance_between_zones2 = st.number_input("Mạch phụ rộng(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
-    with col3:
-        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
-        offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
-        offset_d2 = st.number_input("Dịch chuyển ngang-phụ (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
-    with col4:
+        run = st.button("Tính toán", use_container_width=True)
         diachi = st.text_input("địa chỉ", value="")
+        dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
+        
+        
+    with col2:
+        distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
         rotate_angle = st.number_input("Góc lệch mạch-chính (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
+        ratio_red=st.number_input("tỷ số tốt/xấu- chính", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
+    with col3:
+        distance_between_zones2 = st.number_input("Mạch phụ rộng(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        offset_d2 = st.number_input("Dịch chuyển ngang-phụ (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
         rotate_angle2 = st.number_input("Góc lệch mạch-phụ (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
-    with col5:
+        ratio_red2=st.number_input("tỷ số tốt/xấu- phụ", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
+    with col4:
+        manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         show_main = st.checkbox("Hiện Mạch chính", value=False)
         show_sub = st.checkbox("Hiện Mạch phụ", value=False)
-        run = st.button("Run", use_container_width=True)
+        
+    
+        
+        
    
     x = y = None
     if input_str:
