@@ -164,7 +164,7 @@ def main():
         input_str = st.text_input("Nhập", value="")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        d = st.number_input("Khoảng cách giữa các dải (m)", min_value=1.0, max_value=50.0, value=10.0, step=1.0)
+        distance_between_zones = st.number_input("Khoảng cách giữa các dải (m)", min_value=1.0, max_value=50.0, value=10.0, step=1.0)
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
     with col4:
@@ -578,7 +578,7 @@ def main():
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
-                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0),d)
+                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0),d=distance_between_zones)
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
