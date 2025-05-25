@@ -670,7 +670,12 @@ def main():
                 median_z = np.median(data_array)
                 d=30
                 # Xác định offset_d để màu đúng ý
-                offset_d = 0 if value_center > median_z else d
+                if value_center > median_z:
+                    offset_d = 0
+                    st.write(f'Giá trị tại tâm ({value_center:.2f}) > median ({median_z:.2f}): **CAO**')
+                else:
+                    offset_d = d
+                    st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
                 offsetd2=offset_d
                 if show_main:
                     plot_parallel_zones(
