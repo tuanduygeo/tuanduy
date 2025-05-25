@@ -6,6 +6,7 @@ import math
 from datetime import date, timedelta, datetime
 import swisseph as swe
 import pytz
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
@@ -246,7 +247,8 @@ def main():
                         z_max = z_min + 1e-3
                     levels = np.linspace(z_min, z_max, 30)
                 
-                cmap = cm.get_cmap('jet')
+                
+                cmap = matplotlib.colormaps['jet']
                 norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
                 data_smooth = gaussian_filter(data_array, sigma=1.5)
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
