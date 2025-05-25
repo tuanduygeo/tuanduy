@@ -126,7 +126,7 @@ def main():
     st.markdown("### 1.") 
     # 1. tính ========================
        # --- Giao diện nhập ---
-    col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
+    col1, col2, col3, col4 = st.columns([2, ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập", value="")
     with col2:
@@ -134,6 +134,8 @@ def main():
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
     with col4:
+        diachi = st.text_input("địa chỉ", value="")
+    with col5:
         run = st.button("Run", use_container_width=True)
    
     x = y = None
@@ -513,7 +515,8 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
-                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) | Hiệu số: {diem_tong}| Độ từ thiên: {declination_str}°", 
+                ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) | Địa chỉ: {diachi} | Hiệu số: {diem_tong} | Độ từ thiên: {declination_str}°", 
+    fontsize=16, fontweight='bold', color='#f9d423', pad=18) 
              fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
