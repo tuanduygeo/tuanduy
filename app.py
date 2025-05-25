@@ -231,9 +231,9 @@ def main():
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         run = st.button("Tính toán", use_container_width=True)
+        show_main = st.checkbox("Hiện Mạch chính", value=False)
+        show_sub = st.checkbox("Hiện Mạch phụ", value=False)
         diachi = st.text_input("địa chỉ", value="")
-        dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        
         
     with col2:
         distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
@@ -247,8 +247,8 @@ def main():
         ratio_red2=st.number_input("tỷ số tốt/xấu- phụ", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
     with col4:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
-        show_main = st.checkbox("Hiện Mạch chính", value=False)
-        show_sub = st.checkbox("Hiện Mạch phụ", value=False)
+        dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
+        
         
     
         
