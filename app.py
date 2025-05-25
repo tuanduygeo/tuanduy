@@ -27,7 +27,49 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-
+def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10):
+    # bearing_deg: góc phương song song (0 là Bắc), d là khoảng cách giữa các đường (m)
+    n = int(radius // d)
+    # Tính toán hướng song song
+    theta = np.deg2rad(90 - bearing_deg)  # 0 độ là hướng Bắc
+    # Vector song song
+    dx = np.cos(theta)
+    dy = np.sin(theta)
+    # Vector vuông góc (để tạo các đoạn song song nhau)
+    nx = -dy
+    ny = dx
+    
+    for i in range(-n, n):
+        offset = i * d
+        # Tọa độ hai điểm cắt vòng tròn bán kính "radius"
+        px0 = x_center + nx * offset + dx * radius
+        py0 = y_center + ny * offset + dy * radius
+        px1 = x_center + nx * offset - dx * radius
+        py1 = y_center + ny * offset - dy * radius
+        # Giới hạn lại các đoạn nằm trong vòng tròn
+        # Tính toán góc trên vòng tròn
+        angle1 = np.arctan2(py0 - y_center, px0 - x_center)
+        angle2 = np.arctan2(py1 - y_center, px1 - x_center)
+        # Hai điểm đầu, cuối trên vòng tròn
+        r1x = x_center + np.cos(angle1) * radius
+        r1y = y_center + np.sin(angle1) * radius
+        r2x = x_center + np.cos(angle2) * radius
+        r2y = y_center + np.sin(angle2) * radius
+        # Fill vùng giữa hai đường
+        if i % 2 == 0:
+            color = (1, 0, 0, 0.14) # Đỏ trong suốt
+        else:
+            color = (0, 0.4, 1, 0.14) # Xanh trong suốt
+        # Tạo polygon bọc giữa 2 đường song song và vòng tròn
+        polygon = plt.Polygon([
+            [r1x, r1y],
+            [r2x, r2y],
+            [x_center + nx * (offset + d) + dx * radius, y_center + ny * (offset + d) + dy * radius],
+            [x_center + nx * (offset + d) - dx * radius, y_center + ny * (offset + d) - dy * radius]
+        ], closed=True, facecolor=color, edgecolor=None, linewidth=0)
+        ax.add_patch(polygon)
+        # Vẽ đường kẻ chính giữa vùng
+        ax.plot([r1x, r2x], [r1y, r2y], color='white', linewidth=1, alpha=0.4)
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
     import rasterio
@@ -605,7 +647,7 @@ def main():
                     
                 else:
                     st.write("Không tìm thấy điểm giao cắt giữa KDE và normal fit.")
-                
+                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0), d=st.number_input("Khoảng cách các dải (m)", min_value=1.0, max_value=100.0, value=10.0, step=1.0))
                 ax_hist.legend(prop={'size': 7})
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
