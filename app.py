@@ -512,7 +512,8 @@ def main():
                                     fontsize=14,
                                     fontweight='bold',
                                     color=color_score,
-                                    zorder=100
+                                    zorder=100,
+                                    bbox=dict(facecolor='white', edgecolor='none', boxstyle='round,pad=0.01', alpha=0.7)
                                 )
                         
                             
