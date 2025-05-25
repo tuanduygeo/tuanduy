@@ -668,7 +668,7 @@ def main():
                 
                 # Xác định median
                 median_z = np.median(data_array)
-                
+                d=30
                 # Xác định offset_d để màu đúng ý
                 offset_d = 0 if value_center > median_z else d
                 offsetd2=offset_d
