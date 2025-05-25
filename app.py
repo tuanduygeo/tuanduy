@@ -414,6 +414,9 @@ def main():
                         ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='purple',fontweight='bold', zorder=99)
                 if not df_son.empty:
                     df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
+                    median_z = np.median(data_array)
+                    diem_tong = 0
+                    diem_chi_tiet = []
                     for _, row in df_son.iterrows():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
@@ -427,38 +430,32 @@ def main():
                             x_icon = x_center + np.cos(angle) * r_icon
                             y_icon = y_center + np.sin(angle) * r_icon
                     
-                            # --- Icon & màu sắc ---
-                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
-                                icon = "Sơn"
-                                color = "#ffd600"
-                            elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
-                                icon = "S"
-                                color = "#e65100"
-                            elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
-                                icon = "Thủy"
-                                color = "#00b8d4"
-                            elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
-                                icon = "T"
-                                color = "#01579b"
+                            # TÍNH điểm (đã có trong code bạn)
+                            if row['zone'] == "cung vị sơn":
+                                diem = 1 if value >= median_z else -1
+                            elif row['zone'] == "cung vị thủy":
+                                diem = 1 if value <= median_z else -1
                             else:
-                                continue
-                    
-                            ax.text(
-                                x_icon, y_icon, icon,
-                                ha='center', va='center',
-                                fontsize=14,
-                                fontweight='bold',
-                                zorder=98,
-                                color=color
-                            )   
-                            diem_row = next((item for item in diem_chi_tiet if item['son'] == row['son'] and item['zone'] == row['zone']), None)
-                            if diem_row:
+                                diem = 0
+                
+                            diem_tong += diem
+                            diem_chi_tiet.append({
+                                'son': row['son'],
+                                'zone': row['zone'],
+                                'group': row['group'],
+                                'giatri': value,
+                                'median': median_z,
+                                'diem': diem
+                            })
+                
+                            # VẼ dấu + hoặc - lên bản đồ (chỉ hiện nếu là +1 hoặc -1)
+                            if diem != 0:
                                 ax.text(
-                                    x_icon, y_icon + 8,  # có thể chỉnh 8 thành 10 tùy đẹp
-                                    '+' if diem_row['diem'] > 0 else '-',
+                                    x_icon, y_icon + 8,
+                                    '+' if diem > 0 else '-',
                                     ha='center', va='center',
                                     fontsize=17,
-                                    color='red' if diem_row['diem'] > 0 else 'blue',
+                                    color='red' if diem > 0 else 'blue',
                                     fontweight='bold',
                                     zorder=100,
                                     alpha=0.85
