@@ -674,7 +674,7 @@ def main():
                     offset_d = 0
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) > median ({median_z:.2f}): **CAO**')
                 else:
-                    offset_d = d
+                    offset_d = d/2
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
                 offsetd2=offset_d
                 if show_main:
