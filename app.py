@@ -77,7 +77,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
 
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
-def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=60, offset_d2=0, rotate_angle2=0, ratio_red=0.5):
+def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red=0.5):
     n = int(2 * radius // d2) + 2
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
     dx = np.cos(theta)
@@ -217,7 +217,7 @@ def main():
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         st.markdown("<div style='height:36px'></div>", unsafe_allow_html=True)
-        ratio_red=st.number_input("tỷ số tốt/xấu", min_value=0, max_value=1, value=0.5, step=0.2, format="%.3f")
+        ratio_red=st.number_input("tỷ số tốt/xấu", min_value=0, max_value=1, value=0.5, step=0.2, format="%.1f")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
         distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
