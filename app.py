@@ -30,28 +30,31 @@ import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
 def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0, ratio_red=0.5):
+    """
+    Vẽ dải song song kín toàn bộ vòng tròn, offset_d dịch chuyển thật sự!
+    """
     theta = np.deg2rad(90 - bearing_deg - rotate_angle)
     dx = np.cos(theta)
     dy = np.sin(theta)
     nx = -dy
     ny = dx
 
+    # Độ rộng từng màu
     d_red = d
-    d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d
+    d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d  # tránh chia 0
 
+    # Vòng tròn clip path
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    # Offset khởi tạo để tâm nằm giữa dải đỏ
-    offset = - (d_red / 2) - offset_d
-    cycle = d_red + d_blue
-    L = 2 * radius
-    n_cycles = int(np.ceil(L / cycle)) + 2
+    # Dải phủ kín từ -radius đến +radius, offset_d được cộng cho từng bước
+    offset = -radius
+    while offset < radius:
+        # Cộng offset_d vào từng vị trí
+        total_offset = offset + offset_d
 
-    for i in range(n_cycles):
         # Dải đỏ
-        total_offset = offset + i * cycle
         cx = x_center + nx * total_offset
         cy = y_center + ny * total_offset
         rect_red = Rectangle(
@@ -62,10 +65,12 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         rect_red.set_clip_path(circle)
         ax.add_patch(rect_red)
 
+        offset += d_red
+
         # Dải xanh
-        total_offset_blue = total_offset + d_red
-        cx = x_center + nx * total_offset_blue
-        cy = y_center + ny * total_offset_blue
+        total_offset = offset + offset_d
+        cx = x_center + nx * total_offset
+        cy = y_center + ny * total_offset
         rect_blue = Rectangle(
             (-radius, -d_blue / 2), 2 * radius, d_blue,
             facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
@@ -74,7 +79,8 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         rect_blue.set_clip_path(circle)
         ax.add_patch(rect_blue)
 
-    # Viền vòng tròn ngoài cho đẹp
+        offset += d_blue
+      # Viền vòng tròn ngoài cho đẹp
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
 def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red2=0.5):
