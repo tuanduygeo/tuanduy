@@ -661,6 +661,17 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
+                # Tìm giá trị DEM tại tâm
+                i_center = np.argmin(np.abs(yt - lat0))
+                j_center = np.argmin(np.abs(xt - lon0))
+                value_center = data_array[i_center, j_center]
+                
+                # Xác định median
+                median_z = np.median(data_array)
+                
+                # Xác định offset_d để màu đúng ý
+                offset_d = 0 if value_center > median_z else d
+                offsetd2=offset_d
                 if show_main:
                     plot_parallel_zones(
                         ax, x_center, y_center,
