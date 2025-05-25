@@ -131,7 +131,7 @@ def main():
     st.markdown("### 1.") 
     # 1. tính ========================
        # --- Giao diện nhập ---
-    col1, col2, col3, col4 = st.columns([2 ,1, 1, 1, 1])
+    col1, col2, col3, col4, col5 = st.columns([2 ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập", value="")
     with col2:
