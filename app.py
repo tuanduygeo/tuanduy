@@ -70,7 +70,47 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     # Vẽ lại vòng tròn outline để rõ khu vực
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
+def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0):
+    n = int(2 * radius // d2) + 2  # Nhiều hơn một chút để đủ phủ hết hình tròn
+    theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
+    dx = np.cos(theta)
+    dy = np.sin(theta)
+    # Vector vuông góc (để tạo các dải song song nhau)
+    nx = -dy
+    ny = dx
 
+    # Vẽ vòng tròn để làm clip path
+    circle = Circle((x_center, y_center), radius, transform=ax.transData)
+    ax.add_patch(circle)
+    circle.set_visible(False)  # Không hiện, chỉ dùng làm clip
+
+    for i in range(-n, n):
+        offset = i * d2 + offset_d2    # Đã sửa lại đúng tên biến
+        # Tìm tâm của dải hiện tại
+        cx = x_center + nx * offset
+        cy = y_center + ny * offset
+        # Màu xen kẽ
+        color = (0, 1, 0, 0.12) if i % 2 == 0 else (0, 0.6, 1, 0.12)  # Gợi ý: màu khác hệ 1 cho dễ phân biệt!
+        # Tạo hình chữ nhật dải: rộng = 2*radius, dài = d2
+        rect = Rectangle(
+            (-radius, -d2 / 2), 2 * radius, d2,
+            facecolor=color,
+            edgecolor='none',
+            linewidth=0,
+            alpha=0.2
+        )
+        # Xoay và dịch hình chữ nhật vào đúng vị trí
+        t = transforms.Affine2D() \
+            .rotate_around(0, 0, theta) \
+            .translate(cx, cy) + ax.transData
+        rect.set_transform(t)
+        # Clip bởi hình tròn
+        rect.set_clip_path(circle)
+        ax.add_patch(rect)
+
+    # Vẽ lại vòng tròn outline để rõ khu vực
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
+    ax.add_patch(circle_vis)
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
     import rasterio
@@ -156,21 +196,26 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### 1.") 
+    st.markdown("### 1. Địa mạch") 
     # 1. tính ========================
        # --- Giao diện nhập ---
     col1, col2, col3, col4, col5 = st.columns([2 ,1, 1, 1, 1])
     with col1:
-        input_str = st.text_input("Nhập", value="")
+        input_str = st.text_input("Nhập x,y", value="")
+        st.markdown("**Thông số Mạch chính**")
+        st.markdown("**Thông số Mạch phụ**")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
         distance_between_zones = st.number_input("Khoảng cách giữa các dải (m)", min_value=1.0, max_value=50.0, value=10.0, step=1.0)
+        distance_between_zones2 = st.number_input("Khoảng cách giữa các dải (m)", min_value=1.0, max_value=50.0, value=10.0, step=1.0)
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         offset_d = st.number_input("Dịch chuyển ngang (m)", min_value=-100.0, max_value=100.0, value=0.0, step=1.0)
+        offset_d2 = st.number_input("Dịch chuyển ngang (m)", min_value=-100.0, max_value=100.0, value=0.0, step=1.0)
     with col4:
         diachi = st.text_input("địa chỉ", value="")
         rotate_angle = st.number_input("Góc lệch mạch (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
+        rotate_angle2 = st.number_input("Góc lệch mạch (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
     with col5:
         st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
         run = st.button("Run", use_container_width=True)
@@ -588,6 +633,16 @@ def main():
                     offset_d=offset_d,
                     rotate_angle=rotate_angle
                 )
+                # Dải phụ, thường vuông góc (có thể để bearing_deg2 = bearing_deg + 90)
+                plot_parallel_zones2(
+                    ax, x_center, y_center,
+                    radius=100,
+                    bearing_deg2=bearing_deg2,
+                    d2=distance_between_zones2,
+                    offset_d2=offset_d2,
+                    rotate_angle2=rotate_angle2
+                )
+
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
