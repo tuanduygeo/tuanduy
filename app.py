@@ -27,7 +27,7 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10, offset_d=0, rotate_angle=0):
+def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0):
     """
     - bearing_deg: hướng chính các đường song song (0=Bắc)
     - d: khoảng cách giữa các dải
@@ -586,7 +586,7 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 plot_parallel_zones(
                     ax, x_center, y_center,
-                    radius=300,
+                    radius=100,
                     bearing_deg=(manual_bearing if manual_bearing is not None else 0),
                     d=distance_between_zones,
                     offset_d=offset_d,
