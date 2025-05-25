@@ -126,7 +126,7 @@ def main():
     st.markdown("### 1.") 
     # 1. tính ========================
        # --- Giao diện nhập ---
-    col1, col2, col3, col4 = st.columns([2, ,1, 1, 1, 1])
+    col1, col2, col3, col4 = st.columns([2 ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập", value="")
     with col2:
@@ -517,7 +517,7 @@ def main():
                 x_end = x_start + scale_length
                 ax.set_title(f"Sơ đồ địa mạch ({x:.6f}, {y:.6f}) | Địa chỉ: {diachi} | Hiệu số: {diem_tong} | Độ từ thiên: {declination_str}°", 
     fontsize=16, fontweight='bold', color='#f9d423', pad=18) 
-             fontsize=16, fontweight='bold', color='#f9d423', pad=18)
+             
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
                 # Vẽ hai gạch đứng ở hai đầu (nếu thích)
