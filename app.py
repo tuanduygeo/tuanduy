@@ -486,7 +486,7 @@ def main():
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
-                                fontsize=10,
+                                fontsize=12,
                                 fontweight='bold',
                                 zorder=98,
                                 color=color
@@ -504,7 +504,7 @@ def main():
                                 if icon in ["S", "T"]:
                                     offset_x = 6   # sát hơn
                                 else:
-                                    offset_x = 35   # xa hơn
+                                    offset_x = 30   # xa hơn
                                 ax.text(
                                     x_icon + offset_x, y_icon,
                                     dau,
@@ -513,7 +513,7 @@ def main():
                                     fontweight='bold',
                                     color=color_score,
                                     zorder=100,
-                                    bbox=dict(facecolor='white', edgecolor='none', boxstyle='round,pad=0.01', alpha=0.7)
+                                    bbox=dict(facecolor='white', edgecolor='none', boxstyle='round,pad=0.01', alpha=0.4)
                                 )
                         
                             
