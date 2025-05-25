@@ -48,8 +48,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    # Dải phủ kín từ -radius đến +radius, offset_d được cộng cho từng bước
-    offset = -offset_d
+    offset = -radius
     while offset < radius:
         total_offset = offset + offset_d
         # Dải đỏ
