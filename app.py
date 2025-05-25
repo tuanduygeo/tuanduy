@@ -461,7 +461,7 @@ def main():
                             if diem_val is not None:
                                 # In điểm (vd: +1 hoặc -1), dịch ra bên phải một chút cho dễ nhìn
                                 ax.text(
-                                    x_icon + 18, y_icon,    # bạn có thể chỉnh offset này tuỳ map
+                                    x_icon , y_icon,    # bạn có thể chỉnh offset này tuỳ map
                                     f"{'+' if diem_val>0 else ''}{diem_val}",
                                     ha='left', va='center',
                                     fontsize=14,
