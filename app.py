@@ -24,7 +24,7 @@ from scipy.ndimage import gaussian_filter
 import re
 import geomag
 from scipy.stats import norm, gaussian_kde
-
+import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
 @st.cache_data
@@ -106,6 +106,16 @@ def extract_phongthuy_data(n_text):
 
 
 def main():
+    usernames = ['admin']
+    passwords = ['111111']  # Để bảo mật hơn, dùng hashed password
+    authenticator = stauth.Authenticate(usernames, passwords, 'cookie_name', 'signature_key', cookie_expiry_days=1)
+    name, authentication_status, username = authenticator.login('Đăng nhập', 'main')
+    if authentication_status is False:
+        st.error('Sai tên đăng nhập hoặc mật khẩu')
+        st.stop()
+    elif authentication_status is None:
+        st.warning('Vui lòng nhập tài khoản và mật khẩu')
+        st.stop()
     st.markdown("""
     <div style="background:linear-gradient(90deg,#f9d423,#ff4e50);padding:24px 8px 20px 8px;border-radius:16px;margin-bottom:24px;">
         <h1 style='color:white;text-align:center;margin:0;font-size:36px;'>🔯 ỨNG DỤNG  ĐỊA LÝ & CHIÊM TINH </h1>
