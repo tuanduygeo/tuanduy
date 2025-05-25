@@ -464,7 +464,7 @@ def main():
                             # Chọn icon & màu sắc
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
                                 icon = "Sơn"
-                                color = "#ffd600"
+                                color = "red"
                                 color_score = "red"
                             elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
                                 icon = "S"
