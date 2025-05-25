@@ -201,7 +201,7 @@ def main():
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         st.markdown("**Thông số Mạch chính**")
-        st.markdown("<div style='height:26px'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:36px'></div>", unsafe_allow_html=True)
         st.markdown("**Thông số Mạch phụ**")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
