@@ -485,7 +485,7 @@ def main():
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
-                                fontsize=10,
+                                fontsize=14,
                                 fontweight='bold',
                                 zorder=98,
                                 color=color
@@ -508,7 +508,7 @@ def main():
                                     x_icon + offset_x, y_icon,
                                     dau,
                                     ha='left', va='center',
-                                    fontsize=18,
+                                    fontsize=14,
                                     fontweight='bold',
                                     color=color_score,
                                     zorder=100
