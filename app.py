@@ -465,19 +465,19 @@ def main():
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
                                 icon = "Sơn"
                                 color = "#ffd600"
-                                color_score = "red"  # Sơn: đỏ
+                                color_score = "red"
                             elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
                                 icon = "S"
                                 color = "#e65100"
-                                color_score = "red"  # Sơn: đỏ
+                                color_score = "red"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
                                 icon = "Thủy"
                                 color = "#00b8d4"
-                                color_score = "blue" # Thủy: xanh
+                                color_score = "blue"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
                                 icon = "T"
                                 color = "#01579b"
-                                color_score = "blue" # Thủy: xanh
+                                color_score = "blue"
                             else:
                                 continue
                     
@@ -491,17 +491,21 @@ def main():
                                 color=color
                             )
                             
-                            # Vẽ dấu + hoặc -
+                            # Vẽ dấu +/-
                             diem_val = None
                             for diem in diem_chi_tiet:
                                 if diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']:
                                     diem_val = diem['diem']
                                     break
                             if diem_val is not None:
-                                # Chỉ lấy dấu, bỏ số 1
                                 dau = "+" if diem_val > 0 else "-"
+                                # Offset nhỏ hơn nếu icon là "S" hoặc "T"
+                                if icon in ["S", "T"]:
+                                    offset_x = 12   # sát hơn
+                                else:
+                                    offset_x = 23   # xa hơn
                                 ax.text(
-                                    x_icon + 23, y_icon,
+                                    x_icon + offset_x, y_icon,
                                     dau,
                                     ha='left', va='center',
                                     fontsize=14,
