@@ -28,52 +28,46 @@ import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
 def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0):
-    """
-    - bearing_deg: hướng chính các đường song song (0=Bắc)
-    - d: khoảng cách giữa các dải
-    - offset_d: xê dịch song song theo phương vuông góc với hướng chính (m)
-    - rotate_angle: cộng thêm góc xoay cho hướng song song (độ)
-    """
-    n = int(radius // d) + 2
-    # Tính toán hướng song song (tính cả rotate_angle)
+    n = int(2 * radius // d) + 2  # Nhiều hơn một chút để đủ phủ hết hình tròn
     theta = np.deg2rad(90 - bearing_deg - rotate_angle)
-    # Vector song song
     dx = np.cos(theta)
     dy = np.sin(theta)
-    # Vector vuông góc (để tạo các đoạn song song nhau)
+    # Vector vuông góc (để tạo các dải song song nhau)
     nx = -dy
     ny = dx
 
+    # Vẽ vòng tròn để làm clip path
+    circle = Circle((x_center, y_center), radius, transform=ax.transData)
+    ax.add_patch(circle)
+    circle.set_visible(False)  # Không hiện, chỉ dùng làm clip
+
     for i in range(-n, n):
         offset = i * d + offset_d
-        # Tọa độ hai điểm cắt vòng tròn bán kính "radius"
-        px0 = x_center + nx * offset + dx * radius
-        py0 = y_center + ny * offset + dy * radius
-        px1 = x_center + nx * offset - dx * radius
-        py1 = y_center + ny * offset - dy * radius
+        # Tìm tâm của dải hiện tại
+        cx = x_center + nx * offset
+        cy = y_center + ny * offset
+        # Màu xen kẽ
+        color = (1, 0, 0, 0.14) if i % 2 == 0 else (0, 0.4, 1, 0.14)
+        # Tạo hình chữ nhật dải: rộng = 2*radius, dài = d (rộng theo hướng dải, dài theo hướng vuông góc)
+        rect = Rectangle(
+            (-radius, -d / 2), 2 * radius, d,
+            facecolor=color,
+            edgecolor=None,
+            linewidth=0,
+            alpha=0.5
+        )
+        # Xoay và dịch hình chữ nhật vào đúng vị trí
+        t = transforms.Affine2D() \
+            .rotate_around(0, 0, theta) \
+            .translate(cx, cy) + ax.transData
+        rect.set_transform(t)
+        # Clip bởi hình tròn
+        rect.set_clip_path(circle)
+        ax.add_patch(rect)
 
-        angle1 = np.arctan2(py0 - y_center, px0 - x_center)
-        angle2 = np.arctan2(py1 - y_center, px1 - x_center)
-
-        r1x = x_center + np.cos(angle1) * radius
-        r1y = y_center + np.sin(angle1) * radius
-        r2x = x_center + np.cos(angle2) * radius
-        r2y = y_center + np.sin(angle2) * radius
-
-        # Fill vùng giữa hai đường
-        if i % 2 == 0:
-            color = (1, 0, 0, 0.14) # Đỏ trong suốt
-        else:
-            color = (0, 0.4, 1, 0.14) # Xanh trong suốt
-        polygon = plt.Polygon([
-            [r1x, r1y],
-            [r2x, r2y],
-            [x_center + nx * (offset + d) + dx * radius, y_center + ny * (offset + d) + dy * radius],
-            [x_center + nx * (offset + d) - dx * radius, y_center + ny * (offset + d) - dy * radius]
-        ], closed=True, facecolor=color, edgecolor=None, linewidth=0)
-        ax.add_patch(polygon)
-        # Vẽ đường kẻ chính giữa vùng
-        ax.plot([r1x, r2x], [r1y, r2y], color='white', linewidth=1, alpha=0.5)
+    # Vẽ lại vòng tròn outline để rõ khu vực
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='black', facecolor='none', linewidth=1, alpha=0.8, zorder=99)
+    ax.add_patch(circle_vis)
 
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
