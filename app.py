@@ -27,7 +27,7 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-@st.cache_data
+
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
     import rasterio
@@ -106,21 +106,6 @@ def extract_phongthuy_data(n_text):
 
 
 def main():
-    names = ['admin']             # Danh sách tên hiển thị (có thể trùng username, hoặc đặt biệt danh)
-    usernames = ['admin']         # Danh sách username dùng để đăng nhập
-    passwords = ['111111']        # Danh sách mật khẩu
-    
-    authenticator = stauth.Authenticate(
-        names, usernames, passwords,
-        'cookie_name', 'signature_key', cookie_expiry_days=1
-    )
-    name, authentication_status, username = authenticator.login('Đăng nhập', 'main')
-    if authentication_status is False:
-        st.error('Sai tên đăng nhập hoặc mật khẩu')
-        st.stop()
-    elif authentication_status is None:
-        st.warning('Vui lòng nhập tài khoản và mật khẩu')
-        st.stop()
     st.markdown("""
     <div style="background:linear-gradient(90deg,#f9d423,#ff4e50);padding:24px 8px 20px 8px;border-radius:16px;margin-bottom:24px;">
         <h1 style='color:white;text-align:center;margin:0;font-size:36px;'>🔯 ỨNG DỤNG  ĐỊA LÝ & CHIÊM TINH </h1>
