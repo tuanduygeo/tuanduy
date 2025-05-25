@@ -56,7 +56,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
             facecolor=color,
             edgecolor=None,
             linewidth=0,
-            alpha=0.5
+            alpha=0.2
         )
         # Xoay và dịch hình chữ nhật vào đúng vị trí
         t = transforms.Affine2D() \
@@ -68,7 +68,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         ax.add_patch(rect)
 
     # Vẽ lại vòng tròn outline để rõ khu vực
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='black', facecolor='none', linewidth=1, alpha=0.8, zorder=99)
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
 
 @st.cache_data
