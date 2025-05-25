@@ -29,84 +29,100 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0):
-    n = int(2 * radius // d) + 2  # Nhiều hơn một chút để đủ phủ hết hình tròn
+def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0, ratio_red=0.5):
+    n = int(2 * radius // d) + 2
     theta = np.deg2rad(90 - bearing_deg - rotate_angle)
     dx = np.cos(theta)
     dy = np.sin(theta)
-    # Vector vuông góc (để tạo các dải song song nhau)
     nx = -dy
     ny = dx
 
-    # Vẽ vòng tròn để làm clip path
+    # Độ rộng từng màu
+    d_red = d
+    d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d  # để tránh chia 0
+
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
-    circle.set_visible(False)  # Không hiện, chỉ dùng làm clip
+    circle.set_visible(False)
 
-    for i in range(-n, n):
-        offset = i * d + offset_d
-        # Tìm tâm của dải hiện tại
+    offset = offset_d
+    i = 0
+    while abs(offset) < radius * 1.5:  # để đảm bảo phủ kín
+        # Vẽ dải đỏ
         cx = x_center + nx * offset
         cy = y_center + ny * offset
-        # Màu xen kẽ
-        color = (1, 0, 0, 0.14) if i % 2 == 0 else (0, 0.4, 1, 0.14)
-        # Tạo hình chữ nhật dải: rộng = 2*radius, dài = d (rộng theo hướng dải, dài theo hướng vuông góc)
-        rect = Rectangle(
-            (-radius, -d / 2), 2 * radius, d,
-            facecolor=color,
-            edgecolor=None,
-            linewidth=0,
-            alpha=0.2
-        )
-        # Xoay và dịch hình chữ nhật vào đúng vị trí
-        t = transforms.Affine2D() \
-            .rotate_around(0, 0, theta) \
-            .translate(cx, cy) + ax.transData
-        rect.set_transform(t)
-        # Clip bởi hình tròn
-        rect.set_clip_path(circle)
-        ax.add_patch(rect)
+        rect_red = Rectangle(
+            (-radius, -d_red / 2), 2 * radius, d_red,
+            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+        t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+        rect_red.set_transform(t_red)
+        rect_red.set_clip_path(circle)
+        ax.add_patch(rect_red)
 
-    # Vẽ lại vòng tròn outline để rõ khu vực
+        offset += d_red
+
+        # Vẽ dải xanh
+        cx = x_center + nx * offset
+        cy = y_center + ny * offset
+        rect_blue = Rectangle(
+            (-radius, -d_blue / 2), 2 * radius, d_blue,
+            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+        t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+        rect_blue.set_transform(t_blue)
+        rect_blue.set_clip_path(circle)
+        ax.add_patch(rect_blue)
+
+        offset += d_blue
+        i += 1
+
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
-def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=60, offset_d2=0, rotate_angle2=0):
-    n = int(2 * radius // d2) + 2  # Nhiều hơn một chút để đủ phủ hết hình tròn
+def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=60, offset_d2=0, rotate_angle2=0, ratio_red=0.5):
+    n = int(2 * radius // d2) + 2
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
     dx = np.cos(theta)
     dy = np.sin(theta)
-    # Vector vuông góc (để tạo các dải song song nhau)
     nx = -dy
     ny = dx
 
-    # Vẽ vòng tròn để làm clip path
+    # Độ rộng từng màu
+    d_red = d2
+    d_blue = d2 * (1 - ratio_red) / ratio_red if ratio_red > 0 else d2  # tránh chia 0
+
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
-    circle.set_visible(False)  # Không hiện, chỉ dùng làm clip
+    circle.set_visible(False)
 
-    for i in range(-n, n):
-        offset = i * d2 + offset_d2    # Đã sửa lại đúng tên biến
-        # Tìm tâm của dải hiện tại
+    offset = offset_d2
+    while abs(offset) < radius * 1.5:  # để phủ kín vòng tròn
+        # Vẽ dải đỏ
         cx = x_center + nx * offset
         cy = y_center + ny * offset
-        # Màu xen kẽ
-        color = (1, 0, 0, 0.14) if i % 2 == 0 else (0, 0.4, 1, 0.14)
-        # Tạo hình chữ nhật dải: rộng = 2*radius, dài = d2
-        rect = Rectangle(
-            (-radius, -d2 / 2), 2 * radius, d2,
-            facecolor=color,
-            edgecolor='none',
-            linewidth=0,
-            alpha=0.1
-        )
-        # Xoay và dịch hình chữ nhật vào đúng vị trí
-        t = transforms.Affine2D() \
-            .rotate_around(0, 0, theta) \
-            .translate(cx, cy) + ax.transData
-        rect.set_transform(t)
-        # Clip bởi hình tròn
-        rect.set_clip_path(circle)
-        ax.add_patch(rect)
+        rect_red = Rectangle(
+            (-radius, -d_red / 2), 2 * radius, d_red,
+            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+        t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+        rect_red.set_transform(t_red)
+        rect_red.set_clip_path(circle)
+        ax.add_patch(rect_red)
+
+        offset += d_red
+
+        # Vẽ dải xanh
+        cx = x_center + nx * offset
+        cy = y_center + ny * offset
+        rect_blue = Rectangle(
+            (-radius, -d_blue / 2), 2 * radius, d_blue,
+            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+        t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+        rect_blue.set_transform(t_blue)
+        rect_blue.set_clip_path(circle)
+        ax.add_patch(rect_blue)
+
+        offset += d_blue
+
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
+    ax.add_patch(circle_vis)
 
     
 @st.cache_data
@@ -200,13 +216,12 @@ def main():
     col1, col2, col3, col4, col5 = st.columns([1 ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
-        st.markdown("**Thông số Mạch chính**")
         st.markdown("<div style='height:36px'></div>", unsafe_allow_html=True)
-        st.markdown("**Thông số Mạch phụ**")
+        ratio_red=st.number_input("tỷ số tốt/xấu", min_value=0, max_value=1, value=0.5, step=0.2, format="%.3f")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        distance_between_zones = st.number_input("Khoảng cách giữa-chính (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
-        distance_between_zones2 = st.number_input("Khoảng cách giữa-phụ(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        distance_between_zones2 = st.number_input("Mạch phụ rộng(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
@@ -216,8 +231,8 @@ def main():
         rotate_angle = st.number_input("Góc lệch mạch-chính (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
         rotate_angle2 = st.number_input("Góc lệch mạch-phụ (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
     with col5:
-        show_main = st.checkbox("Hiện Mạch chính", value=True)
-        show_sub = st.checkbox("Hiện Mạch phụ", value=True)
+        show_main = st.checkbox("Hiện Mạch chính", value=False)
+        show_sub = st.checkbox("Hiện Mạch phụ", value=False)
         run = st.button("Run", use_container_width=True)
    
     x = y = None
@@ -634,7 +649,8 @@ def main():
                         bearing_deg=bearing_main,
                         d=distance_between_zones,
                         offset_d=offset_d,
-                        rotate_angle=rotate_angle
+                        rotate_angle=rotate_angle,
+                        ratio_red=ratio_red,
                     )
                 
                 # === Vẽ dải Mạch phụ (vuông góc với mạch chính) ===
@@ -646,7 +662,8 @@ def main():
                         bearing_deg2=bearing_deg2,
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
-                        rotate_angle2=rotate_angle2
+                        rotate_angle2=rotate_angle2,
+                        ratio_red=ratio_red
                     )
 
                 plt.tight_layout()
