@@ -205,12 +205,12 @@ def main():
         st.markdown("**Thông số Mạch phụ**")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        distance_between_zones = st.number_input("Khoảng cách giữa-chính (m)", min_value=1.0, max_value=80.0, value=10.0, step=1.0)
-        distance_between_zones2 = st.number_input("Khoảng cách giữa-phụ(m)", min_value=1.0, max_value=80.0, value=10.0, step=1.0)
+        distance_between_zones = st.number_input("Khoảng cách giữa-chính (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        distance_between_zones2 = st.number_input("Khoảng cách giữa-phụ(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
-        offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-100.0, max_value=100.0, value=0.0, step=1.0)
-        offset_d2 = st.number_input("Dịch chuyển ngang-phụ (m)", min_value=-100.0, max_value=100.0, value=0.0, step=1.0)
+        offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
+        offset_d2 = st.number_input("Dịch chuyển ngang-phụ (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
     with col4:
         diachi = st.text_input("địa chỉ", value="")
         rotate_angle = st.number_input("Góc lệch mạch-chính (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
