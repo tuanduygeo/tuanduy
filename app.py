@@ -216,7 +216,8 @@ def main():
         rotate_angle = st.number_input("Góc lệch mạch-chính (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
         rotate_angle2 = st.number_input("Góc lệch mạch-phụ (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
     with col5:
-        st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
+        show_main = st.checkbox("Hiện Mạch chính", value=True)
+        show_sub = st.checkbox("Hiện Mạch phụ", value=True)
         run = st.button("Run", use_container_width=True)
    
     x = y = None
@@ -626,27 +627,27 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
-                
-                plot_parallel_zones(
-                    ax, x_center, y_center,
-                    radius=100,
-                    bearing_deg=bearing_main,
-                    d=distance_between_zones,
-                    offset_d=offset_d,
-                    rotate_angle=rotate_angle
-                )
+                if show_main:
+                    plot_parallel_zones(
+                        ax, x_center, y_center,
+                        radius=100,
+                        bearing_deg=bearing_main,
+                        d=distance_between_zones,
+                        offset_d=offset_d,
+                        rotate_angle=rotate_angle
+                    )
                 
                 # === Vẽ dải Mạch phụ (vuông góc với mạch chính) ===
                 bearing_deg2 = (bearing_main + 90) % 360
-                
-                plot_parallel_zones2(
-                    ax, x_center, y_center,
-                    radius=100,
-                    bearing_deg2=bearing_deg2,
-                    d2=distance_between_zones2,
-                    offset_d2=offset_d2,
-                    rotate_angle2=rotate_angle2
-                )
+                if show_sub:
+                    plot_parallel_zones2(
+                        ax, x_center, y_center,
+                        radius=100,
+                        bearing_deg2=bearing_deg2,
+                        d2=distance_between_zones2,
+                        offset_d2=offset_d2,
+                        rotate_angle2=rotate_angle2
+                    )
 
                 plt.tight_layout()
                 st.pyplot(fig)
