@@ -347,7 +347,7 @@ def main():
                         x = x_center + np.cos(t) * radius * 0.9
                         y = y_center + np.sin(t) * radius * 0.9
                         ax.text(x, y, label, ha='center', va='center', fontsize=13, color='white', fontweight='bold')
-                    ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=22, color='white', fontweight='bold')
+                    ax.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
                 
                 labels_24 = [
                     'Tý', 'Nhâm', 'Hợi', 'Càn', 'Tuất', 'Tân', 'Dậu', 'Canh',
