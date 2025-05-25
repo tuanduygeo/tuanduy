@@ -465,19 +465,23 @@ def main():
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
                                 icon = "Sơn"
                                 color = "#ffd600"
+                                color_score = "red"  # Sơn: đỏ
                             elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
                                 icon = "S"
                                 color = "#e65100"
+                                color_score = "red"  # Sơn: đỏ
                             elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
                                 icon = "Thủy"
                                 color = "#00b8d4"
+                                color_score = "blue" # Thủy: xanh
                             elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
                                 icon = "T"
                                 color = "#01579b"
+                                color_score = "blue" # Thủy: xanh
                             else:
                                 continue
                     
-                            # VẼ ICON (chữ lớn)
+                            # Vẽ icon
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
@@ -487,21 +491,22 @@ def main():
                                 color=color
                             )
                             
-                            # VẼ ĐIỂM SỐ bên cạnh
+                            # Vẽ dấu + hoặc -
                             diem_val = None
                             for diem in diem_chi_tiet:
                                 if diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']:
                                     diem_val = diem['diem']
                                     break
                             if diem_val is not None:
-                                # Lệch sang phải (có thể tăng giảm offset cho đẹp, thử 25 hoặc 30 cho font lớn hơn)
+                                # Chỉ lấy dấu, bỏ số 1
+                                dau = "+" if diem_val > 0 else "-"
                                 ax.text(
-                                    x_icon + 23, y_icon,         # +23 hoặc +30 pixel/met tùy scale bản đồ bạn test
-                                    f"{'+' if diem_val>0 else ''}{diem_val}",
+                                    x_icon + 23, y_icon,
+                                    dau,
                                     ha='left', va='center',
-                                    fontsize=11,                 # nhỏ hơn chữ icon
+                                    fontsize=14,
                                     fontweight='bold',
-                                    color='red' if diem_val>0 else 'blue',
+                                    color=color_score,
                                     zorder=100
                                 )
                         
