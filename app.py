@@ -586,7 +586,7 @@ def main():
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
                 plot_parallel_zones(
                     ax, x_center, y_center,
-                    radius=100,
+                    radius=300,
                     bearing_deg=(manual_bearing if manual_bearing is not None else 0),
                     d=distance_between_zones,
                     offset_d=offset_d,
