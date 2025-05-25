@@ -106,9 +106,14 @@ def extract_phongthuy_data(n_text):
 
 
 def main():
-    usernames = ['admin']
-    passwords = ['111111']  # Để bảo mật hơn, dùng hashed password
-    authenticator = stauth.Authenticate(usernames, passwords, 'cookie_name', 'signature_key', cookie_expiry_days=1)
+    names = ['admin']             # Danh sách tên hiển thị (có thể trùng username, hoặc đặt biệt danh)
+    usernames = ['admin']         # Danh sách username dùng để đăng nhập
+    passwords = ['111111']        # Danh sách mật khẩu
+    
+    authenticator = stauth.Authenticate(
+        names, usernames, passwords,
+        'cookie_name', 'signature_key', cookie_expiry_days=1
+    )
     name, authentication_status, username = authenticator.login('Đăng nhập', 'main')
     if authentication_status is False:
         st.error('Sai tên đăng nhập hoặc mật khẩu')
