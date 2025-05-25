@@ -1173,185 +1173,99 @@ def astrology_block():
         all_antardasha += compute_antardasha(m_lord, m_start_jd, m_years).to_dict("records")
 
     df_all_antar = pd.DataFrame(all_antardasha)
-    
 
-    # Quy tắc điểm số theo nhà
-
-    benefic_house_scores = {1:3  ,2:2.5  ,3:-2  ,4:2  ,5:2.5  ,6:-2  ,7:2  ,8:-3  ,9:3  ,10:2  ,11:2.5  ,12:-3 }
-    malefic_house_scores = {1:2  ,2:1.5  ,3:0  ,4:1  ,5:2  ,6:0  ,7:2  ,8:-3  ,9:2  ,10:2  ,11:3  ,12:-3 }
-    benefics = {"Jupiter", "Venus", "Moon","Mercury"}
-    malefics = {"Mars", "Saturn", "Rahu", "Ketu","Sun"}
     def get_house_score(house, planet):
+        # Điểm nhà cho các nhóm hành tinh
         if planet in benefics:
             return benefic_house_scores.get(house, 0)
         elif planet in malefics:
             return malefic_house_scores.get(house, 0)
         else:
-            return 0  # Trung lập hoặc không rõ
-    def calc_aspect_and_conj_score(planet, df_planets):
-        # 1. Chiếu: lấy từ cột "Chiếu hành tinh"
-        chiếu = df_planets.loc[df_planets["Hành tinh"] == planet, "Chiếu hành tinh"].values
-        aspected = []
-        if len(chiếu) > 0 and chiếu[0]:
-            aspected = [x.strip().split(" ")[0] for x in chiếu[0].split(",") if x.strip()]
-        # 2. Conjunction: đồng cung với hành tinh nào?
-        this_row = df_planets[df_planets["Hành tinh"] == planet]
-        conjunction = []
-        if not this_row.empty:
-            cung = this_row.iloc[0]["Cung"]
-            others = df_planets[(df_planets["Cung"] == cung) & (df_planets["Hành tinh"] != planet)]
-            conjunction = list(others["Hành tinh"])
-        # 3. Tính điểm từng hành tinh chiếu/đồng cung (không double count nếu vừa chiếu vừa đồng cung)
-        interacted = set(aspected + conjunction)
-        plus03 = {"Jupiter", "Venus", "Moon"}
-        minus03 = {"Mars", "Saturn", "Ketu", "Rahu"}
-        score = 0
-        for asp in interacted:
-            if asp in plus03:
-                score += 0.3
-            elif asp in minus03:
-                score -= 0.3
-            # Mercury, Sun thì không cộng trừ gì
-        # 4. Giới hạn điểm cộng/trừ tối đa ±1.0
-        score = max(min(score, 1.0), -1.0)
-        return score
-    # Tính dữ liệu vẽ biểu đồ
+            return 0
+
+    # Các nhóm dùng cho cộng/trừ điểm
+    dignity_bonus = {"vượng": 1, "tướng": 1, "bạn bè": 0.5, "địch thủ": -0.5, "tù": -1, "tử": -1}
+    cat_hung_bonus = {"Jupiter": 0.5, "Venus": 0.5, "Moon": 0.5, "Mars": -0.5, "Saturn": -0.5, "Rahu": -0.5, "Ketu": -0.5}
+    gana_bonus = {"Thiên thần": 1, "Quỷ thần": -1}
+    antardasha_gana_bonus = {"Thiên thần": 0.5, "Quỷ thần": -0.5}
+    cat_hung_a_bonus = {"Jupiter": 0.2, "Venus": 0.2, "Moon": 0.2, "Mars": -0.2, "Saturn": -0.2, "Rahu": -0.2, "Ketu": -0.2}
+    
+    # Các nhóm rule bonus
+    major_rule_bonus = {6: -3.5, 8: -3.5, 12: -3.5, 1: 3.5, 5: 3.5, 9: 3.5, 4: 1.5, 7: 1.5, 10: 1.5, 2: 2.5, 11: 2.5}
+    minor_rule_bonus = {6: -1, 8: -1, 12: -1, 1: 1, 5: 1, 9: 1, 4: 0.5, 7: 0.5, 10: 0.5, 2: 0.7, 11: 0.7}
+    
     def build_life_chart(df_dasha, planet_data, birth_jd):
-        life_years = []
-        life_scores = []
-        year_labels = []
+        life_years, life_scores, year_labels = [], [], []
         current_year = 0
         birth_offset = None
-        
     
-        # 2. Tính điểm từng Mahadasha
         for _, m_row in df_dasha.iterrows():
             m_lord = m_row["Dasha"]
             m_start = datetime.strptime(m_row["Bắt đầu"], "%d-%m-%Y")
             m_start_jd = swe.julday(m_start.year, m_start.month, m_start.day)
             m_duration = m_row["Số năm"]
-
+    
             if birth_offset is None and birth_jd >= m_start_jd:
                 birth_offset = (birth_jd - m_start_jd) / 365.25
-
-            # Điểm từ vị trí hiện tại của hành tinh
+    
             m_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == m_lord), 0)
             m_score = get_house_score(m_house, m_lord)
-            
+    
             m_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == m_lord), "")
-            if m_dignity in ["vượng", "tướng"]:
-                m_score += 1
-            elif m_dignity == "bạn bè":
-                m_score += 0.5
-            elif m_dignity == "địch thủ":
-                m_score -= 0.5
-            elif m_dignity in ["tù", "tử"]:
-                m_score -= 1
-            # ✅ Thêm điểm theo tính chất "Cát – Hung" của hành tinh
-            if m_lord in ["Jupiter", "Venus", "Moon"]:
-                m_score += 0.5
-            elif m_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
-                m_score -= 0.5
-            m_status = next((p["retro"] for p in planet_data if p["Hành tinh"] == m_lord), "")
+            m_score += dignity_bonus.get(m_dignity, 0)
+            m_score += cat_hung_bonus.get(m_lord, 0)
+    
+            m_status = next((p.get("retro", "") for p in planet_data if p["Hành tinh"] == m_lord), "")
             if "R" in m_status and "C" in m_status:
                 m_score -= 0.5
-            # ✅ Thêm điểm dựa trên các nhà hành tinh đó làm chủ
+    
             ruled_houses = planet_to_ruled_houses.get(m_lord, [])
-            rule_bonus = 0
-            for rh in ruled_houses:
-                if rh in [6, 8, 12]:
-                    rule_bonus -= 3.5
-                elif rh in [1, 5, 9]:
-                    rule_bonus += 3.5
-                elif rh in [ 4, 7, 10]:
-                    rule_bonus += 1.5
-                elif rh in [ 2,11]:
-                    rule_bonus += 2.5
-            m_score += rule_bonus
+            m_score += sum(major_rule_bonus.get(rh, 0) for rh in ruled_houses)
+    
             m_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == m_lord), "")
-            if m_gana == "Thần":
-                m_score += 1
-            elif m_gana == "Quỷ":
-                m_score -= 1
+            m_score += gana_bonus.get(m_gana, 0)
+    
             m_score += calc_aspect_and_conj_score(m_lord, df_planets)
+    
             # Gán nhãn mục tiêu dựa theo nhà
-            purpose = ""
-            if m_house in [2]:
-                purpose = " (tài ↑)"
-            elif m_house in [1]:
-                purpose = " (mệnh ↑)"
-            elif m_house in [ 9]:
-                purpose = " (đạo ↑)"
-            elif m_house in [5]:
-                purpose = " (học ↑)"
-            elif m_house in [10]:
-                purpose = " (danh ↑)"
-            elif m_house in [4]:
-                purpose = " (an cư ↑)"
-            elif m_house == 7:
-                purpose = " (quan hệ ↑)"
-            elif m_house == 3:
-                purpose = " (thị phi ↓)"
-            elif m_house in [8,12]:
-                purpose = " (mệnh,tài ↓)"
-            elif m_house in [6]:
-                purpose = " (mệnh ↓)"
-            elif m_house in [11]:
-                purpose = " (tài ↑)"
+            house_purposes = {2: " (tài ↑)", 1: " (mệnh ↑)", 9: " (đạo ↑)", 5: " (học ↑)", 10: " (danh ↑)", 4: " (an cư ↑)",
+                              7: " (quan hệ ↑)", 3: " (thị phi ↓)", 8: " (mệnh,tài ↓)", 12: " (mệnh,tài ↓)", 6: " (mệnh ↓)", 11: " (tài ↑)"}
+            purpose = house_purposes.get(m_house, "")
+    
             antars = compute_antardasha(m_lord, m_start_jd, m_duration)
             for _, antar in antars.iterrows():
                 a_lord = antar["Antardasha"].split("/")[-1]
                 a_years = antar["Số năm"]
                 a_house = next((p["Nhà"] for p in planet_data if p["Hành tinh"] == a_lord), 0)
-                a_score = get_house_score(a_house, a_lord)*0.5 
-                
-                # ✅ Thêm điểm từ nhà mà antardasha làm chủ
+                a_score = get_house_score(a_house, a_lord) * 0.5
+    
                 ruled_houses_a = planet_to_ruled_houses.get(a_lord, [])
-                rule_bonus_a = 0
-                for rh in ruled_houses_a:
-                    if rh in [6, 8, 12]:
-                        rule_bonus_a -= 1
-                    elif rh in [1, 5, 9]:
-                        rule_bonus_a += 1
-                    elif rh in [4, 7, 10]:
-                        rule_bonus_a += 0.5
-                    elif rh in [ 2,11]:
-                        rule_bonus_a += 0.7
-                a_score += rule_bonus_a
-                
-                a_status = next((p["retro"] for p in planet_data if p["Hành tinh"] == a_lord), "")
+                a_score += sum(minor_rule_bonus.get(rh, 0) for rh in ruled_houses_a)
+    
+                a_status = next((p.get("retro", "") for p in planet_data if p["Hành tinh"] == a_lord), "")
                 if "R" in a_status and "C" in a_status:
                     a_score -= 0.2
-                # ✅ Thêm điểm theo dignity (tính chất) của Antardasha lord
+    
                 a_dignity = next((p["Tính chất"] for p in planet_data if p["Hành tinh"] == a_lord), "")
-                if a_dignity in ["vượng", "tướng"]:
-                    a_score += 0.5
-                elif a_dignity == "bạn bè":
-                    a_score += 0.2
-                elif a_dignity == "địch thủ":
-                    a_score -= 0.2
-                elif a_dignity in ["tù", "tử"]:
-                    a_score -= 0.5
+                a_score += dignity_bonus.get(a_dignity, 0) * 0.5  # giảm 1 nửa trọng số cho antardasha
+    
                 a_gana = next((p["Gana"] for p in planet_data if p["Hành tinh"] == a_lord), "")
-                if a_gana == "Thần":
-                    a_score += 0.5
-                elif a_gana == "Quỷ":
-                    a_score -= 0.5    
-                # 4️⃣ Điểm từ phân loại Cát/Hung tinh
-                if a_lord in ["Jupiter", "Venus", "Moon"]:
-                    a_score += 0.2
-                elif a_lord in ["Mars", "Saturn", "Rahu", "Ketu"]:
-                    a_score -= 0.2
-                a_score =a_score+0.5* calc_aspect_and_conj_score(a_lord, df_planets)
-                total_score = round(a_score +  m_score, 2)
-
+                a_score += antardasha_gana_bonus.get(a_gana, 0)
+    
+                a_score += cat_hung_a_bonus.get(a_lord, 0)
+                a_score += 0.5 * calc_aspect_and_conj_score(a_lord, df_planets)
+    
+                total_score = round(a_score + m_score, 2)
+    
                 life_years.append(current_year)
                 life_scores.append(total_score)
                 year_labels.append(m_lord + purpose)
                 current_year += a_years
-
+    
         birth_x = round(birth_offset, 2) if birth_offset else 0
         return pd.DataFrame({"Năm": life_years, "Điểm số": life_scores, "Mahadasha": year_labels}), birth_x
+
+    
 
     # Sử dụng dữ liệu df_dasha, planet_data và jd ngày sinh
     chart_df, birth_x = build_life_chart(df_dasha, planet_data, jd)
