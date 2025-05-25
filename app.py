@@ -49,7 +49,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     circle.set_visible(False)
 
     # Dải phủ kín từ -radius đến +radius, offset_d được cộng cho từng bước
-    offset = -radius
+    offset =- (d_red / 2) - offset_d
     while offset < radius:
         # Cộng offset_d vào từng vị trí
         total_offset = offset + offset_d
