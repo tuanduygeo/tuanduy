@@ -503,7 +503,7 @@ def main():
                                 if icon in ["S", "T"]:
                                     offset_x = 6   # sát hơn
                                 else:
-                                    offset_x = 27   # xa hơn
+                                    offset_x = 29   # xa hơn
                                 ax.text(
                                     x_icon + offset_x, y_icon,
                                     dau,
