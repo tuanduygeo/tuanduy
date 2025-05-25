@@ -48,9 +48,12 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    offset = -radius + (d_red / 2) - offset_d
+    # Dải phủ kín từ -radius đến +radius, offset_d được cộng cho từng bước
+    offset = -radius
     while offset < radius:
+        # Cộng offset_d vào từng vị trí
         total_offset = offset + offset_d
+
         # Dải đỏ
         cx = x_center + nx * total_offset
         cy = y_center + ny * total_offset
@@ -61,11 +64,11 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         rect_red.set_transform(t_red)
         rect_red.set_clip_path(circle)
         ax.add_patch(rect_red)
-    
+
         offset += d_red
-    
-        total_offset = offset + offset_d
+
         # Dải xanh
+        total_offset = offset + offset_d
         cx = x_center + nx * total_offset
         cy = y_center + ny * total_offset
         rect_blue = Rectangle(
@@ -75,7 +78,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         rect_blue.set_transform(t_blue)
         rect_blue.set_clip_path(circle)
         ax.add_patch(rect_blue)
-    
+
         offset += d_blue
 
     # Viền vòng tròn ngoài cho đẹp
