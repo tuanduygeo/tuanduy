@@ -53,7 +53,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         cy = y_center + ny * offset
         rect_red = Rectangle(
             (-radius, -d_red / 2), 2 * radius, d_red,
-            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
         t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
         rect_red.set_transform(t_red)
         rect_red.set_clip_path(circle)
@@ -66,7 +66,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         cy = y_center + ny * offset
         rect_blue = Rectangle(
             (-radius, -d_blue / 2), 2 * radius, d_blue,
-            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
         t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
         rect_blue.set_transform(t_blue)
         rect_blue.set_clip_path(circle)
@@ -74,7 +74,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
 
         offset += d_blue
 
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.1, zorder=99)
     ax.add_patch(circle_vis)
 def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red=0.5):
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
@@ -100,7 +100,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         cy = y_center + ny * offset
         rect_red = Rectangle(
             (-radius, -d_red / 2), 2 * radius, d_red,
-            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
         t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
         rect_red.set_transform(t_red)
         rect_red.set_clip_path(circle)
@@ -113,7 +113,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         cy = y_center + ny * offset
         rect_blue = Rectangle(
             (-radius, -d_blue / 2), 2 * radius, d_blue,
-            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
+            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
         t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
         rect_blue.set_transform(t_blue)
         rect_blue.set_clip_path(circle)
