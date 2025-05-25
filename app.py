@@ -451,7 +451,18 @@ def main():
                                 zorder=98,
                                 color=color
                             )   
-                      
+                            diem_row = next((item for item in diem_chi_tiet if item['son'] == row['son'] and item['zone'] == row['zone']), None)
+                            if diem_row:
+                                ax.text(
+                                    x_icon, y_icon + 8,  # có thể chỉnh 8 thành 10 tùy đẹp
+                                    '+' if diem_row['diem'] > 0 else '-',
+                                    ha='center', va='center',
+                                    fontsize=17,
+                                    color='red' if diem_row['diem'] > 0 else 'blue',
+                                    fontweight='bold',
+                                    zorder=100,
+                                    alpha=0.85
+                                )
     
             if not df_son.empty:
                 df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
