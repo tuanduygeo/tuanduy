@@ -583,7 +583,7 @@ def main():
                 plot_parallel_zones(
                     ax, x_center, y_center,
                     radius=100,
-                    bearing_deg=(manual_bearing if manual_bearing is not None else 0),
+                    bearing_deg=(manual_bearing if manual_bearing is not None else bearing),
                     d=distance_between_zones,
                     offset_d=offset_d,
                     rotate_angle=rotate_angle
