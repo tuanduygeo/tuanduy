@@ -203,6 +203,7 @@ def main():
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         st.markdown("**Thông số Mạch chính**")
+        st.markdown("<div style='height:26px'></div>", unsafe_allow_html=True)
         st.markdown("**Thông số Mạch phụ**")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
@@ -634,10 +635,12 @@ def main():
                     rotate_angle=rotate_angle
                 )
                 # Dải phụ, thường vuông góc (có thể để bearing_deg2 = bearing_deg + 90)
+                bearing_main = manual_bearing if manual_bearing is not None else bearing
+                bearing_deg2 = (bearing_main + 90) % 360
                 plot_parallel_zones2(
                     ax, x_center, y_center,
                     radius=100,
-                    bearing_deg2=bearing_deg2,
+                    bearing_deg2 = bearing_deg2,
                     d2=distance_between_zones2,
                     offset_d2=offset_d2,
                     rotate_angle2=rotate_angle2
