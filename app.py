@@ -468,15 +468,15 @@ def main():
                                 color_score = "red"
                             elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
                                 icon = "S"
-                                color = "#e65100"
+                                color = "red"
                                 color_score = "red"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
                                 icon = "Thủy"
-                                color = "#00b8d4"
+                                color = "blue"
                                 color_score = "blue"
                             elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
                                 icon = "T"
-                                color = "#01579b"
+                                color = "blue"
                                 color_score = "blue"
                             else:
                                 continue
@@ -503,7 +503,7 @@ def main():
                                 if icon in ["S", "T"]:
                                     offset_x = 6   # sát hơn
                                 else:
-                                    offset_x = 26   # xa hơn
+                                    offset_x = 27   # xa hơn
                                 ax.text(
                                     x_icon + offset_x, y_icon,
                                     dau,
