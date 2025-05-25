@@ -247,20 +247,18 @@ def main():
                     upper_bound = Q3 + k * IQR
                     return (data < lower_bound) | (data > upper_bound)
                 data_1d = data_array.ravel()
-                outlier_mask = detect_outlier_iqr(data_1d)
-                data_no_outlier_1d = np.copy(data_1d)
-                data_no_outlier_1d[outlier_mask] = np.nan    # set NaN để contour bỏ qua
+                low_thres = np.percentile(data_1d, 0.001)
+                high_thres = np.percentile(data_1d, 99.99)
+                mask_keep = (data_array >= low_thres) & (data_array <= high_thres)
+                data_no_extreme = np.where(mask_keep, data_array, np.nan)
                 
-                data_no_outlier = data_no_outlier_1d.reshape(data_array.shape)
-                
-                # Tính min/max trên giá trị hợp lệ (không NaN)
-                valid_data = data_no_outlier[~np.isnan(data_no_outlier)]
+                valid_data = data_no_extreme[~np.isnan(data_no_extreme)]
                 z_min, z_max = valid_data.min(), valid_data.max()
                 levels = np.linspace(z_min, z_max, 30)
                 
                 cmap = matplotlib.colormaps['jet']
                 norm1 = mcolors.Normalize(vmin=np.min(levels), vmax=np.max(levels))
-                data_smooth = gaussian_filter(data_no_outlier, sigma=1.5)
+                data_smooth = gaussian_filter(data_no_extreme, sigma=1.5)
                 ax.contourf(Xx3857, Yx3857, data_smooth, cmap="jet", levels=levels, alpha=0)
                 ax.contour(Xx3857, Yx3857, data_smooth, levels=levels, cmap='jet', linewidths=1)
 
