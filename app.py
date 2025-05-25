@@ -96,7 +96,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
 
     # Độ rộng từng màu
     d_red = d2
-    d_blue = d2 * (1 - ratio_red) / ratio_red if ratio_red > 0 else d2  # tránh chia 0
+    d_blue = d2 * (1 - ratio_red2) / ratio_red2 if ratio_red2 > 0 else d2  # tránh chia 0
 
     # Tạo vòng tròn làm clip path
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
@@ -231,7 +231,8 @@ def main():
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         
-        ratio_red=st.number_input("tỷ số tốt/xấu", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
+        ratio_red=st.number_input("tỷ số tốt/xấu- chính", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
+        ratio_red2=st.number_input("tỷ số tốt/xấu- phụ", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
         distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
@@ -677,7 +678,7 @@ def main():
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
                         rotate_angle2=rotate_angle2,
-                        ratio_red=ratio_red
+                        ratio_red=ratio_red2
                     )
 
                 plt.tight_layout()
