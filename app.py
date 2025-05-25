@@ -602,8 +602,7 @@ def main():
                     max_cross = cross_x.max()
                     ax_hist.axvline(min_cross, color='purple', linestyle=':', linewidth=1.5, label=f'Min crossing: {min_cross:.2f}')
                     ax_hist.axvline(max_cross, color='brown', linestyle=':', linewidth=1.5, label=f'Max crossing: {max_cross:.2f}')
-                    st.write(f"Điểm giao nhỏ nhất: {min_cross:.2f}")
-                    st.write(f"Điểm giao lớn nhất: {max_cross:.2f}")
+                    
                 else:
                     st.write("Không tìm thấy điểm giao cắt giữa KDE và normal fit.")
                 
