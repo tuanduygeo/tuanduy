@@ -26,6 +26,27 @@ from scipy.stats import norm, gaussian_kde
 
 
 st.set_page_config(layout="wide")
+@st.cache_data
+@st.cache_data
+def load_crop_dem(hgt_path, west, south, east, north):
+    import rasterio
+    from rasterio.windows import from_bounds
+    from rasterio.enums import Resampling
+
+    with rasterio.open(hgt_path) as src:
+        window = from_bounds(west, south, east, north, src.transform)
+        dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
+        transform = src.window_transform(window)
+        profile = src.profile
+
+    profile.update({
+        "driver": "GTiff",
+        "height": dem_crop.shape[0],
+        "width": dem_crop.shape[1],
+        "transform": transform,
+        "nodata": -9999
+    })
+    return dem_crop, transform, profile
 def get_magnetic_declination(lat, lon):
     return geomag.declination(lat, lon)
 def extract_phongthuy_data(n_text):
@@ -131,19 +152,9 @@ def main():
             if not os.path.exists(hgt_path):
                 st.error(f"❌ Không tìm thấy file: `{hgt_path}`.")
             else:
-                with rasterio.open(hgt_path) as src:
-                    window = from_bounds(west, south, east, north, src.transform)
-                    dem_crop = src.read(1, window=window, resampling=Resampling.bilinear)
-                    transform = src.window_transform(window)
-                    profile = src.profile
+                dem_crop, transform, profile = load_crop_dem(hgt_path, west, south, east, north)
     
-                profile.update({
-                    "driver": "GTiff",
-                    "height": dem_crop.shape[0],
-                    "width": dem_crop.shape[1],
-                    "transform": transform,
-                    "nodata": -9999
-                })
+                
     
                 with rasterio.open(out_path, "w", **profile) as dst:
                     dst.write(dem_crop, 1)
