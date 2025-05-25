@@ -412,7 +412,7 @@ def main():
                         angle = theta[idx]
                         x_icon = x_center + np.cos(angle)*radius_icon
                         y_icon = y_center + np.sin(angle)*radius_icon
-                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='purple',fontweight='bold', zorder=99)
+                        ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=12, color='purple',fontweight='bold', zorder=99)
                 # Chỉ tính diem_chi_tiet khi df_son không rỗng
                 if not df_son.empty:
                     df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
