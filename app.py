@@ -414,49 +414,20 @@ def main():
                         ax.text(x_icon, y_icon, "Cửa", ha='center', va='center', fontsize=14, color='purple',fontweight='bold', zorder=99)
                 if not df_son.empty:
                     df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
-                    median_z = np.median(data_array)
-                    diem_tong = 0
-                    diem_chi_tiet = []
                     for _, row in df_son.iterrows():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
-                            # Lấy vị trí pixel theo chỉ số idx trên vòng 24
                             angle = theta[idx]
-                            px = x_center + np.cos(angle)*radius*0.7
-                            py = y_center + np.sin(angle)*radius*0.7
-                            # Chuyển đổi ngược về lat,lon (EPSG:3857 -> EPSG:4326)
-                            lon_px, lat_px = transformer.transform(px, py, direction="INVERSE")
-                            # Tìm chỉ số gần nhất trên lưới DEM
-                            i = np.argmin(np.abs(yt - lat_px))
-                            j = np.argmin(np.abs(xt - lon_px))
-                            value = data_array[i, j]
-                
-                            # TÍNH điểm
-                            if row['zone'] == "cung vị sơn":
-                                diem = 1 if value >= median_z else -1
-                            elif row['zone'] == "cung vị thủy":
-                                diem = 1 if value <= median_z else -1
-                            else:
-                                diem = 0
-                
-                            diem_tong += diem
-                            diem_chi_tiet.append({
-                                'son': row['son'],
-                                'zone': row['zone'],
-                                'group': row['group'],
-                                'giatri': value,
-                                'median': median_z,
-                                'diem': diem
-                            })
-                
-                            # --- Vẽ icon tên vị trí ---
+                            # --- Xác định bán kính vẽ icon ---
                             if (row['group'] == "tấn"):
-                                r_icon = 100
+                                r_icon = 100     # 100m tính từ tâm (theo hệ metric của map EPSG:3857)
                             else:
-                                r_icon = radius*0.9
+                                r_icon = radius*0.9  # Mặc định
+                    
                             x_icon = x_center + np.cos(angle) * r_icon
                             y_icon = y_center + np.sin(angle) * r_icon
-                
+                    
+                            # --- Icon & màu sắc ---
                             if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
                                 icon = "Sơn"
                                 color = "#ffd600"
@@ -471,7 +442,7 @@ def main():
                                 color = "#01579b"
                             else:
                                 continue
-                
+                    
                             ax.text(
                                 x_icon, y_icon, icon,
                                 ha='center', va='center',
@@ -479,19 +450,54 @@ def main():
                                 fontweight='bold',
                                 zorder=98,
                                 color=color
-                            )
-                            # VẼ DẤU +/-
-                            if diem != 0:
-                                ax.text(
-                                    x_icon, y_icon + 8,
-                                    '+' if diem > 0 else '-',
-                                    ha='center', va='center',
-                                    fontsize=17,
-                                    color='red' if diem > 0 else 'blue',
-                                    fontweight='bold',
-                                    zorder=100,
-                                    alpha=0.85
-                                )
+                            )   
+                      
+    
+            if not df_son.empty:
+                df_son['son'] = df_son['son'].apply(chuan_hoa_ten)
+                # Tính median địa hình
+                median_z = np.median(data_array)
+                diem_tong = 0
+                diem_chi_tiet = []
+            
+                for _, row in df_son.iterrows():
+                    idx = get_label_index(row['son'], labels_24)
+                    if idx is not None:
+                        # Lấy vị trí pixel theo chỉ số idx trên vòng 24
+                        # Tìm góc
+                        angle = theta[idx]
+                        # Lấy vị trí trên bản đồ (vòng tròn cách tâm bán kính radius*0.7)
+                        px = x_center + np.cos(angle)*radius*0.7
+                        py = y_center + np.sin(angle)*radius*0.7
+                        # Chuyển đổi ngược về lat,lon (EPSG:3857 -> EPSG:4326)
+                        lon_px, lat_px = transformer.transform(px, py, direction="INVERSE")
+                        # Tìm chỉ số gần nhất trên lưới DEM
+                        i = np.argmin(np.abs(yt - lat_px))
+                        j = np.argmin(np.abs(xt - lon_px))
+                        value = data_array[i, j]
+            
+                        # Tính điểm
+                        if row['zone'] == "cung vị sơn":
+                            if value >= median_z:
+                                diem = 1
+                            else:
+                                diem = -1
+                        elif row['zone'] == "cung vị thủy":
+                            if value <= median_z:
+                                diem = 1
+                            else:
+                                diem = -1
+                        else:
+                            diem = 0
+                        diem_tong += diem
+                        diem_chi_tiet.append({
+                            'son': row['son'],
+                            'zone': row['zone'],
+                            'group': row['group'],
+                            'giatri': value,
+                            'median': median_z,
+                            'diem': diem
+                        })
             
                 ax.set_axis_off()
                 scale_length = 100  # 100m
