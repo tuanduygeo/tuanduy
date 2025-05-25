@@ -48,7 +48,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    offset = -radius
+    offset = -radius + (d_red / 2) - offset_d
     while offset < radius:
         total_offset = offset + offset_d
         # Dải đỏ
