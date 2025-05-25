@@ -498,19 +498,8 @@ def main():
                             'median': median_z,
                             'diem': diem
                         })
-                        # VẼ DẤU +/-
-                        if diem != 0:
-                            ax.text(
-                                x_icon, y_icon + 8,
-                                '+' if diem > 0 else '-',
-                                ha='center', va='center',
-                                fontsize=17,
-                                color='red' if diem > 0 else 'blue',
-                                fontweight='bold',
-                                zorder=100,
-                                alpha=0.85
-                            )
-                            st.write(diem)
+                        
+                            
                 ax.set_axis_off()
                 scale_length = 100  # 100m
                 # Chọn vị trí đặt scale bar (ở góc trái dưới)
