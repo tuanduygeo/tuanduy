@@ -27,11 +27,16 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10):
-    # bearing_deg: góc phương song song (0 là Bắc), d là khoảng cách giữa các đường (m)
-    n = int(radius // d)
-    # Tính toán hướng song song
-    theta = np.deg2rad(90 - bearing_deg)  # 0 độ là hướng Bắc
+def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10, offset_d=0, rotate_angle=0):
+    """
+    - bearing_deg: hướng chính các đường song song (0=Bắc)
+    - d: khoảng cách giữa các dải
+    - offset_d: xê dịch song song theo phương vuông góc với hướng chính (m)
+    - rotate_angle: cộng thêm góc xoay cho hướng song song (độ)
+    """
+    n = int(radius // d) + 2
+    # Tính toán hướng song song (tính cả rotate_angle)
+    theta = np.deg2rad(90 - bearing_deg - rotate_angle)
     # Vector song song
     dx = np.cos(theta)
     dy = np.sin(theta)
@@ -40,27 +45,26 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10):
     ny = dx
 
     for i in range(-n, n):
-        offset = i * d
+        offset = i * d + offset_d
         # Tọa độ hai điểm cắt vòng tròn bán kính "radius"
         px0 = x_center + nx * offset + dx * radius
         py0 = y_center + ny * offset + dy * radius
         px1 = x_center + nx * offset - dx * radius
         py1 = y_center + ny * offset - dy * radius
-        # Giới hạn lại các đoạn nằm trong vòng tròn
-        # Tính toán góc trên vòng tròn
+
         angle1 = np.arctan2(py0 - y_center, px0 - x_center)
         angle2 = np.arctan2(py1 - y_center, px1 - x_center)
-        # Hai điểm đầu, cuối trên vòng tròn
+
         r1x = x_center + np.cos(angle1) * radius
         r1y = y_center + np.sin(angle1) * radius
         r2x = x_center + np.cos(angle2) * radius
         r2y = y_center + np.sin(angle2) * radius
+
         # Fill vùng giữa hai đường
         if i % 2 == 0:
             color = (1, 0, 0, 0.14) # Đỏ trong suốt
         else:
             color = (0, 0.4, 1, 0.14) # Xanh trong suốt
-        # Tạo polygon bọc giữa 2 đường song song và vòng tròn
         polygon = plt.Polygon([
             [r1x, r1y],
             [r2x, r2y],
@@ -69,7 +73,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=10):
         ], closed=True, facecolor=color, edgecolor=None, linewidth=0)
         ax.add_patch(polygon)
         # Vẽ đường kẻ chính giữa vùng
-        ax.plot([r1x, r2x], [r1y, r2y], color='white', linewidth=1, alpha=0.4)
+        ax.plot([r1x, r2x], [r1y, r2y], color='white', linewidth=1, alpha=0.5)
 
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
@@ -167,8 +171,10 @@ def main():
         distance_between_zones = st.number_input("Khoảng cách giữa các dải (m)", min_value=1.0, max_value=50.0, value=10.0, step=1.0)
     with col3:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
+        offset_d = st.number_input("Dịch chuyển ngang (m)", min_value=-100.0, max_value=100.0, value=0.0, step=1.0)
     with col4:
         diachi = st.text_input("địa chỉ", value="")
+        rotate_angle = st.number_input("Góc lệch mạch (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
     with col5:
         st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
         run = st.button("Run", use_container_width=True)
@@ -578,7 +584,14 @@ def main():
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
-                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0),d=distance_between_zones)
+                plot_parallel_zones(
+                    ax, x_center, y_center,
+                    radius=100,
+                    bearing_deg=(manual_bearing if manual_bearing is not None else 0),
+                    d=distance_between_zones,
+                    offset_d=offset_d,
+                    rotate_angle=rotate_angle
+                )
                 plt.tight_layout()
                 st.pyplot(fig)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
