@@ -217,7 +217,7 @@ def main():
     col1, col2, col3, col4, col5 = st.columns([1 ,1, 1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
-        st.markdown("<div style='height:36px'></div>", unsafe_allow_html=True)
+        
         ratio_red=st.number_input("tỷ số tốt/xấu", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
     with col2:
         dt = st.number_input("dt", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
