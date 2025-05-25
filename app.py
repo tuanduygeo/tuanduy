@@ -545,11 +545,11 @@ def main():
                 st.session_state['ax'] = ax
                 st.session_state['img_extent'] = (x0, y0, x1, y1)
                 if 'fig' in st.session_state and st.button("Thêm nền vệ tinh"):
-                fig = st.session_state['fig']
-                ax = st.session_state['ax']
-                x0, y0, x1, y1 = st.session_state['img_extent']
+                    fig = st.session_state['fig']
+                    ax = st.session_state['ax']
+                    x0, y0, x1, y1 = st.session_state['img_extent']
             
-                import contextily as ctx
+                
                 img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=17)
                 ax.imshow(img, extent=ext, origin="upper", zorder=0)  # zorder=0 để không đè lên các icon/dấu
             
