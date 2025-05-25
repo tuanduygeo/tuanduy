@@ -447,32 +447,59 @@ def main():
                             })
                 
                     # ... Hiển thị điểm tổng/phụ ...
-                    st.markdown(f"### 🔢 Tổng điểm phong thủy: `{diem_tong}`")
+                    st.markdown(f"### `{diem_tong}`")
                 
-                    # *** Vẽ icon & điểm lên bản đồ ***
                     for _, row in df_son.iterrows():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
                             angle = theta[idx]
-                            r_icon = 100 if (row['group'] == "tấn") else radius*0.9
+                            if (row['group'] == "tấn"):
+                                r_icon = 100
+                            else:
+                                r_icon = radius * 0.9
+                    
                             x_icon = x_center + np.cos(angle) * r_icon
                             y_icon = y_center + np.sin(angle) * r_icon
-                
-                            # --- Icon ---
-                            # ... giống đoạn đã hướng dẫn ở trên ...
-                
-                            # --- Điểm ---
+                    
+                            # Chọn icon & màu sắc
+                            if row['zone'] == "cung vị sơn" and row['group'] == "thoái":
+                                icon = "Sơn"
+                                color = "#ffd600"
+                            elif row['zone'] == "cung vị sơn" and row['group'] == "tấn":
+                                icon = "S"
+                                color = "#e65100"
+                            elif row['zone'] == "cung vị thủy" and row['group'] == "thoái":
+                                icon = "Thủy"
+                                color = "#00b8d4"
+                            elif row['zone'] == "cung vị thủy" and row['group'] == "tấn":
+                                icon = "T"
+                                color = "#01579b"
+                            else:
+                                continue
+                    
+                            # VẼ ICON (chữ lớn)
+                            ax.text(
+                                x_icon, y_icon, icon,
+                                ha='center', va='center',
+                                fontsize=14,
+                                fontweight='bold',
+                                zorder=98,
+                                color=color
+                            )
+                            
+                            # VẼ ĐIỂM SỐ bên cạnh
                             diem_val = None
                             for diem in diem_chi_tiet:
-                                if (diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']):
+                                if diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']:
                                     diem_val = diem['diem']
                                     break
                             if diem_val is not None:
+                                # Lệch sang phải (có thể tăng giảm offset cho đẹp, thử 25 hoặc 30 cho font lớn hơn)
                                 ax.text(
-                                    x_icon + 18, y_icon,
+                                    x_icon + 23, y_icon,         # +23 hoặc +30 pixel/met tùy scale bản đồ bạn test
                                     f"{'+' if diem_val>0 else ''}{diem_val}",
                                     ha='left', va='center',
-                                    fontsize=14,
+                                    fontsize=11,                 # nhỏ hơn chữ icon
                                     fontweight='bold',
                                     color='red' if diem_val>0 else 'blue',
                                     zorder=100
