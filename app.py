@@ -501,9 +501,9 @@ def main():
                                 dau = "+" if diem_val > 0 else "-"
                                 # Offset nhỏ hơn nếu icon là "S" hoặc "T"
                                 if icon in ["S", "T"]:
-                                    offset_x = 12   # sát hơn
+                                    offset_x = 6   # sát hơn
                                 else:
-                                    offset_x = 23   # xa hơn
+                                    offset_x = 26   # xa hơn
                                 ax.text(
                                     x_icon + offset_x, y_icon,
                                     dau,
