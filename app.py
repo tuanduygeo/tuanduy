@@ -567,7 +567,8 @@ def main():
                 x_end = x_start + scale_length
                 ax.set_title(f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})|Hiệu số: {diem_tong}| Từ thiên: {declination_str}°", 
     fontsize=16, fontweight='bold', color='#f9d423', pad=18) 
-             
+                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0), d=st.number_input("Khoảng cách các dải (m)", min_value=1.0, max_value=100.0, value=10.0, step=1.0))
+                
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
                 # Vẽ hai gạch đứng ở hai đầu (nếu thích)
@@ -647,7 +648,6 @@ def main():
                     
                 else:
                     st.write("Không tìm thấy điểm giao cắt giữa KDE và normal fit.")
-                plot_parallel_zones(ax, x_center, y_center, radius=100, bearing_deg=(manual_bearing if manual_bearing is not None else 0), d=st.number_input("Khoảng cách các dải (m)", min_value=1.0, max_value=100.0, value=10.0, step=1.0))
                 ax_hist.legend(prop={'size': 7})
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
