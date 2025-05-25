@@ -678,7 +678,7 @@ def main():
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
                         rotate_angle2=rotate_angle2,
-                        ratio_red=ratio_red2
+                        ratio_red2=ratio_red2
                     )
 
                 plt.tight_layout()
