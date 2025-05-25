@@ -70,7 +70,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     # Vẽ lại vòng tròn outline để rõ khu vực
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
-def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0):
+def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=60, offset_d2=0, rotate_angle2=0):
     n = int(2 * radius // d2) + 2  # Nhiều hơn một chút để đủ phủ hết hình tròn
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
     dx = np.cos(theta)
@@ -90,14 +90,14 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         cx = x_center + nx * offset
         cy = y_center + ny * offset
         # Màu xen kẽ
-        color = (0, 1, 0, 0.12) if i % 2 == 0 else (0, 0.6, 1, 0.12)  # Gợi ý: màu khác hệ 1 cho dễ phân biệt!
+        color = (1, 0, 0, 0.14) if i % 2 == 0 else (0, 0.4, 1, 0.14)
         # Tạo hình chữ nhật dải: rộng = 2*radius, dài = d2
         rect = Rectangle(
             (-radius, -d2 / 2), 2 * radius, d2,
             facecolor=color,
             edgecolor='none',
             linewidth=0,
-            alpha=0.2
+            alpha=0.1
         )
         # Xoay và dịch hình chữ nhật vào đúng vị trí
         t = transforms.Affine2D() \
@@ -108,9 +108,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         rect.set_clip_path(circle)
         ax.add_patch(rect)
 
-    # Vẽ lại vòng tròn outline để rõ khu vực
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
-    ax.add_patch(circle_vis)
+    
 @st.cache_data
 def load_crop_dem(hgt_path, west, south, east, north):
     import rasterio
