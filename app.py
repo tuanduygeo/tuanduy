@@ -807,7 +807,7 @@ def main():
 
                 plt.tight_layout()
                 st.pyplot(fig)
-                st.markdown("### Biểu đồ chi tiết ")
+                
                 st.pyplot(fig2)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
