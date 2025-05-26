@@ -618,20 +618,25 @@ def main():
                     for _, row in df_son.iterrows():
                         idx = get_label_index(row['son'], labels_24)
                         if idx is not None:
-                            # ... các đoạn lấy value ...
+                            # Xác định góc
+                            angle = theta[idx]
+                            # Lấy vị trí trên vòng tròn
+                            px = x_center + np.cos(angle) * radius * 0.7
+                            py = y_center + np.sin(angle) * radius * 0.7
+                            # Chuyển ngược về lat/lon (EPSG:3857 -> EPSG:4326)
+                            lon_px, lat_px = transformer.transform(px, py, direction="INVERSE")
+                            # Tìm chỉ số gần nhất trên DEM
+                            i = np.argmin(np.abs(yt - lat_px))
+                            j = np.argmin(np.abs(xt - lon_px))
+                            value = data_array[i, j]    # <--- PHẢI CÓ DÒNG NÀY
+                    
                             # Tính điểm
                             diem = 0
                             if row['zone'] == "cung vị sơn":
-                                if value >= median_z:
-                                    diem = 1
-                                else:
-                                    diem = -1
+                                diem = 1 if value >= median_z else -1
                                 diem_son += diem
                             elif row['zone'] == "cung vị thủy":
-                                if value <= median_z:
-                                    diem = 1
-                                else:
-                                    diem = -1
+                                diem = 1 if value <= median_z else -1
                                 diem_thuy += diem
                             diem_tong += diem
                             diem_chi_tiet.append({
