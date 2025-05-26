@@ -751,8 +751,8 @@ def main():
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
                 dt2 = dt / 10
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
-                x0, x1 = x_center - radius/10, x_center + radius/10
-                y0, y1 = y_center - radius/10, y_center + radius/10
+                x0, x1 = x_center - radius/5, x_center + radius/5
+                y0, y1 = y_center - radius/5, y_center + radius/5
                 img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
