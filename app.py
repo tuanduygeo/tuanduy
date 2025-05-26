@@ -772,17 +772,15 @@ def main():
                         d=distance_between_zones,
                         offset_d=offset_d,
                         rotate_angle=rotate_angle,
-                        ratio_red=ratio_red,
-                    )
-                    plot_parallel_zones(
+                        ratio_red=ratio_red,                    )
+                     plot_parallel_zones(
                         ax2, x_center, y_center,
                         radius=100,
                         bearing_deg=bearing_main,
                         d=distance_between_zones,
                         offset_d=offset_d,
                         rotate_angle=rotate_angle,
-                        ratio_red=ratio_red,
-                    )
+                        ratio_red=ratio_red,                    )
                 
                 # === Vẽ dải Mạch phụ (vuông góc với mạch chính) ===
                 bearing_deg2 = (bearing_main + 90) % 360
@@ -794,8 +792,7 @@ def main():
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
                         rotate_angle2=rotate_angle2,
-                        ratio_red2=ratio_red2
-                    )
+                        ratio_red2=ratio_red2                    )
                     plot_parallel_zones2(
                         ax2, x_center, y_center,
                         radius=100,
@@ -803,8 +800,7 @@ def main():
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
                         rotate_angle2=rotate_angle2,
-                        ratio_red2=ratio_red2
-                    )
+                        ratio_red2=ratio_red2                    )
 
                 plt.tight_layout()
                 st.pyplot(fig)
