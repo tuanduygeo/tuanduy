@@ -765,6 +765,15 @@ def main():
                 
                 
                 if show_main:
+                     plot_parallel_zones(
+                        ax, x_center, y_center,
+                        radius=100,
+                        bearing_deg=bearing_main,
+                        d=distance_between_zones,
+                        offset_d=offset_d,
+                        rotate_angle=rotate_angle,
+                        ratio_red=ratio_red,
+                    )
                     plot_parallel_zones(
                         ax2, x_center, y_center,
                         radius=100,
@@ -778,6 +787,15 @@ def main():
                 # === Vẽ dải Mạch phụ (vuông góc với mạch chính) ===
                 bearing_deg2 = (bearing_main + 90) % 360
                 if show_sub:
+                    plot_parallel_zones2(
+                        ax, x_center, y_center,
+                        radius=100,
+                        bearing_deg2=bearing_deg2,
+                        d2=distance_between_zones2,
+                        offset_d2=offset_d2,
+                        rotate_angle2=rotate_angle2,
+                        ratio_red2=ratio_red2
+                    )
                     plot_parallel_zones2(
                         ax2, x_center, y_center,
                         radius=100,
