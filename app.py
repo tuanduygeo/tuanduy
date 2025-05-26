@@ -854,12 +854,13 @@ def main():
                 plt.close(fig_hist)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
-st.sidebar.title("Chọn chức năng")
-page = st.sidebar.radio("Đi tới:", ["Địa mạch", "Chiêm tinh Ấn Độ"])
 
-if page == "Địa mạch":
+tab1, tab2 = st.tabs(["Địa mạch", "Chiêm tinh Ấn Độ"])
+
+with tab1:
     main()
-elif page == "Chiêm tinh Ấn Độ":
+
+with tab2:
     chiem_tinh_main()
     
     st.markdown("""### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. 
