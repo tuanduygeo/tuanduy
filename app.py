@@ -786,6 +786,8 @@ def main():
 
                 plt.tight_layout()
                 st.pyplot(fig)
+                st.markdown("### Biểu đồ chi tiết (zoom sâu)")
+                st.pyplot(fig2)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
                 df_diem = pd.DataFrame(diem_chi_tiet)
@@ -859,8 +861,7 @@ def main():
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
                 # --- Figure 2: Zoom sâu, dt2 nhỏ hơn ---
-                st.markdown("### Biểu đồ chi tiết (zoom sâu)")
-                st.pyplot(fig2)
+                
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
 
