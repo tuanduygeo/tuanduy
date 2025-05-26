@@ -428,7 +428,7 @@ def main():
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
-                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=17)
+                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
                 ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
@@ -753,7 +753,7 @@ def main():
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
                 y0, y1 = y_center - radius/5, y_center + radius/5
-                img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=19)
+                img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
                 ax2.set_xlim(x0, x1)
