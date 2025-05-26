@@ -749,6 +749,12 @@ def main():
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) > median ({median_z:.2f}): **CAO**')
                 else:
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
+                dt2 = dt / 10
+                fig2, ax2 = plt.subplots(figsize=(12, 12))
+                x0, x1 = x_center - radius/5, x_center + radius/5
+                y0, y1 = y_center - radius/5, y_center + radius/5
+                img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=19)
+                ax2.imshow(img2, extent=ext2, origin="upper")
                 
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
@@ -756,7 +762,7 @@ def main():
                 
                 if show_main:
                     plot_parallel_zones(
-                        ax, x_center, y_center,
+                        ax2, x_center, y_center,
                         radius=100,
                         bearing_deg=bearing_main,
                         d=distance_between_zones,
@@ -769,7 +775,7 @@ def main():
                 bearing_deg2 = (bearing_main + 90) % 360
                 if show_sub:
                     plot_parallel_zones2(
-                        ax, x_center, y_center,
+                        ax2, x_center, y_center,
                         radius=100,
                         bearing_deg2=bearing_deg2,
                         d2=distance_between_zones2,
@@ -852,6 +858,9 @@ def main():
                 ax_hist.legend(prop={'size': 7})
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
+                # --- Figure 2: Zoom sâu, dt2 nhỏ hơn ---
+                st.markdown("### Biểu đồ chi tiết (zoom sâu)")
+                st.pyplot(fig2)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
 
