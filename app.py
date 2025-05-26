@@ -868,6 +868,5 @@ def main():
     DONATE: nguyenduytuan techcombank 19033167089018
     """)
 
-if __name__ == "__main__":
-    main()
+
 
