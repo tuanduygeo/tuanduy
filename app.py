@@ -764,7 +764,7 @@ def main():
                 ax2.set_xlim(x0, x1)
                 ax2.set_ylim(y0, y1)
                 ax2.set_title(
-                    f"Sơ đồ chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
+                    f"Sơ đồ địa mạch chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 legend_labels = [
                     mpatches.Patch(color="#b71c1c", label="Rất tốt"),      # Đỏ đậm
