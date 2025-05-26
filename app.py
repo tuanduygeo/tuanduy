@@ -159,7 +159,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         if (offset + d_blue/2) < radius:
             rect_blue = Rectangle(
                 (-radius, -d_blue / 2), 2 * radius, d_blue,
-                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
             rect_blue.set_clip_path(circle)
@@ -171,7 +171,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
             cy = y_center + ny * (offset2 + d_red/2)
             rect_red2 = Rectangle(
                 (-radius, -d_red / 2), 2 * radius, d_red,
-                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
             rect_red2.set_clip_path(circle)
@@ -187,7 +187,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         if abs(offset - d_blue/2) < radius:
             rect_blue = Rectangle(
                 (-radius, -d_blue / 2), 2 * radius, d_blue,
-                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
             rect_blue.set_clip_path(circle)
@@ -199,7 +199,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
             cy = y_center + ny * (offset2 - d_red/2)
             rect_red2 = Rectangle(
                 (-radius, -d_red / 2), 2 * radius, d_red,
-                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
             rect_red2.set_clip_path(circle)
