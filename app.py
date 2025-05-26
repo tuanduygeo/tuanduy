@@ -30,14 +30,6 @@ import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
 def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0, ratio_red=0.5):
-    """
-    Vẽ dải song song kín toàn bộ vòng tròn, dải đỏ luôn ở tâm, offset_d dịch chuyển thật sự!
-    Không bị trùng dải đỏ ở giữa!
-    """
-    import numpy as np
-    from matplotlib.patches import Rectangle, Circle
-    import matplotlib.transforms as transforms
-
     theta = np.deg2rad(90 - bearing_deg - rotate_angle)
     dx = np.cos(theta)
     dy = np.sin(theta)
@@ -125,60 +117,96 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     # Viền vòng tròn ngoài cho đẹp
     circle_vis = Circle((x_center, y_center), radius, edgecolor='k', facecolor='none', linewidth=1.2, alpha=0.8, zorder=99)
     ax.add_patch(circle_vis)
-    # Dấu tâm
-    ax.plot(x_center, y_center, 'ko', markersize=6, zorder=100)
+    
 def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red2=0.5):
-    """
-    Vẽ các dải song song kín toàn bộ vòng tròn, offset_d2 dịch toàn bộ hệ dải (song song với 'plot_parallel_zones')
-    """
+    # Góc quay tổng hợp
     theta = np.deg2rad(90 - bearing_deg2 - rotate_angle2)
+    # Vector pháp tuyến của dải
     dx = np.cos(theta)
     dy = np.sin(theta)
     nx = -dy
     ny = dx
 
-    # Độ rộng từng màu
+    # Tính độ rộng từng dải
     d_red = d2
-    d_blue = d2 * (1 - ratio_red2) / ratio_red2 if ratio_red2 > 0 else d2  # tránh chia 0
+    d_blue = d2 * (1 - ratio_red2) / ratio_red2 if ratio_red2 > 0 else d2
+    cycle = d_red + d_blue
 
-    # Tạo vòng tròn làm clip path
+    # Clip path vòng tròn
     circle = Circle((x_center, y_center), radius, transform=ax.transData)
     ax.add_patch(circle)
     circle.set_visible(False)
 
-    # offset chạy từ -radius tới +radius, offset_d2 được cộng cho từng dải
-    offset = -radius
+    # ===== 1. VẼ DẢI ĐỎ Ở GIỮA TÂM =====
+    cx = x_center
+    cy = y_center
+    rect_red = Rectangle(
+        (-radius, -d_red / 2), 2 * radius, d_red,
+        facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+    t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+    rect_red.set_transform(t_red)
+    rect_red.set_clip_path(circle)
+    ax.add_patch(rect_red)
+
+    # ===== 2. VẼ RA NGOÀI HAI PHÍA =====
+    # ---- Phía dương (bên phải tâm) ----
+    offset = d_red/2 + offset_d2
     while offset < radius:
-        # Dải đỏ
-        total_offset = offset + offset_d2
-        cx = x_center + nx * total_offset
-        cy = y_center + ny * total_offset
-        rect_red = Rectangle(
-            (-radius, -d_red / 2), 2 * radius, d_red,
-            facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
-        t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
-        rect_red.set_transform(t_red)
-        rect_red.set_clip_path(circle)
-        ax.add_patch(rect_red)
-
-        offset += d_red
-
         # Dải xanh
-        total_offset = offset + offset_d2
-        cx = x_center + nx * total_offset
-        cy = y_center + ny * total_offset
-        rect_blue = Rectangle(
-            (-radius, -d_blue / 2), 2 * radius, d_blue,
-            facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
-        t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
-        rect_blue.set_transform(t_blue)
-        rect_blue.set_clip_path(circle)
-        ax.add_patch(rect_blue)
+        cx = x_center + nx * (offset + d_blue/2)
+        cy = y_center + ny * (offset + d_blue/2)
+        if (offset + d_blue/2) < radius:
+            rect_blue = Rectangle(
+                (-radius, -d_blue / 2), 2 * radius, d_blue,
+                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+            t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+            rect_blue.set_transform(t_blue)
+            rect_blue.set_clip_path(circle)
+            ax.add_patch(rect_blue)
+        # Dải đỏ tiếp
+        offset2 = offset + d_blue
+        if (offset2 + d_red/2) < radius:
+            cx = x_center + nx * (offset2 + d_red/2)
+            cy = y_center + ny * (offset2 + d_red/2)
+            rect_red2 = Rectangle(
+                (-radius, -d_red / 2), 2 * radius, d_red,
+                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+            t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+            rect_red2.set_transform(t_red2)
+            rect_red2.set_clip_path(circle)
+            ax.add_patch(rect_red2)
+        offset += cycle
 
-        offset += d_blue
+    # ---- Phía âm (bên trái tâm) ----
+    offset = -d_red/2 + offset_d2
+    while abs(offset) < radius:
+        # Dải xanh
+        cx = x_center + nx * (offset - d_blue/2)
+        cy = y_center + ny * (offset - d_blue/2)
+        if abs(offset - d_blue/2) < radius:
+            rect_blue = Rectangle(
+                (-radius, -d_blue / 2), 2 * radius, d_blue,
+                facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+            t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+            rect_blue.set_transform(t_blue)
+            rect_blue.set_clip_path(circle)
+            ax.add_patch(rect_blue)
+        # Dải đỏ tiếp
+        offset2 = offset - d_blue
+        if abs(offset2 - d_red/2) < radius:
+            cx = x_center + nx * (offset2 - d_red/2)
+            cy = y_center + ny * (offset2 - d_red/2)
+            rect_red2 = Rectangle(
+                (-radius, -d_red / 2), 2 * radius, d_red,
+                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+            t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
+            rect_red2.set_transform(t_red2)
+            rect_red2.set_clip_path(circle)
+            ax.add_patch(rect_red2)
+        offset -= cycle
 
-    # Vẽ viền vòng tròn ngoài cho đẹp
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
+    # Viền vòng tròn ngoài cho đẹp
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='k', facecolor='none', linewidth=1.2, alpha=0.8, zorder=99)
     ax.add_patch(circle_vis)
 
     
