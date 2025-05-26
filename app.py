@@ -759,6 +759,9 @@ def main():
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
                 ax2.set_xlim(x0, x1)
                 ax2.set_ylim(y0, y1)
+                ax2.set_title(
+                    f"Sơ đồ chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
+                    fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 ax2.axis('off')
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
@@ -804,7 +807,7 @@ def main():
 
                 plt.tight_layout()
                 st.pyplot(fig)
-                st.markdown("### Biểu đồ chi tiết (zoom sâu)")
+                st.markdown("### Biểu đồ chi tiết ")
                 st.pyplot(fig2)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
