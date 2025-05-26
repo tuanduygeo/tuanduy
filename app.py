@@ -855,7 +855,7 @@ def main():
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
 
-tab1, tab2 = st.tabs(["Địa mạch", "Chiêm tinh Ấn Độ"])
+tab1, tab2 = st.tabs(["ĐỊA MẠCH", "CHIÊM TINH ẤN ĐỘ"])
 
 with tab1:
     main()
