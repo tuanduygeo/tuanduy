@@ -115,7 +115,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         offset -= cycle
 
     # Viền vòng tròn ngoài cho đẹp
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='k', facecolor='none', linewidth=1.2, alpha=0.8, zorder=99)
+    circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
     
 def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, offset_d2=0, rotate_angle2=0, ratio_red2=0.5):
@@ -205,9 +205,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
             ax.add_patch(rect_red2)
         offset -= cycle
 
-    # Viền vòng tròn ngoài cho đẹp
-    circle_vis = Circle((x_center, y_center), radius, edgecolor='k', facecolor='none', linewidth=1.2, alpha=0.8, zorder=99)
-    ax.add_patch(circle_vis)
+    
 
     
 @st.cache_data
