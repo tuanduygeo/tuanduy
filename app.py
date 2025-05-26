@@ -725,7 +725,10 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
-                ax.set_title(f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})|Hiệu số: {diem_tong}| Từ thiên: {declination_str}°", 
+                ax.set_title(
+                    f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f}) | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
+                    fontsize=16, fontweight='bold', color='#f9d423', pad=18
+                ), 
     fontsize=16, fontweight='bold', color='#f9d423', pad=18) 
                 
                 # Vẽ thanh thước
