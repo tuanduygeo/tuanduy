@@ -21,7 +21,7 @@ from rasterio.windows import from_bounds
 from rasterio.enums import Resampling
 from pyproj import Transformer
 import contextily as ctx
-from app_chiemtinh import main as chiem_tinh_main
+from appchiemtinh import main as chiem_tinh_main
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
