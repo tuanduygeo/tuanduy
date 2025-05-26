@@ -21,7 +21,7 @@ from rasterio.windows import from_bounds
 from rasterio.enums import Resampling
 from pyproj import Transformer
 import contextily as ctx
-from astrology_utils import astrology_block
+from app_chiemtinh import main as chiem_tinh_main
 from scipy.ndimage import gaussian_filter
 import re
 import geomag
@@ -854,13 +854,7 @@ def main():
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
   
-    st.markdown("### 2. Chiêm tinh Ấn Độ")
-    astrology_block()
-    st.markdown("""
-    ### 3.🌐Biểu đồ cộng hưởng Schumann 
-    Nguồn: [Tomsk, Russia Space Observing System]
-    """)
-    st.image("https://sosrff.tsu.ru/new/shm.jpg", caption="Schumann Resonance - Live", use_container_width=True)
+    
     st.markdown("""### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. 
     Dữ liệu code nguồn không sao chép dưới mọi hình thức. 
     SĐT&ZALO: 0377442597. 
@@ -869,3 +863,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+st.sidebar.title("Chọn chức năng")
+page = st.sidebar.radio("Đi tới:", ["Địa mạch", "Chiêm tinh Ấn Độ"])
+
+if page == "Địa mạch":
+    main()
+elif page == "Chiêm tinh Ấn Độ":
+    chiem_tinh_main()
