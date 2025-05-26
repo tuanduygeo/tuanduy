@@ -47,8 +47,8 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     circle.set_visible(False)
 
     # ===== 1. VẼ DẢI ĐỎ Ở GIỮA =====
-    cx = x_center
-    cy = y_center
+    cx = x_center + nx * offset_d
+    cy = y_center + ny * offset_d
     rect_red = Rectangle(
         (-radius, -d_red / 2), 2 * radius, d_red,
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
@@ -138,8 +138,8 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
     circle.set_visible(False)
 
     # ===== 1. VẼ DẢI ĐỎ Ở GIỮA TÂM =====
-    cx = x_center
-    cy = y_center
+    cx = x_center + nx * offset_d2
+    cy = y_center + ny * offset_d2
     rect_red = Rectangle(
         (-radius, -d_red / 2), 2 * radius, d_red,
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
