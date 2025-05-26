@@ -755,7 +755,9 @@ def main():
                 y0, y1 = y_center - radius/5, y_center + radius/5
                 img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=19)
                 ax2.imshow(img2, extent=ext2, origin="upper")
-                
+                # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
+                ax2.set_xlim(x0, x1)
+                ax2.set_ylim(y0, y1)
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
                 
