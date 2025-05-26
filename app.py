@@ -727,9 +727,7 @@ def main():
                 x_end = x_start + scale_length
                 ax.set_title(
                     f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f}) | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
-                    fontsize=16, fontweight='bold', color='#f9d423', pad=18
-                ), 
-    fontsize=16, fontweight='bold', color='#f9d423', pad=18) 
+                    fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 
                 # Vẽ thanh thước
                 ax.plot([x_start, x_end], [y_start, y_start], color='white', linewidth=4, solid_capstyle='round', zorder=20)
