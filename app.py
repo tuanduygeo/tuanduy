@@ -758,6 +758,7 @@ def main():
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
                 ax2.set_xlim(x0, x1)
                 ax2.set_ylim(y0, y1)
+                ax2.axis('off')
                 # === Vẽ dải Mạch chính ===
                 bearing_main = manual_bearing if manual_bearing is not None else bearing
                 
@@ -862,7 +863,7 @@ def main():
                 ax_hist.legend(prop={'size': 7})
                 st.pyplot(fig_hist)
                 plt.close(fig_hist)
-                # --- Figure 2: Zoom sâu, dt2 nhỏ hơn ---
+                
                 
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
