@@ -29,13 +29,7 @@ from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
-st.sidebar.title("Chọn chức năng")
-page = st.sidebar.radio("Đi tới:", ["Địa mạch", "Chiêm tinh Ấn Độ"])
 
-if page == "Địa mạch":
-    main()
-elif page == "Chiêm tinh Ấn Độ":
-    chiem_tinh_main()
 def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, offset_d=0, rotate_angle=0, ratio_red=0.5):
     theta = np.deg2rad(90 - bearing_deg - rotate_angle)
     dx = np.cos(theta)
@@ -860,7 +854,13 @@ def main():
                 plt.close(fig_hist)
         except Exception as e:
             st.error(f"Đã xảy ra lỗi: {e}")
-  
+st.sidebar.title("Chọn chức năng")
+page = st.sidebar.radio("Đi tới:", ["Địa mạch", "Chiêm tinh Ấn Độ"])
+
+if page == "Địa mạch":
+    main()
+elif page == "Chiêm tinh Ấn Độ":
+    chiem_tinh_main()
     
     st.markdown("""### Tác giả Nguyễn Duy Tuấn – với mục đích phụng sự tâm linh và cộng đồng. 
     Dữ liệu code nguồn không sao chép dưới mọi hình thức. 
