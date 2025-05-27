@@ -830,19 +830,20 @@ def main():
                     w, h = image.size
                 
                     # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
-                    x_center3 = w // 2
-                    y_center3 = h // 2
-                    radius3 = 50  # -10 để tránh tràn viền ảnh
+                    radius3 = 50
+                    x0, x1 = x_center - radius3, x_center + radius3
+                    y0, y1 = y_center - radius3, y_center + radius3
+                      # -10 để tránh tràn viền ảnh
                 
-                    fig3, ax3 = plt.subplots(figsize=(8, 8))
-                    ax3.imshow(image)
-                    ax3.set_xlim(0, w)
-                    ax3.set_ylim(h, 0)  # Đảo chiều Y cho đúng chiều ảnh
+                    fig3, ax3 = plt.subplots(figsize=(12, 12))
+                    ax3.imshow(image, extent=[x0, x1, y0, y1], origin="upper")
+                    ax3.set_xlim(x0, x1)
+                    ax3.set_ylim(y0, y1) # Đảo chiều Y cho đúng chiều ảnh
                 
-                    # Vẽ dải mạch chính lên ảnh nền (dùng lại các thông số đã nhập của mạch chính)
+                    # Overlay mạch chính
                     if show_main:
                         plot_parallel_zones(
-                            ax3, x_center3, y_center3,
+                            ax3, x_center, y_center,
                             radius=radius3,
                             bearing_deg=manual_bearing if manual_bearing is not None else 0,
                             d=distance_between_zones,
@@ -850,11 +851,11 @@ def main():
                             rotate_angle=rotate_angle,
                             ratio_red=ratio_red,
                         )
-                    # Vẽ dải mạch phụ (vuông góc với mạch chính, dùng lại thông số mạch phụ)
+                    # Overlay mạch phụ
                     if show_sub:
                         bearing_deg2 = (manual_bearing if manual_bearing is not None else 0) + 90
                         plot_parallel_zones2(
-                            ax3, x_center3, y_center3,
+                            ax3, x_center, y_center,
                             radius=radius3,
                             bearing_deg2=bearing_deg2,
                             d2=distance_between_zones2,
@@ -862,8 +863,9 @@ def main():
                             rotate_angle2=rotate_angle2,
                             ratio_red2=ratio_red2,
                         )
+                
                     ax3.axis("off")
-                    ax3.set_title("Overlay mạch lên ảnh nền", fontsize=14, color='navy')
+                    ax3.set_title("Sơ đồ địa mạch", fontsize=14)
                     st.pyplot(fig3)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
