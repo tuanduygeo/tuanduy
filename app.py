@@ -748,7 +748,7 @@ def main():
                 # Xác định median
                 median_z = np.median(data_array)
                 if value_center > median_z:
-                    st.write(f'Giá trị tại tâm ({value_center:.2f}) > median ({median_z:.2f}): **CAO**')
+                    st.write(f'Giá trị tại tâm ({value_center:.2f}) >  ({median_z:.2f}): **CAO**')
                     
                 else:
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
