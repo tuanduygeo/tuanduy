@@ -82,7 +82,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=("red"), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            # rect_red2.set_clip_path(circle)  # BỎ DÒNG NÀY
+            
             ax.add_patch(rect_red2)
         offset += cycle
 
@@ -829,17 +829,35 @@ def main():
                 if uploaded_file is not None:
                     image = Image.open(uploaded_file).convert("RGBA")
                     bearing = manual_bearing if manual_bearing is not None else bearing
-                    image_rot = image.rotate(-bearing, expand=True)
-                    # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
-                    radius3 = 50
-                    x0, x1 = x_center - radius3, x_center + radius3
-                    y0, y1 = y_center - radius3, y_center + radius3
-                      # -10 để tránh tràn viền ảnh
+                    
+                    w, h = image.size
+                    radius3 = 50  # mét
+                
+                    # Tính extent để fit ảnh theo 1 chiều (giữ nguyên tỉ lệ)
+                    geo_w = geo_h = 2 * radius3
+                    ratio_w = geo_w / w
+                    ratio_h = geo_h / h
+                
+                    if ratio_w < ratio_h:
+                        # Fit chiều rộng
+                        new_geo_w = geo_w
+                        new_geo_h = h * ratio_w
+                        x0, x1 = x_center - radius3, x_center + radius3
+                        y0 = y_center - new_geo_h / 2
+                        y1 = y_center + new_geo_h / 2
+                    else:
+                        # Fit chiều cao
+                        new_geo_h = geo_h
+                        new_geo_w = w * ratio_h
+                        y0, y1 = y_center - radius3, y_center + radius3
+                        x0 = x_center - new_geo_w / 2
+                        x1 = x_center + new_geo_w / 2
                 
                     fig3, ax3 = plt.subplots(figsize=(12, 12))
                     ax3.imshow(image, extent=[x0, x1, y0, y1], origin="upper")
-                    ax3.set_xlim(x0, x1)
-                    ax3.set_ylim(y0, y1)
+                
+                    ax3.set_xlim(x_center - radius3, x_center + radius3)
+                    ax3.set_ylim(y_center - radius3, y_center + radius3)
                     ax3.legend(handles=legend_labels, loc="upper right", fontsize=12, title="Chú thích", title_fontsize=13)
                     plot_fibonacci_labels_only(ax3, x_center, y_center, labels_24, radius=50)
                     # Overlay mạch chính
