@@ -827,7 +827,7 @@ def main():
                 
                 if uploaded_file is not None:
                     image = Image.open(uploaded_file).convert("RGBA")
-                    bearing = manual_bearing if manual_bearing is not None else 0
+                    bearing = manual_bearing if manual_bearing is not None else bearing
                     image_rot = image.rotate(-bearing, expand=True)
                     # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
                     radius3 = 50
