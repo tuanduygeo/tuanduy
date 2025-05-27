@@ -630,11 +630,17 @@ def main():
                     
                             # Tính điểm
                             diem = 0
-                            if row['zone'] == "cung vị sơn":
-                                diem = 1 if value >= median_z else -1
+                           if row['zone'] == "cung vị sơn":
+                                if value == median_z:
+                                    diem = 0  # Không cộng điểm nếu bằng median
+                                else:
+                                    diem = 1 if value > median_z else -1
                                 diem_son += diem
                             elif row['zone'] == "cung vị thủy":
-                                diem = 1 if value <= median_z else -1
+                                if value == median_z:
+                                    diem = 0  # Không cộng điểm nếu bằng median
+                                else:
+                                    diem = 1 if value < median_z else -1
                                 diem_thuy += diem
                             diem_tong += diem
                             diem_chi_tiet.append({
