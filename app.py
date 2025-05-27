@@ -754,21 +754,31 @@ def main():
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
                 y0, y1 = y_center - radius/5, y_center + radius/5
-                def get_valid_sat_image(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
-                    # Thử zoom 19
-                    try:
-                        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=19)
-                        # Kiểm tra dữ liệu ảnh có giá trị thực sự không (không toàn 0, không NaN, shape hợp lý)
-                        if img is not None and img.shape[0] > 1 and img.shape[1] > 1 and np.nanmax(img) != np.nanmin(img):
-                            return img, ext, 19
-                    except Exception:
-                        pass
-                    # Nếu fail, thử zoom 18
-                    img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=18)
-                    return img, ext, 18
+                def is_img_data_valid(img):
+                    # Nếu là RGB, img.shape[2]=3
+                    if img is None:
+                        return False
+                    if np.isnan(img).all():
+                        return False
+                    # Nếu ảnh chỉ toàn 1 màu (toàn xám nhạt hoặc toàn 0)
+                    if np.nanmax(img) == np.nanmin(img):
+                        return False
+                    # Nếu ảnh quá nhỏ
+                    if img.shape[0] <= 1 or img.shape[1] <= 1:
+                        return False
+                    # Nếu toàn bộ đều là màu xám (ví dụ 220~240, phổ biến với map not available)
+                    if img.ndim == 3 and np.all((img[...,0] > 210) & (img[...,0] < 245)):
+                        return False
+                    return True
                 
-                # Cách dùng:
-                img2, ext2, zoom_used = get_valid_sat_image(x0, y0, x1, y1)
+                def get_valid_sat_image(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
+                    img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=19)
+                    if not is_img_data_valid(img):
+                        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=18)
+                    return img, ext
+                
+                # Sử dụng:
+                img2, ext2 = get_valid_sat_image(x0, y0, x1, y1)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 ax2.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
