@@ -754,21 +754,7 @@ def main():
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
                 y0, y1 = y_center - radius/5, y_center + radius/5
-                def get_valid_sat_image(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
-                    # Thử zoom 19
-                    try:
-                        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=19)
-                        # Kiểm tra dữ liệu ảnh có giá trị thực sự không (không toàn 0, không NaN, shape hợp lý)
-                        if img is not None and img.shape[0] > 1 and img.shape[1] > 1 and np.nanmax(img) != np.nanmin(img):
-                            return img, ext, 19
-                    except Exception:
-                        pass
-                    # Nếu fail, thử zoom 18
-                    img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=18)
-                    return img, ext, 18
-                
-                # Cách dùng:
-                img2, ext2, zoom_used = get_valid_sat_image(x0, y0, x1, y1)
+                img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=18)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 ax2.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
