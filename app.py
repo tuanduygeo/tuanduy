@@ -704,7 +704,7 @@ def main():
                                 if diem['son'] == row['son'] and diem['zone'] == row['zone'] and diem['group'] == row['group']:
                                     diem_val = diem['diem']
                                     break
-                            if diem_val is not None:
+                            if diem_val is not None and diem_val != 0:
                                 dau = "+" if diem_val > 0 else "-"
                                 # Offset nhỏ hơn nếu icon là "S" hoặc "T"
                                 if icon in ["S", "T"]:
