@@ -840,6 +840,7 @@ def main():
                     ax3.imshow(image, extent=[x0, x1, y0, y1], origin="upper")
                     ax3.set_xlim(x0, x1)
                     ax3.set_ylim(y0, y1)
+                    ax3.legend(handles=legend_labels, loc="upper right", fontsize=12, title="Chú thích", title_fontsize=13)
                     plot_fibonacci_labels_only(ax3, x_center, y_center, labels_24, radius=50)
                     # Overlay mạch chính
                     if show_main:
