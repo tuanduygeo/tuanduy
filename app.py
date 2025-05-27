@@ -783,7 +783,7 @@ def main():
                         ratio_red=ratio_red,                    )
                      plot_parallel_zones(
                         ax2, x_center, y_center,
-                        radius=100,
+                        radius=50,
                         bearing_deg=bearing_main,
                         d=distance_between_zones,
                         offset_d=offset_d,
@@ -803,7 +803,7 @@ def main():
                         ratio_red2=ratio_red2                    )
                     plot_parallel_zones2(
                         ax2, x_center, y_center,
-                        radius=100,
+                        radius=50,
                         bearing_deg2=bearing_deg2,
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
