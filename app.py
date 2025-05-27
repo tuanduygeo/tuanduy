@@ -775,7 +775,7 @@ def main():
                 if show_main:
                      plot_parallel_zones(
                         ax, x_center, y_center,
-                        radius=100,
+                        radius=50,
                         bearing_deg=bearing_main,
                         d=distance_between_zones,
                         offset_d=offset_d,
@@ -795,7 +795,7 @@ def main():
                 if show_sub:
                     plot_parallel_zones2(
                         ax, x_center, y_center,
-                        radius=100,
+                        radius=50,
                         bearing_deg2=bearing_deg2,
                         d2=distance_between_zones2,
                         offset_d2=offset_d2,
