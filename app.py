@@ -748,12 +748,12 @@ def main():
                 # Xác định offset_d để màu đúng ý
                 if value_center > median_z:
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) > median ({median_z:.2f}): **CAO**')
-                    ratio_red = ratio_red + 0.1
-                    ratio_red2 = ratio_red2 + 0.1
+                    ratio_red = ratio_red + 0.2
+                    ratio_red2 = ratio_red2 + 0.2
                 else:
                     st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
-                    ratio_red = ratio_red - 0.1
-                    ratio_red2 = ratio_red2 - 0.1
+                    ratio_red = ratio_red - 0.2
+                    ratio_red2 = ratio_red2 - 0.2
                 dt2 = dt / 10
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
