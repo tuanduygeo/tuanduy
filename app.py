@@ -770,8 +770,8 @@ def main():
                     f"Sơ đồ địa mạch chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 legend_labels = [
-                    mpatches.Patch(color=""#FFA3A3", label="Rất tốt"),      # Đỏ đậm
-                    mpatches.Patch(color=""#D5A3CB", label="Tốt"),          # Đỏ vừa
+                    mpatches.Patch(color="#FFA3A3", label="Rất tốt"),      # Đỏ đậm
+                    mpatches.Patch(color="#D5A3CB", label="Tốt"),          # Đỏ vừa
                     mpatches.Patch(color="#CCCCFF", label="Xấu"),          # Xanh vừa
                     mpatches.Patch(color="#A3A3FF", label="Rất xấu"),      # Xanh đậm
                 ]
