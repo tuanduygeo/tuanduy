@@ -318,7 +318,7 @@ def main():
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
         zoominput= st.number_input("zoom", min_value=16.0, max_value=22.0, value=18.0, step=1.0, format="%.1f")
-        uploaded_file = st.file_uploader("Tải lên ảnh nền (PNG/JPG)", type=["png", "jpg", "jpeg"])
+        uploaded_file = st.file_uploader("Tải lên ảnh nền (PNG/JPG)", type=["png", "jpg", "jpeg","bmp","tif", "webp"])
     
         
         
