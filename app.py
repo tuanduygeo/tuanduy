@@ -28,6 +28,7 @@ import re
 import geomag
 from scipy.stats import norm, gaussian_kde
 import streamlit_authenticator as stauth
+from PIL import Image
 
 st.set_page_config(layout="wide")
 
@@ -317,7 +318,7 @@ def main():
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
         zoominput= st.number_input("zoom", min_value=16.0, max_value=22.0, value=18.0, step=1.0, format="%.1f")
-        
+        uploaded_file = st.file_uploader("Tải lên ảnh nền (PNG/JPG)", type=["png", "jpg", "jpeg"])
     
         
         
@@ -821,6 +822,49 @@ def main():
                 st.pyplot(fig)
                 
                 st.pyplot(fig2)
+                st.markdown("### Sơ đồ địa mạch upload")
+
+                
+                if uploaded_file is not None:
+                    image = Image.open(uploaded_file).convert("RGBA")
+                    w, h = image.size
+                
+                    # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
+                    x_center3 = w // 2
+                    y_center3 = h // 2
+                    radius3 = min(w, h) // 2 - 10  # -10 để tránh tràn viền ảnh
+                
+                    fig3, ax3 = plt.subplots(figsize=(8, 8))
+                    ax3.imshow(image)
+                    ax3.set_xlim(0, w)
+                    ax3.set_ylim(h, 0)  # Đảo chiều Y cho đúng chiều ảnh
+                
+                    # Vẽ dải mạch chính lên ảnh nền (dùng lại các thông số đã nhập của mạch chính)
+                    if show_main:
+                        plot_parallel_zones(
+                            ax3, x_center3, y_center3,
+                            radius=radius3,
+                            bearing_deg=manual_bearing if manual_bearing is not None else 0,
+                            d=distance_between_zones,
+                            offset_d=offset_d,
+                            rotate_angle=rotate_angle,
+                            ratio_red=ratio_red,
+                        )
+                    # Vẽ dải mạch phụ (vuông góc với mạch chính, dùng lại thông số mạch phụ)
+                    if show_sub:
+                        bearing_deg2 = (manual_bearing if manual_bearing is not None else 0) + 90
+                        plot_parallel_zones2(
+                            ax3, x_center3, y_center3,
+                            radius=radius3,
+                            bearing_deg2=bearing_deg2,
+                            d2=distance_between_zones2,
+                            offset_d2=offset_d2,
+                            rotate_angle2=rotate_angle2,
+                            ratio_red2=ratio_red2,
+                        )
+                    ax3.axis("off")
+                    ax3.set_title("Overlay mạch lên ảnh nền", fontsize=14, color='navy')
+                    st.pyplot(fig3)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
                 df_diem = pd.DataFrame(diem_chi_tiet)
