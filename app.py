@@ -52,7 +52,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
     t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
     rect_red.set_transform(t_red)
-    # rect_red.set_clip_path(circle)  # BỎ DÒNG NÀY
+    
     ax.add_patch(rect_red)
 
     # ===== 2. VẼ RA NGOÀI HAI PHÍA =====
@@ -143,7 +143,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
     t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
     rect_red.set_transform(t_red)
-    rect_red.set_clip_path(circle)
+    
     ax.add_patch(rect_red)
 
     # ===== 2. VẼ RA NGOÀI HAI PHÍA =====
@@ -159,7 +159,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
                 facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
-            rect_blue.set_clip_path(circle)
+            
             ax.add_patch(rect_blue)
         # Dải đỏ tiếp
         offset2 = offset + d_blue
@@ -171,7 +171,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
                 facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            rect_red2.set_clip_path(circle)
+            
             ax.add_patch(rect_red2)
         offset += cycle
 
@@ -187,7 +187,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
                 facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
-            rect_blue.set_clip_path(circle)
+            
             ax.add_patch(rect_blue)
         # Dải đỏ tiếp
         offset2 = offset - d_blue
@@ -199,7 +199,7 @@ def plot_parallel_zones2(ax, x_center, y_center, radius, bearing_deg2=0, d2=30, 
                 facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            rect_red2.set_clip_path(circle)
+            
             ax.add_patch(rect_red2)
         offset -= cycle
 
