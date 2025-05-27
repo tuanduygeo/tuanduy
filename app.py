@@ -754,31 +754,38 @@ def main():
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
                 y0, y1 = y_center - radius/5, y_center + radius/5
-                def is_img_data_valid(img):
-                    # Nếu là RGB, img.shape[2]=3
+                def is_img_valid(img):
+                    # Không hợp lệ nếu toàn 1 màu (thường là xám 230~240)
                     if img is None:
                         return False
-                    if np.isnan(img).all():
-                        return False
-                    # Nếu ảnh chỉ toàn 1 màu (toàn xám nhạt hoặc toàn 0)
-                    if np.nanmax(img) == np.nanmin(img):
-                        return False
-                    # Nếu ảnh quá nhỏ
-                    if img.shape[0] <= 1 or img.shape[1] <= 1:
-                        return False
-                    # Nếu toàn bộ đều là màu xám (ví dụ 220~240, phổ biến với map not available)
-                    if img.ndim == 3 and np.all((img[...,0] > 210) & (img[...,0] < 245)):
-                        return False
+                    # Nếu là RGB (3 chiều)
+                    if img.ndim == 3:
+                        # Nếu toàn bộ đều là màu xám hoặc trắng (giá trị trong khoảng 220-245 trên cả 3 kênh)
+                        if np.all((img[...,0] >= 220) & (img[...,0] <= 245)) and \
+                           np.all((img[...,1] >= 220) & (img[...,1] <= 245)) and \
+                           np.all((img[...,2] >= 220) & (img[...,2] <= 245)):
+                            return False
+                        # Hoặc toàn bộ đều 1 màu
+                        if np.nanmax(img) == np.nanmin(img):
+                            return False
+                    # Nếu là grayscale
+                    if img.ndim == 2:
+                        if np.all((img >= 220) & (img <= 245)):
+                            return False
+                        if np.nanmax(img) == np.nanmin(img):
+                            return False
                     return True
                 
-                def get_valid_sat_image(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
+                def get_sat_img(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
+                    # Ưu tiên thử zoom=19 trước
                     img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=19)
-                    if not is_img_data_valid(img):
+                    if not is_img_valid(img):
+                        # print("Zoom 19 not available, switching to 18")
                         img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=18)
                     return img, ext
                 
                 # Sử dụng:
-                img2, ext2 = get_valid_sat_image(x0, y0, x1, y1)
+                img2, ext2 = get_sat_img(x0, y0, x1, y1)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 ax2.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
