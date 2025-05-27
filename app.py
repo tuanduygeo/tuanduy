@@ -832,7 +832,7 @@ def main():
                     # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
                     x_center3 = w // 2
                     y_center3 = h // 2
-                    radius3 = min(w, h) // 2 - 10  # -10 để tránh tràn viền ảnh
+                    radius3 = 50  # -10 để tránh tràn viền ảnh
                 
                     fig3, ax3 = plt.subplots(figsize=(8, 8))
                     ax3.imshow(image)
