@@ -765,6 +765,7 @@ def main():
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
                 ax2.set_xlim(x0, x1)
                 ax2.set_ylim(y0, y1)
+                plot_fibonacci_labels_only(ax2, x_center, y_center, labels_24, radius=50)
                 ax2.set_title(
                     f"Sơ đồ địa mạch chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
@@ -836,10 +837,10 @@ def main():
                       # -10 để tránh tràn viền ảnh
                 
                     fig3, ax3 = plt.subplots(figsize=(12, 12))
-                    ax3.imshow(image_rot, extent=[x0, x1, y0, y1], origin="upper")
+                    ax3.imshow(image, extent=[x0, x1, y0, y1], origin="upper")
                     ax3.set_xlim(x0, x1)
                     ax3.set_ylim(y0, y1)
-                
+                    plot_fibonacci_labels_only(ax3, x_center, y_center, labels_24, radius=50)
                     # Overlay mạch chính
                     if show_main:
                         plot_parallel_zones(
