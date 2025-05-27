@@ -630,7 +630,7 @@ def main():
                     
                             # Tính điểm
                             diem = 0
-                           if row['zone'] == "cung vị sơn":
+                            if row['zone'] == "cung vị sơn":
                                 if value == median_z:
                                     diem = 0  # Không cộng điểm nếu bằng median
                                 else:
