@@ -109,7 +109,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
             cy = y_center + ny * (offset2 - d_red/2)
             rect_red2 = Rectangle(
                 (-radius, -d_red / 2), 2 * radius, d_red,
-                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
+                facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alphacol5=0.4)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
             rect_red2.set_clip_path(circle)
@@ -298,7 +298,7 @@ def main():
     st.markdown("### 1. Địa mạch") 
     # 1. tính ========================
        # --- Giao diện nhập ---
-    col1, col2, col3, col4, col5 = st.columns([1 ,1, 1, 1, 1])
+    col1, col2, col3, col4 = st.columns([1 ,1, 1, 1])
     with col1:
         input_str = st.text_input("Nhập x,y", value="")
         run = st.button("Tính toán", use_container_width=True)
@@ -319,7 +319,7 @@ def main():
     with col4:
         manual_bearing = st.number_input("góc", min_value=0.0, max_value=360.0, value=None, step=1.0, format="%.1f")
         dt = st.number_input("Bán kính", min_value=0.001, max_value=0.02, value=0.005, step=0.002, format="%.3f")
-        
+        zoominput= st.number_input("zoom", min_value=16, max_value=19, value=18, step=1, format="%.1f")
         
     
         
@@ -429,7 +429,7 @@ def main():
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
-                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=16)
+                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=zoominput-1)
                 ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
@@ -754,36 +754,7 @@ def main():
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/5, x_center + radius/5
                 y0, y1 = y_center - radius/5, y_center + radius/5
-                def is_img_valid(img):
-                    # Kiểm tra xem ảnh có phải "not available" không (toàn xám hoặc toàn 1 màu)
-                    if img is None:
-                        return False
-                    if img.ndim == 3:
-                        if np.all((img[...,0] >= 220) & (img[...,0] <= 245)) and \
-                           np.all((img[...,1] >= 220) & (img[...,1] <= 245)) and \
-                           np.all((img[...,2] >= 220) & (img[...,2] <= 245)):
-                            return False
-                        if np.nanmax(img) == np.nanmin(img):
-                            return False
-                    if img.ndim == 2:
-                        if np.all((img >= 220) & (img <= 245)):
-                            return False
-                        if np.nanmax(img) == np.nanmin(img):
-                            return False
-                    return True
-                
-                def get_sat_img_for_ax2(x0, y0, x1, y1, provider=ctx.providers.Esri.WorldImagery):
-                    # Thử zoom=19 trước
-                    img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=19)
-                    if not is_img_valid(img):
-                        img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=provider, zoom=18)
-                        zoom_used = 18
-                    else:
-                        zoom_used = 19
-                    return img, ext, zoom_used
-                
-                # --- Ở chỗ plot ax2 ---
-                img2, ext2, zoom_used = get_sat_img_for_ax2(x0, y0, x1, y1)
+                img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=zoominput)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 ax2.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
                 # Cực kỳ quan trọng: Giới hạn khung hình trùng với bbox vừa chọn!
