@@ -56,7 +56,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
     t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
     rect_red.set_transform(t_red)
-    rect_red.set_clip_path(circle)
+    
     ax.add_patch(rect_red)
 
     # ===== 2. VẼ RA NGOÀI HAI PHÍA =====
@@ -112,7 +112,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            rect_red2.set_clip_path(circle)
+            
             ax.add_patch(rect_red2)
         offset -= cycle
 
