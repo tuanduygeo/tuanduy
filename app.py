@@ -770,10 +770,10 @@ def main():
                     f"Sơ đồ địa mạch chi tiết ({diachi} {x:.6f}, {y:.6f}) ",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 legend_labels = [
-                    mpatches.Patch(color="#b71c1c", label="Rất tốt"),      # Đỏ đậm
-                    mpatches.Patch(color="#e57373", label="Tốt"),          # Đỏ vừa
-                    mpatches.Patch(color="#64b5f6", label="Xấu"),          # Xanh vừa
-                    mpatches.Patch(color="#0d47a1", label="Rất xấu"),      # Xanh đậm
+                    mpatches.Patch(color=""#FFA3A3", label="Rất tốt"),      # Đỏ đậm
+                    mpatches.Patch(color=""#D5A3CB", label="Tốt"),          # Đỏ vừa
+                    mpatches.Patch(color="#CCCCFF", label="Xấu"),          # Xanh vừa
+                    mpatches.Patch(color="#A3A3FF", label="Rất xấu"),      # Xanh đậm
                 ]
                 ax2.legend(handles=legend_labels, loc="upper right", fontsize=12, title="Chú thích", title_fontsize=13)
                 ax2.axis('off')
