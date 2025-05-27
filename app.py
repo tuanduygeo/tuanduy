@@ -425,7 +425,7 @@ def main():
                 fig, ax = plt.subplots(figsize=(12, 12))
                 x0, x1 = Xx3857.min(), Xx3857.max()
                 y0, y1 = Yx3857.min(), Yx3857.max()
-                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=zoominput-1)
+                img, ext = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=zoominput-2)
                 ax.imshow(img, extent=ext, origin="upper")
                 ax.set_xlim(x0, x1)
                 ax.set_ylim(y0, y1)
@@ -749,8 +749,8 @@ def main():
                     
                 dt2 = dt / 10
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
-                x0, x1 = x_center - radius/5, x_center + radius/5
-                y0, y1 = y_center - radius/5, y_center + radius/5
+                x0, x1 = x_center - radius/10, x_center + radius/10
+                y0, y1 = y_center - radius/10, y_center + radius/10
                 img2, ext2 = ctx.bounds2img(x0, y0, x1, y1, ll=False, source=ctx.providers.Esri.WorldImagery, zoom=zoominput)
                 ax2.imshow(img2, extent=ext2, origin="upper")
                 ax2.text(x_center, y_center, '+', ha='center', va='center', fontsize=14, color='white', fontweight='bold')
