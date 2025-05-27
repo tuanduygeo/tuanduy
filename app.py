@@ -827,8 +827,8 @@ def main():
                 
                 if uploaded_file is not None:
                     image = Image.open(uploaded_file).convert("RGBA")
-                    w, h = image.size
-                
+                    bearing = manual_bearing if manual_bearing is not None else 0
+                    image_rot = image.rotate(-bearing, expand=True)
                     # Xác định tâm và bán kính vẽ (tương ứng center và radius như fig, fig2)
                     radius3 = 50
                     x0, x1 = x_center - radius3, x_center + radius3
@@ -836,16 +836,16 @@ def main():
                       # -10 để tránh tràn viền ảnh
                 
                     fig3, ax3 = plt.subplots(figsize=(12, 12))
-                    ax3.imshow(image, extent=[x0, x1, y0, y1], origin="upper")
+                    ax3.imshow(image_rot, extent=[x0, x1, y0, y1], origin="upper")
                     ax3.set_xlim(x0, x1)
-                    ax3.set_ylim(y0, y1) # Đảo chiều Y cho đúng chiều ảnh
+                    ax3.set_ylim(y0, y1)
                 
                     # Overlay mạch chính
                     if show_main:
                         plot_parallel_zones(
                             ax3, x_center, y_center,
                             radius=radius3,
-                            bearing_deg=manual_bearing if manual_bearing is not None else 0,
+                            bearing_deg=bearing,
                             d=distance_between_zones,
                             offset_d=offset_d,
                             rotate_angle=rotate_angle,
@@ -853,7 +853,7 @@ def main():
                         )
                     # Overlay mạch phụ
                     if show_sub:
-                        bearing_deg2 = (manual_bearing if manual_bearing is not None else 0) + 90
+                        bearing_deg2 = bearing + 90
                         plot_parallel_zones2(
                             ax3, x_center, y_center,
                             radius=radius3,
@@ -865,7 +865,7 @@ def main():
                         )
                 
                     ax3.axis("off")
-                    ax3.set_title("Sơ đồ địa mạch", fontsize=14)
+                    ax3.set_title("Sơ đồ địa mạch-upload file", fontsize=14)
                     st.pyplot(fig3)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
