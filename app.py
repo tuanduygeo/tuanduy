@@ -303,12 +303,12 @@ def main():
         diachi = st.text_input("địa chỉ", value="")
         
     with col2:
-        distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        distance_between_zones = st.number_input("Mạch chính rộng (m)", min_value=1.0, max_value=800.0, value=10.0, step=1.0)
         offset_d = st.number_input("Dịch chuyển ngang-chính (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
         rotate_angle = st.number_input("Góc lệch mạch-chính (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
         ratio_red=st.number_input("tỷ số tốt/xấu- chính", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
     with col3:
-        distance_between_zones2 = st.number_input("Mạch phụ rộng(m)", min_value=1.0, max_value=800.0, value=30.0, step=1.0)
+        distance_between_zones2 = st.number_input("Mạch phụ rộng(m)", min_value=1.0, max_value=800.0, value=10.0, step=1.0)
         offset_d2 = st.number_input("Dịch chuyển ngang-phụ (m)", min_value=-500.0, max_value=500.0, value=0.0, step=1.0)
         rotate_angle2 = st.number_input("Góc lệch mạch-phụ (độ)", min_value=-180.0, max_value=180.0, value=0.0, step=1.0)
         ratio_red2=st.number_input("tỷ số tốt/xấu- phụ", min_value=0.0, max_value=1.0, value=0.5, step=0.2, format="%.1f")
