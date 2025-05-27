@@ -822,7 +822,7 @@ def main():
                 st.pyplot(fig)
                 
                 st.pyplot(fig2)
-                st.markdown("### Sơ đồ địa mạch upload")
+                
 
                 
                 if uploaded_file is not None:
@@ -865,7 +865,7 @@ def main():
                         )
                 
                     ax3.axis("off")
-                    ax3.set_title("Sơ đồ địa mạch-upload file", fontsize=14)
+                    ax3.set_title(f"Sơ đồ địa mạch nhà {diachi} ", fontsize=14)
                     st.pyplot(fig3)
                 st.markdown(f"**Chú giải phong thủy:**<br>{n}", unsafe_allow_html=True)
                 # Nếu muốn hiển thị chi tiết:
