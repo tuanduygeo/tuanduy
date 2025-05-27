@@ -43,11 +43,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
     d_blue = d * (1 - ratio_red) / ratio_red if ratio_red > 0 else d  # tránh chia 0
     cycle = d_red + d_blue
 
-    # Clip path là hình tròn
-    circle = Circle((x_center, y_center), radius, transform=ax.transData)
-    ax.add_patch(circle)
-    circle.set_visible(False)
-
+    # KHÔNG cần clip path hình tròn nữa!
     # ===== 1. VẼ DẢI ĐỎ Ở GIỮA =====
     cx = x_center + nx * offset_d
     cy = y_center + ny * offset_d
@@ -56,7 +52,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
         facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
     t_red = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
     rect_red.set_transform(t_red)
-    
+    # rect_red.set_clip_path(circle)  # BỎ DÒNG NÀY
     ax.add_patch(rect_red)
 
     # ===== 2. VẼ RA NGOÀI HAI PHÍA =====
@@ -72,7 +68,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
-            rect_blue.set_clip_path(circle)
+            # rect_blue.set_clip_path(circle)  # BỎ DÒNG NÀY
             ax.add_patch(rect_blue)
         # Dải đỏ tiếp
         offset2 = offset + d_blue
@@ -84,7 +80,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            rect_red2.set_clip_path(circle)
+            # rect_red2.set_clip_path(circle)  # BỎ DÒNG NÀY
             ax.add_patch(rect_red2)
         offset += cycle
 
@@ -100,7 +96,7 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=(0, 0.4, 1, 0.14), edgecolor=None, linewidth=0, alpha=0.2)
             t_blue = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_blue.set_transform(t_blue)
-            rect_blue.set_clip_path(circle)
+            # rect_blue.set_clip_path(circle)  # BỎ DÒNG NÀY
             ax.add_patch(rect_blue)
         # Dải đỏ tiếp
         offset2 = offset - d_blue
@@ -112,11 +108,11 @@ def plot_parallel_zones(ax, x_center, y_center, radius, bearing_deg=0, d=30, off
                 facecolor=(1, 0, 0, 0.14), edgecolor=None, linewidth=0, alpha=0.4)
             t_red2 = transforms.Affine2D().rotate_around(0, 0, theta).translate(cx, cy) + ax.transData
             rect_red2.set_transform(t_red2)
-            
+            # rect_red2.set_clip_path(circle)  # BỎ DÒNG NÀY
             ax.add_patch(rect_red2)
         offset -= cycle
 
-    # Viền vòng tròn ngoài cho đẹp
+    # Viền vòng tròn ngoài cho đẹp (giữ lại hoặc bỏ tuỳ thích)
     circle_vis = Circle((x_center, y_center), radius, edgecolor='none', facecolor='none', linewidth=1, alpha=0.2, zorder=99)
     ax.add_patch(circle_vis)
     
