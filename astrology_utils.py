@@ -38,7 +38,7 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
             cell.set_facecolor('#e6f4fa')
         else:
             cell.set_facecolor('#fffef6')
-            cell.set_height(0.065 + 0.025 * wrapped_yoga[key[0]-1].count('\n'))
+            cell.set_height(0.12 + 0.038 * wrapped_yoga[key[0]-1].count('\n'))
     # Thêm title đúng 1 lần, luôn là "Cách cục Yoga"
     plt.title("Cách cục Yoga", fontsize=15, pad=10, fontweight='bold')
     plt.tight_layout()
