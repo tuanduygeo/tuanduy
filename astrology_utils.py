@@ -434,8 +434,7 @@ def detect_yoga_dosha(df_planets):
                 )
     
     if raja_yoga_results:
-        for s in raja_yoga_results:
-            res.append(s)
+        res += raja_yoga_results
     else:
         res.append("Không phát hiện Raja Yoga (đồng cung hoặc chiếu nhau).")
                 
