@@ -18,27 +18,23 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
 
     wrapped_yoga = ["\n".join(textwrap.wrap(line, max_width)) for line in yoga_list]
 
-    # Tăng figsize cho to lên
-    fig, ax = plt.subplots(figsize=(18, min(1.1 + 0.7*len(wrapped_yoga), 13)))
+    # Không header, chỉ nội dung
+    fig, ax = plt.subplots(figsize=(19, min(1.2 + 0.8*len(wrapped_yoga), 16)))
     ax.axis('off')
     table = ax.table(
         cellText=[[line] for line in wrapped_yoga],
-        colLabels=["Yoga/Dosha nổi bật"],
         cellLoc='left',
         loc='center'
     )
     table.auto_set_font_size(False)
-    table.set_fontsize(16)
-    table.scale(1.30, 1.24)
+    table.set_fontsize(24)  # CHỮ TO HẲN
+    table.scale(1.45, 1.32)
     for key, cell in table.get_celld().items():
         cell.set_linewidth(0)
-        if key[0] == 0:
-            cell.set_text_props(weight='bold', color='navy')
-            cell.set_facecolor('#ffffff')
-        else:
-            cell.set_facecolor('#ffffff')
-            cell.set_height(0.14 + 0.045 * wrapped_yoga[key[0]-1].count('\n'))
-    plt.title("Cách cục Yoga", fontsize=20, pad=12, fontweight='bold')
+        cell.set_facecolor('#ffffff')
+        cell.set_height(0.16 + 0.048 * wrapped_yoga[key[0]].count('\n'))
+    # Title lớn
+    ax.text(0.5, 1.07, 'Cách cục Yoga', ha='center', va='bottom', fontsize=35, fontweight='bold', transform=ax.transAxes)
     plt.tight_layout()
     return fig
 def plot_ashtakavarga_table(df_bav):
