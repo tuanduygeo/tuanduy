@@ -405,36 +405,58 @@ def detect_yoga_dosha(df_planets):
                 )
         
    # Raja Yoga: Chủ Kendra và chủ Trikona đồng cung hoặc cùng nhìn nhau (aspect)
-    trikona_houses = [1, 5, 9]
-    kendra_houses = [1, 4, 7, 10]
-    # Tìm các hành tinh là chủ của nhà Trikona và Kendra
-    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
-    kendra_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    def detect_raja_yoga(df_planets):
+        """
+        Trả về danh sách mô tả chi tiết các trường hợp Raja Yoga thực sự xuất hiện trong lá số.
+        """
+        trikona_houses = [1, 5, 9]
+        kendra_houses = [1, 4, 7, 10]
+        
+        # 1. Xác định chủ các nhà Kendra và Trikona
+        trikona_rulers = [
+            {"planet": p["Hành tinh"], "houses": p.get("Chủ tinh của nhà", []), "cung": p["Cung"], "nhà": p["Nhà"],
+             "chiếu": [x.strip().split(" ")[0] for x in str(p.get("Chiếu hành tinh", "")).split(",") if x.strip()]}
+            for p in df_planets.to_dict("records")
+            if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)
+        ]
+        kendra_rulers = [
+            {"planet": p["Hành tinh"], "houses": p.get("Chủ tinh của nhà", []), "cung": p["Cung"], "nhà": p["Nhà"],
+             "chiếu": [x.strip().split(" ")[0] for x in str(p.get("Chiếu hành tinh", "")).split(",") if x.strip()]}
+            for p in df_planets.to_dict("records")
+            if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)
+        ]
     
-    raja_yoga_results = []
-    for tr in trikona_rulers:
-        for kr in kendra_rulers:
-            if tr["Hành tinh"] == kr["Hành tinh"]:
-                continue
-            # 1. Đồng cung
-            if tr["Cung"] == kr["Cung"]:
-                raja_yoga_results.append(
-                    f"- **Raja Yoga (Đồng cung):** Chủ Trikona ({tr['Hành tinh']}) và Chủ Kendra ({kr['Hành tinh']}) đồng cung tại {tr['Cung']}."
-                )
-            # 2. Aspect/chiếu nhau
-            chiếu_tr = [x.strip().split(" ")[0] for x in str(tr.get("Chiếu hành tinh", "")).split(",") if x.strip()]
-            chiếu_kr = [x.strip().split(" ")[0] for x in str(kr.get("Chiếu hành tinh", "")).split(",") if x.strip()]
-            if kr["Hành tinh"] in chiếu_tr:
-                raja_yoga_results.append(
-                    f"- **Raja Yoga (Chiếu):** Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']}) chiếu Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']})."
-                )
-            if tr["Hành tinh"] in chiếu_kr:
-                raja_yoga_results.append(
-                    f"- **Raja Yoga (Chiếu):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
-                )
+        results = []
     
-    if raja_yoga_results:
-        res += raja_yoga_results
+        for tr in trikona_rulers:
+            for kr in kendra_rulers:
+                # Không xét nếu cùng một hành tinh
+                if tr["planet"] == kr["planet"]:
+                    continue
+    
+                # 1. Đồng cung (conjunction)
+                if tr["cung"] == kr["cung"]:
+                    results.append(
+                        f"- **Raja Yoga (Đồng cung):** Chủ Trikona ({tr['planet']}) và Chủ Kendra ({kr['planet']}) đồng cung tại {tr['cung']}."
+                    )
+                    continue
+    
+                # 2. Mutual aspect (cả hai chiếu nhau, tức là A chiếu B và B chiếu A)
+                # (có thể chỉ cần một chiều, nhưng mutual là mạnh nhất)
+                if (kr["planet"] in tr["chiếu"]) and (tr["planet"] in kr["chiếu"]):
+                    results.append(
+                        f"- **Raja Yoga (Mutual Aspect):** Chủ Trikona ({tr['planet']}, {tr['cung']}) và Chủ Kendra ({kr['planet']}, {kr['cung']}) chiếu lẫn nhau."
+                    )
+                # Nếu muốn ghi nhận cả chiều đơn, bạn mở rộng thêm hai if dưới đây:
+                elif kr["planet"] in tr["chiếu"]:
+                    results.append(
+                        f"- **Raja Yoga (Chiếu):** Chủ Trikona ({tr['planet']}, {tr['cung']}) chiếu Chủ Kendra ({kr['planet']}, {kr['cung']})."
+                    )
+                elif tr["planet"] in kr["chiếu"]:
+                    results.append(
+                        f"- **Raja Yoga (Chiếu):** Chủ Kendra ({kr['planet']}, {kr['cung']}) chiếu Chủ Trikona ({tr['planet']}, {tr['cung']})."
+                    )
+        return results
     
     def check_parivartana(df_planets):
         records = df_planets.to_dict("records")
