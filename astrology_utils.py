@@ -435,9 +435,6 @@ def detect_yoga_dosha(df_planets):
     
     if raja_yoga_results:
         res += raja_yoga_results
-    else:
-        res.append("Không phát hiện Raja Yoga (đồng cung hoặc chiếu nhau).")
-                
     
     def check_parivartana(df_planets):
         records = df_planets.to_dict("records")
