@@ -9,7 +9,7 @@ import re
 import io
 import textwrap
 
-def plot_detect_yoga_matplotlib(yoga_list max_width=90):
+def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     # Nếu là markdown thì cần chuyển thành list các câu
     if isinstance(yoga_list, str):
         # Loại bỏ markdown, chia dòng
