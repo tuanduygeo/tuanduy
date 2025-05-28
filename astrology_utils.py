@@ -66,7 +66,7 @@ def plot_ashtakavarga_table(df_bav):
         if row == 0 or col == -1:
             cell.set_text_props(weight='bold', color='navy')
     # Đặt title sát trên bảng (0.98 là sát, 1 là mép trên)
-    ax.text(0.5, 0.7, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=12, fontweight='bold', transform=ax.transAxes)
+    ax.text(0.5, 0.8, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=12, fontweight='bold', transform=ax.transAxes)
     plt.tight_layout()
     return fig
 def plot_planet_table(df_planets, user_name=None):
