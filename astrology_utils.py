@@ -841,7 +841,7 @@ def astrology_block():
     "Mars": "N,Lửa",
     "Mercury": "B,Đất",
     "Jupiter": "ĐB,Không",
-    "Venus": "ĐN,Nước",
+    "Venus": "TN,Nước",
     "Saturn": "T,Khí",
     "Rahu": "TN,Khí",
     "Ketu": "N,Lửa"
