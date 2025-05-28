@@ -8,7 +8,39 @@ import matplotlib.pyplot as plt
 import re
 import io
 
-
+def plot_ashtakavarga_table(df_bav):
+    # Đảm bảo là bảng 8 x 12 hoặc 8 x 12+1 (nếu có cột Tổng)
+    rows = df_bav.index.tolist()
+    cols = df_bav.columns.tolist()
+    fig, ax = plt.subplots(figsize=(1.4 + 0.5*len(cols), 1.2 + 0.35*len(rows)))
+    ax.axis('off')
+    table = ax.table(
+        cellText=df_bav.values,
+        rowLabels=rows,
+        colLabels=cols,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+    table.scale(1.12, 1.17)
+    # Tô màu điểm cao/thấp
+    for (row, col), cell in table.get_celld().items():
+        if row == 0 or col == -1:
+            cell.set_text_props(weight='bold', color='navy')
+            cell.set_facecolor('#e6f4fa')
+        elif row > 0 and col > -1:
+            try:
+                val = float(df_bav.iloc[row-1, col])
+                if val >= 5:
+                    cell.set_facecolor('#d9ead3')  # Xanh
+                elif val <= 2:
+                    cell.set_facecolor('#f4cccc')  # Đỏ
+            except:
+                pass
+    plt.title('Bảng Ashtakavarga', fontsize=14, fontweight='bold', pad=12)
+    plt.tight_layout()
+    return fig
 def plot_planet_table(df_planets, user_name=None):
     # Bỏ cột cuối cùng (dù tên là gì)
     df_no_last_col = df_planets.iloc[:, :-1]
@@ -1445,8 +1477,11 @@ def astrology_block():
     
     
     df_bav = compute_ashtakavarga(df_planets)
-    st.markdown("### Bảng Ashtakavarga ")
-    st.dataframe(df_bav, use_container_width=False)  
+    fig_bav = plot_ashtakavarga_table(df_bav)
+    st.pyplot(fig_bav)
+    plt.close(fig_bav)
+    
+      
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
