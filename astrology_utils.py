@@ -1008,7 +1008,7 @@ def astrology_block():
             "Nhà": ketu_bhava,
             "Tính chất": ketu_dignity,
             "retro": "R",  
-            "vastu": "N",
+            "vastu": "N,Lửa",
         })
 
     selected_datetime_local = None
