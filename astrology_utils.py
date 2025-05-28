@@ -7,7 +7,38 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
+def plot_detect_yoga_matplotlib(yoga_list, title="Tổng hợp Yoga/Dosha nổi bật"):
+    # Nếu là markdown thì cần chuyển thành list các câu
+    if isinstance(yoga_list, str):
+        # Loại bỏ markdown, chia dòng
+        yoga_list = [line.strip("-• ") for line in yoga_list.split("\n") if line.strip() and not line.startswith("####")]
+    
+    # Nếu không có yoga nào
+    if not yoga_list or (len(yoga_list)==1 and "không phát hiện" in yoga_list[0].lower()):
+        yoga_list = ["Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."]
 
+    fig, ax = plt.subplots(figsize=(10, min(0.5 + 0.42*len(yoga_list), 7)))
+    ax.axis('off')
+    table = ax.table(
+        cellText=[[line] for line in yoga_list],
+        colLabels=["Yoga/Dosha nổi bật"],
+        cellLoc='left',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+    table.scale(1.12, 1.08)
+    # Không kẻ dòng ngang
+    for key, cell in table.get_celld().items():
+        cell.set_linewidth(0)
+        if key[0] == 0:  # Header
+            cell.set_text_props(weight='bold', color='navy')
+            cell.set_facecolor('#e6f4fa')
+        else:
+            cell.set_facecolor('#fffef6')
+    plt.title(title, fontsize=15, pad=10, fontweight='bold')
+    plt.tight_layout()
+    return fig
 def plot_ashtakavarga_table(df_bav):
     # Đảm bảo là bảng 8 x 12 hoặc 8 x 12+1 (nếu có cột Tổng)
     rows = df_bav.index.tolist()
@@ -1466,7 +1497,10 @@ def astrology_block():
     fig = plot_planet_table(df_planets, user_name)
     st.pyplot(fig)
     plt.close(fig)
-    st.markdown(detect_yoga_dosha(df_planets), unsafe_allow_html=True)
+    yoga_markdown = detect_yoga_dosha(df_planets)
+    fig_yoga = plot_detect_yoga_matplotlib(yoga_markdown)
+    st.pyplot(fig_yoga)
+    plt.close(fig_yoga)
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
