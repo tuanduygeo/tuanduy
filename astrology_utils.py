@@ -12,10 +12,8 @@ import textwrap
 def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     # Nếu là markdown thì cần chuyển thành list các câu
     if isinstance(yoga_list, str):
-        # Loại bỏ markdown, chia dòng
         yoga_list = [line.strip("-• ") for line in yoga_list.split("\n") if line.strip() and not line.startswith("####")]
 
-    # Nếu không có yoga nào
     if not yoga_list or (len(yoga_list) == 1 and "không phát hiện" in yoga_list[0].lower()):
         yoga_list = ["Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."]
 
@@ -33,16 +31,16 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     table.auto_set_font_size(False)
     table.set_fontsize(12)
     table.scale(1.17, 1.15)
-    # Không kẻ dòng ngang
     for key, cell in table.get_celld().items():
         cell.set_linewidth(0)
-        if key[0] == 0:  # Header
+        if key[0] == 0:
             cell.set_text_props(weight='bold', color='navy')
             cell.set_facecolor('#e6f4fa')
         else:
             cell.set_facecolor('#fffef6')
-            cell.set_height(0.065 + 0.025 * wrapped_yoga[key[0]-1].count('\n'))  # tăng chiều cao dòng nếu nhiều dòng
-    plt.title(title, fontsize=15, pad=10, fontweight='bold')
+            cell.set_height(0.065 + 0.025 * wrapped_yoga[key[0]-1].count('\n'))
+    # Thêm title đúng 1 lần, luôn là "Cách cục Yoga"
+    plt.title("Cách cục Yoga", fontsize=15, pad=10, fontweight='bold')
     plt.tight_layout()
     return fig
 def plot_ashtakavarga_table(df_bav):
