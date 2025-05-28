@@ -44,7 +44,6 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     plt.tight_layout()
     return fig
 def plot_ashtakavarga_table(df_bav):
-    # Đảm bảo là bảng 8 x 12 hoặc 8 x 12+1 (nếu có cột Tổng)
     rows = df_bav.index.tolist()
     cols = df_bav.columns.tolist()
     fig, ax = plt.subplots(figsize=(1.4 + 0.5*len(cols), 1.2 + 0.35*len(rows)))
@@ -59,20 +58,13 @@ def plot_ashtakavarga_table(df_bav):
     table.auto_set_font_size(False)
     table.set_fontsize(12)
     table.scale(1.12, 1.17)
-    # Tô màu điểm cao/thấp
+    # Tắt hoàn toàn màu cho tất cả cell (kể cả header):
     for (row, col), cell in table.get_celld().items():
+        cell.set_facecolor('#ffffff')  # Tất cả cell trắng
+        cell.set_linewidth(0)  # Không viền nếu muốn tối giản tuyệt đối
+        # Nếu muốn giữ header đậm thì giữ lại set_text_props cho row==0 hoặc col==-1
         if row == 0 or col == -1:
             cell.set_text_props(weight='bold', color='navy')
-            cell.set_facecolor('#e6f4fa')
-        elif row > 0 and col > -1:
-            try:
-                val = float(df_bav.iloc[row-1, col])
-                if val >= 5:
-                    cell.set_facecolor('#d9ead3')  # Xanh
-                elif val <= 2:
-                    cell.set_facecolor('#f4cccc')  # Đỏ
-            except:
-                pass
     plt.title('Bảng Ashtakavarga', fontsize=14, fontweight='bold', pad=12)
     plt.tight_layout()
     return fig
