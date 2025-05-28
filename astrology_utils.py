@@ -10,17 +10,16 @@ import io
 import textwrap
 
 def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
-    # Nếu là markdown thì cần chuyển thành list các câu
     if isinstance(yoga_list, str):
         yoga_list = [line.strip("-• ") for line in yoga_list.split("\n") if line.strip() and not line.startswith("####")]
 
     if not yoga_list or (len(yoga_list) == 1 and "không phát hiện" in yoga_list[0].lower()):
         yoga_list = ["Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."]
 
-    # Wrap từng câu dài sang nhiều dòng
     wrapped_yoga = ["\n".join(textwrap.wrap(line, max_width)) for line in yoga_list]
 
-    fig, ax = plt.subplots(figsize=(12, min(0.6 + 0.42*len(wrapped_yoga), 9)))
+    # Tăng figsize cho to lên
+    fig, ax = plt.subplots(figsize=(18, min(1.1 + 0.7*len(wrapped_yoga), 13)))
     ax.axis('off')
     table = ax.table(
         cellText=[[line] for line in wrapped_yoga],
@@ -29,18 +28,17 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
         loc='center'
     )
     table.auto_set_font_size(False)
-    table.set_fontsize(12)
-    table.scale(1.17, 1.15)
+    table.set_fontsize(16)
+    table.scale(1.30, 1.24)
     for key, cell in table.get_celld().items():
         cell.set_linewidth(0)
         if key[0] == 0:
             cell.set_text_props(weight='bold', color='navy')
-            cell.set_facecolor('#ffffff')  # Header trắng luôn
+            cell.set_facecolor('#ffffff')
         else:
             cell.set_facecolor('#ffffff')
-            cell.set_height(0.12 + 0.038 * wrapped_yoga[key[0]-1].count('\n'))
-    # Thêm title đúng 1 lần, luôn là "Cách cục Yoga"
-    plt.title("Cách cục Yoga", fontsize=15, pad=10, fontweight='bold')
+            cell.set_height(0.14 + 0.045 * wrapped_yoga[key[0]-1].count('\n'))
+    plt.title("Cách cục Yoga", fontsize=20, pad=12, fontweight='bold')
     plt.tight_layout()
     return fig
 def plot_ashtakavarga_table(df_bav):
