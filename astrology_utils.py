@@ -60,12 +60,13 @@ def plot_ashtakavarga_table(df_bav):
     table.set_fontsize(12)
     table.scale(1.12, 1.17)
     for (row, col), cell in table.get_celld().items():
-        cell.set_facecolor('#ffffff')         # Nền trắng
-        cell.set_edgecolor('black')           # Viền đen
-        cell.set_linewidth(1)                 # Độ dày viền (1 là đẹp, >1 thì đậm)
+        cell.set_facecolor('#ffffff')
+        cell.set_edgecolor('black')
+        cell.set_linewidth(1)
         if row == 0 or col == -1:
             cell.set_text_props(weight='bold', color='navy')
-    plt.title('Bảng Ashtakavarga', fontsize=14, fontweight='bold', pad=12)
+    # Đặt title sát trên bảng (0.98 là sát, 1 là mép trên)
+    ax.text(0.5, 1.02, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=16, fontweight='bold', transform=ax.transAxes)
     plt.tight_layout()
     return fig
 def plot_planet_table(df_planets, user_name=None):
