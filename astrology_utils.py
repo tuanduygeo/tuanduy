@@ -836,15 +836,15 @@ def astrology_block():
         "U.Bhad": "Nhân", "Revati": "Thần"
     }
     planet_natural_direction = {
-    "Sun": "Đ",
-    "Moon": "TB",
-    "Mars": "N",
-    "Mercury": "B",
-    "Jupiter": "ĐB",
-    "Venus": "ĐN",
-    "Saturn": "T",
-    "Rahu": "TN",
-    "Ketu": "N"
+    "Sun": "Đ,Lửa",
+    "Moon": "TB,Nước",
+    "Mars": "N,Lửa",
+    "Mercury": "B,Đất",
+    "Jupiter": "ĐB,Không",
+    "Venus": "ĐN,Nước",
+    "Saturn": "T,Khí",
+    "Rahu": "TN,Khí",
+    "Ketu": "N,Lửa"
 }
     # ==== Hàm phụ ====
     def get_rashi(degree):
