@@ -7,7 +7,23 @@ from datetime import datetime, date
 import matplotlib.pyplot as plt
 import re
 import io
+from io import BytesIO
 import textwrap
+from PIL import Image
+def download_all_figs_as_pdf(figs):
+    image_bytes_list = []
+    for fig in figs:
+        buf = BytesIO()
+        fig.savefig(buf, format="png", bbox_inches="tight")
+        buf.seek(0)
+        image_bytes_list.append(buf)
+    images = [Image.open(b).convert("RGB") for b in image_bytes_list]
+    pdf_bytes = BytesIO()
+    if images:
+        images[0].save(pdf_bytes, format="PDF", save_all=True, append_images=images[1:])
+        pdf_bytes.seek(0)
+        return pdf_bytes
+    return None
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
@@ -799,6 +815,7 @@ def astrology_block():
         selected_label = st.selectbox("🌐 Chọn múi giờ đại diện", tz_labels, index=default_index)
         selected_tz = tz_values[tz_labels.index(selected_label)]
         local_tz = pytz.timezone(selected_tz)
+        
     # Button to calculate
     if st.button("Tính Toán"):
         # Gán timezone theo local_tz đã chọn
@@ -1523,7 +1540,10 @@ def astrology_block():
     fig_bav = plot_ashtakavarga_table(df_bav)
     st.pyplot(fig_bav)
     plt.close(fig_bav)
-    
+    if st.button("Tải toàn bộ ảnh PDF"):
+        pdf_bytes = download_all_figs_as_pdf(figs)
+    if pdf_bytes:
+        st.download_button("Tải PDF", data=pdf_bytes, file_name="all_images.pdf", mime="application/pdf")
       
    
     st.markdown("""#### 📌 Hướng dẫn
