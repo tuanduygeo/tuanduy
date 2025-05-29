@@ -60,7 +60,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65
             cell.set_text_props(weight='bold')
 
     # Thêm tiêu đề
-    ax.text(0.5, 0.8, "Bảng Antardasha (chia 2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
+    ax.text(0.5, 0.7, "Bảng Antardasha (2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
     
     return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
@@ -185,7 +185,7 @@ def plot_ashtakavarga_table(df_bav):
             cell.set_text_props(weight='bold', color='navy')
     # Đặt title sát trên bảng (0.98 là sát, 1 là mép trên)
     ax.text(0.5, 0.8, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=12, fontweight='bold', transform=ax.transAxes)
-    plt.tight_layout()
+    
     return fig
 def plot_planet_table(df_planets, user_name=None):
     # Bỏ cột cuối cùng (dù tên là gì)
