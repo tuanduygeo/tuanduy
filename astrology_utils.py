@@ -501,8 +501,8 @@ def detect_yoga_dosha(df_planets):
     kendra_houses = [1, 4, 7, 10]
     
     # Xác định danh sách hành tinh là chủ các nhà Trikona và Kendra
-    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(trikona_houses)]
-    kendra_rulers  = [p for p in df_planets.to_dict("records") if set(p.get("Chủ tinh của nhà", [])) & set(kendra_houses)]
+    trikona_rulers = [p for p in df_planets.to_dict("records") if set(p.get("Chủ nhà", [])) & set(trikona_houses)]
+    kendra_rulers  = [p for p in df_planets.to_dict("records") if set(p.get("Chủ nhà", [])) & set(kendra_houses)]
     
     for tr in trikona_rulers:
         for kr in kendra_rulers:
