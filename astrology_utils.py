@@ -10,14 +10,25 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
-def download_all_figs_as_pdf(figs):
+def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
+    # img: PIL.Image
+    # target_size: (width, height)
+    img = img.convert("RGB")
+    # Giữ tỉ lệ, thu nhỏ tối đa vừa fit
+    img.thumbnail(target_size, Image.LANCZOS)
+    canvas = Image.new("RGB", target_size, bgcolor)
+    paste_x = (target_size[0] - img.width) // 2
+    paste_y = (target_size[1] - img.height) // 2
+    canvas.paste(img, (paste_x, paste_y))
+    return canvas
+def download_all_figs_as_pdf(figs, target_size=(1200, 1200)):
     image_bytes_list = []
     for fig in figs:
         buf = BytesIO()
-        fig.savefig(buf, format="png", bbox_inches="tight")
+        fig.savefig(buf, format="png", bbox_inches="tight", dpi=180)  # tăng dpi nếu muốn nét
         buf.seek(0)
         image_bytes_list.append(buf)
-    images = [Image.open(b).convert("RGB") for b in image_bytes_list]
+    images = [resize_image_to_canvas(Image.open(b), target_size=target_size) for b in image_bytes_list]
     pdf_bytes = BytesIO()
     if images:
         images[0].save(pdf_bytes, format="PDF", save_all=True, append_images=images[1:])
@@ -1548,10 +1559,14 @@ def astrology_block():
     fig_bav    # Bảng Ashtakavarga
     # Có thể bổ sung các figure khác nếu muốn
     ]
-    if st.button("Tải toàn bộ ảnh PDF"):
-        pdf_bytes = download_all_figs_as_pdf(figs)
-        if pdf_bytes:
-            st.download_button("Tải PDF", data=pdf_bytes, file_name="all_images.pdf", mime="application/pdf")
+    pdf_bytes = download_all_figs_as_pdf(figs)
+
+    st.download_button(
+        label="Tải toàn bộ ảnh PDF",
+        data=pdf_bytes,
+        file_name="all_images.pdf",
+        mime="application/pdf"
+    )
       
    
     st.markdown("""#### 📌 Hướng dẫn
