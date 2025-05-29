@@ -73,10 +73,10 @@ def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     # Đổi màu header
     for (row, col), cell in table.get_celld().items():
         if row == 0:
-            cell.set_fontsize(18)
+            cell.set_fontsize(14)
             cell.set_facecolor("#ffe299")
             cell.set_text_props(weight='bold')
-    ax.set_title(title, fontsize=20, pad=20)
+    ax.set_title(title, fontsize=14, pad=20)
     plt.tight_layout()
     return fig
 
