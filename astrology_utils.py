@@ -21,20 +21,39 @@ def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255))
     paste_y = (target_size[1] - img.height) // 2
     canvas.paste(img, (paste_x, paste_y))
     return canvas
-def download_all_figs_as_pdf(figs, target_size=(1200, 1200)):
-    image_bytes_list = []
-    for fig in figs:
-        buf = BytesIO()
-        fig.savefig(buf, format="png", bbox_inches="tight", dpi=180)  # tăng dpi nếu muốn nét
-        buf.seek(0)
-        image_bytes_list.append(buf)
-    images = [resize_image_to_canvas(Image.open(b), target_size=target_size) for b in image_bytes_list]
+def fig_to_pil(fig, dpi=180):
+    buf = BytesIO()
+    fig.savefig(buf, format="png", bbox_inches="tight", dpi=dpi)
+    buf.seek(0)
+    return Image.open(buf).convert("RGB")
+def make_pdf_page_group(images, layout, page_size=(1600, 900), paddings=(30, 30)):
+    from math import ceil
+    n_images = len(images)
+    n_row, n_col = layout
+    page_w, page_h = page_size
+    cell_w = (page_w - (n_col+1)*paddings[0]) // n_col
+    cell_h = (page_h - (n_row+1)*paddings[1]) // n_row
+
+    page = Image.new("RGB", page_size, (255,255,255))
+    for i in range(min(n_images, n_row*n_col)):
+        row = i // n_col
+        col = i % n_col
+        img = images[i].copy()
+        img.thumbnail((cell_w, cell_h), Image.LANCZOS)
+        x = paddings[0] + col * (cell_w + paddings[0])
+        y = paddings[1] + row * (cell_h + paddings[1])
+        page.paste(img, (x, y))
+    return page
+def download_grouped_figs_as_pdf(figs):
+    imgs = [fig_to_pil(fig) for fig in figs]
+    # Trang 1: fig_d1 và fig_d9 cạnh nhau (2 cột)
+    page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1600,800))
+    # Trang 2: các ảnh còn lại (1 cột dọc)
+    page2 = make_pdf_page_group(imgs[2:], layout=(len(imgs[2:]),1), page_size=(1200,1800))
     pdf_bytes = BytesIO()
-    if images:
-        images[0].save(pdf_bytes, format="PDF", save_all=True, append_images=images[1:])
-        pdf_bytes.seek(0)
-        return pdf_bytes
-    return None
+    page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2])
+    pdf_bytes.seek(0)
+    return pdf_bytes
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
@@ -1559,12 +1578,12 @@ def astrology_block():
     fig_bav    # Bảng Ashtakavarga
     # Có thể bổ sung các figure khác nếu muốn
     ]
-    pdf_bytes = download_all_figs_as_pdf(figs)
+    pdf_bytes = download_grouped_figs_as_pdf(figs)
 
     st.download_button(
         label="Tải toàn bộ ảnh PDF",
         data=pdf_bytes,
-        file_name="all_images.pdf",
+        file_name=f"{user_name.replace(' ', '_')}_all_images_grouped.pdf" if user_name else "all_images_grouped.pdf"
         mime="application/pdf"
     )
       
