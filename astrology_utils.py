@@ -1503,7 +1503,7 @@ def astrology_block():
     chart_df["Năm_mới"] = chart_df["Năm"] - birth_x
     
     
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig_life, ax = plt.subplots(figsize=(12, 5))
     ax.plot(chart_df["Năm_mới"], chart_df["Điểm số"], marker='o')
     ax.hlines(y=0, xmin=0, xmax=115, color='black', linestyle='-', linewidth=2)
 
@@ -1544,12 +1544,13 @@ def astrology_block():
     ax.set_xlabel("Tuổi")
     ax.set_ylabel("Điểm số")
     ax.grid(True)
+    
     st.pyplot(fig,use_container_width=False)
     
     
     
-    fig = plot_planet_table(df_planets, user_name)
-    st.pyplot(fig)
+    fig_planet = plot_planet_table(df_planets, user_name)
+    st.pyplot(fig_planet)
     
     yoga_markdown = detect_yoga_dosha(df_planets)
     fig_yoga = plot_detect_yoga_matplotlib(yoga_markdown)
@@ -1557,8 +1558,8 @@ def astrology_block():
     
     col1, col2 = st.columns([1, 1])
     with col1:
-        
-        st.pyplot(plot_mahadasha_table(df_dasha))
+        fig_dasha=plot_mahadasha_table(df_dasha)
+        st.pyplot(fig_dasha)
         
     with col2:
         if st.checkbox("Antardasha"):
@@ -1573,8 +1574,10 @@ def astrology_block():
     fig_d1,    # Lá số chính D1
     fig_d9,    # Navamsa
     # fig_d30, # Nếu cần thêm D30 thì bật lên
-    fig,       # Biểu đồ đại vận
+    fig_life,
+    fig_planet,       # Biểu đồ đại vận
     fig_yoga,  # Yoga/Dosha
+    fig_dasha,    
     fig_bav    # Bảng Ashtakavarga
     # Có thể bổ sung các figure khác nếu muốn
     ]
