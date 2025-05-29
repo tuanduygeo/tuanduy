@@ -164,9 +164,14 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     
     return fig
 def plot_ashtakavarga_table(df_bav):
-    import matplotlib.pyplot as plt
     rows = df_bav.index.tolist()
     cols = df_bav.columns.tolist()
+    # Lấy index dòng 'Tổng'
+    try:
+        idx_tong = rows.index("Tổng")
+    except ValueError:
+        idx_tong = None  # Không có dòng tổng
+
     fig, ax = plt.subplots(figsize=(1.4 + 0.5*len(cols), 1.2 + 0.35*len(rows)))
     ax.axis('off')
     table = ax.table(
@@ -178,24 +183,25 @@ def plot_ashtakavarga_table(df_bav):
     )
     table.auto_set_font_size(False)
     table.set_fontsize(10)
-    table.scale(1.12, 1.17)
+    table.scale(1.12, 1.22)
     for (row, col), cell in table.get_celld().items():
         cell.set_facecolor('#ffffff')
         cell.set_edgecolor('black')
         cell.set_linewidth(1)
         if row == 0 or col == -1:
             cell.set_text_props(weight='bold', color='navy')
-    # Đánh màu cho dòng "Tổng" (giả sử là dòng cuối cùng)
-        if rows[row] == "Tổng":
+        # Chỉ kiểm tra nếu đúng dòng "Tổng"
+        if idx_tong is not None and row == idx_tong:
             try:
                 val = float(cell.get_text().get_text())
                 if val > 28:
                     cell.set_text_props(color='red', weight='bold')
                 elif val < 25:
-                    cell.set_text_props(color='blue', weight='bold')
+                    cell.set_text_props(color='#1E90FF', weight='bold')
             except:
                 pass  # Nếu không convert được thành số thì bỏ qua
     ax.text(0.5, 0.8, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=12, fontweight='bold', transform=ax.transAxes)
+    plt.tight_layout()
     return fig
 def plot_planet_table(df_planets, user_name=None):
     # Bỏ cột cuối cùng (dù tên là gì)
