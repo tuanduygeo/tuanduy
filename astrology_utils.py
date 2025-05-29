@@ -10,7 +10,7 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
-def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=12, cell_height=0.4):
+def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65):
     # Bỏ cột Số năm nếu có
     if "Số năm" in df_antar.columns:
         df_antar = df_antar.drop(columns=["Số năm"])
@@ -20,7 +20,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=12, cell_height=0.4)
     # Bổ sung dòng trống nếu chưa đủ chia hết
     pad_rows = ncol * nrow - n
     if pad_rows > 0:
-        empty = pd.DataFrame([["", ""]] * pad_rows, columns=df_antar.columns)
+        empty = pd.DataFrame([[""] * len(df_antar.columns)] * pad_rows, columns=df_antar.columns)
         df_antar = pd.concat([df_antar, empty], ignore_index=True)
 
     # Chuyển DataFrame thành list 2D cho table multi-col
@@ -41,7 +41,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=12, cell_height=0.4)
             col_labels.append(f"{label} [{i+1}]")
 
     # Vẽ bảng
-    fig, ax = plt.subplots(figsize=(ncol*6, nrow*cell_height+1))
+    fig, ax = plt.subplots(figsize=(ncol*7, nrow*cell_height+1.5))
     ax.axis('off')
     table = ax.table(
         cellText=table_data,
@@ -51,7 +51,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=12, cell_height=0.4)
     )
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1.15, 1.05)
+    table.scale(1.14, 1.18)
 
     # Tô màu header cho dễ nhìn
     for (row, col), cell in table.get_celld().items():
@@ -59,7 +59,8 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=12, cell_height=0.4)
             cell.set_facecolor('#ffe299')
             cell.set_text_props(weight='bold')
 
-    ax.text(0.5, 0.8, "Bảng Antardasha (chia 3 cột)", fontsize=14, ha='center', va='bottom', transform=ax.transAxes)
+    # Thêm tiêu đề
+    ax.text(0.5, 1.13, "Bảng Antardasha (chia 2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
     plt.tight_layout()
     return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
