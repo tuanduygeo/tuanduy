@@ -46,12 +46,15 @@ def make_pdf_page_group(images, layout, page_size=(1600, 900), paddings=(30, 30)
     return page
 def download_grouped_figs_as_pdf(figs):
     imgs = [fig_to_pil(fig) for fig in figs]
-    # Trang 1: fig_d1 và fig_d9 cạnh nhau (2 cột)
-    page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1600,800))
-    # Trang 2: các ảnh còn lại (1 cột dọc)
-    page2 = make_pdf_page_group(imgs[2:], layout=(len(imgs[2:]),1), page_size=(1200,1800))
+    # Trang 1: fig_d1 và fig_d30 (2 cột)
+    page1 = make_pdf_page_group(imgs[0:2], layout=(1, 2), page_size=(1600, 800))
+    # Trang 2: fig_life và fig_planet (2 cột)
+    page2 = make_pdf_page_group(imgs[2:4], layout=(1, 2), page_size=(1600, 800))
+    # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
+    page3 = make_pdf_page_group(imgs[4:7], layout=(3, 1), page_size=(1200, 2100))
+    # Gộp PDF
     pdf_bytes = BytesIO()
-    page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2])
+    page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2, page3])
     pdf_bytes.seek(0)
     return pdf_bytes
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
