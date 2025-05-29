@@ -1592,7 +1592,7 @@ def astrology_block():
         file_name=f"Biểu đồ chiêm tinh:{user_name.replace(' ', '_')}.pdf" if user_name else "biểu đồ chiêm tinh.pdf",
         mime="application/pdf"
     )
-      
+    plt.close('all')  
    
     st.markdown("""#### 📌 Hướng dẫn
     - Biểu đồ đại vận vimshottari là cách miêu tả hành trình của đời người trong thời mạt pháp, diễn ra trong 120 năm, 
