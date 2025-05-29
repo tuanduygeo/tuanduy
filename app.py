@@ -731,15 +731,20 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
+                
+                # Tìm giá trị DEM tại tâm
+                i_center = np.argmin(np.abs(yt - lat0))
+                j_center = np.argmin(np.abs(xt - lon0))
+                value_center = data_array[i_center, j_center]
+                # Xác định median
                 median_z = np.median(data_array)
                 if value_center > median_z:
                     center_str = f"Vị trí({value_center:.2f}) > median ({median_z:.2f}): cao"
                 else:
                     center_str = f"Vị trí({value_center:.2f}) < median ({median_z:.2f}): thấp"
-                
-                
-                ax.set_title(
-                    f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})| {center_str} | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
+                    
+                dt2 = dt / 10
+                ax.set_title(f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})| {center_str} | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 
                 # Vẽ thanh thước
@@ -750,14 +755,7 @@ def main():
                 # Thêm chú thích "100m"
                 ax.text((x_start + x_end)/2, y_start-+5, "100m", color='white', fontsize=14,fontweight='bold', ha='center', va='top', zorder=21)
                 plot_bearing_circle(ax, x_center, y_center, radius*0.672)
-                # Tìm giá trị DEM tại tâm
-                i_center = np.argmin(np.abs(yt - lat0))
-                j_center = np.argmin(np.abs(xt - lon0))
-                value_center = data_array[i_center, j_center]
-                # Xác định median
                 
-                    
-                dt2 = dt / 10
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
                 x0, x1 = x_center - radius/10, x_center + radius/10
                 y0, y1 = y_center - radius/10, y_center + radius/10
