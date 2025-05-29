@@ -1611,17 +1611,17 @@ def astrology_block():
     
     yoga_markdown = detect_yoga_dosha(df_planets)
     fig_yoga = plot_detect_yoga_matplotlib(yoga_markdown)
-    st.pyplot(fig_yoga)
+    st.pyplot(fig_yoga,use_container_width=True)
     df_bav = compute_ashtakavarga(df_planets)
     fig_bav = plot_ashtakavarga_table(df_bav)
-    st.pyplot(fig_bav)
+    st.pyplot(fig_bav,use_container_width=True)
     col1, col2 = st.columns([1, 1])
     with col1:
         fig_dasha=plot_mahadasha_table(df_dasha)
-        st.pyplot(fig_dasha)
+        st.pyplot(fig_dasha,use_container_width=True)
         
     fig_antar = plot_antardasha_multi_column(df_all_antar)
-    st.pyplot(fig_antar)      
+    st.pyplot(fig_antar,use_container_width=True)      
     
     
     
