@@ -51,7 +51,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.75
     )
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1.5, 1.35)
+    table.scale(1.15, 1.5)
 
     # Tô màu header cho dễ nhìn
     for (row, col), cell in table.get_celld().items():
