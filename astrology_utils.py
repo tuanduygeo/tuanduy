@@ -1516,8 +1516,8 @@ def astrology_block():
     col1, col2 = st.columns([1, 1])
     with col1:
         
-        st.pyplot(plot_mahadasha_table(df))
-        plt.close(plot_mahadasha_table(df))
+        st.pyplot(plot_mahadasha_table(df_planets))
+        plt.close(plot_mahadasha_table(df_planets))
     with col2:
         if st.checkbox("Antardasha"):
             st.dataframe(df_all_antar, use_container_width=False)       
