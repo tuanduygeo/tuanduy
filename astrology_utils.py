@@ -30,9 +30,6 @@ def plot_mahadasha_table(df, title="Bảng Mahadasha (Vimsottari Dasa)"):
     plt.tight_layout()
     return fig
 
-# Test:
-fig = plot_mahadasha_table(df)
-plt.show()
 def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     if isinstance(yoga_list, str):
         yoga_list = [line.strip("-• ") for line in yoga_list.split("\n") if line.strip() and not line.startswith("####")]
@@ -1520,6 +1517,7 @@ def astrology_block():
     with col1:
         
         st.pyplot(plot_mahadasha_table(df))
+        plt.close(plot_mahadasha_table(df))
     with col2:
         if st.checkbox("Antardasha"):
             st.dataframe(df_all_antar, use_container_width=False)       
