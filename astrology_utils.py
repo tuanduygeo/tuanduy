@@ -67,7 +67,7 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     wrapped_yoga = ["\n".join(textwrap.wrap(line, max_width)) for line in yoga_list]
 
     # Không header, chỉ nội dung
-    fig, ax = plt.subplots(figsize=(19, min(1.2 + 0.8*len(wrapped_yoga), 16)))
+    fig, ax = plt.subplots(figsize=(12, min(1.2 + 0.55*len(wrapped_yoga), 10)))
     ax.axis('off')
     table = ax.table(
         cellText=[[line] for line in wrapped_yoga],
@@ -82,7 +82,7 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
         cell.set_facecolor('#ffffff')
         cell.set_height(0.16 + 0.048 * wrapped_yoga[key[0]].count('\n'))
     # Title lớn
-    ax.text(0.5, 1.2, 'Cách cục Yoga', ha='center', va='bottom', fontsize=35, fontweight='bold', transform=ax.transAxes)
+    ax.text(0.5, 1.2, 'Cách cục Yoga', ha='center', va='bottom', fontsize=14, fontweight='bold', transform=ax.transAxes)
     plt.tight_layout()
     return fig
 def plot_ashtakavarga_table(df_bav):
