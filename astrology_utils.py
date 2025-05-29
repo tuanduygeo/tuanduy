@@ -1583,7 +1583,7 @@ def astrology_block():
     st.download_button(
         label="Tải toàn bộ ảnh PDF",
         data=pdf_bytes,
-        file_name=f"{user_name.replace(' ', '_')}_all_images_grouped.pdf" if user_name else "all_images_grouped.pdf"
+        file_name=f"{user_name.replace(' ', '_')}_all_images_grouped.pdf" if user_name else "all_images_grouped.pdf",
         mime="application/pdf"
     )
       
