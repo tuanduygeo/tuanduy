@@ -17,7 +17,7 @@ def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
         cellLoc='center',
         loc='center'
     )
-    table.auto_set_font_size(False)
+    table.auto_set_font_size(True)
     table.set_fontsize(16)
     table.scale(1, 2)  # Tăng chiều cao row
     # Đổi màu header
