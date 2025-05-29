@@ -10,7 +10,58 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
+def plot_antardasha_multi_column(df_antar, ncol=3, fontsize=12, cell_height=0.4):
+    # Bỏ cột Số năm nếu có
+    if "Số năm" in df_antar.columns:
+        df_antar = df_antar.drop(columns=["Số năm"])
+    n = len(df_antar)
+    nrow = (n + ncol - 1) // ncol  # Số dòng cho mỗi cột
 
+    # Bổ sung dòng trống nếu chưa đủ chia hết
+    pad_rows = ncol * nrow - n
+    if pad_rows > 0:
+        empty = pd.DataFrame([["", ""]] * pad_rows, columns=df_antar.columns)
+        df_antar = pd.concat([df_antar, empty], ignore_index=True)
+
+    # Chuyển DataFrame thành list 2D cho table multi-col
+    columns = []
+    for i in range(ncol):
+        block = df_antar.iloc[i*nrow:(i+1)*nrow].reset_index(drop=True)
+        columns.append(block.values)
+    # Xếp lại để tạo table đa cột: từng dòng sẽ gồm ncol * số cột của bảng nhỏ
+    table_data = []
+    col_labels = []
+    for i in range(nrow):
+        row = []
+        for col in columns:
+            row.extend(col[i])
+        table_data.append(row)
+    for i in range(ncol):
+        for label in df_antar.columns:
+            col_labels.append(f"{label} [{i+1}]")
+
+    # Vẽ bảng
+    fig, ax = plt.subplots(figsize=(ncol*6, nrow*cell_height+1))
+    ax.axis('off')
+    table = ax.table(
+        cellText=table_data,
+        colLabels=col_labels,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(fontsize)
+    table.scale(1.15, 1.05)
+
+    # Tô màu header cho dễ nhìn
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_facecolor('#ffe299')
+            cell.set_text_props(weight='bold')
+
+    ax.set_title("Bảng Antardasha (chia 3 cột)", fontsize=fontsize+2, pad=14)
+    plt.tight_layout()
+    return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
     # img: PIL.Image
     # target_size: (width, height)
@@ -51,8 +102,8 @@ def download_grouped_figs_as_pdf(figs):
     page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1200,800))
     # Trang 2: fig_life và fig_planet (2 cột)
     page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1200))
-    # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
-    page3 = make_pdf_page_group(imgs[4:7], layout=(3, 1), page_size=(1200, 1600))
+    # Trang 3: fig_yoga, fig_dasha, fig_bav,fig_antar (4 hàng, 1 cột)
+    page3 = make_pdf_page_group(imgs[4:9], layout=(3, 1), page_size=(1200, 2100))
     # Gộp PDF
     pdf_bytes = BytesIO()
     page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2, page3])
@@ -1567,7 +1618,8 @@ def astrology_block():
         
     with col2:
         if st.checkbox("Antardasha"):
-            st.dataframe(df_all_antar, use_container_width=False)       
+            fig_antar = plot_antardasha_multi_column(df_all_antar)
+            st.pyplot(fig_antar)      
     
     
     df_bav = compute_ashtakavarga(df_planets)
@@ -1581,8 +1633,9 @@ def astrology_block():
     fig_life,
     fig_planet,       # Biểu đồ đại vận
     fig_yoga,  # Yoga/Dosha
+    fig_bav
     fig_dasha,    
-    fig_bav    # Bảng Ashtakavarga
+    fig_antar    
     # Có thể bổ sung các figure khác nếu muốn
     ]
     pdf_bytes = download_grouped_figs_as_pdf(figs)
