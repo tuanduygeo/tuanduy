@@ -191,7 +191,7 @@ def plot_ashtakavarga_table(df_bav):
         if row == 0 or col == -1:
             cell.set_text_props(weight='bold', color='navy')
         # Chỉ kiểm tra nếu đúng dòng "Tổng"
-        if idx_tong is not None and row == idx_tong:
+        if idx_tong is not None and row == idx_tong+1:
             try:
                 val = float(cell.get_text().get_text())
                 if val > 28:
