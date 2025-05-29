@@ -10,7 +10,7 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
-def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.85):
+def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=1):
     # Bỏ cột Số năm nếu có
     if "Số năm" in df_antar.columns:
         df_antar = df_antar.drop(columns=["Số năm"])
