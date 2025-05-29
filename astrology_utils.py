@@ -59,7 +59,7 @@ def plot_antardasha_multi_column(df_antar, ncol=3, fontsize=12, cell_height=0.4)
             cell.set_facecolor('#ffe299')
             cell.set_text_props(weight='bold')
 
-    ax.text(0.5, 1.2,"Bảng Antardasha (chia 3 cột)", fontsize=14, pad=14)
+    ax.text(0.5, 1.2, "Bảng Antardasha (chia 3 cột)", fontsize=14, ha='center', va='bottom', transform=ax.transAxes)
     plt.tight_layout()
     return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
