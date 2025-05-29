@@ -57,7 +57,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65
     for (row, col), cell in table.get_celld().items():
         if row == 0:
             cell.set_facecolor('#ffe299')
-            cell.set_text_props(weight='bold')
+            
 
     # Thêm tiêu đề
     ax.text(0.5, 0.7, "Bảng Antardasha (2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
