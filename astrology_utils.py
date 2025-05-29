@@ -26,7 +26,7 @@ def fig_to_pil(fig, dpi=180):
     fig.savefig(buf, format="png", bbox_inches="tight", dpi=dpi)
     buf.seek(0)
     return Image.open(buf).convert("RGB")
-def make_pdf_page_group(images, layout, page_size=(1600, 900), paddings=(30, 30)):
+def make_pdf_page_group(images, layout, page_size=(1300, 900), paddings=(30, 30)):
     from math import ceil
     n_images = len(images)
     n_row, n_col = layout
@@ -47,7 +47,7 @@ def make_pdf_page_group(images, layout, page_size=(1600, 900), paddings=(30, 30)
 def download_grouped_figs_as_pdf(figs):
     imgs = [fig_to_pil(fig) for fig in figs]
     # Trang 1: fig_d1 và fig_d30 (2 cột)
-    page1 = make_pdf_page_group(imgs[0:2], layout=(1, 2), page_size=(1600, 800))
+    page1 = make_pdf_page_group(imgs[0:2], layout=(1, 2), page_size=(1200, 800))
     # Trang 2: fig_life và fig_planet (2 cột)
     page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1200))
     # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
