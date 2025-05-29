@@ -1481,12 +1481,8 @@ def astrology_block():
     fig_d30=plot_d30_chart(df_d30)
     col1, col2 = st.columns([2, 1])
     with col1:
-        st.markdown("### Biểu đồ sinh ")
-        
         st.pyplot(fig_d1,use_container_width=False)
     with col2:
-        st.markdown("### Biểu đồ hậu vận")
-        
         st.pyplot(fig_d9,use_container_width=False)
         #st.markdown("### Biểu đồ lực âm")
         #st.pyplot(fig_d30,use_container_width=False)
