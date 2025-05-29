@@ -108,7 +108,9 @@ def download_grouped_figs_as_pdf(figs):
     page4 = make_pdf_page_group([imgs[7]], layout=(1, 1), page_size=(1200, 1600)) 
     # Gộp PDF
     pdf_bytes = BytesIO()
-    page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2, page3])
+    pages = [page2, page3, page4]
+    page1.save(pdf_bytes, format="PDF", save_all=True, append_images=pages)
+    
     pdf_bytes.seek(0)
     return pdf_bytes
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
