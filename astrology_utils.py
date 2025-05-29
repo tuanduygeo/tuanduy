@@ -1463,7 +1463,7 @@ def astrology_block():
     ax.axvspan(0, 70, color='grey', alpha=0.2)  
     ax.spines['left'].set_position('zero')  # Đặt OY đúng tại x=0 mới
     
-    ax.set_ylim(-12, 12)
+    ax.set_ylim(-13, 13)
 
     # Cài đặt chi tiết cho trục hoành
     ax.set_xticks(range(int(chart_df["Năm"].min()), int(chart_df["Năm"].max()) + 1, 5))  # Interval = 5 năm
