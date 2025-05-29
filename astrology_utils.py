@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 import re
 import io
 import textwrap
-def plot_mahadasha_table(df, title="Bảng Mahadasha (Vimsottari Dasa)"):
+def plot_mahadasha_table(df_planets, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
     table = ax.table(
-        cellText=df.values,
-        colLabels=df.columns,
+        cellText=df_planets.values,
+        colLabels=df_planets.columns,
         cellLoc='center',
         loc='center'
     )
