@@ -237,7 +237,7 @@ def plot_d9_chart(df_d9):
                 planets.append(f"{name} ({int(deg)}°)")
         if planets:
             ax.text(x, y, "\n".join(planets), ha='center', va='center', fontsize=7, color='blue')
-    
+    ax.set_title("Biểu đồ hậu vận", fontsize=14, pad=10)
     plt.tight_layout()
     plt.show()
     return fig
