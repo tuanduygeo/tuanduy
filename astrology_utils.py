@@ -153,14 +153,14 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
         loc='center'
     )
     table.auto_set_font_size(False)
-    table.set_fontsize(19)  # CHỮ TO HẲN
+    table.set_fontsize(18)  # CHỮ TO HẲN
     table.scale(1.45, 1.32)
     for key, cell in table.get_celld().items():
         cell.set_linewidth(0)
         cell.set_facecolor('#ffffff')
         cell.set_height(0.16 + 0.048 * wrapped_yoga[key[0]].count('\n'))
     # Title lớn
-    ax.text(0.5, 1.2, 'Cách cục Yoga', ha='center', va='bottom', fontsize=14, fontweight='bold', transform=ax.transAxes)
+    ax.text(0.5, 1.3, 'Cách cục Yoga', ha='center', va='bottom', fontsize=19, fontweight='bold', transform=ax.transAxes)
     
     return fig
 def plot_ashtakavarga_table(df_bav):
