@@ -1535,7 +1535,7 @@ def astrology_block():
         st.pyplot(fig_dasha,use_container_width=True)
     with col2:
         if st.checkbox("Hiện/Ẩn bảng Antar Dasha"):
-            st.dataframe(pd.DataFrame(antardashas), use_container_width=True)
+            st.dataframe(df_all_antar, use_container_width=True)
              
     
     plt.close('all')  
