@@ -196,8 +196,6 @@ def plot_ashtakavarga_table(df_bav):
             except:
                 pass  # Nếu không convert được thành số thì bỏ qua
     ax.text(0.5, 0.8, 'Bảng Ashtakavarga', ha='center', va='bottom', fontsize=12, fontweight='bold', transform=ax.transAxes)
-    
-    return fig
     return fig
 def plot_planet_table(df_planets, user_name=None):
     # Bỏ cột cuối cùng (dù tên là gì)
