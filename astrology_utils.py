@@ -41,7 +41,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65
             col_labels.append(f"{label} [{i+1}]")
 
     # Vẽ bảng
-    fig, ax = plt.subplots(figsize=(ncol*7, nrow*cell_height+1.5))
+    fig, ax = plt.subplots(figsize=(12, 15))
     ax.axis('off')
     table = ax.table(
         cellText=table_data,
