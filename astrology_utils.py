@@ -60,7 +60,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65
             
 
     # Thêm tiêu đề
-    ax.text(0.5, 1, "Bảng Antardasha (2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
+    ax.text(0.5, 0.9, "Bảng Antardasha (2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
     
     return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
