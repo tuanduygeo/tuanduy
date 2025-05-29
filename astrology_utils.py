@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import re
 import io
 import textwrap
-def plot_mahadasha_table(df_planets, title="Bảng Mahadasha (Vimsottari Dasa)"):
+def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
     table = ax.table(
@@ -1516,8 +1516,8 @@ def astrology_block():
     col1, col2 = st.columns([1, 1])
     with col1:
         
-        st.pyplot(plot_mahadasha_table(df_planets))
-        plt.close(plot_mahadasha_table(df_planets))
+        st.pyplot(plot_mahadasha_table(df_dasha))
+        plt.close(plot_mahadasha_table(df_dasha))
     with col2:
         if st.checkbox("Antardasha"):
             st.dataframe(df_all_antar, use_container_width=False)       
