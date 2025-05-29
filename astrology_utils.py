@@ -48,11 +48,11 @@ def make_pdf_page_group(images, layout, page_size=(1300, 900), paddings=(30, 30)
 def download_grouped_figs_as_pdf(figs):
     imgs = [fig_to_pil(fig) for fig in figs]
     # Trang 1: fig_d1 và fig_d30 (2 cột)
-    page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1600,800))
+    page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1200,800))
     # Trang 2: fig_life và fig_planet (2 cột)
     page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1200))
     # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
-    page3 = make_pdf_page_group(imgs[4:7], layout=(3, 1), page_size=(1200, 2100))
+    page3 = make_pdf_page_group(imgs[4:7], layout=(3, 1), page_size=(1200, 1600))
     # Gộp PDF
     pdf_bytes = BytesIO()
     page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2, page3])
