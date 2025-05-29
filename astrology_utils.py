@@ -1550,8 +1550,8 @@ def astrology_block():
     ]
     if st.button("Tải toàn bộ ảnh PDF"):
         pdf_bytes = download_all_figs_as_pdf(figs)
-    if pdf_bytes:
-        st.download_button("Tải PDF", data=pdf_bytes, file_name="all_images.pdf", mime="application/pdf")
+        if pdf_bytes:
+            st.download_button("Tải PDF", data=pdf_bytes, file_name="all_images.pdf", mime="application/pdf")
       
    
     st.markdown("""#### 📌 Hướng dẫn
