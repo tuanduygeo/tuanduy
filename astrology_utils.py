@@ -99,7 +99,7 @@ def plot_ashtakavarga_table(df_bav):
         loc='center'
     )
     table.auto_set_font_size(False)
-    table.set_fontsize(12)
+    table.set_fontsize(10)
     table.scale(1.12, 1.17)
     for (row, col), cell in table.get_celld().items():
         cell.set_facecolor('#ffffff')
