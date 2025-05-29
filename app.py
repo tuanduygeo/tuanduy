@@ -739,9 +739,9 @@ def main():
                 # Xác định median
                 median_z = np.median(data_array)
                 if value_center > median_z:
-                    center_str = f"Vị trí({value_center:.2f}) > median ({median_z:.2f}): cao"
+                    center_str = f"Vị trí{value_center:.2f}>{median_z:.2f}"
                 else:
-                    center_str = f"Vị trí({value_center:.2f}) < median ({median_z:.2f}): thấp"
+                    center_str = f"Vị trí{value_center:.2f}<{median_z:.2f}"
                     
                 dt2 = dt / 10
                 ax.set_title(f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})| {center_str} | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
