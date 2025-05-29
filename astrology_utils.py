@@ -105,7 +105,7 @@ def download_grouped_figs_as_pdf(figs):
     page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1200))
     # Trang 3: fig_yoga, fig_dasha, fig_bav,fig_antar (4 hàng, 1 cột)
     page3 = make_pdf_page_group(imgs[4:9], layout=(3, 1), page_size=(1200, 2100))
-    page4 = imgs[7]  # fig_antar dạng PIL.Image rồi
+    page4 = make_pdf_page_group([imgs[7]], layout=(1, 1), page_size=(1200, 1600)) 
     # Gộp PDF
     pdf_bytes = BytesIO()
     page1.save(pdf_bytes, format="PDF", save_all=True, append_images=[page2, page3])
