@@ -731,8 +731,15 @@ def main():
                 x_start = x0 + 10   # cách mép trái 30m cho đẹp, tùy bạn chỉnh
                 y_start = y0 + 20   # cách mép dưới 30m cho đẹp, tùy bạn chỉnh
                 x_end = x_start + scale_length
+                median_z = np.median(data_array)
+                if value_center > median_z:
+                    center_str = f"Vị trí({value_center:.2f}) > median ({median_z:.2f}): cao"
+                else:
+                    center_str = f"Vị trí({value_center:.2f}) < median ({median_z:.2f}): thấp"
+                
+                
                 ax.set_title(
-                    f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f}) | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
+                    f"Sơ đồ địa mạch ({diachi} {x:.6f}, {y:.6f})| {center_str} | Sơn: {diem_son} | Thủy: {diem_thuy} | Từ thiên: {declination_str}°",
                     fontsize=16, fontweight='bold', color='#f9d423', pad=18)
                 
                 # Vẽ thanh thước
@@ -748,12 +755,7 @@ def main():
                 j_center = np.argmin(np.abs(xt - lon0))
                 value_center = data_array[i_center, j_center]
                 # Xác định median
-                median_z = np.median(data_array)
-                if value_center > median_z:
-                    st.write(f'Giá trị tại tâm ({value_center:.2f}) >  ({median_z:.2f}): **CAO**')
-                    
-                else:
-                    st.write(f'Giá trị tại tâm ({value_center:.2f}) < median ({median_z:.2f}): **THẤP**')
+                
                     
                 dt2 = dt / 10
                 fig2, ax2 = plt.subplots(figsize=(12, 12))
