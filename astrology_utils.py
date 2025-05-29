@@ -153,7 +153,7 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
         loc='center'
     )
     table.auto_set_font_size(False)
-    table.set_fontsize(14)  # CHỮ TO HẲN
+    table.set_fontsize(16)  # CHỮ TO HẲN
     table.scale(1.45, 1.32)
     for key, cell in table.get_celld().items():
         cell.set_linewidth(0)
