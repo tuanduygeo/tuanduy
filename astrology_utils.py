@@ -1545,7 +1545,7 @@ def astrology_block():
     ax.set_ylabel("Điểm số")
     ax.grid(True)
     
-    st.pyplot(fig,use_container_width=False)
+    st.pyplot(fig_life,use_container_width=False)
     
     
     
