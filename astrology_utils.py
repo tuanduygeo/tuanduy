@@ -61,7 +61,7 @@ def plot_antardasha_multi_column(df_antar, ncol=2, fontsize=15, cell_height=0.65
 
     # Thêm tiêu đề
     ax.text(0.5, 0.8, "Bảng Antardasha (chia 2 cột)", fontsize=fontsize+4, ha='center', va='bottom', transform=ax.transAxes, weight='bold')
-    plt.tight_layout()
+    
     return fig
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
     # img: PIL.Image
@@ -130,7 +130,7 @@ def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
             cell.set_facecolor("#ffe299")
             cell.set_text_props(weight='bold')
     ax.set_title(title, fontsize=14, pad=20)
-    plt.tight_layout()
+    
     return fig
 
 def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
@@ -159,7 +159,7 @@ def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
         cell.set_height(0.16 + 0.048 * wrapped_yoga[key[0]].count('\n'))
     # Title lớn
     ax.text(0.5, 1.2, 'Cách cục Yoga', ha='center', va='bottom', fontsize=14, fontweight='bold', transform=ax.transAxes)
-    plt.tight_layout()
+    
     return fig
 def plot_ashtakavarga_table(df_bav):
     import matplotlib.pyplot as plt
