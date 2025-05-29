@@ -1617,9 +1617,8 @@ def astrology_block():
         st.pyplot(fig_dasha)
         
     with col2:
-        if st.checkbox("Antardasha"):
-            fig_antar = plot_antardasha_multi_column(df_all_antar)
-            st.pyplot(fig_antar)      
+        fig_antar = plot_antardasha_multi_column(df_all_antar)
+        st.pyplot(fig_antar)      
     
     
     df_bav = compute_ashtakavarga(df_planets)
@@ -1633,7 +1632,7 @@ def astrology_block():
     fig_life,
     fig_planet,       # Biểu đồ đại vận
     fig_yoga,  # Yoga/Dosha
-    fig_bav
+    fig_bav,
     fig_dasha,    
     fig_antar    
     # Có thể bổ sung các figure khác nếu muốn
