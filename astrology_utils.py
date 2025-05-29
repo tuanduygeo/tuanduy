@@ -12,8 +12,8 @@ def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
     table = ax.table(
-        cellText=df_planets.values,
-        colLabels=df_planets.columns,
+        cellText=df_dasha.values,
+        colLabels=df_dasha.columns,
         cellLoc='center',
         loc='center'
     )
