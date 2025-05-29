@@ -1616,9 +1616,8 @@ def astrology_block():
         fig_dasha=plot_mahadasha_table(df_dasha)
         st.pyplot(fig_dasha)
         
-    with col2:
-        fig_antar = plot_antardasha_multi_column(df_all_antar)
-        st.pyplot(fig_antar)      
+    fig_antar = plot_antardasha_multi_column(df_all_antar)
+    st.pyplot(fig_antar)      
     
     
     df_bav = compute_ashtakavarga(df_planets)
