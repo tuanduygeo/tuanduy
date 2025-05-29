@@ -49,7 +49,7 @@ def download_grouped_figs_as_pdf(figs):
     # Trang 1: fig_d1 và fig_d30 (2 cột)
     page1 = make_pdf_page_group(imgs[0:2], layout=(1, 2), page_size=(1600, 800))
     # Trang 2: fig_life và fig_planet (2 cột)
-    page2 = make_pdf_page_group(imgs[2:4], layout=(1, 2), page_size=(1600, 800))
+    page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1800))
     # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
     page3 = make_pdf_page_group(imgs[4:7], layout=(3, 1), page_size=(1200, 2100))
     # Gộp PDF
