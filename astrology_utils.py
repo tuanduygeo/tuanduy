@@ -1503,8 +1503,7 @@ def astrology_block():
         st.pyplot(fig_d9,use_container_width=False)
         #st.markdown("### Biểu đồ lực âm")
         #st.pyplot(fig_d30,use_container_width=False)
-    plt.close(fig_d1)
-    plt.close(fig_d9)
+    
     ax.tick_params(axis='x')
     filtered_df = chart_df[chart_df["Năm_mới"].between(0, 70)]
     median_score = round(filtered_df["Điểm số"].median(), 2)
@@ -1516,21 +1515,21 @@ def astrology_block():
     ax.set_ylabel("Điểm số")
     ax.grid(True)
     st.pyplot(fig,use_container_width=False)
-    plt.close(fig)
+    
     
     
     fig = plot_planet_table(df_planets, user_name)
     st.pyplot(fig)
-    plt.close(fig)
+    
     yoga_markdown = detect_yoga_dosha(df_planets)
     fig_yoga = plot_detect_yoga_matplotlib(yoga_markdown)
     st.pyplot(fig_yoga)
-    plt.close(fig_yoga)
+    
     col1, col2 = st.columns([1, 1])
     with col1:
         
         st.pyplot(plot_mahadasha_table(df_dasha))
-        plt.close(plot_mahadasha_table(df_dasha))
+        
     with col2:
         if st.checkbox("Antardasha"):
             st.dataframe(df_all_antar, use_container_width=False)       
@@ -1539,7 +1538,16 @@ def astrology_block():
     df_bav = compute_ashtakavarga(df_planets)
     fig_bav = plot_ashtakavarga_table(df_bav)
     st.pyplot(fig_bav)
-    plt.close(fig_bav)
+    
+    figs = [
+    fig_d1,    # Lá số chính D1
+    fig_d9,    # Navamsa
+    # fig_d30, # Nếu cần thêm D30 thì bật lên
+    fig,       # Biểu đồ đại vận
+    fig_yoga,  # Yoga/Dosha
+    fig_bav    # Bảng Ashtakavarga
+    # Có thể bổ sung các figure khác nếu muốn
+    ]
     if st.button("Tải toàn bộ ảnh PDF"):
         pdf_bytes = download_all_figs_as_pdf(figs)
     if pdf_bytes:
