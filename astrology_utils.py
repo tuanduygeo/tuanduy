@@ -8,7 +8,31 @@ import matplotlib.pyplot as plt
 import re
 import io
 import textwrap
+def plot_mahadasha_table(df, title="Bảng Mahadasha (Vimsottari Dasa)"):
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.axis('off')
+    table = ax.table(
+        cellText=df.values,
+        colLabels=df.columns,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(16)
+    table.scale(1, 2)  # Tăng chiều cao row
+    # Đổi màu header
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_fontsize(18)
+            cell.set_facecolor("#ffe299")
+            cell.set_text_props(weight='bold')
+    ax.set_title(title, fontsize=20, pad=20)
+    plt.tight_layout()
+    return fig
 
+# Test:
+fig = plot_mahadasha_table(df)
+plt.show()
 def plot_detect_yoga_matplotlib(yoga_list, max_width=90):
     if isinstance(yoga_list, str):
         yoga_list = [line.strip("-• ") for line in yoga_list.split("\n") if line.strip() and not line.startswith("####")]
@@ -1494,8 +1518,8 @@ def astrology_block():
     plt.close(fig_yoga)
     col1, col2 = st.columns([1, 1])
     with col1:
-        st.markdown("### 🕉️ Bảng Đại Vận Vimshottari ")
-        st.dataframe(df_dasha, use_container_width=False)
+        
+        st.pyplot(plot_mahadasha_table(df))
     with col2:
         if st.checkbox("Antardasha"):
             st.dataframe(df_all_antar, use_container_width=False)       
