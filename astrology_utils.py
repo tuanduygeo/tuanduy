@@ -10,22 +10,7 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
-from PIL import ImageDraw, ImageFont
 
-def annotate_page1_with_info(page1, user_name, selected_datetime_local, latitude, longitude, utc_offset):
-    draw = ImageDraw.Draw(page1)
-    font = ImageFont.load_default()  # Hoặc dùng truetype cho font đẹp hơn
-    # Chuẩn bị nội dung
-    info = (
-        f"Họ tên: {user_name}   "
-        f"Ngày giờ: {selected_datetime_local.strftime('%Y-%m-%d %H:%M')}   "
-        f"Vĩ độ: {latitude}°   "
-        f"Kinh độ: {longitude}°   "
-        f"Múi giờ: UTC{int(utc_offset):+}"
-    )
-    # Chọn vị trí (vd: top left)
-    draw.text((40, 20), info, fill="black", font=font)
-    return page1
 def resize_image_to_canvas(img, target_size=(1200, 1200), bgcolor=(255,255,255)):
     # img: PIL.Image
     # target_size: (width, height)
@@ -63,9 +48,7 @@ def make_pdf_page_group(images, layout, page_size=(1300, 900), paddings=(30, 30)
 def download_grouped_figs_as_pdf(figs):
     imgs = [fig_to_pil(fig) for fig in figs]
     # Trang 1: fig_d1 và fig_d30 (2 cột)
-    utc_offset = selected_datetime_local.utcoffset().total_seconds() / 3600 if selected_datetime_local else 7
     page1 = make_pdf_page_group(imgs[:2], layout=(1,2), page_size=(1600,800))
-    page1 = annotate_page1_with_info(page1, user_name, selected_datetime_local, latitude, longitude, utc_offset)
     # Trang 2: fig_life và fig_planet (2 cột)
     page2 = make_pdf_page_group(imgs[2:4], layout=(2, 1), page_size=(1200, 1200))
     # Trang 3: fig_yoga, fig_dasha, fig_bav (3 hàng, 1 cột)
