@@ -743,13 +743,13 @@ def detect_yoga_dosha(df_planets):
             reasons.append("Sun đồng cung Ketu")
         # 2. Sun ở nhà 9
         if sun_house == 9:
-            reasons.append("Sun ở nhà 9 (cung tổ tiên)")
+            reasons.append("Sun ở nhà 9 ")
         # 3. Rahu ở nhà 9
         if rahu_house == 9:
-            reasons.append("Rahu ở nhà 9 (cung tổ tiên)")
+            reasons.append("Rahu ở nhà 9 ")
         
         if reasons:
-            return True, f"- **Pitra Dosha**: Phát hiện do: {', '.join(reasons)}. Nên chú ý cúng lễ tổ tiên và hóa giải nghiệp."
+            return True, f"- **Pitra Dosha**: Phát hiện do: {', '.join(reasons)}. Gánh vác nghiệp tổ tiên, dòng họ."
         else:
             return False, "Không phát hiện Pitra Dosha mạnh."
     
