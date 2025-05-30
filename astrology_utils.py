@@ -798,7 +798,37 @@ def detect_yoga_dosha(df_planets):
         res.append(
             f"- **Pitra Dosha**: Có các chỉ báo sau: {', '.join(pitra_dosha_reasons)}. Nên chú ý cúng lễ, làm thiện, hóa giải nghiệp tổ tiên."
         )
+    def check_sade_sati(df_planets, saturn_transit_rashi=None):
+        """
+        Kiểm tra Sade Sati cho một lá số. 
+        - df_planets: DataFrame với cột 'Hành tinh', 'Cung'
+        - saturn_transit_rashi: tên cung hiện tại của Saturn (ví dụ: "Bảo Bình"), nếu None thì lấy luôn cung Saturn trong lá số (không chính xác với transit, nhưng mô phỏng)
+        """
+        rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+                  "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+        
+        moon_row = df_planets[df_planets["Hành tinh"] == "Moon"]
+        if moon_row.empty:
+            return False, "Không có dữ liệu Moon."
+        moon_rashi = moon_row.iloc[0]["Cung"]
+        moon_idx = rashis.index(moon_rashi)
     
+        # 3 cung: trước, hiện tại, sau Moon
+        sade_sati_rashis = [rashis[(moon_idx - 1) % 12], moon_rashi, rashis[(moon_idx + 1) % 12]]
+    
+        # Nếu không nhập vị trí transit, lấy luôn vị trí Saturn trong lá số
+        if saturn_transit_rashi is None:
+            saturn_row = df_planets[df_planets["Hành tinh"] == "Saturn"]
+            if saturn_row.empty:
+                return False, "Không có dữ liệu Saturn."
+            saturn_rashi = saturn_row.iloc[0]["Cung"]
+        else:
+            saturn_rashi = saturn_transit_rashi
+    
+        if saturn_rashi in sade_sati_rashis:
+            return True, f"Saturn đang ở {saturn_rashi}, thuộc Sade Sati (liên quan Moon ở {moon_rashi})"
+        else:
+            return False, "Saturn không ở Sade Sati."
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."
     else:
