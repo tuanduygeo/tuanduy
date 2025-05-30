@@ -795,16 +795,19 @@ def detect_yoga_dosha(df_planets):
             if dusthana in p.get("chủ nhà", []):
                 p_house = p.get("Nhà")
                 p_aspected = get_aspected(p['Hành tinh'])
-                # Kiểm tra đồng cung hoặc chiếu Sun, Rahu, Ketu, chủ nhà 9
                 check_list = ["Sun", "Rahu", "Ketu"]
                 if ninth_house_ruler:
                     check_list.append(ninth_house_ruler['Hành tinh'])
                 for target in check_list:
                     target_house = get_house(target)
-                    if p_house == target_house:
-                        pitra_dosha_reasons.append(f"Chủ nhà {dusthana} đồng cung {target} (Dosha nặng hơn)")
-                    if target in p_aspected:
-                        pitra_dosha_reasons.append(f"Chủ nhà {dusthana} chiếu {target} (Dosha nặng hơn)")
+                    if p_house == target_house and p['Hành tinh'] != target:
+                        pitra_dosha_reasons.append(
+                            f"{p['Hành tinh']} (chủ nhà {dusthana}) đồng cung {target} (Dosha nặng hơn)"
+                        )
+                    if target in p_aspected and p['Hành tinh'] != target:
+                        pitra_dosha_reasons.append(
+                            f"{p['Hành tinh']} (chủ nhà {dusthana}) chiếu {target} (Dosha nặng hơn)"
+                        )
 
     if pitra_dosha_reasons:
         res.append(
