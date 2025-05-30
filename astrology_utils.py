@@ -796,7 +796,7 @@ def detect_yoga_dosha(df_planets):
 
     if pitra_dosha_reasons:
         res.append(
-            f"- **Pitra Dosha**: Có các chỉ báo sau: {', '.join(pitra_dosha_reasons)}. Nên chú ý cúng lễ, làm thiện, hóa giải nghiệp tổ tiên."
+            f"- **Pitra Dosha**: Có các chỉ báo sau: {', '.join(pitra_dosha_reasons)}. Gánh vác nghiệp của tổ tiên."
         )
     def check_sade_sati(df_planets, saturn_transit_rashi=None):
         """
