@@ -750,7 +750,8 @@ def detect_yoga_dosha(df_planets):
         
         if reasons:
             return True, f"- **Pitra Dosha**: Phát hiện do: {', '.join(reasons)}. Gánh vác nghiệp tổ tiên, dòng họ."
-        
+        else:
+            return False, "Không phát hiện Pitra Dosha mạnh."
     
     # Ví dụ sử dụng trong detect_yoga_dosha:
     is_pitra, pitra_note = detect_pitra_dosha(df_planets)
