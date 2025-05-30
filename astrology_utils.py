@@ -543,42 +543,9 @@ def detect_yoga_dosha(df_planets):
                 raj_yoga_res.append(
                     f"- **Raj Yoga (Kendra chiếu Trikona):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
                 )
-
-    # 3. Parivartana (exchange) giữa chủ Kendra và chủ Trikona
-    rashi_rulers = {
-        "Bạch Dương": "Mars", "Kim Ngưu": "Venus", "Song Tử": "Mercury", "Cự Giải": "Moon",
-        "Sư Tử": "Sun", "Xử Nữ": "Mercury", "Thiên Bình": "Venus", "Bọ Cạp": "Mars",
-        "Nhân Mã": "Jupiter", "Ma Kết": "Saturn", "Bảo Bình": "Saturn", "Song Ngư": "Jupiter"
-    }
-    records = df_planets.to_dict("records")
-    for p1 in records:
-        lord1_houses = set(p1.get("chủ nhà", []))
-        ruler1 = rashi_rulers.get(p1["Cung"])
-        if not ruler1: continue
-        p2 = next((p for p in records if p["Hành tinh"] == ruler1), None)
-        if (
-            p2
-            and rashi_rulers.get(p2["Cung"]) == p1["Hành tinh"]
-            and p1["Hành tinh"] != p2["Hành tinh"]
-        ):
-            lord2_houses = set(p2.get("chủ nhà", []))
-            # Chỉ ghi nhận nếu 1 là chủ Kendra, 1 là chủ Trikona
-            if (lord1_houses & trikona_houses and lord2_houses & kendra_houses) or \
-               (lord2_houses & trikona_houses and lord1_houses & kendra_houses):
-                pair = tuple(sorted([p1["Hành tinh"], p2["Hành tinh"]]))
-                raj_yoga_res.append(
-                    f"- **Raj Yoga (Exchange/Parivartana):** {pair[0]} và {pair[1]} hoán đổi cung giữa Kendra và Trikona."
-                )
     raj_yogas = detect_raj_yoga_v2(df_planets)
     if raj_yogas:
         res.extend(raj_yogas)
-
-
-
-
-
-
-
 
     
     def check_parivartana(df_planets):
