@@ -719,7 +719,44 @@ def detect_yoga_dosha(df_planets):
     found_benefics = [p for p in df_planets.to_dict("records") if p["Hành tinh"] in benefics and p["Nhà"] in houses_6_7_8]
     if len(found_benefics) >= 2:
         res.append("- **Adhi Yoga:** Mercury, Venus, Jupiter chiếm các nhà 6/7/8 từ Ascendant – địa vị, danh vọng, an nhàn.")
-
+    def detect_pitra_dosha(df_planets):
+        """
+        Kiểm tra Pitra Dosha chỉ dựa trên 3 điều kiện mạnh nhất truyền thống.
+        Trả về tuple (True/False, Lý do nếu có Dosha).
+        """
+        # Hàm phụ lấy nhà của hành tinh
+        def get_house(planet):
+            p = df_planets[df_planets['Hành tinh'] == planet]
+            if not p.empty:
+                return p.iloc[0]['Nhà']
+            return None
+    
+        sun_house = get_house("Sun")
+        rahu_house = get_house("Rahu")
+        ketu_house = get_house("Ketu")
+    
+        reasons = []
+        # 1. Sun đồng cung Rahu/Ketu
+        if sun_house is not None and rahu_house is not None and sun_house == rahu_house:
+            reasons.append("Sun đồng cung Rahu")
+        if sun_house is not None and ketu_house is not None and sun_house == ketu_house:
+            reasons.append("Sun đồng cung Ketu")
+        # 2. Sun ở nhà 9
+        if sun_house == 9:
+            reasons.append("Sun ở nhà 9 (cung tổ tiên)")
+        # 3. Rahu ở nhà 9
+        if rahu_house == 9:
+            reasons.append("Rahu ở nhà 9 (cung tổ tiên)")
+        
+        if reasons:
+            return True, f"- **Pitra Dosha**: Phát hiện do: {', '.join(reasons)}. Nên chú ý cúng lễ tổ tiên và hóa giải nghiệp."
+        else:
+            return False, "Không phát hiện Pitra Dosha mạnh."
+    
+    # Ví dụ sử dụng trong detect_yoga_dosha:
+    is_pitra, pitra_note = detect_pitra_dosha(df_planets)
+    if is_pitra:
+        res.append(pitra_note)
     
 
     def check_sade_sati(df_planets, saturn_transit_rashi=None):
