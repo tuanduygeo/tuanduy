@@ -720,75 +720,7 @@ def detect_yoga_dosha(df_planets):
     if len(found_benefics) >= 2:
         res.append("- **Adhi Yoga:** Mercury, Venus, Jupiter chiếm các nhà 6/7/8 từ Ascendant – địa vị, danh vọng, an nhàn.")
 
-    # Chỉ khi phát hiện pitradosha chính (các dòng dưới), mới thêm chi tiết nặng nhẹ
-    main_pitra_dosha = False
-    pitra_dosha_reasons = []
-    def get_house(planet):
-        p = df_planets[df_planets['Hành tinh'] == planet]
-        if not p.empty:
-            return p.iloc[0]['Nhà']
-        return None
     
-    sun_house = get_house("Sun")
-    rahu_house = get_house("Rahu")
-    ketu_house = get_house("Ketu")
-    ninth_house_ruler = None
-    for p in df_planets.to_dict("records"):
-        if 9 in p.get("chủ nhà", []):
-            ninth_house_ruler = p
-            break
-    # 1. Sun đồng cung Rahu/Ketu ở bất cứ đâu
-    if sun_house == rahu_house:
-        main_pitra_dosha = True
-        pitra_dosha_reasons.append("Sun đồng cung Rahu")
-    if sun_house == ketu_house:
-        main_pitra_dosha = True
-        pitra_dosha_reasons.append("Sun đồng cung Ketu")
-    
-    # 2. Sun ở nhà 9
-    if sun_house == 9:
-        main_pitra_dosha = True
-        pitra_dosha_reasons.append("Sun ở nhà 9 (cung tổ tiên)")
-    
-    # 3. Rahu ở nhà 9
-    if rahu_house == 9:
-        main_pitra_dosha = True
-        pitra_dosha_reasons.append("Rahu ở nhà 9 (cung tổ tiên)")
-    
-    # 4. Chủ nhà 9 đồng cung hoặc bị Rahu/Ketu chiếu
-    if ninth_house_ruler:
-        nhr_house = ninth_house_ruler.get("Nhà")
-        nhr_aspected = get_aspected(ninth_house_ruler['Hành tinh'])
-        if nhr_house in [rahu_house, ketu_house]:
-            main_pitra_dosha = True
-            pitra_dosha_reasons.append("Chủ nhà 9 đồng cung Rahu/Ketu")
-        if "Rahu" in nhr_aspected or "Ketu" in nhr_aspected:
-            main_pitra_dosha = True
-            pitra_dosha_reasons.append("Chủ nhà 9 bị Rahu/Ketu chiếu")
-    
-    # === Nếu đã phát hiện Dosha chính, mới xét các yếu tố "nặng hơn" ===
-    if main_pitra_dosha:
-        for dusthana in [6,8,12]:
-            for p in df_planets.to_dict("records"):
-                if dusthana in p.get("chủ nhà", []):
-                    p_house = p.get("Nhà")
-                    p_aspected = get_aspected(p['Hành tinh'])
-                    check_list = ["Sun", "Rahu", "Ketu"]
-                    if ninth_house_ruler:
-                        check_list.append(ninth_house_ruler['Hành tinh'])
-                    for target in check_list:
-                        target_house = get_house(target)
-                        if p_house == target_house and p['Hành tinh'] != target:
-                            pitra_dosha_reasons.append(
-                                f"{p['Hành tinh']} (chủ nhà {dusthana}) đồng cung {target} (Dosha nặng hơn)"
-                            )
-                        if target in p_aspected and p['Hành tinh'] != target:
-                            pitra_dosha_reasons.append(
-                                f"{p['Hành tinh']} (chủ nhà {dusthana}) chiếu {target} (Dosha nặng hơn)"
-                            )
-        res.append(
-            f"- **Pitra Dosha**: Phát hiện do: {', '.join(pitra_dosha_reasons)}. Gánh vác nghiệp tổ tiên, dòng họ."
-        )
 
     def check_sade_sati(df_planets, saturn_transit_rashi=None):
         """
