@@ -829,6 +829,55 @@ def detect_yoga_dosha(df_planets):
             return True, f"Saturn đang ở {saturn_rashi}, thuộc Sade Sati (liên quan Moon ở {moon_rashi})"
         else:
             return False, "Saturn không ở Sade Sati."
+
+    def check_gandanta_dosha(df_planets):
+        """
+        Kiểm tra Gandanta Dosha cho Sun, Moon, Ascendant (Asc).
+        Trả về list các dosha phát hiện được.
+        """
+        rashis = ["Bạch Dương", "Kim Ngưu", "Song Tử", "Cự Giải", "Sư Tử", "Xử Nữ",
+                  "Thiên Bình", "Bọ Cạp", "Nhân Mã", "Ma Kết", "Bảo Bình", "Song Ngư"]
+        # Các vùng Gandanta: (Cung, độ bắt đầu, độ kết thúc)
+        gandanta_zones = [
+            ("Cự Giải", 29 + 20/60, 30),    # Cancer: 29°20'–30°00'
+            ("Sư Tử", 0, 0 + 40/60),        # Leo: 0°00'–0°40'
+            ("Bọ Cạp", 29 + 20/60, 30),     # Scorpio: 29°20'–30°00'
+            ("Nhân Mã", 0, 0 + 40/60),      # Sagittarius: 0°00'–0°40'
+            ("Song Ngư", 29 + 20/60, 30),   # Pisces: 29°20'–30°00'
+            ("Bạch Dương", 0, 0 + 40/60),   # Aries: 0°00'–0°40'
+        ]
+    
+        planets_to_check = [("Sun", "Surya Gandanta"), ("Moon", "Chandra Gandanta"), ("Asc", "Lagna Gandanta")]
+        gandanta_found = []
+    
+        for planet, dosha_name in planets_to_check:
+            row = df_planets[df_planets['Hành tinh'] == planet]
+            if row.empty:
+                continue
+            cung = row.iloc[0]['Cung']
+            pos_str = row.iloc[0]['Vị trí']
+            # Chuyển vị trí từ dms sang số thập phân
+            import re
+            m = re.match(r"(\d+)°(\d+)'(\d+)?", pos_str)
+            if m:
+                d = int(m.group(1))
+                m_ = int(m.group(2))
+                s = int(m.group(3)) if m.group(3) else 0
+                deg = d + m_ / 60 + s / 3600
+            else:
+                deg = float(pos_str.replace("°", ""))
+            # Kiểm tra có nằm vùng Gandanta không?
+            for rashi, start_deg, end_deg in gandanta_zones:
+                if cung == rashi and start_deg <= deg < end_deg:
+                    gandanta_found.append(
+                        f"- **{dosha_name} Dosha:** {planet} nằm trong vùng Gandanta của {rashi} ({start_deg:.2f}°–{end_deg:.2f}°). Hành tinh này có nhiều thử thách nghiệp và chuyển hóa lớn."
+                    )
+                    break  # Không kiểm tra tiếp vùng khác
+    
+        return gandanta_found
+    gandanta_results = check_gandanta_dosha(df_planets)
+    if gandanta_results:
+        res.extend(gandanta_results)
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."
     else:
