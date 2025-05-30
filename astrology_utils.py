@@ -829,6 +829,9 @@ def detect_yoga_dosha(df_planets):
             return True, f"Saturn đang ở {saturn_rashi}, thuộc Sade Sati (liên quan Moon ở {moon_rashi})"
         else:
             return False, "Saturn không ở Sade Sati."
+    is_sadesati, sadesati_note = check_sade_sati(df_planets)
+    if is_sadesati:
+        res.append(f"- **Sade Sati (Shani Sadhesati)**: {sadesati_note}. Đây là giai đoạn thử thách, nên giữ bình tĩnh, làm thiện, cẩn trọng các quyết định lớn.")
 
     def check_gandanta_dosha(df_planets):
         """
