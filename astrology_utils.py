@@ -544,7 +544,9 @@ def detect_yoga_dosha(df_planets):
                         f"- **Raja Yoga (Kendra chiếu Trikona):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
                     )
         return raja_yoga_res
-    
+    raja_yogas = detect_raja_yoga(df_planets)
+    if raja_yogas:
+        res.extend(raja_yogas)
     def check_parivartana(df_planets):
         records = df_planets.to_dict("records")
         exchanges = []
