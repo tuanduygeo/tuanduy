@@ -723,7 +723,20 @@ def detect_yoga_dosha(df_planets):
     # Chỉ khi phát hiện pitradosha chính (các dòng dưới), mới thêm chi tiết nặng nhẹ
     main_pitra_dosha = False
     pitra_dosha_reasons = []
+    def get_house(planet):
+        p = df_planets[df_planets['Hành tinh'] == planet]
+        if not p.empty:
+            return p.iloc[0]['Nhà']
+        return None
     
+    sun_house = get_house("Sun")
+    rahu_house = get_house("Rahu")
+    ketu_house = get_house("Ketu")
+    ninth_house_ruler = None
+    for p in df_planets.to_dict("records"):
+        if 9 in p.get("chủ nhà", []):
+            ninth_house_ruler = p
+            break
     # 1. Sun đồng cung Rahu/Ketu ở bất cứ đâu
     if sun_house == rahu_house:
         main_pitra_dosha = True
