@@ -850,9 +850,9 @@ def detect_yoga_dosha(df_planets):
                                 status = houses_status[planet]
                             else:
                                 row_planet = df_planets[df_planets["Hành tinh"] == planet]
-                                if len(row_planet) > 0 and "Trạng thái" in row_planet.columns:
-                                    status = row_planet["Trạng thái"].values[0]
-                            if status and ("tù" in status or "tử" in status or "C" in status or "R" in status):
+                                if len(row_planet) > 0 and "Tính chất" in row_planet.columns:
+                                    status = row_planet["Tính chất"].values[0]
+                            if status and ("tù" in status or "tử" in status ):
                                 strength_notes.append(f"{planet} ({status})")
                         if strength_notes:
                             note = f" (Bị suy yếu: {', '.join(strength_notes)} ⇒ hiệu lực giảm hoặc Raja Yoga Bhanga)"
