@@ -821,9 +821,6 @@ def detect_yoga_dosha(df_planets):
                 continue
             for ruler_k in house_rulers.get(k, []):
                 for ruler_t in house_rulers.get(t, []):
-                    if ruler_k == ruler_t:
-                        # Bỏ qua nếu là cùng 1 hành tinh
-                        continue
                     pair_key = tuple(sorted([ruler_k, ruler_t]))
                     if pair_key in checked_pairs:
                         continue
