@@ -797,31 +797,25 @@ def detect_yoga_dosha(df_planets):
     gandanta_results = check_gandanta_dosha(df_planets)
     if gandanta_results:
         res.extend(gandanta_results)
-
+    
+    
+    #Raja yoga: 
     # Map house index to house name for readable code (1-based index)
     kendra_houses = [1, 4, 7, 10]
     trikona_houses = [1, 5, 9]
-    all_houses = sorted(set(kendra_houses + trikona_houses))
-    
-    # Tạo từ điển: {house_number: ruler_planet}
-    # Giả sử df_planets có cột 'Chủ tinh của nhà' dạng list[int]
     house_rulers = {}
     for i, row in df_planets.iterrows():
-        for house in row.get("Chủ nhà", []):
+        for house in row.get("chủ nhà", []):
             house_rulers.setdefault(house, []).append(row["Hành tinh"])
-    
-    # Lưu ý: Một hành tinh có thể chủ nhiều nhà
     yoga_list = []
     checked_pairs = set()
-    
-    # Duyệt từng cặp Kendra - Trikona, không trùng lặp
     for k in kendra_houses:
         for t in trikona_houses:
             if k == t:
                 continue
             for ruler_k in house_rulers.get(k, []):
                 for ruler_t in house_rulers.get(t, []):
-                    pair_key = tuple(sorted([ruler_k, ruler_t]))
+                    pair_key = tuple(sorted([ruler_k, ruler_t, k, t]))
                     if pair_key in checked_pairs:
                         continue
                     checked_pairs.add(pair_key)
@@ -862,13 +856,6 @@ def detect_yoga_dosha(df_planets):
                         yoga_list.append(
                             f"Raja Yoga: Chủ {k} ({ruler_k}) kết hợp chủ {t} ({ruler_t}){note}"
                         )
-
-    
-
-
-
-
-
 
     
     if not res:
