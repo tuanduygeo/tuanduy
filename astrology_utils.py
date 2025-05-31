@@ -10,53 +10,7 @@ import io
 from io import BytesIO
 import textwrap
 from PIL import Image
-def detect_raj_yoga_v2(df_planets):
-    """
-    Phát hiện Raj Yoga truyền thống: Chủ Kendra (1,4,7,10) và Chủ Trikona (5,9, và thường cả 1) 
-    kết nối qua conjunction, aspect, hoặc exchange (parivartana).
-    """
-    trikona_houses = {1, 5, 9}
-    kendra_houses = {1, 4, 7, 10}
-    raj_yoga_res = []
 
-    # 1. Xác định chủ Kendra & Trikona (lord = planet làm chủ nhà đó)
-    trikona_lords = [p for p in df_planets.to_dict("records") if set(p.get("chủ nhà", [])) & trikona_houses]
-    kendra_lords  = [p for p in df_planets.to_dict("records") if set(p.get("chủ nhà", [])) & kendra_houses]
-
-    # 2. Raj Yoga do conjunction/aspect
-    for tr in trikona_lords:
-        for kr in kendra_lords:
-            # Cho phép trường hợp cùng hành tinh (ví dụ: Jupiter chủ cả 1 và 10 ở cùng cung)
-            # a. Đồng cung (conjunction)
-            if tr["Cung"] == kr["Cung"]:
-                if tr["Hành tinh"] == kr["Hành tinh"]:
-                    raj_yoga_res.append(
-                        f"- **Raj Yoga (Single planet):** {tr['Hành tinh']} là chủ cả Kendra và Trikona, đồng cung tại {tr['Cung']}."
-                    )
-                else:
-                    raj_yoga_res.append(
-                        f"- **Raj Yoga (Conjunction):** Chủ Kendra ({kr['Hành tinh']}) và Chủ Trikona ({tr['Hành tinh']}) đồng cung tại {tr['Cung']}."
-                    )
-            # b. Mutual aspect hoặc aspect 1 chiều
-            chiếu_tr = [x.strip().split(" ")[0] for x in str(tr.get("Chiếu hành tinh", "")).split(",") if x.strip()]
-            chiếu_kr = [x.strip().split(" ")[0] for x in str(kr.get("Chiếu hành tinh", "")).split(",") if x.strip()]
-            if (kr["Hành tinh"] in chiếu_tr) and (tr["Hành tinh"] in chiếu_kr):
-                if tr["Hành tinh"] == kr["Hành tinh"]:
-                    raj_yoga_res.append(
-                        f"- **Raj Yoga (Self aspect):** {tr['Hành tinh']} là chủ cả Kendra và Trikona, tự chiếu bản thân tại {tr['Cung']}."
-                    )
-                else:
-                    raj_yoga_res.append(
-                        f"- **Raj Yoga (Mutual Aspect):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) và Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']}) chiếu lẫn nhau."
-                    )
-            elif kr["Hành tinh"] in chiếu_tr:
-                raj_yoga_res.append(
-                    f"- **Raj Yoga (Trikona chiếu Kendra):** Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']}) chiếu Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']})."
-                )
-            elif tr["Hành tinh"] in chiếu_kr:
-                raj_yoga_res.append(
-                    f"- **Raj Yoga (Kendra chiếu Trikona):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
-                )
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
@@ -543,9 +497,7 @@ def detect_yoga_dosha(df_planets):
                 )
         
     
-    raj_yogas = detect_raj_yoga_v2(df_planets)
-    if raj_yogas:
-        res.extend(raj_yogas)
+    
 
     
     def check_parivartana(df_planets):
@@ -845,6 +797,96 @@ def detect_yoga_dosha(df_planets):
     gandanta_results = check_gandanta_dosha(df_planets)
     if gandanta_results:
         res.extend(gandanta_results)
+
+    def detect_raja_yoga_v2(df_planets):
+        """
+        Phát hiện các tổ hợp Raja Yoga cơ bản nhất:
+          1. Chủ nhà Kendra và chủ nhà Trikona đồng cung, hoặc chiếu nhau (1-7, 4-10)
+          2. Chủ nhà Kendra nằm ở Trikona hoặc ngược lại (hoán vị)
+          3. Chủ nhà Kendra nằm ở Trikona, chủ Trikona nằm ở Kendra
+        Trả về list markdown mô tả từng trường hợp.
+        """
+        res = []
+        kendra_houses = [1, 4, 7, 10]
+        trikona_houses = [1, 5, 9]
+        all_houses = list(range(1, 13))
+    
+        # Bảng chủ tinh các cung
+        rashi_rulers = {
+            "Bạch Dương": "Mars", "Kim Ngưu": "Venus", "Song Tử": "Mercury", "Cự Giải": "Moon",
+            "Sư Tử": "Sun", "Xử Nữ": "Mercury", "Thiên Bình": "Venus", "Bọ Cạp": "Mars",
+            "Nhân Mã": "Jupiter", "Ma Kết": "Saturn", "Bảo Bình": "Saturn", "Song Ngư": "Jupiter"
+        }
+    
+        # Xác định chủ tinh từng nhà (theo cung ở mỗi nhà)
+        house_rulers = {}
+        for i in all_houses:
+            rashi = df_planets[df_planets["Nhà"] == i].iloc[0]["Cung"]
+            ruler = rashi_rulers[rashi]
+            house_rulers[i] = ruler
+    
+        # Lấy vị trí hiện tại của các chủ tinh
+        planet_positions = {row['Hành tinh']: row for _, row in df_planets.iterrows()}
+    
+        ## 1. Chủ Kendra và Trikona đồng cung hoặc đối xung (chiếu nhau)
+        for k in kendra_houses:
+            for t in trikona_houses:
+                if k == t: continue  # tránh trùng nhà 1
+                ruler_k = house_rulers[k]
+                ruler_t = house_rulers[t]
+                if ruler_k not in planet_positions or ruler_t not in planet_positions:
+                    continue
+                pos_k = planet_positions[ruler_k]['Nhà']
+                pos_t = planet_positions[ruler_t]['Nhà']
+                # Đồng cung
+                if pos_k == pos_t:
+                    res.append(f"- Chủ nhà Kendra ({ruler_k}, nhà {k}) và chủ nhà Trikona ({ruler_t}, nhà {t}) **đồng cung tại nhà {pos_k}**.")
+                # Đối xung (1-7, 4-10)
+                elif abs(pos_k - pos_t) % 12 == 6:
+                    res.append(f"- Chủ nhà Kendra ({ruler_k}, nhà {k}) và chủ nhà Trikona ({ruler_t}, nhà {t}) **chiếu nhau (nhà {pos_k} - nhà {pos_t})**.")
+    
+        ## 2. Chủ Kendra nằm ở Trikona, chủ Trikona nằm ở Kendra (hoán vị lẫn nhau)
+        for k in kendra_houses:
+            ruler_k = house_rulers[k]
+            if ruler_k in planet_positions:
+                pos_k = planet_positions[ruler_k]['Nhà']
+                if pos_k in trikona_houses and k not in trikona_houses:  # Tránh trường hợp nhà 1 là vừa Kendra vừa Trikona
+                    res.append(f"- Chủ nhà Kendra ({ruler_k}, nhà {k}) **nằm ở nhà Trikona ({pos_k})**.")
+    
+        for t in trikona_houses:
+            ruler_t = house_rulers[t]
+            if ruler_t in planet_positions:
+                pos_t = planet_positions[ruler_t]['Nhà']
+                if pos_t in kendra_houses and t not in kendra_houses:
+                    res.append(f"- Chủ nhà Trikona ({ruler_t}, nhà {t}) **nằm ở nhà Kendra ({pos_t})**.")
+    
+        ## 3. Chủ nhà 5, 9 nằm ở Kendra, chủ nhà 1, 4, 7, 10 nằm ở Trikona
+        for t in [5, 9]:
+            ruler_t = house_rulers[t]
+            if ruler_t in planet_positions:
+                pos_t = planet_positions[ruler_t]['Nhà']
+                if pos_t in kendra_houses:
+                    res.append(f"- Chủ nhà Trikona ({ruler_t}, nhà {t}) **nằm ở Kendra ({pos_t})**.")
+    
+        for k in [1, 4, 7, 10]:
+            ruler_k = house_rulers[k]
+            if ruler_k in planet_positions:
+                pos_k = planet_positions[ruler_k]['Nhà']
+                if pos_k in trikona_houses:
+                    res.append(f"- Chủ nhà Kendra ({ruler_k}, nhà {k}) **nằm ở Trikona ({pos_k})**.")
+    
+        if res:
+            return ["**Raja Yoga phát hiện:**"] + res
+        else:
+            return []
+    res += detect_raja_yoga_v2(df_planets)
+
+
+
+
+
+
+    
     if not res:
         return "Không phát hiện Yoga/Dosha đặc biệt nổi bật nào."
     else:
