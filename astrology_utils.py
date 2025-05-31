@@ -548,11 +548,7 @@ def detect_yoga_dosha(df_planets):
                 )
         
     
-    raj_yogas = detect_raj_yoga_v2(df_planets)
-    if raj_yogas:
-        res.extend(raj_yogas)
-
-    
+        
     def check_parivartana(df_planets):
         records = df_planets.to_dict("records")
         exchanges = []
