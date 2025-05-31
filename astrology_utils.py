@@ -799,63 +799,7 @@ def detect_yoga_dosha(df_planets):
         res.extend(gandanta_results)
     
     
-    #Raja yoga: 
-    # Map house index to house name for readable code (1-based index)
-    kendra_houses = [1, 4, 7, 10]
-    trikona_houses = [1, 5, 9]
-    house_rulers = {}
-    for i, row in df_planets.iterrows():
-        for house in row.get("chủ nhà", []):
-            house_rulers.setdefault(house, []).append(row["Hành tinh"])
-    yoga_list = []
-    checked_pairs = set()
-    for k in kendra_houses:
-        for t in trikona_houses:
-            if k == t:
-                continue
-            for ruler_k in house_rulers.get(k, []):
-                for ruler_t in house_rulers.get(t, []):
-                    pair_key = tuple(sorted([str(ruler_k), str(ruler_t), str(k), str(t)]))
-                    if pair_key in checked_pairs:
-                        continue
-                    checked_pairs.add(pair_key)
-
-                    # Lấy vị trí (house) của từng hành tinh
-                    pos_k = df_planets[df_planets["Tên"] == ruler_k]["Nhà"].values
-                    pos_t = df_planets[df_planets["Tên"] == ruler_t]["Nhà"].values
-                    if len(pos_k) == 0 or len(pos_t) == 0:
-                        continue
-                    pos_k, pos_t = int(pos_k[0]), int(pos_t[0])
-                    
-                    # Điều kiện đồng cung hoặc chiếu nhau (đối xứng 7 nhà)
-                    is_same_house = (pos_k == pos_t)
-                    is_opposite = ((pos_k - pos_t) % 12 == 6)
-
-                    # Điều kiện đặc biệt khi Ascendant kết hợp nhà 9/10
-                    is_special = ((k == 1 and t in [9, 10]) or (t == 1 and k in [9, 10]))
-
-                    # Nếu thỏa mãn điều kiện Raja Yoga
-                    if is_same_house or is_opposite or is_special:
-                        strength_notes = []
-                        # Kiểm tra trạng thái yếu (debilitation, combust, affliction)
-                        for planet in [ruler_k, ruler_t]:
-                            status = ""
-                            if houses_status and planet in houses_status:
-                                status = houses_status[planet]
-                            else:
-                                row_planet = df_planets[df_planets["Hành tinh"] == planet]
-                                if len(row_planet) > 0 and "Tính chất" in row_planet.columns:
-                                    status = row_planet["Tính chất"].values[0]
-                            if status and ("tù" in status or "tử" in status ):
-                                strength_notes.append(f"{planet} ({status})")
-                        if strength_notes:
-                            note = f" (Bị suy yếu: {', '.join(strength_notes)} ⇒ hiệu lực giảm hoặc Raja Yoga Bhanga)"
-                        else:
-                            note = ""
-                        # Ghi chú lại yoga
-                        yoga_list.append(
-                            f"Raja Yoga: Chủ {k} ({ruler_k}) kết hợp chủ {t} ({ruler_t}){note}"
-                        )
+    
 
     
     if not res:
