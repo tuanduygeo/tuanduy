@@ -432,7 +432,9 @@ def detect_yoga_dosha(df_planets):
         "Song Ngư": "Jupiter"        # Pisces
     }
     res = []
-    res.extend(detect_raj_yoga_v2(df_planets))
+    raj_yogas = detect_raj_yoga_v2(df_planets)
+    if raj_yogas:
+    res.extend(raj_yogas[:2])
     # Lấy các vị trí nhanh
     def get_planet(name):
         return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
