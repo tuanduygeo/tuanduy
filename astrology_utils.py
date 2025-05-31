@@ -57,6 +57,8 @@ def detect_raj_yoga_v2(df_planets):
                 raj_yoga_res.append(
                     f"- **Raj Yoga (Kendra chiếu Trikona):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
                 )
+    return raj_yoga_res
+    res.extend(detect_raj_yoga_v2(df_planets))
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
