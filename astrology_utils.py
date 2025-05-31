@@ -58,8 +58,8 @@ def detect_raj_yoga_v2(df_planets):
                     f"- **Raj Yoga (Kendra chiếu Trikona):** Chủ Kendra ({kr['Hành tinh']}, {kr['Cung']}) chiếu Chủ Trikona ({tr['Hành tinh']}, {tr['Cung']})."
                 )
     return raj_yoga_res
-res = []
-res.extend(detect_raj_yoga_v2(df_planets))
+
+    
 def plot_mahadasha_table(df_dasha, title="Bảng Mahadasha (Vimsottari Dasa)"):
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.axis('off')
@@ -432,7 +432,7 @@ def detect_yoga_dosha(df_planets):
         "Song Ngư": "Jupiter"        # Pisces
     }
     res = []
-    
+    res.extend(detect_raj_yoga_v2(df_planets))
     # Lấy các vị trí nhanh
     def get_planet(name):
         return df_planets[df_planets['Hành tinh'] == name].iloc[0] if name in set(df_planets['Hành tinh']) else None
