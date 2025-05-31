@@ -815,7 +815,7 @@ def detect_yoga_dosha(df_planets):
                 continue
             for ruler_k in house_rulers.get(k, []):
                 for ruler_t in house_rulers.get(t, []):
-                    pair_key = tuple(sorted([ruler_k, ruler_t, k, t]))
+                    pair_key = tuple(sorted([str(ruler_k), str(ruler_t), str(k), str(t)]))
                     if pair_key in checked_pairs:
                         continue
                     checked_pairs.add(pair_key)
