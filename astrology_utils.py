@@ -863,9 +863,7 @@ def detect_yoga_dosha(df_planets):
                             f"Raja Yoga: Chủ {k} ({ruler_k}) kết hợp chủ {t} ({ruler_t}){note}"
                         )
 
-    if not yoga_list:
-        yoga_list.append("Không phát hiện Raja Yoga nổi bật nào.")
-    return yoga_list
+    
 
 
 
